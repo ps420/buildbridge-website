@@ -513,6 +513,71 @@ if (heroHeading) {
   }, 500);
 }
 
+// Typewriter Effect for Eyebrow
+class Typewriter {
+  constructor(element, text, speed = 100) {
+    this.element = element;
+    this.text = text;
+    this.speed = speed;
+    this.index = 0;
+    this.type();
+  }
+  
+  type() {
+    if (this.index < this.text.length) {
+      this.element.textContent += this.text.charAt(this.index);
+      this.index++;
+      setTimeout(() => this.type(), this.speed);
+    }
+  }
+}
+
+// Initialize typewriter on eyebrow
+const eyebrow = document.querySelector('.hero-copy .eyebrow');
+if (eyebrow) {
+  const eyebrowText = eyebrow.textContent;
+  eyebrow.textContent = '';
+  setTimeout(() => {
+    new Typewriter(eyebrow, eyebrowText, 80);
+  }, 300);
+}
+
+// 3D Tilt Effect for Cards
+class Tilt3D {
+  constructor(element) {
+    this.element = element;
+    this.init();
+  }
+  
+  init() {
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+    
+    this.element.addEventListener('mousemove', (e) => {
+      const rect = this.element.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = (y - centerY) / 10;
+      const rotateY = (centerX - x) / 10;
+      
+      this.element.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+    });
+    
+    this.element.addEventListener('mouseleave', () => {
+      this.element.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+    });
+  }
+}
+
+// Apply 3D tilt to cards
+document.querySelectorAll('.service-card, .project-card, .testimonial-card').forEach(card => {
+  card.style.transition = 'transform 0.3s ease';
+  new Tilt3D(card);
+});
+
 // Particle Background System
 class ParticleSystem {
   constructor() {
