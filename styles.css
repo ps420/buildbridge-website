@@ -516,6 +516,62 @@
 }
 
 /* ========================================
+   FLOATING WHATSAPP BUTTON
+======================================== */
+.floating-whatsapp{
+  position:fixed;
+  bottom:100px;
+  right:30px;
+  width:60px;
+  height:60px;
+  background:linear-gradient(135deg,#25D366,#128C7E);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:28px;
+  text-decoration:none;
+  box-shadow:0 4px 20px rgba(37,211,102,.4);
+  z-index:999;
+  transition:all 0.3s ease;
+}
+
+.floating-whatsapp:hover{
+  transform:scale(1.1) rotate(10deg);
+  box-shadow:0 6px 30px rgba(37,211,102,.6);
+}
+
+.whatsapp-pulse{
+  position:absolute;
+  inset:-5px;
+  border-radius:50%;
+  border:2px solid #25D366;
+  opacity:0;
+  animation:pulse-ring 2s ease-out infinite;
+}
+
+@keyframes pulse-ring{
+  0%{transform:scale(0.8);opacity:1;}
+  100%{transform:scale(1.5);opacity:0;}
+}
+
+.whatsapp-cta{
+  text-decoration:none;
+  color:inherit;
+  transition:all 0.3s ease;
+}
+
+.whatsapp-cta:hover{
+  color:#25D366;
+}
+
+.whatsapp-cta:hover .icon{
+  background:#25D366;
+  color:white;
+}
+
+/* ========================================
    COOKIE CONSENT
 ======================================== */
 .cookie-consent{
