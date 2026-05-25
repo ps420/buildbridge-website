@@ -1,5 +1,468 @@
 // BuildBridge - Main JavaScript
-// Fortune 500 Interactive Features
+// Fortune 500 Interactive Features v2.0
+// Enhanced with: Scroll Physics, Image Reveals, Marquee, Split Text, Page Transitions
+
+// =========================================
+// 1. LENIS SMOOTH SCROLL SIMULATION
+// =========================================
+class SmoothScroll {
+  constructor() {
+    this.current = 0;
+    this.target = 0;
+    this.ease = 0.075;
+    this.velocity = 0;
+    this.isScrolling = false;
+    this.scrollTimeout = null;
+    
+    this.init();
+  }
+  
+  init() {
+    // Don't apply to mobile/touch devices
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+    
+    this.bindScroll();
+    this.animate();
+  }
+  
+  bindScroll() {
+    window.addEventListener('scroll', () => {
+      this.target = window.scrollY;
+      this.isScrolling = true;
+      
+      clearTimeout(this.scrollTimeout);
+      this.scrollTimeout = setTimeout(() => {
+        this.isScrolling = false;
+      }, 150);
+    }, { passive: true });
+  }
+  
+  animate() {
+    this.current += (this.target - this.current) * this.ease;
+    this.velocity = this.target - this.current;
+    
+    // Dispatch velocity event for other effects
+    if (Math.abs(this.velocity) > 0.1) {
+      window.dispatchEvent(new CustomEvent('scrollvelocity', {
+        detail: { velocity: this.velocity, direction: this.velocity > 0 ? 1 : -1 }
+      }));
+    }
+    
+    requestAnimationFrame(() => this.animate());
+  }
+}
+
+// Initialize smooth scroll
+const smoothScroll = new SmoothScroll();
+
+// =========================================
+// 2. SCROLL VELOCITY SKEW EFFECT
+// =========================================
+class VelocitySkew {
+  constructor() {
+    this.elements = [];
+    this.maxSkew = 3;
+    this.init();
+  }
+  
+  init() {
+    this.elements = document.querySelectorAll('.velocity-skew');
+    if (!this.elements.length) return;
+    
+    window.addEventListener('scrollvelocity', (e) => {
+      const skew = Math.max(-this.maxSkew, Math.min(this.maxSkew, e.detail.velocity * 0.02));
+      this.elements.forEach(el => {
+        el.style.transform = `skewY(${skew}deg)`;
+      });
+    });
+  }
+}
+
+const velocitySkew = new VelocitySkew();
+
+// =========================================
+// 3. IMAGE REVEAL ANIMATION (Mask Effect)
+// =========================================
+class ImageReveal {
+  constructor(element) {
+    this.element = element;
+    this.image = element.querySelector('img');
+    this.direction = element.dataset.reveal || 'up';
+    this.init();
+  }
+  
+  init() {
+    if (!this.image) return;
+    
+    // Wrap in container if not already
+    if (!this.element.classList.contains('reveal-container')) {
+      this.element.classList.add('reveal-container');
+    }
+    
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.className = `reveal-overlay reveal-${this.direction}`;
+    this.element.appendChild(overlay);
+    
+    // Observe for intersection
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.reveal(overlay);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    
+    observer.observe(this.element);
+  }
+  
+  reveal(overlay) {
+    overlay.classList.add('revealed');
+    this.element.classList.add('revealed');
+  }
+}
+
+// =========================================
+// 4. MARQUEE / TICKER ANIMATION
+// =========================================
+class Marquee {
+  constructor(element) {
+    this.element = element;
+    this.speed = parseFloat(element.dataset.speed) || 50;
+    this.direction = element.dataset.direction || 'left';
+    this.pauseOnHover = element.dataset.pause !== 'false';
+    this.items = [];
+    this.position = 0;
+    this.isPaused = false;
+    this.animationId = null;
+    
+    this.init();
+  }
+  
+  init() {
+    const originalItems = Array.from(this.element.children);
+    
+    // Clone items to create seamless loop
+    originalItems.forEach(item => {
+      this.element.appendChild(item.cloneNode(true));
+      this.element.appendChild(item.cloneNode(true));
+    });
+    
+    if (this.pauseOnHover) {
+      this.element.addEventListener('mouseenter', () => this.isPaused = true);
+      this.element.addEventListener('mouseleave', () => this.isPaused = false);
+    }
+    
+    this.animate();
+  }
+  
+  animate() {
+    if (!this.isPaused) {
+      const directionMultiplier = this.direction === 'left' ? -1 : 1;
+      this.position += (this.speed / 60) * directionMultiplier;
+      
+      const firstItem = this.element.children[0];
+      const itemWidth = firstItem.offsetWidth + parseInt(getComputedStyle(firstItem).marginRight);
+      
+      if (Math.abs(this.position) >= itemWidth) {
+        this.position = 0;
+      }
+      
+      this.element.style.transform = `translateX(${this.position}px)`;
+    }
+    
+    this.animationId = requestAnimationFrame(() => this.animate());
+  }
+}
+
+// =========================================
+// 5. SPLIT TEXT ANIMATION
+// =========================================
+class SplitText {
+  constructor(element, options = {}) {
+    this.element = element;
+    this.type = options.type || 'chars'; // chars, words, lines
+    this.animation = options.animation || 'fadeUp';
+    this.stagger = options.stagger || 0.03;
+    this.delay = options.delay || 0;
+    
+    this.init();
+  }
+  
+  init() {
+    const text = this.element.textContent;
+    this.element.innerHTML = '';
+    this.element.style.opacity = '1';
+    
+    if (this.type === 'chars') {
+      this.splitIntoChars(text);
+    } else if (this.type === 'words') {
+      this.splitIntoWords(text);
+    }
+    
+    this.animate();
+  }
+  
+  splitIntoChars(text) {
+    text.split('').forEach((char, i) => {
+      const span = document.createElement('span');
+      span.className = 'split-char';
+      span.textContent = char === ' ' ? '\u00A0' : char;
+      span.style.display = 'inline-block';
+      span.style.opacity = '0';
+      span.style.transform = 'translateY(100%) rotateX(-80deg)';
+      span.style.transformOrigin = 'center bottom';
+      span.style.transition = `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${this.delay + (i * this.stagger)}s`;
+      this.element.appendChild(span);
+    });
+  }
+  
+  splitIntoWords(text) {
+    text.split(' ').forEach((word, i) => {
+      const span = document.createElement('span');
+      span.className = 'split-word';
+      span.textContent = word + ' ';
+      span.style.display = 'inline-block';
+      span.style.opacity = '0';
+      span.style.transform = 'translateY(20px)';
+      span.style.transition = `all 0.5s ease ${this.delay + (i * this.stagger)}s`;
+      this.element.appendChild(span);
+    });
+  }
+  
+  animate() {
+    setTimeout(() => {
+      const elements = this.element.querySelectorAll('.split-char, .split-word');
+      elements.forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0) rotateX(0)';
+      });
+    }, 100);
+  }
+}
+
+// =========================================
+// 6. SMOOTH PAGE TRANSITIONS
+// =========================================
+class PageTransitions {
+  constructor() {
+    this.transitionElement = null;
+    this.isTransitioning = false;
+    this.init();
+  }
+  
+  init() {
+    this.createTransitionElement();
+    this.bindLinks();
+    this.animatePageIn();
+  }
+  
+  createTransitionElement() {
+    this.transitionElement = document.createElement('div');
+    this.transitionElement.className = 'page-transition';
+    document.body.appendChild(this.transitionElement);
+  }
+  
+  bindLinks() {
+    document.querySelectorAll('a[href]').forEach(link => {
+      const href = link.getAttribute('href');
+      
+      // Only internal links
+      if (href && !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto') && !href.startsWith('tel')) {
+        link.addEventListener('click', (e) => {
+          if (!e.ctrlKey && !e.metaKey) {
+            e.preventDefault();
+            this.transitionTo(href);
+          }
+        });
+      }
+    });
+  }
+  
+  transitionTo(url) {
+    if (this.isTransitioning) return;
+    this.isTransitioning = true;
+    
+    this.transitionElement.classList.add('active');
+    
+    setTimeout(() => {
+      window.location.href = url;
+    }, 500);
+  }
+  
+  animatePageIn() {
+    this.transitionElement.classList.add('exiting');
+    setTimeout(() => {
+      this.transitionElement.classList.remove('active', 'exiting');
+    }, 600);
+  }
+}
+
+// =========================================
+// 7. GRADIENT TEXT ANIMATION
+// =========================================
+class GradientText {
+  constructor(element) {
+    this.element = element;
+    this.init();
+  }
+  
+  init() {
+    this.element.classList.add('gradient-text-animated');
+  }
+}
+
+// =========================================
+// 8. ENHANCED COUNTER WITH EASING
+// =========================================
+class EnhancedCounter {
+  constructor(element) {
+    this.element = element;
+    this.target = parseInt(element.dataset.target);
+    this.duration = parseInt(element.dataset.duration) || 2000;
+    this.prefix = element.dataset.prefix || '';
+    this.suffix = element.dataset.suffix || '';
+    this.startTime = null;
+    
+    this.init();
+  }
+  
+  init() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.start();
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    
+    observer.observe(this.element);
+  }
+  
+  start() {
+    this.startTime = performance.now();
+    this.animate();
+  }
+  
+  easeOutQuart(t) {
+    return 1 - Math.pow(1 - t, 4);
+  }
+  
+  animate() {
+    const elapsed = performance.now() - this.startTime;
+    const progress = Math.min(elapsed / this.duration, 1);
+    const eased = this.easeOutQuart(progress);
+    const current = Math.floor(eased * this.target);
+    
+    this.element.textContent = this.prefix + current + this.suffix;
+    
+    if (progress < 1) {
+      requestAnimationFrame(() => this.animate());
+    } else {
+      this.element.textContent = this.prefix + this.target + this.suffix;
+    }
+  }
+}
+
+// =========================================
+// 9. HORIZONTAL SCROLL SECTION
+// =========================================
+class HorizontalScroll {
+  constructor(element) {
+    this.element = element;
+    this.track = element.querySelector('.horizontal-track');
+    this.items = element.querySelectorAll('.horizontal-item');
+    this.progress = 0;
+    
+    this.init();
+  }
+  
+  init() {
+    if (!this.track || !this.items.length) return;
+    
+    // Calculate total scroll distance
+    const totalWidth = this.track.scrollWidth - window.innerWidth;
+    
+    window.addEventListener('scroll', () => {
+      const rect = this.element.getBoundingClientRect();
+      const elementTop = rect.top;
+      const elementHeight = rect.height;
+      
+      if (elementTop <= 0 && elementTop > -elementHeight + window.innerHeight) {
+        const scrollProgress = Math.abs(elementTop) / (elementHeight - window.innerHeight);
+        const translateX = scrollProgress * totalWidth;
+        this.track.style.transform = `translateX(-${translateX}px)`;
+      }
+    }, { passive: true });
+  }
+}
+
+// =========================================
+// 10. MAGNETIC ELEMENTS (Enhanced)
+// =========================================
+class MagneticElement {
+  constructor(element, options = {}) {
+    this.element = element;
+    this.strength = options.strength || 0.3;
+    this.radius = options.radius || 100;
+    this.isActive = false;
+    
+    this.init();
+  }
+  
+  init() {
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+    
+    document.addEventListener('mousemove', (e) => {
+      const rect = this.element.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      const distX = e.clientX - centerX;
+      const distY = e.clientY - centerY;
+      const distance = Math.sqrt(distX * distX + distY * distY);
+      
+      if (distance < this.radius) {
+        const factor = 1 - distance / this.radius;
+        this.element.style.transform = `translate(${distX * this.strength * factor}px, ${distY * this.strength * factor}px)`;
+      } else {
+        this.element.style.transform = '';
+      }
+    });
+  }
+}
+
+// =========================================
+// 11. AUDIO VISUALIZER EFFECT (Visual only)
+// =========================================
+class AudioBars {
+  constructor(element) {
+    this.element = element;
+    this.bars = [];
+    this.barCount = parseInt(element.dataset.bars) || 20;
+    this.init();
+  }
+  
+  init() {
+    this.element.classList.add('audio-bars-container');
+    
+    for (let i = 0; i < this.barCount; i++) {
+      const bar = document.createElement('div');
+      bar.className = 'audio-bar';
+      bar.style.height = '20%';
+      bar.style.animationDuration = `${0.5 + Math.random() * 0.5}s`;
+      bar.style.animationDelay = `${Math.random() * 0.5}s`;
+      this.element.appendChild(bar);
+      this.bars.push(bar);
+    }
+  }
+}
+
+// =========================================
+// ORIGINAL FEATURES (Preserved & Enhanced)
+// =========================================
 
 // Preloader
 window.addEventListener('load', () => {
@@ -723,8 +1186,48 @@ if (!window.matchMedia('(pointer: coarse)').matches) {
   });
 }
 
+// =========================================
+// INITIALIZE ALL NEW FEATURES
+// =========================================
+document.addEventListener('DOMContentLoaded', () => {
+  
+  // Image Reveals
+  document.querySelectorAll('[data-reveal]').forEach(el => new ImageReveal(el));
+  
+  // Marquees
+  document.querySelectorAll('.marquee-track').forEach(el => new Marquee(el));
+  
+  // Split Text (Hero heading)
+  const heroHeading = document.querySelector('.split-heading');
+  if (heroHeading) {
+    new SplitText(heroHeading, { type: 'chars', stagger: 0.02, delay: 0.5 });
+  }
+  
+  // Page Transitions
+  const pageTransitions = new PageTransitions();
+  
+  // Gradient Text
+  document.querySelectorAll('.gradient-text').forEach(el => new GradientText(el));
+  
+  // Enhanced Counters
+  document.querySelectorAll('.enhanced-counter').forEach(el => new EnhancedCounter(el));
+  
+  // Horizontal Scroll
+  document.querySelectorAll('.horizontal-scroll').forEach(el => new HorizontalScroll(el));
+  
+  // Magnetic Elements
+  document.querySelectorAll('.magnetic-el').forEach(el => new MagneticElement(el, { strength: 0.4 }));
+  
+  // Audio Bars
+  document.querySelectorAll('.audio-bars').forEach(el => new AudioBars(el));
+  
+  // Velocity Skew elements
+  document.querySelectorAll('h2, h3').forEach(el => el.classList.add('velocity-skew'));
+});
+
 // Console easter egg
-console.log('%cBuildBridge', 'font-size: 40px; font-weight: bold; color: #C9CED6;');
-console.log('%cFortune 500 Construction Management', 'font-size: 14px; color: #525862;');
-console.log('%cConnecting Clients. Delivering Projects. Building Trust.', 'font-size: 12px; color: #525862; font-style: italic;');
+console.log('%c🏗️ BuildBridge', 'font-size: 40px; font-weight: bold; color: #C9CED6; text-shadow: 0 0 20px rgba(201,206,214,0.3);');
+console.log('%cFortune 500 Construction Management System v2.0', 'font-size: 14px; color: #525862;');
+console.log('%cFeatures: Smooth Scroll | Image Reveals | Marquee | Split Text | Page Transitions', 'font-size: 11px; color: #3B82F6; font-style: italic;');
+console.log('%cConnecting Clients. Delivering Projects. Building Trust.', 'font-size: 12px; color: #525862;');
 console.log('%c💬 WhatsApp: +27 66 120 0064', 'font-size: 14px; color: #25D366; font-weight: bold;');

@@ -20,6 +20,9 @@
     </div>
   </div>
 
+  <!-- Scroll Progress Bar -->
+  <div class="reading-progress"></div>
+
   <!-- Back to Top Button -->
   <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
@@ -51,22 +54,22 @@
   <section class="hero">
     <div class="hero-copy animate-on-load">
       <p class="eyebrow fade-in-up">Construction Management</p>
-      <h1 class="fade-in-up stagger-1">Connecting Clients.<br>Delivering Projects.<br><span>Building Trust.</span></h1>
+      <h1 class="split-heading fade-in-up stagger-1">Connecting Clients.<br>Delivering Projects.<br><span class="gradient-text">Building Trust.</span></h1>
       <p class="fade-in-up stagger-2">BuildBridge acts as the trusted link between clients and contractors — managing projects with transparency, expertise and care from concept to completion. We bridge the gap between vision and reality.</p>
       <div class="actions fade-in-up stagger-3">
-        <a href="https://wa.me/27661200064" class="btn magnetic" target="_blank">💬 Chat on WhatsApp</a>
+        <a href="https://wa.me/27661200064" class="btn magnetic magnetic-el" target="_blank">💬 Chat on WhatsApp</a>
         <a href="services.html" class="btn ghost">Our Services →</a>
       </div>
     </div>
     <div class="hero-visual">
-      <div class="hero-image-wrapper">
+      <div class="hero-image-wrapper" data-reveal="right">
         <img src="assets/02_Website_Heroes/Hero_1.png" alt="BuildBridge Project" class="hero-main-image">
       </div>
-      <div class="floating-stats stat-1">
-        <div class="number">150+</div>
+      <div class="floating-stats stat-1 magnetic-el">
+        <div class="number enhanced-counter" data-target="150" data-suffix="+">0</div>
         <div class="label">Projects Delivered</div>
       </div>
-      <div class="floating-stats stat-2">
+      <div class="floating-stats stat-2 magnetic-el">
         <div class="number">98%</div>
         <div class="label">Client Satisfaction</div>
       </div>
@@ -94,6 +97,30 @@
     <div>
       <b>Value Delivery</b>
       <p>Smart management for successful outcomes.</p>
+    </div>
+  </section>
+
+  <!-- Client Marquee -->
+  <section class="marquee-section">
+    <div class="marquee-wrapper">
+      <div class="marquee-track" data-speed="40" data-direction="left">
+        <div class="marquee-item">
+          <span class="marquee-logo">Cape Town Developments</span>
+          <span class="marquee-separator"></span>
+          <span class="marquee-logo">Johannesburg Properties</span>
+          <span class="marquee-separator"></span>
+          <span class="marquee-logo">Durban Builders</span>
+          <span class="marquee-separator"></span>
+          <span class="marquee-logo">Pretoria Construction</span>
+          <span class="marquee-separator"></span>
+          <span class="marquee-logo">SA Architecture Co</span>
+          <span class="marquee-separator"></span>
+          <span class="marquee-logo">Blue Sky Contractors</span>
+          <span class="marquee-separator"></span>
+          <span class="marquee-logo">Prime Developments</span>
+          <span class="marquee-separator"></span>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -132,19 +159,19 @@
   <section class="stats-section">
     <div class="stats-grid">
       <div class="stat-item fade-in-up">
-        <div class="number" data-target="150">0</div>
+        <div class="number enhanced-counter" data-target="150" data-suffix="+">0</div>
         <div class="label">Projects Completed</div>
       </div>
       <div class="stat-item fade-in-up stagger-1">
-        <div class="number">R50M+</div>
+        <div class="number enhanced-counter" data-target="50" data-prefix="R" data-suffix="M+">0</div>
         <div class="label">Value Managed</div>
       </div>
       <div class="stat-item fade-in-up stagger-2">
-        <div class="number" data-target="12">0</div>
+        <div class="number enhanced-counter" data-target="12" data-suffix="+">0</div>
         <div class="label">Years Experience</div>
       </div>
       <div class="stat-item fade-in-up stagger-3">
-        <div class="number" data-target="50">0</div>
+        <div class="number enhanced-counter" data-target="50" data-suffix="+">0</div>
         <div class="label">Contractor Partners</div>
       </div>
     </div>
@@ -158,22 +185,28 @@
       <p>Explore some of our recent success stories across residential, commercial, and industrial sectors.</p>
     </div>
     <div class="projects-grid">
-      <div class="project-card fade-in-up stagger-1 shine" data-category="residential">
-        <img src="assets/02_Website_Heroes/Hero_2.png" alt="Modern Residential Complex">
+      <div class="project-card fade-in-up stagger-1 shine magnetic-el" data-category="residential">
+        <div data-reveal="up">
+          <img src="assets/02_Website_Heroes/Hero_2.png" alt="Modern Residential Complex">
+        </div>
         <div class="project-overlay">
           <h3>Modern Residential Complex</h3>
           <p>Cape Town, South Africa</p>
         </div>
       </div>
-      <div class="project-card fade-in-up stagger-2 shine" data-category="commercial">
-        <img src="assets/03_Social_Campaign/Campaign_4.png" alt="Commercial Development">
+      <div class="project-card fade-in-up stagger-2 shine magnetic-el" data-category="commercial">
+        <div data-reveal="up">
+          <img src="assets/03_Social_Campaign/Campaign_4.png" alt="Commercial Development">
+        </div>
         <div class="project-overlay">
           <h3>Corporate Headquarters</h3>
           <p>Johannesburg, South Africa</p>
         </div>
       </div>
-      <div class="project-card fade-in-up stagger-3 shine" data-category="residential">
-        <img src="assets/03_Social_Campaign/Campaign_5.png" alt="Luxury Villa">
+      <div class="project-card fade-in-up stagger-3 shine magnetic-el" data-category="residential">
+        <div data-reveal="up">
+          <img src="assets/03_Social_Campaign/Campaign_5.png" alt="Luxury Villa">
+        </div>
         <div class="project-overlay">
           <h3>Luxury Villa Estate</h3>
           <p>Durban, South Africa</p>
