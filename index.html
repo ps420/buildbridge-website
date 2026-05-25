@@ -7,10 +7,16 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
 </head>
-<body>
+<body class="focus-ring-accessible cursor-enabled">
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Noise Texture Overlay - Premium Film Grain -->
+  <div class="noise-overlay"></div>
+
   <!-- Animated Background Orbs -->
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
+  <div class="orb orb-1 breathing"></div>
+  <div class="orb orb-2 breathing"></div>
 
   <!-- Preloader -->
   <div class="preloader">
@@ -51,7 +57,7 @@
   </header>
 
   <!-- Hero Section -->
-  <section class="hero">
+  <section class="hero" id="main-content">
     <div class="hero-copy animate-on-load">
       <p class="eyebrow fade-in-up">Construction Management</p>
       <h1 class="split-heading fade-in-up stagger-1">Connecting Clients.<br>Delivering Projects.<br><span class="gradient-text">Building Trust.</span></h1>
@@ -126,31 +132,39 @@
 
   <!-- Services Section -->
   <section class="section">
-    <div class="section-header fade-in-up">
+    <div class="section-header fade-in-up reveal-section">
       <p class="eyebrow">What We Do</p>
-      <h2>Our Core Services</h2>
+      <h2 class="scramble-text">Our Core Services</h2>
       <p>From initial consultation to final handover, we provide comprehensive construction management services that ensure your project succeeds on time, within budget, and to the highest standards.</p>
     </div>
     <div class="services-grid">
-      <article class="service-card fade-in-up stagger-1 hover-lift">
-        <div class="service-icon">📋</div>
-        <h3>Project Consultation</h3>
-        <p>We understand your goals, scope, budget and ideal delivery plan. Our experts help define clear objectives and realistic timelines.</p>
+      <article class="service-card tilt-card-advanced fade-in-up stagger-1">
+        <div class="card-content">
+          <div class="service-icon">📋</div>
+          <h3 class="scramble-text">Project Consultation</h3>
+          <p>We understand your goals, scope, budget and ideal delivery plan. Our experts help define clear objectives and realistic timelines.</p>
+        </div>
       </article>
-      <article class="service-card fade-in-up stagger-2 hover-lift">
-        <div class="service-icon">🤝</div>
-        <h3>Contractor Matching</h3>
-        <p>We connect you with qualified contractors suited to the work. Our vetted network ensures quality craftsmanship every time.</p>
+      <article class="service-card tilt-card-advanced fade-in-up stagger-2">
+        <div class="card-content">
+          <div class="service-icon">🤝</div>
+          <h3 class="scramble-text">Contractor Matching</h3>
+          <p>We connect you with qualified contractors suited to the work. Our vetted network ensures quality craftsmanship every time.</p>
+        </div>
       </article>
-      <article class="service-card fade-in-up stagger-3 hover-lift">
-        <div class="service-icon">📊</div>
-        <h3>Project Management</h3>
-        <p>We oversee timelines, communication, quality and progress. Full oversight from groundbreaking to ribbon cutting.</p>
+      <article class="service-card tilt-card-advanced fade-in-up stagger-3">
+        <div class="card-content">
+          <div class="service-icon">📊</div>
+          <h3 class="scramble-text">Project Management</h3>
+          <p>We oversee timelines, communication, quality and progress. Full oversight from groundbreaking to ribbon cutting.</p>
+        </div>
       </article>
-      <article class="service-card fade-in-up stagger-4 hover-lift">
-        <div class="service-icon">✓</div>
-        <h3>Quality & Transparency</h3>
-        <p>We keep every stage clear, professional and accountable. Real-time updates and honest communication always.</p>
+      <article class="service-card tilt-card-advanced fade-in-up stagger-4">
+        <div class="card-content">
+          <div class="service-icon">✓</div>
+          <h3 class="scramble-text">Quality & Transparency</h3>
+          <p>We keep every stage clear, professional and accountable. Real-time updates and honest communication always.</p>
+        </div>
       </article>
     </div>
   </section>
@@ -179,9 +193,9 @@
 
   <!-- Featured Projects -->
   <section class="section">
-    <div class="section-header fade-in-up">
+    <div class="section-header fade-in-up reveal-section">
       <p class="eyebrow">Our Work</p>
-      <h2>Featured Projects</h2>
+      <h2 class="scramble-text">Featured Projects</h2>
       <p>Explore some of our recent success stories across residential, commercial, and industrial sectors.</p>
     </div>
     <div class="projects-grid">
@@ -220,9 +234,9 @@
 
   <!-- Testimonials -->
   <section class="section testimonials">
-    <div class="section-header">
+    <div class="section-header reveal-section">
       <p class="eyebrow">Testimonials</p>
-      <h2>What Clients Say</h2>
+      <h2 class="scramble-text">What Clients Say</h2>
     </div>
     <div class="testimonial-grid">
       <div class="testimonial-card">

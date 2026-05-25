@@ -1231,3 +1231,671 @@ console.log('%cFortune 500 Construction Management System v2.0', 'font-size: 14p
 console.log('%cFeatures: Smooth Scroll | Image Reveals | Marquee | Split Text | Page Transitions', 'font-size: 11px; color: #3B82F6; font-style: italic;');
 console.log('%cConnecting Clients. Delivering Projects. Building Trust.', 'font-size: 12px; color: #525862;');
 console.log('%c💬 WhatsApp: +27 66 120 0064', 'font-size: 14px; color: #25D366; font-weight: bold;');
+
+// =========================================
+// FORTUNE 500 ENHANCEMENTS v3.0
+// Advanced Interactive Features
+// =========================================
+
+// =========================================
+// 1. TEXT SCRAMBLE / DECODE EFFECT
+// =========================================
+class TextScramble {
+  constructor(element, options = {}) {
+    this.element = element;
+    this.chars = options.chars || '!<>-_\\/[]{}—=+*^?#________';
+    this.updateInterval = options.interval || 50;
+    this.frame = 0;
+    this.queue = [];
+    this.frameRequest = null;
+    this.isAnimating = false;
+    
+    this.init();
+  }
+  
+  init() {
+    const text = this.element.textContent;
+    this.element.setAttribute('data-text', text);
+    this.setText(text);
+    
+    // Auto-trigger on scroll into view
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !this.isAnimating) {
+          this.decode(text);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    
+    observer.observe(this.element);
+  }
+  
+  setText(text) {
+    this.element.textContent = text;
+  }
+  
+  decode(text) {
+    this.isAnimating = true;
+    const length = text.length;
+    this.queue = [];
+    
+    for (let i = 0; i < length; i++) {
+      this.queue.push({
+        from: this.chars[Math.floor(Math.random() * this.chars.length)],
+        to: text[i],
+        start: i * 30,
+        end: i * 30 + 500
+      });
+    }
+    
+    this.frame = 0;
+    this.update();
+  }
+  
+  update() {
+    let output = '';
+    let complete = 0;
+    
+    for (let i = 0; i < this.queue.length; i++) {
+      const item = this.queue[i];
+      let char = item.from;
+      
+      if (this.frame >= item.end) {
+        complete++;
+        char = item.to;
+      } else if (this.frame >= item.start) {
+        if (Math.random() < 0.28) {
+          char = this.chars[Math.floor(Math.random() * this.chars.length)];
+        }
+      }
+      
+      output += char;
+    }
+    
+    this.setText(output);
+    
+    if (complete < this.queue.length) {
+      this.frameRequest = requestAnimationFrame(() => this.update());
+      this.frame++;
+    } else {
+      this.isAnimating = false;
+    }
+  }
+}
+
+// =========================================
+// 2. ADVANCED 3D TILT WITH GLARE
+// =========================================
+class AdvancedTiltCard {
+  constructor(element, options = {}) {
+    this.element = element;
+    this.maxRotation = options.maxRotation || 12;
+    this.glare = options.glare !== false;
+    this.shine = options.shine !== false;
+    
+    this.init();
+  }
+  
+  init() {
+    this.element.classList.add('tilt-card-advanced');
+    
+    // Add glare effect
+    if (this.glare) {
+      const glare = document.createElement('div');
+      glare.className = 'glare-effect';
+      this.element.appendChild(glare);
+    }
+    
+    // Add shine effect
+    if (this.shine) {
+      const shine = document.createElement('div');
+      shine.className = 'card-shine';
+      this.element.appendChild(shine);
+    }
+    
+    this.bindEvents();
+  }
+  
+  bindEvents() {
+    this.element.addEventListener('mousemove', (e) => this.onMouseMove(e));
+    this.element.addEventListener('mouseleave', () => this.onMouseLeave());
+    this.element.addEventListener('mouseenter', () => this.onMouseEnter());
+  }
+  
+  onMouseMove(e) {
+    const rect = this.element.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const rotateX = ((y - centerY) / centerY) * -this.maxRotation;
+    const rotateY = ((x - centerX) / centerX) * this.maxRotation;
+    
+    this.element.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+    
+    // Update shine position
+    const shine = this.element.querySelector('.card-shine');
+    if (shine) {
+      const mouseX = (x / rect.width) * 100;
+      const mouseY = (y / rect.height) * 100;
+      shine.style.setProperty('--mouse-x', `${mouseX}%`);
+      shine.style.setProperty('--mouse-y', `${mouseY}%`);
+    }
+  }
+  
+  onMouseLeave() {
+    this.element.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+  }
+  
+  onMouseEnter() {
+    this.element.style.transition = 'none';
+  }
+}
+
+// =========================================
+// 3. ADVANCED CUSTOM CURSOR
+// =========================================
+class CustomCursor {
+  constructor(options = {}) {
+    this.dot = null;
+    this.ring = null;
+    this.cursorX = 0;
+    this.cursorY = 0;
+    this.dotX = 0;
+    this.dotY = 0;
+    this.ringX = 0;
+    this.ringY = 0;
+    this.dotSpeed = options.dotSpeed || 1;
+    this.ringSpeed = options.ringSpeed || 0.15;
+    this.isActive = false;
+    this.clickCooldown = false;
+    
+    this.init();
+  }
+  
+  init() {
+    // Only on non-touch devices
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+    
+    this.createElements();
+    this.bindEvents();
+    this.animate();
+    
+    document.body.classList.add('cursor-enabled');
+    this.isActive = true;
+  }
+  
+  createElements() {
+    this.dot = document.createElement('div');
+    this.dot.className = 'cursor-dot';
+    document.body.appendChild(this.dot);
+    
+    this.ring = document.createElement('div');
+    this.ring.className = 'cursor-ring';
+    document.body.appendChild(this.ring);
+  }
+  
+  bindEvents() {
+    document.addEventListener('mousemove', (e) => {
+      this.cursorX = e.clientX;
+      this.cursorY = e.clientY;
+    });
+    
+    document.addEventListener('mousedown', () => {
+      this.dot.classList.add('click');
+      this.ring.classList.add('click');
+    });
+    
+    document.addEventListener('mouseup', () => {
+      this.dot.classList.remove('click');
+      this.ring.classList.remove('click');
+    });
+    
+    // Hover detection for links and buttons
+    const hoverElements = document.querySelectorAll('a, button, .magnetic-el, .btn');
+    hoverElements.forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        this.dot.classList.add('hover');
+        this.ring.classList.add('hover');
+      });
+      
+      el.addEventListener('mouseleave', () => {
+        this.dot.classList.remove('hover');
+        this.ring.classList.remove('hover');
+      });
+    });
+  }
+  
+  animate() {
+    if (!this.isActive) return;
+    
+    // Dot follows cursor directly
+    this.dotX += (this.cursorX - this.dotX) * this.dotSpeed;
+    this.dotY += (this.cursorY - this.dotY) * this.dotSpeed;
+    
+    // Ring follows with lag
+    this.ringX += (this.cursorX - this.ringX) * this.ringSpeed;
+    this.ringY += (this.cursorY - this.ringY) * this.ringSpeed;
+    
+    this.dot.style.left = `${this.dotX}px`;
+    this.dot.style.top = `${this.dotY}px`;
+    this.ring.style.left = `${this.ringX}px`;
+    this.ring.style.top = `${this.ringY}px`;
+    
+    requestAnimationFrame(() => this.animate());
+  }
+}
+
+// =========================================
+// 4. PARALLAX DEPTH LAYERS
+// =========================================
+class ParallaxLayers {
+  constructor() {
+    this.layers = [];
+    this.scrollY = 0;
+    this.rafId = null;
+    
+    this.init();
+  }
+  
+  init() {
+    // Find all parallax layers
+    document.querySelectorAll('.parallax-layer').forEach(el => {
+      const speed = parseFloat(getComputedStyle(el).getPropertyValue('--parallax-speed')) || 0.5;
+      this.layers.push({ element: el, speed });
+    });
+    
+    if (this.layers.length) {
+      this.bindEvents();
+    }
+  }
+  
+  bindEvents() {
+    window.addEventListener('scroll', () => {
+      this.scrollY = window.scrollY;
+      if (!this.rafId) {
+        this.rafId = requestAnimationFrame(() => this.update());
+      }
+    }, { passive: true });
+  }
+  
+  update() {
+    this.layers.forEach(layer => {
+      const yPos = this.scrollY * layer.speed * -1;
+      layer.element.style.transform = `translateY(${yPos}px)`;
+    });
+    
+    this.rafId = null;
+  }
+}
+
+// =========================================
+// 5. PARTICLES NETWORK
+// =========================================
+class ParticlesNetwork {
+  constructor(container, options = {}) {
+    this.container = container || document.body;
+    this.particleCount = options.particleCount || 20;
+    this.connectionDistance = options.connectionDistance || 150;
+    this.mouseDistance = options.mouseDistance || 200;
+    this.particles = [];
+    this.connections = [];
+    this.mouseX = -1000;
+    this.mouseY = -1000;
+    this.animationId = null;
+    
+    this.init();
+  }
+  
+  init() {
+    this.createContainer();
+    this.createParticles();
+    this.bindEvents();
+    this.animate();
+  }
+  
+  createContainer() {
+    if (!this.container.querySelector('.particles-network')) {
+      const network = document.createElement('div');
+      network.className = 'particles-network';
+      network.style.cssText = `
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+      `;
+      this.container.appendChild(network);
+      this.networkContainer = network;
+    } else {
+      this.networkContainer = this.container.querySelector('.particles-network');
+    }
+  }
+  
+  createParticles() {
+    for (let i = 0; i < this.particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle-node';
+      
+      const x = Math.random() * window.innerWidth;
+      const y = Math.random() * window.innerHeight;
+      const vx = (Math.random() - 0.5) * 0.5;
+      const vy = (Math.random() - 0.5) * 0.5;
+      
+      particle.style.left = `${x}px`;
+      particle.style.top = `${y}px`;
+      particle.style.animationDelay = `${Math.random() * 20}s`;
+      
+      this.networkContainer.appendChild(particle);
+      
+      this.particles.push({
+        element: particle,
+        x, y, vx, vy,
+        originX: x,
+        originY: y
+      });
+    }
+  }
+  
+  bindEvents() {
+    document.addEventListener('mousemove', (e) => {
+      this.mouseX = e.clientX;
+      this.mouseY = e.clientY;
+    });
+  }
+  
+  animate() {
+    this.particles.forEach(particle => {
+      // Return to original position with slight movement
+      const dx = particle.originX - particle.x;
+      const dy = particle.originY - particle.y;
+      
+      particle.vx += dx * 0.0005;
+      particle.vy += dy * 0.0005;
+      
+      // Mouse repulsion
+      const mouseDx = particle.x - this.mouseX;
+      const mouseDy = particle.y - this.mouseY;
+      const distance = Math.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
+      
+      if (distance < this.mouseDistance) {
+        const force = (this.mouseDistance - distance) / this.mouseDistance;
+        particle.vx += (mouseDx / distance) * force * 2;
+        particle.vy += (mouseDy / distance) * force * 2;
+      }
+      
+      // Apply velocity with damping
+      particle.vx *= 0.98;
+      particle.vy *= 0.98;
+      
+      particle.x += particle.vx;
+      particle.y += particle.vy;
+      
+      particle.element.style.left = `${particle.x}px`;
+      particle.element.style.top = `${particle.y}px`;
+    });
+    
+    this.animationId = requestAnimationFrame(() => this.animate());
+  }
+}
+
+// =========================================
+// 6. KINETIC TYPOGRAPHY
+// =========================================
+class KineticTypography {
+  constructor(element, options = {}) {
+    this.element = element;
+    this.stagger = options.stagger || 0.03;
+    
+    this.init();
+  }
+  
+  init() {
+    this.element.classList.add('kinetic-heading');
+    const text = this.element.textContent;
+    this.element.innerHTML = '';
+    
+    const words = text.split(' ');
+    words.forEach((word, wordIndex) => {
+      const wordSpan = document.createElement('span');
+      wordSpan.className = 'word';
+      
+      word.split('').forEach((char, charIndex) => {
+        const charSpan = document.createElement('span');
+        charSpan.className = 'char';
+        charSpan.textContent = char;
+        charSpan.style.transitionDelay = `${(wordIndex * word.length + charIndex) * this.stagger}s`;
+        wordSpan.appendChild(charSpan);
+      });
+      
+      this.element.appendChild(wordSpan);
+      
+      // Add space
+      if (wordIndex < words.length - 1) {
+        this.element.appendChild(document.createTextNode(' '));
+      }
+    });
+    
+    // Trigger animation
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.element.classList.add('animate');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    
+    observer.observe(this.element);
+  }
+}
+
+// =========================================
+// 7. SCROLL REVEAL SECTIONS
+// =========================================
+class ScrollReveal {
+  constructor(elements, options = {}) {
+    this.elements = elements;
+    this.threshold = options.threshold || 0.1;
+    this.rootMargin = options.rootMargin || '0px';
+    
+    this.init();
+  }
+  
+  init() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: this.threshold,
+      rootMargin: this.rootMargin
+    });
+    
+    this.elements.forEach(el => observer.observe(el));
+  }
+}
+
+// =========================================
+// 8. RIPPLE EFFECT
+// =========================================
+class RippleEffect {
+  constructor(elements) {
+    this.elements = elements || document.querySelectorAll('.ripple-container, .btn, .service-card');
+    this.init();
+  }
+  
+  init() {
+    this.elements.forEach(el => {
+      el.classList.add('ripple-container');
+      el.addEventListener('click', (e) => this.createRipple(e, el));
+    });
+  }
+  
+  createRipple(e, element) {
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple-effect';
+    
+    const rect = element.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    
+    ripple.style.width = ripple.style.height = `${size}px`;
+    ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+    ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+    
+    element.appendChild(ripple);
+    
+    setTimeout(() => ripple.remove(), 600);
+  }
+}
+
+// =========================================
+// 9. STAGGERED LIST REVEAL
+// =========================================
+class StaggeredListReveal {
+  constructor(lists, options = {}) {
+    this.lists = lists;
+    this.itemDelay = options.itemDelay || 100;
+    
+    this.init();
+  }
+  
+  init() {
+    this.lists.forEach(list => {
+      const items = list.querySelectorAll('li, .stagger-list-item');
+      
+      items.forEach((item, index) => {
+        item.classList.add('stagger-list-item');
+        item.style.transitionDelay = `${index * this.itemDelay}ms`;
+      });
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            items.forEach(item => item.classList.add('visible'));
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+      
+      observer.observe(list);
+    });
+  }
+}
+
+// =========================================
+// 10. SMOOTH PAGE TRANSITIONS
+// =========================================
+class SmoothPageTransition {
+  constructor() {
+    this.overlay = null;
+    this.isTransitioning = false;
+    
+    this.init();
+  }
+  
+  init() {
+    this.createOverlay();
+    this.bindEvents();
+  }
+  
+  createOverlay() {
+    this.overlay = document.createElement('div');
+    this.overlay.className = 'page-transition-overlay';
+    this.overlay.innerHTML = `
+      <img src="assets/BuildBridge_Icon_Mark.svg" alt="BuildBridge" class="page-transition-logo">
+    `;
+    document.body.appendChild(this.overlay);
+  }
+  
+  bindEvents() {
+    document.querySelectorAll('a[href^="."], a[href^="/"], a[href^="index"], a[href^="about"], a[href^="services"], a[href^="projects"], a[href^="contact"]').forEach(link => {
+      // Skip external links
+      if (link.getAttribute('href').startsWith('http')) return;
+      
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href && !href.startsWith('#')) {
+          e.preventDefault();
+          this.transition(href);
+        }
+      });
+    });
+  }
+  
+  transition(url) {
+    if (this.isTransitioning) return;
+    this.isTransitioning = true;
+    
+    this.overlay.classList.add('active');
+    
+    setTimeout(() => {
+      window.location.href = url;
+    }, 600);
+  }
+}
+
+// =========================================
+// INITIALIZE ALL FORTUNE 500 v3.0 FEATURES
+// =========================================
+document.addEventListener('DOMContentLoaded', () => {
+  
+  // Text Scramble Effect on headings
+  document.querySelectorAll('.scramble-text, .section-header h2').forEach(el => {
+    new TextScramble(el);
+  });
+  
+  // Advanced 3D Tilt Cards
+  document.querySelectorAll('.service-card, .project-card, .testimonial-card').forEach(el => {
+    new AdvancedTiltCard(el, { maxRotation: 8, glare: true, shine: true });
+  });
+  
+  // Advanced Custom Cursor (desktop only)
+  const customCursor = new CustomCursor({ dotSpeed: 1, ringSpeed: 0.12 });
+  
+  // Parallax Layers
+  const parallax = new ParallaxLayers();
+  
+  // Particles Network
+  const particles = new ParticlesNetwork(document.body, { particleCount: 15 });
+  
+  // Kinetic Typography
+  document.querySelectorAll('h1, .hero h1').forEach(el => {
+    new KineticTypography(el, { stagger: 0.04 });
+  });
+  
+  // Scroll Reveal Sections
+  new ScrollReveal(document.querySelectorAll('.reveal-section, .section'), { threshold: 0.1 });
+  new ScrollReveal(document.querySelectorAll('.reveal-scale'), { threshold: 0.2 });
+  
+  // Ripple Effect
+  const rippleEffect = new RippleEffect();
+  
+  // Staggered List Reveal
+  new StaggeredListReveal(document.querySelectorAll('.footer-links ul, .trust'));
+  
+  // Smooth Page Transitions
+  const pageTransitions = new SmoothPageTransition();
+  
+  // Remove preloader faster with new animation
+  const preloader = document.querySelector('.preloader');
+  if (preloader) {
+    setTimeout(() => {
+      preloader.classList.add('fade-out');
+      setTimeout(() => preloader.remove(), 500);
+    }, 1500);
+  }
+});
+
+// Console easter egg for v3.0
+console.log('%c🏗️ BuildBridge', 'font-size: 40px; font-weight: bold; color: #C9CED6; text-shadow: 0 0 30px rgba(201,206,214,0.5);');
+console.log('%cFortune 500 Construction Management System v3.0', 'font-size: 14px; color: #525862;');
+console.log('%c✨ New Features: Text Scramble | Advanced 3D Tilt | Custom Cursor | Particles Network | Kinetic Typography', 'font-size: 11px; color: #C9CED6; font-style: italic;');
+console.log('%c💫 Premium: Parallax Layers | Ripple Effects | Smooth Transitions | Glare & Shine', 'font-size: 11px; color: #3B82F6; font-style: italic;');
+console.log('%cConnecting Clients. Delivering Projects. Building Trust.', 'font-size: 12px; color: #525862;');
+console.log('%c💬 WhatsApp: +27 66 120 0064', 'font-size: 14px; color: #25D366; font-weight: bold;');
