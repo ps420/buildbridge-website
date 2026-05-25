@@ -2813,10 +2813,410 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Console easter egg for v5.0
-console.log('%c🏗️ BuildBridge', 'font-size: 40px; font-weight: bold; color: #C9CED6; text-shadow: 0 0 30px rgba(201,206,214,0.5);');
-console.log('%cFortune 500 Construction Management System v5.0', 'font-size: 14px; color: #525862;');
-console.log('%c✨ Professional Features: Toast Notifications | Scroll Navigation | Slot Machine Counters | Velocity Effects', 'font-size: 11px; color: #C9CED6; font-style: italic;');
-console.log('%c💫 Premium: Masonry Gallery | Hero Perspective Tilt | WebGL-style Shimmer | Liquid Buttons', 'font-size: 11px; color: #3B82F6; font-style: italic;');
-console.log('%c🚀 Version 5.0 - Auto-Update: ' + new Date().toLocaleDateString(), 'font-size: 11px; color: #22c55e; font-style: italic;');
-console.log('%cConnecting Clients. Delivering Projects. Building Trust.', 'font-size: 12px; color: #525862;');
+// =========================================
+// v6.0 PROFESSIONAL FEATURES (NEW)
+// =========================================
+
+// Mouse Spotlight Effect
+class MouseSpotlight {
+  constructor() {
+    this.spotlight = null;
+    this.init();
+  }
+  
+  init() {
+    // Don't initialize on touch devices
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+    
+    this.spotlight = document.createElement('div');
+    this.spotlight.className = 'mouse-spotlight';
+    document.body.appendChild(this.spotlight);
+    
+    let mouseX = 0, mouseY = 0;
+    let spotlightX = 0, spotlightY = 0;
+    let isActive = false;
+    let rafId = null;
+    
+    const updatePosition = () => {
+      const ease = 0.1;
+      spotlightX += (mouseX - spotlightX) * ease;
+      spotlightY += (mouseY - spotlightY) * ease;
+      
+      this.spotlight.style.left = spotlightX + 'px';
+      this.spotlight.style.top = spotlightY + 'px';
+      
+      if (isActive) {
+        rafId = requestAnimationFrame(updatePosition);
+      }
+    };
+    
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      
+      if (!isActive) {
+        isActive = true;
+        this.spotlight.classList.add('active');
+        updatePosition();
+      }
+    }, { passive: true });
+    
+    document.addEventListener('mouseleave', () => {
+      isActive = false;
+      this.spotlight.classList.remove('active');
+      if (rafId) cancelAnimationFrame(rafId);
+    });
+  }
+}
+
+// Custom Cursor
+class CustomCursor {
+  constructor() {
+    this.cursor = null;
+    this.cursorDot = null;
+    this.init();
+  }
+  
+  init() {
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+    
+    this.cursor = document.createElement('div');
+    this.cursor.className = 'custom-cursor';
+    document.body.appendChild(this.cursor);
+    
+    this.cursorDot = document.createElement('div');
+    this.cursorDot.className = 'custom-cursor-dot';
+    document.body.appendChild(this.cursorDot);
+    
+    let cursorX = 0, cursorY = 0;
+    let dotX = 0, dotY = 0;
+    let mouseX = 0, mouseY = 0;
+    
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    }, { passive: true });
+    
+    const animate = () => {
+      cursorX += (mouseX - cursorX) * 0.15;
+      cursorY += (mouseY - cursorY) * 0.15;
+      dotX += (mouseX - dotX) * 0.5;
+      dotY += (mouseY - dotY) * 0.5;
+      
+      this.cursor.style.left = cursorX + 'px';
+      this.cursor.style.top = cursorY + 'px';
+      this.cursorDot.style.left = dotX + 'px';
+      this.cursorDot.style.top = dotY + 'px';
+      
+      requestAnimationFrame(animate);
+    };
+    animate();
+    
+    // Hover effect on interactive elements
+    const interactiveElements = document.querySelectorAll('a, button, .btn, .magnetic-el');
+    interactiveElements.forEach(el => {
+      el.addEventListener('mouseenter', () => this.cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => this.cursor.classList.remove('hover'));
+    });
+  }
+}
+
+// Particle Network Background
+class ParticleNetwork {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.particles = [];
+    this.particleCount = 60;
+    this.connectionDistance = 150;
+    this.maxConnections = 3;
+    this.mouse = { x: null, y: null };
+    this.init();
+  }
+  
+  init() {
+    this.resize();
+    window.addEventListener('resize', () => this.resize());
+    
+    document.addEventListener('mousemove', (e) => {
+      this.mouse.x = e.clientX;
+      this.mouse.y = e.clientY;
+    }, { passive: true });
+    
+    document.addEventListener('mouseleave', () => {
+      this.mouse.x = null;
+      this.mouse.y = null;
+    });
+    
+    this.createParticles();
+    this.animate();
+  }
+  
+  resize() {
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+  }
+  
+  createParticles() {
+    for (let i = 0; i < this.particleCount; i++) {
+      this.particles.push({
+        x: Math.random() * this.canvas.width,
+        y: Math.random() * this.canvas.height,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        radius: Math.random() * 2 + 1
+      });
+    }
+  }
+  
+  animate() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    
+    this.particles.forEach((particle, i) => {
+      // Move particle
+      particle.x += particle.vx;
+      particle.y += particle.vy;
+      
+      // Boundaries
+      if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
+      if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
+      
+      // Draw particle
+      this.ctx.beginPath();
+      this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+      this.ctx.fillStyle = 'rgba(201, 206, 214, 0.3)';
+      this.ctx.fill();
+      
+      // Connect particles
+      let connections = 0;
+      for (let j = i + 1; j < this.particles.length; j++) {
+        if (connections >= this.maxConnections) break;
+        
+        const other = this.particles[j];
+        const dx = particle.x - other.x;
+        const dy = particle.y - other.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < this.connectionDistance) {
+          connections++;
+          const opacity = (1 - distance / this.connectionDistance) * 0.2;
+          this.ctx.beginPath();
+          this.ctx.moveTo(particle.x, particle.y);
+          this.ctx.lineTo(other.x, other.y);
+          this.ctx.strokeStyle = `rgba(201, 206, 214, ${opacity})`;
+          this.ctx.lineWidth = 0.5;
+          this.ctx.stroke();
+        }
+      }
+      
+      // Connect to mouse
+      if (this.mouse.x && this.mouse.y) {
+        const dx = particle.x - this.mouse.x;
+        const dy = particle.y - this.mouse.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < 200) {
+          const opacity = (1 - distance / 200) * 0.3;
+          this.ctx.beginPath();
+          this.ctx.moveTo(particle.x, particle.y);
+          this.ctx.lineTo(this.mouse.x, this.mouse.y);
+          this.ctx.strokeStyle = `rgba(201, 206, 214, ${opacity})`;
+          this.ctx.lineWidth = 0.8;
+          this.ctx.stroke();
+        }
+      }
+    });
+    
+    requestAnimationFrame(() => this.animate());
+  }
+}
+
+// Advanced Ripple Effect
+class AdvancedRipple {
+  constructor(element) {
+    this.element = element;
+    this.init();
+  }
+  
+  init() {
+    this.element.classList.add('ripple-container');
+    
+    this.element.addEventListener('click', (e) => {
+      const rect = this.element.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      ripple.style.left = x + 'px';
+      ripple.style.top = y + 'px';
+      
+      this.element.appendChild(ripple);
+      
+      setTimeout(() => ripple.remove(), 600);
+    });
+  }
+}
+
+// Text Scramble Effect on Hover
+class TextScrambleHover {
+  constructor(element) {
+    this.element = element;
+    this.originalText = element.textContent;
+    this.chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    this.isHovering = false;
+    this.init();
+  }
+  
+  init() {
+    this.element.addEventListener('mouseenter', () => {
+      this.isHovering = true;
+      this.scramble();
+    });
+    
+    this.element.addEventListener('mouseleave', () => {
+      this.isHovering = false;
+      this.element.textContent = this.originalText;
+    });
+  }
+  
+  scramble() {
+    if (!this.isHovering) return;
+    
+    let iteration = 0;
+    const interval = setInterval(() => {
+      if (!this.isHovering) {
+        clearInterval(interval);
+        this.element.textContent = this.originalText;
+        return;
+      }
+      
+      this.element.textContent = this.originalText
+        .split('')
+        .map((char, index) => {
+          if (index < iteration) {
+            return this.originalText[index];
+          }
+          return this.chars[Math.floor(Math.random() * this.chars.length)];
+        })
+        .join('');
+      
+      if (iteration >= this.originalText.length) {
+        clearInterval(interval);
+      }
+      
+      iteration += 1/2;
+    }, 30);
+  }
+}
+
+// Parallax Tilt Cards
+class ParallaxTiltCard {
+  constructor(element) {
+    this.element = element;
+    this.inner = element.querySelector('.parallax-card-inner');
+    this.shine = element.querySelector('.parallax-card-shine');
+    this.init();
+  }
+  
+  init() {
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+    
+    this.element.addEventListener('mousemove', (e) => {
+      const rect = this.element.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = (y - centerY) / 10;
+      const rotateY = (centerX - x) / 10;
+      
+      this.element.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+      
+      if (this.shine) {
+        const shineX = (x / rect.width) * 100;
+        const shineY = (y / rect.height) * 100;
+        this.shine.style.background = `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255,255,255,0.2) 0%, transparent 60%)`;
+        this.shine.style.opacity = '1';
+      }
+    });
+    
+    this.element.addEventListener('mouseleave', () => {
+      this.element.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+      if (this.shine) {
+        this.shine.style.opacity = '0';
+      }
+    });
+  }
+}
+
+// Initialize all new v6.0 features
+document.addEventListener('DOMContentLoaded', () => {
+  // Mouse Spotlight
+  new MouseSpotlight();
+  
+  // Custom Cursor (desktop only)
+  new CustomCursor();
+  
+  // Particle Network
+  const particleCanvas = document.createElement('canvas');
+  particleCanvas.className = 'particle-canvas';
+  document.body.insertBefore(particleCanvas, document.body.firstChild);
+  new ParticleNetwork(particleCanvas);
+  
+  // Advanced Ripple on buttons
+  document.querySelectorAll('.btn, .quote-btn').forEach(btn => {
+    new AdvancedRipple(btn);
+  });
+  
+  // Text Scramble on nav links
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    new TextScrambleHover(link);
+  });
+  
+  // Parallax Tilt on service cards
+  document.querySelectorAll('.service-card').forEach(card => {
+    card.classList.add('parallax-card');
+    card.innerHTML = `<div class="parallax-card-inner" style="transform-style: preserve-3d; height: 100%;">${card.innerHTML}<div class="parallax-card-shine" style="position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 0.3s;"></div></div>`;
+    new ParallaxTiltCard(card);
+  });
+  
+  // Animated gradient text for hero headline
+  const heroHeadline = document.querySelector('.hero h1');
+  if (heroHeadline) {
+    heroHeadline.classList.add('animated-gradient-text');
+  }
+  
+  // Add shimmer loading to project cards temporarily on load
+  document.querySelectorAll('.project-card').forEach((card, index) => {
+    setTimeout(() => {
+      card.classList.add('shimmer');
+      setTimeout(() => card.classList.remove('shimmer'), 1500);
+    }, index * 200);
+  });
+  
+  // Floating animation for stats
+  document.querySelectorAll('.floating-stats').forEach((stat, index) => {
+    stat.style.animationDelay = `${index * 0.5}s`;
+    stat.classList.add('float-animation');
+  });
+});
+
+// Console easter egg for v6.0
+console.log('%c🏗️ BuildBridge', 'font-size: 42px; font-weight: bold; background: linear-gradient(90deg, #C9CED6, #fff, #C9CED6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 40px rgba(201,206,214,0.6);');
+console.log('%cFortune 500 Construction Management System v6.0', 'font-size: 16px; color: #525862; font-weight: 600;');
+console.log('%c═════════════════════════════════════════════════════', 'font-size: 12px; color: #333;');
+console.log('%c✨ New in v6.0:', 'font-size: 13px; color: #C9CED6; font-weight: bold;');
+console.log('%c   • Mouse Spotlight Effect - Cursor-following gradient glow', 'font-size: 11px; color: #888;');
+console.log('%c   • Custom Animated Cursor - Premium hover interactions', 'font-size: 11px; color: #888;');
+console.log('%c   • Particle Network Background - Dynamic connecting dots', 'font-size: 11px; color: #888;');
+console.log('%c   • Advanced Ripple Effects - Material design clicks', 'font-size: 11px; color: #888;');
+console.log('%c   • Text Scramble Hover - Cyber-style text animation', 'font-size: 11px; color: #888;');
+console.log('%c   • Parallax Tilt Cards - 3D perspective on service cards', 'font-size: 11px; color: #888;');
+console.log('%c   • Animated Gradient Text - Flowing color headlines', 'font-size: 11px; color: #888;');
+console.log('%c   • Shimmer Loading Effects - Premium loading states', 'font-size: 11px; color: #888;');
+console.log('%c═════════════════════════════════════════════════════', 'font-size: 12px; color: #333;');
 console.log('%c💬 WhatsApp: +27 66 120 0064', 'font-size: 14px; color: #25D366; font-weight: bold;');
+console.log('%c🌐 Auto-Update Timestamp: ' + new Date().toISOString(), 'font-size: 10px; color: #666; font-style: italic;');
