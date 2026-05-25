@@ -7,12 +7,16 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="css/premium-effects.css">
   <link rel="stylesheet" href="css/advanced-effects.css">
+  <link rel="stylesheet" href="css/fortune500-effects.css">
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
 </head>
 <body class="focus-ring-accessible cursor-enabled">
   <!-- Skip Link for Accessibility -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
+  <!-- Living Gradient Background -->
+  <div class="living-gradient"></div>
+  
   <!-- Noise Texture Overlay - Premium Film Grain -->
   <div class="noise-overlay"></div>
 
@@ -22,12 +26,6 @@
 
   <!-- Back to Top Button -->
   <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
-
-  <!-- Floating WhatsApp Button -->
-  <a href="https://wa.me/27661200064" class="floating-whatsapp" target="_blank" title="Chat on WhatsApp">
-    <span>💬</span>
-    <div class="whatsapp-pulse"></div>
-  </a>
   <header class="nav" id="navbar">
     <a href="index.html" class="brand">
       <img src="assets/BuildBridge_Icon_Mark.svg" alt="BuildBridge">
@@ -273,6 +271,7 @@
   <script src="js/particles.js"></script>
   <script src="js/premium-effects.js"></script>
   <script src="js/advanced-animations.js"></script>
+  <script src="js/fortune500-animations.js"></script>
   <script>
     function toggleMenu() {
       const navLinks = document.getElementById('navLinks');
