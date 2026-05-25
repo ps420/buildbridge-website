@@ -513,7 +513,153 @@ if (heroHeading) {
   }, 500);
 }
 
+// Particle Background System
+class ParticleSystem {
+  constructor() {
+    this.canvas = document.createElement('canvas');
+    this.ctx = this.canvas.getContext('2d');
+    this.particles = [];
+    this.maxParticles = window.matchMedia('(pointer: coarse)').matches ? 15 : 30;
+    this.init();
+  }
+  
+  init() {
+    this.canvas.id = 'particle-canvas';
+    this.canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.4;';
+    document.body.prepend(this.canvas);
+    
+    this.resize();
+    window.addEventListener('resize', () => this.resize());
+    
+    for (let i = 0; i < this.maxParticles; i++) {
+      this.addParticle();
+    }
+    
+    this.animate();
+  }
+  
+  resize() {
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+  }
+  
+  addParticle() {
+    this.particles.push({
+      x: Math.random() * this.canvas.width,
+      y: Math.random() * this.canvas.height,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5,
+      size: Math.random() * 2 + 1,
+      opacity: Math.random() * 0.5 + 0.1
+    });
+  }
+  
+  animate() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    
+    this.particles.forEach((p, i) => {
+      p.x += p.vx;
+      p.y += p.vy;
+      
+      if (p.x < 0 || p.x > this.canvas.width) p.vx *= -1;
+      if (p.y < 0 || p.y > this.canvas.height) p.vy *= -1;
+      
+      this.ctx.beginPath();
+      this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      this.ctx.fillStyle = `rgba(201, 206, 214, ${p.opacity})`;
+      this.ctx.fill();
+      
+      // Connect nearby particles
+      for (let j = i + 1; j < this.particles.length; j++) {
+        const p2 = this.particles[j];
+        const dx = p.x - p2.x;
+        const dy = p.y - p2.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        
+        if (dist < 100) {
+          this.ctx.beginPath();
+          this.ctx.moveTo(p.x, p.y);
+          this.ctx.lineTo(p2.x, p2.y);
+          this.ctx.strokeStyle = `rgba(201, 206, 214, ${0.1 * (1 - dist / 100)})`;
+          this.ctx.stroke();
+        }
+      }
+    });
+    
+    requestAnimationFrame(() => this.animate());
+  }
+}
+
+// Initialize particles
+document.addEventListener('DOMContentLoaded', () => {
+  if (!window.matchMedia('(pointer: coarse)').matches) {
+    new ParticleSystem();
+  }
+});
+
+// Reading Progress Bar
+const progressBar = document.createElement('div');
+progressBar.className = 'reading-progress';
+document.body.prepend(progressBar);
+
+window.addEventListener('scroll', () => {
+  const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+  const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const scrolled = (winScroll / height) * 100;
+  progressBar.style.width = scrolled + '%';
+});
+
+// Custom Cursor with Trail (Desktop only)
+if (!window.matchMedia('(pointer: coarse)').matches) {
+  const cursor = document.createElement('div');
+  cursor.className = 'custom-cursor';
+  document.body.appendChild(cursor);
+  
+  const cursorTrail = [];
+  for (let i = 0; i < 5; i++) {
+    const trail = document.createElement('div');
+    trail.className = 'cursor-trail';
+    trail.style.opacity = (i + 1) * 0.15;
+    document.body.appendChild(trail);
+    cursorTrail.push(trail);
+  }
+  
+  let mouseX = 0, mouseY = 0;
+  let cursorX = 0, cursorY = 0;
+  
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+  
+  function animateCursor() {
+    cursorX += (mouseX - cursorX) * 0.15;
+    cursorY += (mouseY - cursorY) * 0.15;
+    
+    cursor.style.left = cursorX + 'px';
+    cursor.style.top = cursorY + 'px';
+    
+    cursorTrail.forEach((trail, i) => {
+      const delay = (i + 1) * 0.08;
+      const x = cursorX + (mouseX - cursorX) * delay;
+      const y = cursorY + (mouseY - cursorY) * delay;
+      trail.style.left = x + 'px';
+      trail.style.top = y + 'px';
+    });
+    
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+  
+  // Hover effects on interactive elements
+  document.querySelectorAll('a, button, .project-card, .service-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+}
+
 // Console easter egg
 console.log('%cBuildBridge', 'font-size: 40px; font-weight: bold; color: #C9CED6;');
 console.log('%cFortune 500 Construction Management', 'font-size: 14px; color: #525862;');
 console.log('%cConnecting Clients. Delivering Projects. Building Trust.', 'font-size: 12px; color: #525862; font-style: italic;');
+console.log('%c💬 WhatsApp: +27 66 120 0064', 'font-size: 14px; color: #25D366; font-weight: bold;');
