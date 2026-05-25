@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="css/premium-effects.css">
   <link rel="stylesheet" href="css/advanced-effects.css">
+  <link rel="stylesheet" href="css/fortune500-effects.css">
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0f0f10">
@@ -24,6 +25,9 @@
   <!-- Skip Link for Accessibility -->
   <a href="#main-content" class="skip-link" aria-label="Skip to main content">Skip to main content</a>
 
+  <!-- Living Gradient Background -->
+  <div class="living-gradient"></div>
+  
   <!-- Noise Texture Overlay - Premium Film Grain -->
   <div class="noise-overlay"></div>
 
@@ -44,12 +48,6 @@
 
   <!-- Back to Top Button -->
   <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
-
-  <!-- Floating WhatsApp Button -->
-  <a href="https://wa.me/27661200064" class="floating-whatsapp" target="_blank" title="Chat on WhatsApp" aria-label="Chat with BuildBridge on WhatsApp" rel="noopener noreferrer">
-    <span aria-hidden="true">💬</span>
-    <div class="whatsapp-pulse" aria-hidden="true"></div>
-  </a>
   <!-- Navigation -->
   <header class="nav" id="navbar">
     <a href="index.html" class="brand">
@@ -76,8 +74,8 @@
       <h1 class="split-heading fade-in-up stagger-1">Connecting Clients.<br>Delivering Projects.<br><span class="gradient-text">Building Trust.</span></h1>
       <p class="fade-in-up stagger-2">BuildBridge acts as the trusted link between clients and contractors — managing projects with transparency, expertise and care from concept to completion. We bridge the gap between vision and reality.</p>
       <div class="actions fade-in-up stagger-3">
-        <a href="https://wa.me/27661200064" class="btn magnetic magnetic-el" target="_blank">💬 Chat on WhatsApp</a>
-        <a href="services.html" class="btn ghost">Our Services →</a>
+        <a href="https://wa.me/27661200064" class="btn magnetic magnetic-el" target="_blank" data-magnetic="0.3">💬 Chat on WhatsApp</a>
+        <a href="services.html" class="btn ghost" data-magnetic="0.1">Our Services →</a>
       </div>
     </div>
     <div class="hero-visual">
@@ -151,28 +149,28 @@
       <p>From initial consultation to final handover, we provide comprehensive construction management services that ensure your project succeeds on time, within budget, and to the highest standards.</p>
     </div>
     <div class="services-grid">
-      <article class="service-card tilt-card-advanced fade-in-up stagger-1">
+      <article class="service-card tilt-card-3d tilt-card-advanced fade-in-up stagger-1" data-magnetic="0.2">
         <div class="card-content">
           <div class="service-icon">📋</div>
           <h3 class="scramble-text">Project Consultation</h3>
           <p>We understand your goals, scope, budget and ideal delivery plan. Our experts help define clear objectives and realistic timelines.</p>
         </div>
       </article>
-      <article class="service-card tilt-card-advanced fade-in-up stagger-2">
+      <article class="service-card tilt-card-3d tilt-card-advanced fade-in-up stagger-2" data-magnetic="0.2">
         <div class="card-content">
           <div class="service-icon">🤝</div>
           <h3 class="scramble-text">Contractor Matching</h3>
           <p>We connect you with qualified contractors suited to the work. Our vetted network ensures quality craftsmanship every time.</p>
         </div>
       </article>
-      <article class="service-card tilt-card-advanced fade-in-up stagger-3">
+      <article class="service-card tilt-card-3d tilt-card-advanced fade-in-up stagger-3" data-magnetic="0.2">
         <div class="card-content">
           <div class="service-icon">📊</div>
           <h3 class="scramble-text">Project Management</h3>
           <p>We oversee timelines, communication, quality and progress. Full oversight from groundbreaking to ribbon cutting.</p>
         </div>
       </article>
-      <article class="service-card tilt-card-advanced fade-in-up stagger-4">
+      <article class="service-card tilt-card-3d tilt-card-advanced fade-in-up stagger-4" data-magnetic="0.2">
         <div class="card-content">
           <div class="service-icon">✓</div>
           <h3 class="scramble-text">Quality & Transparency</h3>
@@ -517,6 +515,7 @@
   <script src="js/particles.js"></script>
   <script src="js/premium-effects.js"></script>
   <script src="js/advanced-animations.js"></script>
+  <script src="js/fortune500-animations.js"></script>
   <script>
     // Mobile menu toggle with animation
     function toggleMenu() {

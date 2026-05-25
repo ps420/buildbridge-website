@@ -1,0 +1,720 @@
+/**
+ * BuildBridge Fortune 500 Effects v7.0
+ * Executive-level polish and premium interactions
+ */
+
+/* ========================================
+   1. MAGNETIC CURSOR SYSTEM
+======================================== */
+.magnetic-cursor {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--chrome);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease, background 0.3s ease;
+  mix-blend-mode: difference;
+}
+
+.magnetic-cursor.hovering {
+  width: 60px;
+  height: 60px;
+  background: rgba(201, 206, 214, 0.1);
+}
+
+.magnetic-cursor.clicking {
+  width: 40px;
+  height: 40px;
+  background: rgba(201, 206, 214, 0.2);
+}
+
+.magnetic-cursor-dot {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  background: var(--chrome);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+}
+
+/* Hide on touch devices */
+@media (pointer: coarse) {
+  .magnetic-cursor,
+  .magnetic-cursor-dot {
+    display: none !important;
+  }
+}
+
+/* ========================================
+   2. 3D TILT CARD WITH GLARE
+======================================== */
+.tilt-card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease-out;
+}
+
+.tilt-card-3d .card-glare {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 10;
+}
+
+.tilt-card-3d:hover .card-glare {
+  opacity: 1;
+}
+
+.tilt-card-3d .card-content {
+  transform: translateZ(30px);
+}
+
+.tilt-card-3d .service-icon {
+  transform: translateZ(50px);
+}
+
+/* ========================================
+   3. TEXT SCRAMBLE EFFECT
+======================================== */
+.scramble-text-hover {
+  position: relative;
+  display: inline-block;
+}
+
+.scramble-text-hover::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Matrix-style scramble effect */
+@keyframes text-glitch {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+}
+
+.text-glitching {
+  animation: text-glitch 0.3s ease;
+}
+
+/* ========================================
+   4. SCROLL VELOCITY EFFECTS
+======================================== */
+.velocity-aware {
+  transition: transform 0.15s ease-out;
+}
+
+.velocity-skew-left {
+  transform: skewX(-2deg);
+}
+
+.velocity-skew-right {
+  transform: skewX(2deg);
+}
+
+/* Staggered parallax layers */
+.parallax-layer {
+  will-change: transform;
+}
+
+.parallax-slow { --parallax-speed: 0.3; }
+.parallax-medium { --parallax-speed: 0.5; }
+.parallax-fast { --parallax-speed: 0.8; }
+
+/* ========================================
+   5. DYNAMIC FOOTER REVEAL
+======================================== */
+.footer-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+.cta {
+  position: relative;
+  z-index: 2;
+  background: var(--black);
+}
+
+.footer-reveal {
+  position: relative;
+}
+
+.footer-reveal footer {
+  position: sticky;
+  bottom: 0;
+  z-index: -1;
+}
+
+/* Footer curtain effect */
+.footer-curtain {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+}
+
+/* ========================================
+   6. FLOATING ACTION BUTTON V2
+======================================== */
+.fab-container {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.fab-main {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--chrome);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(201, 206, 214, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.fab-main:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px rgba(201, 206, 214, 0.4);
+}
+
+.fab-main svg {
+  width: 28px;
+  height: 28px;
+  fill: var(--black);
+  transition: transform 0.3s ease;
+}
+
+.fab-main:hover svg {
+  transform: rotate(90deg);
+}
+
+.fab-main::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.3), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.fab-main:hover::before {
+  opacity: 1;
+}
+
+.fab-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(20px) scale(0.8);
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fab-menu.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+
+.fab-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: var(--onyx);
+  border-radius: 30px;
+  color: var(--chrome);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  white-space: nowrap;
+}
+
+.fab-item:hover {
+  background: var(--eerie);
+  transform: translateX(-5px);
+}
+
+.fab-item .icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========================================
+   7. ADVANCED HAMBURGER ANIMATION
+======================================== */
+.menu-btn-advanced {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  position: relative;
+  z-index: 1001;
+}
+
+.menu-line {
+  position: absolute;
+  width: 24px;
+  height: 2px;
+  background: var(--chrome);
+  transition: all 0.4s cubic-bezier(0.86, 0, 0.07, 1);
+}
+
+.menu-line:nth-child(1) { transform: translateY(-8px); }
+.menu-line:nth-child(2) { transform: scaleX(1); }
+.menu-line:nth-child(3) { transform: translateY(8px); }
+
+.menu-btn-advanced.active .menu-line:nth-child(1) {
+  transform: translateY(0) rotate(45deg);
+}
+
+.menu-btn-advanced.active .menu-line:nth-child(2) {
+  transform: scaleX(0);
+  opacity: 0;
+}
+
+.menu-btn-advanced.active .menu-line:nth-child(3) {
+  transform: translateY(0) rotate(-45deg);
+}
+
+/* Full screen menu overlay */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 15, 16, 0.98);
+  backdrop-filter: blur(20px);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menu-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.menu-overlay-content {
+  text-align: center;
+}
+
+.menu-overlay-link {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(32px, 8vw, 64px);
+  font-weight: 700;
+  color: var(--arctic);
+  text-decoration: none;
+  padding: 15px 0;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menu-overlay.active .menu-overlay-link {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.menu-overlay.active .menu-overlay-link:nth-child(1) { transition-delay: 0.1s; }
+.menu-overlay.active .menu-overlay-link:nth-child(2) { transition-delay: 0.15s; }
+.menu-overlay.active .menu-overlay-link:nth-child(3) { transition-delay: 0.2s; }
+.menu-overlay.active .menu-overlay-link:nth-child(4) { transition-delay: 0.25s; }
+.menu-overlay.active .menu-overlay-link:nth-child(5) { transition-delay: 0.3s; }
+
+.menu-overlay-link:hover {
+  color: var(--chrome);
+}
+
+.menu-overlay-link .number {
+  font-size: 0.4em;
+  opacity: 0.5;
+  margin-right: 15px;
+  font-weight: 400;
+}
+
+/* ========================================
+   8. LIVING GRADIENT BACKGROUND
+======================================== */
+.living-gradient {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: 
+    radial-gradient(ellipse at 20% 20%, rgba(201, 206, 214, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(168, 173, 181, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(140, 145, 153, 0.04) 0%, transparent 60%);
+  animation: living-gradient-shift 20s ease-in-out infinite;
+}
+
+@keyframes living-gradient-shift {
+  0%, 100% {
+    background-position: 0% 0%, 100% 100%, 50% 50%;
+    transform: scale(1);
+  }
+  33% {
+    background-position: 100% 0%, 0% 100%, 50% 50%;
+    transform: scale(1.1);
+  }
+  66% {
+    background-position: 50% 100%, 50% 0%, 0% 50%;
+    transform: scale(1.05);
+  }
+}
+
+/* ========================================
+   9. AMBIENT PARTICLE FIELD
+======================================== */
+.ambient-particles {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.ambient-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--chrome);
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: float-particle 15s ease-in-out infinite;
+}
+
+@keyframes float-particle {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translate(50px, -30px);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-30px, -60px);
+    opacity: 0.2;
+  }
+  75% {
+    transform: translate(-50px, -20px);
+    opacity: 0.5;
+  }
+}
+
+/* ========================================
+   10. SMOOTH SECTION INDICATOR
+======================================== */
+.section-indicator {
+  position: fixed;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section-indicator-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 206, 214, 0.3);
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.section-indicator-dot::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.section-indicator-dot.active {
+  background: var(--chrome);
+  border-color: var(--chrome);
+  transform: scale(1.3);
+}
+
+.section-indicator-dot.active::before {
+  border-color: rgba(201, 206, 214, 0.2);
+  animation: ripple 1s ease-out infinite;
+}
+
+@keyframes ripple {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+.section-indicator-label {
+  position: absolute;
+  right: 25px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--chrome);
+  opacity: 0;
+  white-space: nowrap;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.section-indicator-dot:hover .section-indicator-label {
+  opacity: 1;
+}
+
+@media (max-width: 1200px) {
+  .section-indicator {
+    display: none;
+  }
+}
+
+/* ========================================
+   11. BREATHING UI ELEMENTS
+======================================== */
+.breathing {
+  animation: breathe 4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+}
+
+/* Pulse animation for CTAs */
+.pulse-subtle {
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+@keyframes pulse-subtle {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(201, 206, 214, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(201, 206, 214, 0);
+  }
+}
+
+/* ========================================
+   12. GLASSMORPHISM CARDS
+======================================== */
+.glass-card {
+  background: rgba(30, 30, 32, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 20px;
+  padding: 40px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: rgba(30, 30, 32, 0.8);
+  border-color: rgba(201, 206, 214, 0.2);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* ========================================
+   13. TEXT REVEAL MASK
+======================================== */
+.text-reveal-mask {
+  overflow: hidden;
+}
+
+.text-reveal-mask .text-reveal-inner {
+  transform: translateY(100%);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.text-reveal-mask.revealed .text-reveal-inner {
+  transform: translateY(0);
+}
+
+/* ========================================
+   14. STAGGERED LIST REVEAL
+======================================== */
+.stagger-list {
+  list-style: none;
+  padding: 0;
+}
+
+.stagger-list-item {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stagger-list.revealed .stagger-list-item {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.stagger-list.revealed .stagger-list-item:nth-child(1) { transition-delay: 0.05s; }
+.stagger-list.revealed .stagger-list-item:nth-child(2) { transition-delay: 0.1s; }
+.stagger-list.revealed .stagger-list-item:nth-child(3) { transition-delay: 0.15s; }
+.stagger-list.revealed .stagger-list-item:nth-child(4) { transition-delay: 0.2s; }
+.stagger-list.revealed .stagger-list-item:nth-child(5) { transition-delay: 0.25s; }
+
+/* ========================================
+   15. IMAGE PARALLAX CONTAINER
+======================================== */
+.parallax-image-container {
+  overflow: hidden;
+  position: relative;
+}
+
+.parallax-image-container img {
+  transition: transform 0.1s ease-out;
+  will-change: transform;
+}
+
+/* ========================================
+   16. LOADING SHIMMER
+======================================== */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--onyx) 25%,
+    var(--eerie) 50%,
+    var(--onyx) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ========================================
+   17. HOVER LIFT EFFECTS
+======================================== */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.hover-lift-sm:hover {
+  transform: translateY(-4px);
+}
+
+/* ========================================
+   18. BUTTON RIPPLE EFFECT
+======================================== */
+.ripple-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(0);
+  animation: ripple-effect 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple-effect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ========================================
+   19. SCROLL SNAP IMPROVEMENTS
+======================================== */
+@media (min-width: 1024px) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ========================================
+   20. REDUCED MOTION SUPPORT
+======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .magnetic-cursor,
+  .magnetic-cursor-dot,
+  .ambient-particles,
+  .living-gradient {
+    display: none !important;
+  }
+  
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Cursor magnetic elements */
+[data-magnetic] {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
