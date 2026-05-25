@@ -1,0 +1,601 @@
+/**
+ * BuildBridge Advanced Effects v6.3
+ * Fortune 500-quality animations and transitions
+ */
+
+/* ========================================
+   1. SMOOTH SCROLL INDICATOR
+======================================== */
+.scroll-indicator {
+  position: fixed;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scroll-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.scroll-dot.active {
+  background: var(--chrome);
+  transform: scale(1.5);
+  box-shadow: 0 0 10px rgba(201, 206, 214, 0.5);
+}
+
+.scroll-dot:hover {
+  background: var(--slate);
+}
+
+@media (max-width: 1024px) {
+  .scroll-indicator {
+    display: none;
+  }
+}
+
+/* ========================================
+   2. SECTION REVEAL STATES
+======================================== */
+.section-revealed {
+  --reveal-state: revealed;
+}
+
+.section-reveal-content {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.section-revealed .section-reveal-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+   3. HERO ENTRANCE ANIMATIONS
+======================================== */
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes hero-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes hero-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.hero-animate {
+  animation: hero-fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+.hero-animate-delay-1 { animation-delay: 0.2s; }
+.hero-animate-delay-2 { animation-delay: 0.4s; }
+.hero-animate-delay-3 { animation-delay: 0.6s; }
+.hero-animate-delay-4 { animation-delay: 0.8s; }
+.hero-animate-delay-5 { animation-delay: 1s; }
+
+/* ========================================
+   4. TYPEWRITER CURSOR
+======================================== */
+.typewriter-cursor::after {
+  content: '|';
+  animation: cursor-blink 1s step-end infinite;
+  margin-left: 2px;
+  color: var(--chrome);
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ========================================
+   5. COUNTER COMPLETION GLOW
+======================================== */
+.counter-complete {
+  animation: counter-glow 0.6s ease;
+}
+
+@keyframes counter-glow {
+  0% {
+    text-shadow: 0 0 0 transparent;
+  }
+  50% {
+    text-shadow: 0 0 20px var(--chrome);
+  }
+  100% {
+    text-shadow: 0 0 0 transparent;
+  }
+}
+
+/* ========================================
+   6. CONFETTI CONTAINER
+======================================== */
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 99999;
+}
+
+/* ========================================
+   7. CAROUSEL ENHANCEMENTS
+======================================== */
+.testimonial-carousel-3d {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.testimonial-carousel-card {
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+}
+
+.testimonial-carousel-card.active {
+  transform: translateZ(50px) scale(1);
+  opacity: 1;
+}
+
+.testimonial-carousel-card.prev,
+.testimonial-carousel-card.next {
+  opacity: 0.5;
+  filter: blur(2px);
+}
+
+.testimonial-carousel-card.prev {
+  transform: translateX(-30%) translateZ(-30px) rotateY(15deg) scale(0.85);
+}
+
+.testimonial-carousel-card.next {
+  transform: translateX(30%) translateZ(-30px) rotateY(-15deg) scale(0.85);
+}
+
+/* ========================================
+   8. TIMELINE ENHANCED
+======================================== */
+.timeline-progress {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--chrome), transparent);
+  transform: translateX(-50%) scaleY(0);
+  transform-origin: top;
+  transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.timeline-progress.animate {
+  transform: translateX(-50%) scaleY(1);
+}
+
+.timeline-node {
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.timeline-item.revealed .timeline-node {
+  transform: scale(1);
+  animation: node-pulse 0.5s ease;
+}
+
+@keyframes node-pulse {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* ========================================
+   9. CARD STACK EFFECT
+======================================== */
+.card-stack {
+  position: relative;
+  perspective: 1000px;
+}
+
+.card-stack-item {
+  position: absolute;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-stack-item:nth-child(1) {
+  transform: translateZ(0) rotateY(0);
+  z-index: 3;
+}
+
+.card-stack-item:nth-child(2) {
+  transform: translateZ(-30px) translateX(20px) rotateY(-5deg);
+  z-index: 2;
+}
+
+.card-stack-item:nth-child(3) {
+  transform: translateZ(-60px) translateX(40px) rotateY(-10deg);
+  z-index: 1;
+}
+
+/* ========================================
+   10. MORPHING SVG BACKGROUND
+======================================== */
+.morphing-svg-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.morphing-svg-bg path {
+  animation: morph-path 10s ease-in-out infinite;
+}
+
+@keyframes morph-path {
+  0%, 100% {
+    d: path('M440,320Q400,390,320,425Q240,460,160,400Q80,340,100,240Q120,140,220,100Q320,60,400,140Q480,220,440,320Z');
+  }
+  50% {
+    d: path('M441,318Q396,386,318,423Q240,460,162,396Q84,332,108,236Q132,140,228,106Q324,72,401,148Q478,224,441,318Z');
+  }
+}
+
+/* ========================================
+   11. NAVIGATION ACTIVE GLOW
+======================================== */
+.nav-links a {
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-links a::before {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--chrome);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 10px var(--chrome);
+}
+
+.nav-links a:hover::before,
+.nav-links a.active::before {
+  width: 100%;
+}
+
+.nav-links a.active {
+  color: var(--chrome);
+}
+
+/* ========================================
+   12. FLOATING STATS ANIMATION
+======================================== */
+@keyframes float-stat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.floating-stats {
+  animation: float-stat 4s ease-in-out infinite;
+}
+
+.floating-stats:nth-child(2) {
+  animation-delay: -2s;
+}
+
+.floating-stats .number {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ========================================
+   13. MARQUEE ENHANCEMENTS
+======================================== */
+.marquee-track {
+  animation: marquee var(--marquee-duration, 40s) linear infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-section:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* ========================================
+   14. PROJECT CARD HOVER LIFT
+======================================== */
+.project-card {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.project-card img {
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-card:hover img {
+  transform: scale(1.1);
+}
+
+/* ========================================
+   15. SERVICE CARD HOVER
+======================================== */
+.service-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.service-card .service-icon {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.service-card:hover .service-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* ========================================
+   16. BUTTON HOVER STATES
+======================================== */
+.btn {
+  overflow: hidden;
+  position: relative;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn:hover::after {
+  width: 300%;
+  height: 300%;
+}
+
+/* ========================================
+   17. PAGE TRANSITION OVERLAY
+======================================== */
+.page-transition {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  z-index: 99999;
+  transform: translateY(100%);
+  transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-transition.active {
+  transform: translateY(0);
+}
+
+.page-transition.exiting {
+  transform: translateY(-100%);
+}
+
+.page-transition-logo {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s ease 0.3s;
+}
+
+.page-transition.active .page-transition-logo {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ========================================
+   18. SCROLL SNAP FOR SECTIONS
+======================================== */
+@media (min-width: 1024px) {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  .snap-section {
+    scroll-snap-align: start;
+  }
+}
+
+/* ========================================
+   19. INTERSECTION OBSERVER ANIMATIONS
+======================================== */
+.io-fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.io-fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.io-fade-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.io-fade-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.io-scale {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.io-scale.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ========================================
+   20. PRELOADER ENHANCED
+======================================== */
+.preloader {
+  position: fixed;
+  inset: 0;
+  background: var(--black);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.preloader.loaded {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.preloader-logo {
+  width: 60px;
+  height: 60px;
+  animation: preloader-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes preloader-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+}
+
+.preloader-bar {
+  width: 150px;
+  height: 2px;
+  background: rgba(201, 206, 214, 0.2);
+  margin-top: 20px;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.preloader-progress {
+  height: 100%;
+  width: 0;
+  background: var(--chrome);
+  transition: width 0.3s ease;
+}
+
+/* ========================================
+   PERFORMANCE: REDUCED MOTION
+======================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .preloader,
+  .scroll-indicator,
+  .morphing-blob,
+  .particle-canvas {
+    display: none !important;
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES
+======================================== */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.gpu-layer {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.contain-layout {
+  contain: layout style paint;
+}
