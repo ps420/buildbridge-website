@@ -278,10 +278,25 @@
   </footer>
 
   <script>
-    // Mobile menu toggle
+    // Mobile menu toggle with animation
     function toggleMenu() {
-      document.getElementById('navLinks').classList.toggle('active');
+      const navLinks = document.getElementById('navLinks');
+      const menuBtn = document.querySelector('.mobile-menu-btn');
+      navLinks.classList.toggle('active');
+      menuBtn.classList.toggle('active');
+      document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
     }
+
+    // Close menu when clicking a link
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        const navLinks = document.getElementById('navLinks');
+        const menuBtn = document.querySelector('.mobile-menu-btn');
+        navLinks.classList.remove('active');
+        menuBtn.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+    });
 
     // Navbar scroll effect
     window.addEventListener('scroll', () => {
@@ -302,6 +317,26 @@
         });
       });
     });
+    
+    // Touch swipe detection for mobile menu
+    let touchStartY = 0;
+    let touchEndY = 0;
+    
+    document.addEventListener('touchstart', e => {
+      touchStartY = e.changedTouches[0].screenY;
+    }, false);
+    
+    document.addEventListener('touchend', e => {
+      touchEndY = e.changedTouches[0].screenY;
+      handleSwipe();
+    }, false);
+    
+    function handleSwipe() {
+      const navLinks = document.getElementById('navLinks');
+      if (touchEndY < touchStartY - 50 && window.scrollY < 100) {
+        // Swipe up near top - could add pull to refresh here
+      }
+    }
   </script>
 </body>
 </html>
