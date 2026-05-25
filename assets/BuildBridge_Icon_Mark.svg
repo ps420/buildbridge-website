@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+<rect width="600" height="600" rx="40" fill="#0F0F10"/>
+<g fill="#F5F7FA">
+<rect x="130" y="230" width="36" height="170"/><rect x="185" y="175" width="40" height="225"/><rect x="250" y="110" width="44" height="290"/>
+<text x="295" y="390" font-size="285" font-weight="800" font-family="Arial">B</text>
+</g>
+<g fill="none" stroke="#C9CED6" stroke-width="14">
+<path d="M125 400 C210 285,390 285,500 400"/>
+<line x1="170" y1="380" x2="170" y2="450"/><line x1="225" y1="350" x2="225" y2="450"/><line x1="285" y1="340" x2="285" y2="450"/><line x1="345" y1="350" x2="345" y2="450"/><line x1="405" y1="380" x2="405" y2="450"/>
+</g></svg>

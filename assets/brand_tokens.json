@@ -1,0 +1,17 @@
+{
+  "brand": "BuildBridge",
+  "direction": "Option A - Black + Chrome + White",
+  "colors": {
+    "black": "#0F0F10",
+    "gunmetal": "#2A2D34",
+    "slate": "#525862",
+    "chrome": "#C9CED6",
+    "white": "#F5F7FA",
+    "soft": "#E6E8EC"
+  },
+  "fonts": {
+    "headings": "Montserrat Bold / DejaVu Sans Condensed Bold fallback",
+    "body": "Poppins / Arial fallback"
+  },
+  "tagline": "Connecting Clients. Delivering Projects. Building Trust."
+}

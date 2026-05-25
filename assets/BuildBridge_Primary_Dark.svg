@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420">
+<rect width="1200" height="420" fill="#0F0F10"/>
+<g fill="#F5F7FA">
+<rect x="90" y="130" width="28" height="130"/><rect x="130" y="90" width="30" height="170"/><rect x="175" y="50" width="34" height="210"/>
+<text x="220" y="250" font-size="210" font-weight="800" font-family="Arial">B</text>
+<text x="390" y="205" font-size="92" font-weight="800" font-family="Arial">BuildBridge</text>
+</g>
+<g fill="none" stroke="#C9CED6" stroke-width="9">
+<path d="M90 260 C145 190,260 190,330 260"/>
+<line x1="122" y1="245" x2="122" y2="290"/><line x1="155" y1="228" x2="155" y2="290"/><line x1="190" y1="220" x2="190" y2="290"/><line x1="225" y1="225" x2="225" y2="290"/><line x1="260" y1="240" x2="260" y2="290"/>
+</g>
+<text x="400" y="260" font-size="28" letter-spacing="8" font-family="Arial" fill="#C9CED6">CONSTRUCTION MANAGEMENT</text>
+<text x="400" y="315" font-size="22" letter-spacing="4" font-family="Arial" fill="#F5F7FA">CONNECTING CLIENTS. DELIVERING PROJECTS. BUILDING TRUST.</text>
+</svg>
