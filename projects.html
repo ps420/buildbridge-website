@@ -8,6 +8,8 @@
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
 </head>
 <body>
+  <!-- Back to Top Button -->
+  <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
   <header class="nav" id="navbar">
     <a href="index.html" class="brand">
       <img src="assets/BuildBridge_Icon_Mark.svg" alt="BuildBridge">
@@ -37,10 +39,19 @@
   </section>
 
   <section class="section">
-    <div class="section-header">
+    <div class="section-header fade-in-up">
       <p class="eyebrow">Portfolio</p>
       <h2>Featured Work</h2>
     </div>
+    
+    <!-- Project Filters -->
+    <div class="filter-container fade-in-up">
+      <button class="filter-btn active" data-filter="all">All Projects</button>
+      <button class="filter-btn" data-filter="residential">Residential</button>
+      <button class="filter-btn" data-filter="commercial">Commercial</button>
+      <button class="filter-btn" data-filter="industrial">Industrial</button>
+    </div>
+    
     <div class="projects-grid">
       <div class="project-card">
         <img src="assets/02_Website_Heroes/Hero_1.png" alt="Modern Residential Complex">
@@ -265,6 +276,7 @@
     </div>
   </footer>
 
+  <script src="scripts.js"></script>
   <script>
     function toggleMenu() {
       const navLinks = document.getElementById('navLinks');

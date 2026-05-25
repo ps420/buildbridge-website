@@ -8,6 +8,16 @@
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
 </head>
 <body>
+  <!-- Preloader -->
+  <div class="preloader">
+    <img src="assets/BuildBridge_Icon_Mark.svg" alt="BuildBridge" class="preloader-logo">
+    <div class="preloader-bar">
+      <div class="preloader-progress"></div>
+    </div>
+  </div>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
   <!-- Navigation -->
   <header class="nav" id="navbar">
     <a href="index.html" class="brand">
@@ -29,12 +39,12 @@
 
   <!-- Hero Section -->
   <section class="hero">
-    <div class="hero-copy">
-      <p class="eyebrow">Construction Management</p>
-      <h1>Connecting Clients.<br>Delivering Projects.<br><span>Building Trust.</span></h1>
-      <p>BuildBridge acts as the trusted link between clients and contractors — managing projects with transparency, expertise and care from concept to completion. We bridge the gap between vision and reality.</p>
-      <div class="actions">
-        <a href="services.html" class="btn">Our Services →</a>
+    <div class="hero-copy animate-on-load">
+      <p class="eyebrow fade-in-up">Construction Management</p>
+      <h1 class="fade-in-up stagger-1">Connecting Clients.<br>Delivering Projects.<br><span>Building Trust.</span></h1>
+      <p class="fade-in-up stagger-2">BuildBridge acts as the trusted link between clients and contractors — managing projects with transparency, expertise and care from concept to completion. We bridge the gap between vision and reality.</p>
+      <div class="actions fade-in-up stagger-3">
+        <a href="services.html" class="btn magnetic">Our Services →</a>
         <a href="contact.html" class="btn ghost">Book Consultation</a>
       </div>
     </div>
@@ -79,28 +89,28 @@
 
   <!-- Services Section -->
   <section class="section">
-    <div class="section-header">
+    <div class="section-header fade-in-up">
       <p class="eyebrow">What We Do</p>
       <h2>Our Core Services</h2>
       <p>From initial consultation to final handover, we provide comprehensive construction management services that ensure your project succeeds on time, within budget, and to the highest standards.</p>
     </div>
     <div class="services-grid">
-      <article class="service-card">
+      <article class="service-card fade-in-up stagger-1 hover-lift">
         <div class="service-icon">📋</div>
         <h3>Project Consultation</h3>
         <p>We understand your goals, scope, budget and ideal delivery plan. Our experts help define clear objectives and realistic timelines.</p>
       </article>
-      <article class="service-card">
+      <article class="service-card fade-in-up stagger-2 hover-lift">
         <div class="service-icon">🤝</div>
         <h3>Contractor Matching</h3>
         <p>We connect you with qualified contractors suited to the work. Our vetted network ensures quality craftsmanship every time.</p>
       </article>
-      <article class="service-card">
+      <article class="service-card fade-in-up stagger-3 hover-lift">
         <div class="service-icon">📊</div>
         <h3>Project Management</h3>
         <p>We oversee timelines, communication, quality and progress. Full oversight from groundbreaking to ribbon cutting.</p>
       </article>
-      <article class="service-card">
+      <article class="service-card fade-in-up stagger-4 hover-lift">
         <div class="service-icon">✓</div>
         <h3>Quality & Transparency</h3>
         <p>We keep every stage clear, professional and accountable. Real-time updates and honest communication always.</p>
@@ -111,20 +121,20 @@
   <!-- Stats Section -->
   <section class="stats-section">
     <div class="stats-grid">
-      <div class="stat-item">
-        <div class="number">150+</div>
+      <div class="stat-item fade-in-up">
+        <div class="number" data-target="150">0</div>
         <div class="label">Projects Completed</div>
       </div>
-      <div class="stat-item">
+      <div class="stat-item fade-in-up stagger-1">
         <div class="number">R50M+</div>
         <div class="label">Value Managed</div>
       </div>
-      <div class="stat-item">
-        <div class="number">12+</div>
+      <div class="stat-item fade-in-up stagger-2">
+        <div class="number" data-target="12">0</div>
         <div class="label">Years Experience</div>
       </div>
-      <div class="stat-item">
-        <div class="number">50+</div>
+      <div class="stat-item fade-in-up stagger-3">
+        <div class="number" data-target="50">0</div>
         <div class="label">Contractor Partners</div>
       </div>
     </div>
@@ -132,27 +142,27 @@
 
   <!-- Featured Projects -->
   <section class="section">
-    <div class="section-header">
+    <div class="section-header fade-in-up">
       <p class="eyebrow">Our Work</p>
       <h2>Featured Projects</h2>
       <p>Explore some of our recent success stories across residential, commercial, and industrial sectors.</p>
     </div>
     <div class="projects-grid">
-      <div class="project-card">
+      <div class="project-card fade-in-up stagger-1 shine" data-category="residential">
         <img src="assets/02_Website_Heroes/Hero_2.png" alt="Modern Residential Complex">
         <div class="project-overlay">
           <h3>Modern Residential Complex</h3>
           <p>Cape Town, South Africa</p>
         </div>
       </div>
-      <div class="project-card">
+      <div class="project-card fade-in-up stagger-2 shine" data-category="commercial">
         <img src="assets/03_Social_Campaign/Campaign_4.png" alt="Commercial Development">
         <div class="project-overlay">
           <h3>Corporate Headquarters</h3>
           <p>Johannesburg, South Africa</p>
         </div>
       </div>
-      <div class="project-card">
+      <div class="project-card fade-in-up stagger-3 shine" data-category="residential">
         <img src="assets/03_Social_Campaign/Campaign_5.png" alt="Luxury Villa">
         <div class="project-overlay">
           <h3>Luxury Villa Estate</h3>
@@ -279,6 +289,20 @@
     </div>
   </footer>
 
+  <!-- Cookie Consent -->
+  <div class="cookie-consent" id="cookieConsent">
+    <p>We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.</p>
+    <button class="btn" onclick="document.getElementById('cookieConsent').classList.remove('show')">Accept</button>
+  </div>
+
+  <script>
+    // Show cookie consent after delay
+    setTimeout(() => {
+      document.getElementById('cookieConsent').classList.add('show');
+    }, 3000);
+  </script>
+
+  <script src="scripts.js"></script>
   <script>
     // Mobile menu toggle with animation
     function toggleMenu() {
