@@ -3222,6 +3222,382 @@ console.log('%c💬 WhatsApp: +27 66 120 0064', 'font-size: 14px; color: #25D366
 console.log('%c🌐 Auto-Update Timestamp: ' + new Date().toISOString(), 'font-size: 10px; color: #666; font-style: italic;');
 
 // =========================================
+// v6.2 ADVANCED UI COMPONENTS
+// =========================================
+
+// Circular Scroll Progress Indicator
+class ScrollProgressRing {
+  constructor() {
+    this.element = null;
+    this.progress = 0;
+    this.init();
+  }
+  
+  init() {
+    this.element = document.createElement('div');
+    this.element.className = 'scroll-progress-ring';
+    this.element.innerHTML = `
+      <svg width="54" height="54" viewBox="0 0 54 54">
+        <circle class="bg" cx="27" cy="27" r="24"></circle>
+        <circle class="progress" cx="27" cy="27" r="24" 
+                stroke-dasharray="150.8" stroke-dashoffset="150.8"></circle>
+      </svg>
+      <span class="arrow">↑</span>
+    `;
+    
+    document.body.appendChild(this.element);
+    
+    // Scroll listener
+    window.addEventListener('scroll', () => this.update(), { passive: true });
+    
+    // Click to scroll to top
+    this.element.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    
+    this.update();
+  }
+  
+  update() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    this.progress = (scrollTop / docHeight) * 150.8;
+    
+    const circle = this.element.querySelector('.progress');
+    circle.style.strokeDashoffset = 150.8 - this.progress;
+    
+    // Show/hide based on scroll
+    if (scrollTop > 300) {
+      this.element.classList.add('visible');
+    } else {
+      this.element.classList.remove('visible');
+    }
+  }
+}
+
+// Enhanced Magnetic Buttons
+class MagneticButtons {
+  constructor() {
+    this.buttons = [];
+    this.init();
+  }
+  
+  init() {
+    document.querySelectorAll('.magnetic-btn, .btn, .quote-btn').forEach(btn => {
+      btn.classList.add('magnetic-btn-enhanced');
+      
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        
+        btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+        btn.querySelector('span')?.style?.transform && (btn.querySelector('span').style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`);
+      });
+      
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = 'translate(0, 0)';
+        btn.querySelector('span')?.style?.transform && (btn.querySelector('span').style.transform = 'translate(0, 0)');
+      });
+    });
+  }
+}
+
+// Progressive Image Loading
+class ProgressiveImageLoader {
+  constructor() {
+    this.init();
+  }
+  
+  init() {
+    document.querySelectorAll('.project-card img, .hero-main-image').forEach(img => {
+      const container = document.createElement('div');
+      container.className = 'progressive-image';
+      
+      // Create placeholder
+      const placeholder = document.createElement('div');
+      placeholder.className = 'placeholder';
+      
+      // Small blur version as placeholder
+      const smallImg = new Image();
+      smallImg.src = img.src;
+      smallImg.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+      placeholder.appendChild(smallImg);
+      
+      img.parentNode.insertBefore(container, img);
+      container.appendChild(placeholder);
+      container.appendChild(img);
+      
+      // Load full image
+      if (img.complete) {
+        container.classList.add('loaded');
+      } else {
+        img.addEventListener('load', () => {
+          container.classList.add('loaded');
+        });
+      }
+    });
+  }
+}
+
+// Tab Component
+class TabComponent {
+  constructor(container) {
+    this.container = container;
+    this.buttons = container.querySelectorAll('.tab-btn');
+    this.panels = container.querySelectorAll('.tab-content');
+    this.init();
+  }
+  
+  init() {
+    this.buttons.forEach((btn, index) => {
+      btn.addEventListener('click', () => this.switchTab(index));
+    });
+    
+    // Activate first tab
+    this.switchTab(0);
+  }
+  
+  switchTab(index) {
+    this.buttons.forEach((btn, i) => {
+      btn.classList.toggle('active', i === index);
+    });
+    
+    this.panels.forEach((panel, i) => {
+      panel.classList.toggle('active', i === index);
+    });
+  }
+}
+
+// Spotlight Cards (Mouse tracking glow)
+class SpotlightCards {
+  constructor() {
+    this.init();
+  }
+  
+  init() {
+    document.querySelectorAll('.service-card').forEach(card => {
+      card.classList.add('spotlight-card');
+      
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        
+        card.style.setProperty('--mouse-x', `${x}%`);
+        card.style.setProperty('--mouse-y', `${y}%`);
+      });
+    });
+  }
+}
+
+// Enhanced FAQ Accordion
+class EnhancedAccordion {
+  constructor(container) {
+    this.container = container;
+    this.items = container.querySelectorAll('.faq-item');
+    this.init();
+  }
+  
+  init() {
+    this.items.forEach(item => {
+      const btn = item.querySelector('.faq-question');
+      const content = item.querySelector('.faq-answer');
+      
+      // Add enhanced icon
+      const icon = document.createElement('span');
+      icon.className = 'faq-icon-enhanced';
+      icon.innerHTML = '+';
+      btn.appendChild(icon);
+      
+      btn.addEventListener('click', () => {
+        const isActive = item.classList.contains('active');
+        
+        // Close all
+        this.items.forEach(i => {
+          i.classList.remove('active');
+          i.querySelector('.faq-icon-enhanced').innerHTML = '+';
+        });
+        
+        // Open current
+        if (!isActive) {
+          item.classList.add('active');
+          icon.innerHTML = '−';
+        }
+      });
+    });
+  }
+}
+
+// Intersection Observer for Animations
+class ScrollAnimations {
+  constructor() {
+    this.observer = null;
+    this.init();
+  }
+  
+  init() {
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+          this.observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    
+    // Observe elements
+    document.querySelectorAll('.trust > div, .stat-item, .timeline-item').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(30px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+      this.observer.observe(el);
+    });
+  }
+}
+
+// Service Worker Registration (for PWA capability)
+class PWARegistration {
+  constructor() {
+    this.init();
+  }
+  
+  init() {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(err => {
+        console.log('SW registration failed:', err);
+      });
+    }
+  }
+}
+
+// PWA Install Prompt
+class PWAInstallPrompt {
+  constructor() {
+    this.deferredPrompt = null;
+    this.init();
+  }
+  
+  init() {
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      this.deferredPrompt = e;
+      
+      // Show install button after 5 seconds
+      setTimeout(() => {
+        this.showInstallButton();
+      }, 5000);
+    });
+  }
+  
+  showInstallButton() {
+    const btn = document.createElement('button');
+    btn.className = 'btn magnetic-btn install-btn';
+    btn.innerHTML = '<span>📱 Install App</span>';
+    btn.style.cssText = 'position: fixed; bottom: 30px; left: 30px; z-index: 9999;';
+    
+    btn.addEventListener('click', () => {
+      if (this.deferredPrompt) {
+        this.deferredPrompt.prompt();
+        this.deferredPrompt.userChoice.then(() => {
+          btn.remove();
+        });
+      }
+    });
+    
+    document.body.appendChild(btn);
+  }
+}
+
+// Initialize v6.2 features
+document.addEventListener('DOMContentLoaded', () => {
+  // Scroll Progress Ring
+  new ScrollProgressRing();
+  
+  // Magnetic Buttons
+  new MagneticButtons();
+  
+  // Progressive Image Loading
+  new ProgressiveImageLoader();
+  
+  // Spotlight Cards
+  new SpotlightCards();
+  
+  // Enhanced FAQ Accordion
+  const faqContainer = document.querySelector('.faq-container');
+  if (faqContainer) {
+    new EnhancedAccordion(faqContainer);
+  }
+  
+  // Scroll Animations
+  new ScrollAnimations();
+  
+  // Add 'Animate In' class styles
+  const style = document.createElement('style');
+  style.textContent = `
+    .animate-in {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+  `;
+  document.head.appendChild(style);
+  
+  // Add notification badge to WhatsApp button
+  const whatsappBtn = document.querySelector('.floating-whatsapp');
+  if (whatsappBtn && !sessionStorage.getItem('whatsapp-clicked')) {
+    whatsappBtn.classList.add('notification-badge');
+    whatsappBtn.addEventListener('click', () => {
+      sessionStorage.setItem('whatsapp-clicked', 'true');
+      whatsappBtn.classList.remove('notification-badge');
+    });
+  }
+  
+  // Add flip card effect to testimonials
+  document.querySelectorAll('.testimonial-carousel-card').forEach(card => {
+    card.classList.add('flip-card');
+    const inner = document.createElement('div');
+    inner.className = 'flip-card-inner';
+    inner.innerHTML = `
+      <div class="flip-card-front">${card.innerHTML}</div>
+      <div class="flip-card-back">
+        <p style="font-size: 14px; color: var(--chrome);">Verified Client</p>
+        <p style="margin-top: 20px; color: var(--slate);">★★★★★</p>
+        <p style="margin-top: 15px; font-size: 13px;">Project completed in 2024</p>
+      </div>
+    `;
+    card.innerHTML = '';
+    card.appendChild(inner);
+  });
+  
+  // Skeleton loading for dynamic content
+  document.querySelectorAll('.project-card').forEach(card => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+  });
+  
+  setTimeout(() => {
+    document.querySelectorAll('.project-card').forEach((card, index) => {
+      setTimeout(() => {
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, index * 150);
+    });
+  }, 100);
+});
+
+console.log('%c✨ v6.2 Advanced UI Components Loaded:', 'font-size: 12px; color: #C9CED6; font-weight: bold;');
+console.log('%c   • Circular scroll progress indicator', 'font-size: 10px; color: #888;');
+console.log('%c   • Enhanced magnetic button effects', 'font-size: 10px; color: #888;');
+console.log('%c   • Progressive image loading with blur transition', 'font-size: 10px; color: #888;');
+console.log('%c   • Spotlight hover effects on cards', 'font-size: 10px; color: #888;');
+console.log('%c   • Enhanced FAQ accordion with icons', 'font-size: 10px; color: #888;');
+console.log('%c   • Scroll-triggered animations', 'font-size: 10px; color: #888;');
+console.log('%c   • Flip card testimonials', 'font-size: 10px; color: #888;');
+console.log('%c   • Skeleton loading states', 'font-size: 10px; color: #888;');
+console.log('%c   • Notification badges', 'font-size: 10px; color: #888;');
+
+// =========================================
 // v6.1 ADDITIONAL PROFESSIONAL FEATURES
 // =========================================
 

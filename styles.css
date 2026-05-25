@@ -5165,5 +5165,479 @@ html, body{
 }
 
 /* ========================================
+   31. CIRCULAR SCROLL PROGRESS
+======================================== */
+.scroll-progress-ring {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  width: 54px;
+  height: 54px;
+  z-index: 999;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.scroll-progress-ring.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-progress-ring svg {
+  transform: rotate(-90deg);
+}
+
+.scroll-progress-ring circle {
+  fill: none;
+  stroke-width: 3;
+}
+
+.scroll-progress-ring .bg {
+  stroke: rgba(201, 206, 214, 0.1);
+}
+
+.scroll-progress-ring .progress {
+  stroke: var(--chrome);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.1s ease;
+}
+
+.scroll-progress-ring .arrow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--chrome);
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.scroll-progress-ring:hover .arrow {
+  transform: translate(-50%, -60%);
+}
+
+@media (max-width: 768px) {
+  .scroll-progress-ring {
+    right: 15px;
+    bottom: 80px;
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* ========================================
+   32. MAGNETIC BUTTON ENHANCED
+======================================== */
+.magnetic-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px;
+  background: transparent;
+  border: 1px solid var(--chrome);
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--chrome);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
+}
+
+.magnetic-btn:hover {
+  color: var(--black);
+  border-color: var(--chrome);
+}
+
+.magnetic-btn:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.magnetic-btn span {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+/* ========================================
+   33. PROGRESSIVE IMAGE LOADING
+======================================== */
+.progressive-image {
+  position: relative;
+  overflow: hidden;
+  background: rgba(201, 206, 214, 0.05);
+}
+
+.progressive-image img {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.progressive-image.loaded img {
+  opacity: 1;
+}
+
+.progressive-image .placeholder {
+  position: absolute;
+  inset: 0;
+  filter: blur(20px);
+  transform: scale(1.1);
+  transition: opacity 0.5s ease;
+}
+
+.progressive-image.loaded .placeholder {
+  opacity: 0;
+}
+
+/* ========================================
+   34. TAB COMPONENT ENHANCED
+======================================== */
+.tab-container {
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.tab-nav {
+  display: flex;
+  border-bottom: 1px solid rgba(201, 206, 214, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 18px 24px;
+  background: none;
+  border: none;
+  color: var(--slate);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.tab-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--chrome);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.tab-btn:hover {
+  color: var(--white);
+}
+
+.tab-btn.active {
+  color: var(--chrome);
+}
+
+.tab-btn.active::after {
+  transform: scaleX(1);
+}
+
+.tab-content {
+  padding: 40px;
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+  animation: tab-fade-in 0.4s ease;
+}
+
+@keyframes tab-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   35. TEAM/TESTIMONIAL CARDS FLIP
+======================================== */
+.flip-card {
+  perspective: 1000px;
+  height: 400px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  text-align: center;
+}
+
+/* ========================================
+   36. INFINITE SCROLL CAROUSEL
+======================================== */
+.infinite-carousel {
+  position: relative;
+  overflow: hidden;
+  padding: 40px 0;
+}
+
+.infinite-carousel-track {
+  display: flex;
+  gap: 30px;
+  animation: infinite-scroll 30s linear infinite;
+  width: max-content;
+}
+
+.infinite-carousel:hover .infinite-carousel-track {
+  animation-play-state: paused;
+}
+
+@keyframes infinite-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.infinite-carousel-item {
+  flex-shrink: 0;
+  width: 300px;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.infinite-carousel-item:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ========================================
+   37. HOVER SPOTLIGHT CARDS
+======================================== */
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.spotlight-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(201, 206, 214, 0.1),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+
+.spotlight-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* ========================================
+   38. ACCORDION ENHANCED
+======================================== */
+.accordion-item {
+  border-bottom: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.accordion-btn {
+  width: 100%;
+  padding: 24px 0;
+  background: none;
+  border: none;
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.accordion-btn:hover {
+  color: var(--chrome);
+}
+
+.accordion-icon {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.accordion-icon::before,
+.accordion-icon::after {
+  content: '';
+  position: absolute;
+  background: currentColor;
+  transition: all 0.3s ease;
+}
+
+.accordion-icon::before {
+  width: 100%;
+  height: 2px;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+.accordion-icon::after {
+  width: 2px;
+  height: 100%;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+}
+
+.accordion-item.active .accordion-icon {
+  transform: rotate(135deg);
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1), padding 0.5s ease;
+}
+
+.accordion-item.active .accordion-content {
+  max-height: 500px;
+  padding-bottom: 24px;
+}
+
+/* ========================================
+   39. NOTIFICATION BADGE
+======================================== */
+.notification-badge {
+  position: relative;
+}
+
+.notification-badge::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 10px;
+  height: 10px;
+  background: #22c55e;
+  border-radius: 50%;
+  animation: badge-pulse 2s infinite;
+}
+
+@keyframes badge-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+  }
+}
+
+/* ========================================
+   40. SKELETON LOADING
+======================================== */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(201, 206, 214, 0.05) 25%,
+    rgba(201, 206, 214, 0.1) 50%,
+    rgba(201, 206, 214, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-title {
+  height: 24px;
+  width: 70%;
+  margin-bottom: 12px;
+}
+
+.skeleton-text {
+  height: 16px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.skeleton-text.short {
+  width: 60%;
+}
+
+/* ========================================
    END OF STYLES
 ======================================== */
