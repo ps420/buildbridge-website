@@ -5639,5 +5639,180 @@ html, body{
 }
 
 /* ========================================
+   41. ACCESSIBILITY IMPROVEMENTS
+======================================== */
+
+/* Focus visible styles */
+:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 2px;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--chrome);
+  color: var(--black);
+  padding: 8px 16px;
+  z-index: 100000;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .typewriter-cursor,
+  .particle-canvas,
+  .mouse-spotlight {
+    display: none !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  :root {
+    --chrome: #ffffff;
+    --slate: #cccccc;
+  }
+  
+  .btn, .quote-btn {
+    border-width: 2px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .nav,
+  .floating-whatsapp,
+  .scroll-progress-ring,
+  .back-to-top,
+  .particle-canvas,
+  .mouse-spotlight,
+  .custom-cursor,
+  .custom-cursor-dot,
+  .noise-overlay,
+  .orb {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .hero {
+    height: auto !important;
+    min-height: auto !important;
+  }
+  
+  a {
+    color: black !important;
+    text-decoration: underline !important;
+  }
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Animations paused (for visibility API) */
+.animations-paused .parallax-layer,
+.animations-paused .particle-canvas,
+.animations-paused .marquee-track,
+.animations-paused .breathing,
+.animations-paused .float-animation {
+  animation-play-state: paused !important;
+}
+
+/* ARIA live regions */
+[aria-live="polite"],
+[aria-live="assertive"] {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ========================================
+   42. PERFORMANCE OPTIMIZATIONS
+======================================== */
+
+/* Content visibility for long pages */
+.section:not(.hero) {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
+}
+
+/* GPU acceleration for animations */
+.gpu-accelerated {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Lazy loading placeholder */
+img[loading="lazy"] {
+  background: linear-gradient(110deg, #1a1a1f 8%, #25252a 18%, #1a1a1f 33%);
+  background-size: 200% 100%;
+  animation: lazy-loading-shimmer 1.5s linear infinite;
+}
+
+img[loading="lazy"].loaded {
+  animation: none;
+  background: none;
+}
+
+@keyframes lazy-loading-shimmer {
+  to {
+    background-position-x: -200%;
+  }
+}
+
+/* CSS containment for better performance */
+.hero,
+.section,
+.trust,
+.cta,
+footer {
+  contain: layout style paint;
+}
+
+/* ========================================
+   43. DARK MODE SUPPORT (System)
+======================================== */
+
+@media (prefers-color-scheme: light) {
+  /* Keep dark theme as default brand identity */
+  /* But we can add light mode support if needed later */
+}
+
+/* ========================================
    END OF STYLES
 ======================================== */

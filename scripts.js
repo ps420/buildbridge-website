@@ -3598,6 +3598,161 @@ console.log('%c   • Skeleton loading states', 'font-size: 10px; color: #888;')
 console.log('%c   • Notification badges', 'font-size: 10px; color: #888;');
 
 // =========================================
+// PWA & SERVICE WORKER REGISTRATION
+// =========================================
+
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then((registration) => {
+        console.log('[PWA] Service Worker registered:', registration.scope);
+        
+        // Check for updates
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              // New version available
+              console.log('[PWA] New version available');
+              toast.info('A new version is available. Refresh to update.', {
+                title: 'Update Available',
+                duration: 10000
+              });
+            }
+          });
+        });
+      })
+      .catch((error) => {
+        console.log('[PWA] Service Worker registration failed:', error);
+      });
+  });
+}
+
+// Performance Monitoring
+class PerformanceMonitor {
+  constructor() {
+    this.metrics = {};
+    this.init();
+  }
+  
+  init() {
+    // Monitor Core Web Vitals
+    if ('PerformanceObserver' in window) {
+      // LCP (Largest Contentful Paint)
+      const lcpObserver = new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        const lastEntry = entries[entries.length - 1];
+        this.metrics.lcp = lastEntry.startTime;
+        console.log('[Perf] LCP:', lastEntry.startTime.toFixed(2) + 'ms');
+      });
+      lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+      
+      // FID (First Input Delay)
+      const fidObserver = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          const delay = entry.processingStart - entry.startTime;
+          this.metrics.fid = delay;
+          console.log('[Perf] FID:', delay.toFixed(2) + 'ms');
+        }
+      });
+      fidObserver.observe({ entryTypes: ['first-input'] });
+      
+      // CLS (Cumulative Layout Shift)
+      let clsValue = 0;
+      const clsObserver = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          if (!entry.hadRecentInput) {
+            clsValue += entry.value;
+          }
+        }
+        this.metrics.cls = clsValue;
+      });
+      clsObserver.observe({ entryTypes: ['layout-shift'] });
+    }
+    
+    // Page load metrics
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const perfData = performance.timing;
+        const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+        
+        this.metrics.fcp = perfData.responseEnd - perfData.navigationStart;
+        this.metrics.ttfb = perfData.responseStart - perfData.navigationStart;
+        this.metrics.domReady = perfData.domContentLoadedEventEnd - perfData.navigationStart;
+        this.metrics.loadComplete = pageLoadTime;
+        
+        console.log('[Perf] Page Load Time:', pageLoadTime + 'ms');
+        console.log('[Perf] TTFB:', this.metrics.ttfb + 'ms');
+        console.log('[Perf] DOM Ready:', this.metrics.domReady + 'ms');
+      }, 0);
+    });
+  }
+  
+  getMetrics() {
+    return this.metrics;
+  }
+}
+
+// Initialize performance monitoring
+const perfMonitor = new PerformanceMonitor();
+
+// Prefetch critical resources
+const prefetchResources = () => {
+  const links = [
+    '/about.html',
+    '/services.html',
+    '/contact.html'
+  ];
+  
+  links.forEach(href => {
+    const link = document.createElement('link');
+    link.rel = 'prefetch';
+    link.href = href;
+    document.head.appendChild(link);
+  });
+};
+
+// Prefetch on idle
+if ('requestIdleCallback' in window) {
+  requestIdleCallback(prefetchResources, { timeout: 5000 });
+} else {
+  setTimeout(prefetchResources, 5000);
+}
+
+// Network status monitoring
+window.addEventListener('online', () => {
+  console.log('[Network] Back online');
+  toast.success('You are back online', { title: 'Connected' });
+});
+
+window.addEventListener('offline', () => {
+  console.log('[Network] Gone offline');
+  toast.warning('You are offline. Some features may be limited.', { 
+    title: 'Offline Mode',
+    duration: 5000 
+  });
+});
+
+// Visibility API - pause heavy animations when tab hidden
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    console.log('[App] Tab hidden - pausing animations');
+    document.body.classList.add('animations-paused');
+  } else {
+    console.log('[App] Tab visible - resuming animations');
+    document.body.classList.remove('animations-paused');
+  }
+});
+
+console.log('%c📱 PWA Features Loaded:', 'font-size: 12px; color: #C9CED6; font-weight: bold;');
+console.log('%c   • Service Worker registration', 'font-size: 10px; color: #888;');
+console.log('%c   • Core Web Vitals monitoring', 'font-size: 10px; color: #888;');
+console.log('%c   • Resource prefetching', 'font-size: 10px; color: #888;');
+console.log('%c   • Network status detection', 'font-size: 10px; color: #888;');
+console.log('%c   • Page visibility optimization', 'font-size: 10px; color: #888;');
+
+// =========================================
 // v6.1 ADDITIONAL PROFESSIONAL FEATURES
 // =========================================
 
