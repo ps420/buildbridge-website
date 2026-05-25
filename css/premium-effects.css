@@ -1,0 +1,826 @@
+/**
+ * BuildBridge Premium Effects v6.2
+ * Fortune 500-quality enhancements
+ */
+
+/* ========================================
+   1. PARTICLE CANVAS STYLES
+======================================== */
+.particle-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.section-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ========================================
+   2. CUSTOM CURSOR SYSTEM
+======================================== */
+.cursor-enabled {
+  cursor: none;
+}
+
+.custom-cursor {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--chrome);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s ease, height 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  mix-blend-mode: difference;
+}
+
+.custom-cursor.hover {
+  width: 60px;
+  height: 60px;
+  background: rgba(201, 206, 214, 0.1);
+  border-color: var(--white);
+}
+
+.custom-cursor.click {
+  width: 30px;
+  height: 30px;
+  background: var(--chrome);
+}
+
+.custom-cursor-dot {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: var(--chrome);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+}
+
+/* Hide custom cursor on touch devices */
+@media (pointer: coarse) {
+  .cursor-enabled {
+    cursor: auto;
+  }
+  .custom-cursor,
+  .custom-cursor-dot {
+    display: none !important;
+  }
+}
+
+/* ========================================
+   3. MAGNETIC EFFECTS
+======================================== */
+.magnetic {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-active {
+  will-change: transform;
+}
+
+/* Magnetic button variants */
+.magnetic-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.magnetic-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: var(--chrome);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
+              height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
+}
+
+.magnetic-btn:hover::before {
+  width: 300%;
+  height: 300%;
+}
+
+.magnetic-btn:hover {
+  color: var(--black);
+}
+
+/* ========================================
+   4. RIPPLE EFFECT
+======================================== */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.4);
+  transform: scale(0);
+  animation: ripple-effect 0.6s linear;
+  pointer-events: none;
+}
+
+@keyframes ripple-effect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ========================================
+   5. 3D TILT CARDS ENHANCED
+======================================== */
+.tilt-card-3d {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.tilt-card-3d .card-inner {
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease-out;
+}
+
+.tilt-card-3d .card-content {
+  transform: translateZ(30px);
+}
+
+.tilt-card-3d .card-icon {
+  transform: translateZ(50px);
+}
+
+.tilt-card-3d .card-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateZ(1px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.tilt-card-3d:hover .card-shine {
+  opacity: 1;
+}
+
+/* ========================================
+   6. SCROLL NAVIGATION SPY
+======================================== */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--chrome);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link.active::after,
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Scroll progress indicator */
+.scroll-progress-ring {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  z-index: 999;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.scroll-progress-ring.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.scroll-progress-ring svg {
+  transform: rotate(-90deg);
+}
+
+.scroll-progress-ring circle {
+  fill: none;
+  stroke-width: 2;
+}
+
+.scroll-progress-ring .bg {
+  stroke: rgba(201, 206, 214, 0.2);
+}
+
+.scroll-progress-ring .progress {
+  stroke: var(--chrome);
+  stroke-dasharray: 126;
+  stroke-dashoffset: 126;
+  transition: stroke-dashoffset 0.1s ease;
+}
+
+.scroll-progress-ring .percentage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--chrome);
+}
+
+/* ========================================
+   7. MORPHING BLOBS
+======================================== */
+.morphing-blob {
+  position: absolute;
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  background: linear-gradient(135deg, var(--chrome) 0%, transparent 100%);
+  opacity: 0.1;
+  filter: blur(40px);
+  animation: morph-blob 8s ease-in-out infinite;
+}
+
+.morphing-blob:nth-child(2) {
+  animation-delay: -2s;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+}
+
+.morphing-blob:nth-child(3) {
+  animation-delay: -4s;
+  border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+}
+
+@keyframes morph-blob {
+  0%, 100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+    transform: rotate(90deg) scale(1.1);
+  }
+  50% {
+    border-radius: 50% 60% 30% 60% / 30% 40% 70% 50%;
+    transform: rotate(180deg) scale(1);
+  }
+  75% {
+    border-radius: 60% 40% 60% 30% / 70% 30% 50% 60%;
+    transform: rotate(270deg) scale(0.95);
+  }
+}
+
+/* ========================================
+   8. GLITCH TEXT EFFECT 2.0
+======================================== */
+.glitch-text-v2 {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch-text-v2::before,
+.glitch-text-v2::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-text-v2::before {
+  animation: glitch-1 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+  color: var(--chrome);
+  z-index: -1;
+}
+
+.glitch-text-v2::after {
+  animation: glitch-2 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+  color: var(--slate);
+  z-index: -2;
+}
+
+@keyframes glitch-1 {
+  0% { clip-path: inset(40% 0 61% 0); transform: translate(-2px, 2px); }
+  20% { clip-path: inset(92% 0 1% 0); transform: translate(1px, -1px); }
+  40% { clip-path: inset(43% 0 1% 0); transform: translate(-1px, 2px); }
+  60% { clip-path: inset(25% 0 58% 0); transform: translate(2px, 1px); }
+  80% { clip-path: inset(54% 0 7% 0); transform: translate(-2px, -2px); }
+  100% { clip-path: inset(58% 0 43% 0); transform: translate(1px, 1px); }
+}
+
+@keyframes glitch-2 {
+  0% { clip-path: inset(65% 0 25% 0); transform: translate(2px, -1px); }
+  20% { clip-path: inset(12% 0 65% 0); transform: translate(-1px, 2px); }
+  40% { clip-path: inset(54% 0 11% 0); transform: translate(2px, 1px); }
+  60% { clip-path: inset(23% 0 67% 0); transform: translate(-2px, -2px); }
+  80% { clip-path: inset(81% 0 2% 0); transform: translate(1px, -1px); }
+  100% { clip-path: inset(2% 0 84% 0); transform: translate(-1px, 2px); }
+}
+
+.glitch-text-v2:hover::before,
+.glitch-text-v2:hover::after {
+  animation-duration: 0.15s;
+}
+
+/* ========================================
+   9. TEXT SCRAMBLE EFFECT
+======================================== */
+.scramble-text-effect {
+  display: inline-block;
+}
+
+.scramble-char {
+  display: inline-block;
+  transition: transform 0.1s ease;
+}
+
+.scramble-char.scrambling {
+  animation: char-scramble 0.1s ease;
+}
+
+@keyframes char-scramble {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+/* ========================================
+   10. PAGE TRANSITIONS
+======================================== */
+.page-transition-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  z-index: 99999;
+  transform: translateY(100%);
+  transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+  pointer-events: none;
+}
+
+.page-transition-overlay.active {
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.page-transition-overlay.exiting {
+  transform: translateY(-100%);
+}
+
+.page-transition-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.page-transition-overlay.active .page-transition-logo {
+  opacity: 1;
+}
+
+.page-transition-loader {
+  position: absolute;
+  bottom: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 2px;
+  background: rgba(201, 206, 214, 0.2);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.page-transition-overlay.active .page-transition-loader {
+  opacity: 1;
+}
+
+.page-transition-loader-bar {
+  height: 100%;
+  width: 0;
+  background: var(--chrome);
+  transition: width 0.3s ease;
+}
+
+/* ========================================
+   11. ENHANCED CAROUSEL 3D
+======================================== */
+.carousel-3d {
+  position: relative;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.carousel-3d-track {
+  display: flex;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+}
+
+.carousel-3d-item {
+  flex-shrink: 0;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+}
+
+.carousel-3d-item.active {
+  transform: translateZ(50px) scale(1.05);
+  z-index: 10;
+}
+
+.carousel-3d-item.prev,
+.carousel-3d-item.next {
+  opacity: 0.6;
+  transform: translateZ(-30px) scale(0.9);
+}
+
+.carousel-3d-item.prev {
+  transform: translateX(-20%) translateZ(-30px) scale(0.9) rotateY(15deg);
+}
+
+.carousel-3d-item.next {
+  transform: translateX(20%) translateZ(-30px) scale(0.9) rotateY(-15deg);
+}
+
+/* ========================================
+   12. SCROLL VELOCITY SKEW
+======================================== */
+.velocity-skew-container {
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+}
+
+/* ========================================
+   13. DYNAMIC UNDERLINE
+======================================== */
+.dynamic-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.dynamic-underline::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--chrome), var(--slate));
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dynamic-underline:hover::after {
+  width: 100%;
+}
+
+/* Underline from center */
+.dynamic-underline-center::after {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.dynamic-underline-center:hover::after {
+  width: 100%;
+}
+
+/* ========================================
+   14. FLOATING LABELS
+======================================== */
+.floating-label-group {
+  position: relative;
+}
+
+.floating-label-group input,
+.floating-label-group textarea {
+  width: 100%;
+  padding: 16px 0 8px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(201, 206, 214, 0.3);
+  color: var(--white);
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.floating-label-group input:focus,
+.floating-label-group textarea:focus {
+  outline: none;
+  border-color: var(--chrome);
+}
+
+.floating-label-group label {
+  position: absolute;
+  left: 0;
+  top: 16px;
+  color: var(--slate);
+  font-size: 16px;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.floating-label-group input:focus ~ label,
+.floating-label-group input:not(:placeholder-shown) ~ label,
+.floating-label-group textarea:focus ~ label,
+.floating-label-group textarea:not(:placeholder-shown) ~ label {
+  top: -8px;
+  font-size: 12px;
+  color: var(--chrome);
+}
+
+/* ========================================
+   15. NEON GLOW EFFECTS
+======================================== */
+.neon-glow {
+  text-shadow: 
+    0 0 5px var(--chrome),
+    0 0 10px var(--chrome),
+    0 0 20px var(--chrome),
+    0 0 40px var(--chrome);
+}
+
+.neon-box {
+  box-shadow: 
+    0 0 5px rgba(201, 206, 214, 0.5),
+    0 0 10px rgba(201, 206, 214, 0.3),
+    0 0 20px rgba(201, 206, 214, 0.2);
+}
+
+.neon-border {
+  position: relative;
+}
+
+.neon-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(45deg, var(--chrome), var(--slate), var(--chrome));
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.neon-border:hover::before {
+  opacity: 1;
+  animation: neon-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes neon-pulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
+}
+
+/* ========================================
+   16. GLASS MORPHISM CARDS
+======================================== */
+.glass-card {
+  background: rgba(26, 26, 31, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 24px;
+}
+
+.glass-card-enhanced {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* ========================================
+   17. SPLIT SCREEN PARALLAX
+======================================== */
+.split-parallax {
+  position: relative;
+  overflow: hidden;
+}
+
+.split-parallax-left,
+.split-parallax-right {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 120%;
+  will-change: transform;
+}
+
+.split-parallax-left {
+  left: 0;
+}
+
+.split-parallax-right {
+  right: 0;
+}
+
+/* ========================================
+   18. HORIZONTAL SCROLL SECTION
+======================================== */
+.horizontal-scroll-container {
+  height: 300vh;
+}
+
+.horizontal-scroll-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.horizontal-scroll-track {
+  display: flex;
+  gap: 40px;
+  padding: 0 10vw;
+  will-change: transform;
+}
+
+/* ========================================
+   19. ACCORDION ENHANCED
+======================================== */
+.accordion-enhanced {
+  border-bottom: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.accordion-enhanced-header {
+  padding: 24px 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.accordion-enhanced-header:hover {
+  color: var(--chrome);
+}
+
+.accordion-enhanced-icon {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.accordion-enhanced-icon::before,
+.accordion-enhanced-icon::after {
+  content: '';
+  position: absolute;
+  background: currentColor;
+  transition: all 0.3s ease;
+}
+
+.accordion-enhanced-icon::before {
+  width: 100%;
+  height: 2px;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+.accordion-enhanced-icon::after {
+  width: 2px;
+  height: 100%;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+}
+
+.accordion-enhanced.active .accordion-enhanced-icon {
+  transform: rotate(360deg);
+}
+
+.accordion-enhanced.active .accordion-enhanced-icon::after {
+  transform: translateX(-50%) rotate(90deg);
+  opacity: 0;
+}
+
+.accordion-enhanced-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.accordion-enhanced.active .accordion-enhanced-content {
+  max-height: 500px;
+}
+
+/* ========================================
+   20. LAZY LOAD REVEAL
+======================================== */
+.lazy-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lazy-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.lazy-reveal-scale {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lazy-reveal-scale.revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+======================================== */
+@media (max-width: 768px) {
+  .particle-canvas,
+  .custom-cursor,
+  .custom-cursor-dot {
+    display: none !important;
+  }
+  
+  .scroll-progress-ring {
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .scroll-progress-ring .percentage {
+    font-size: 8px;
+  }
+}
+
+/* ========================================
+   PERFORMANCE OPTIMIZATIONS
+======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .morphing-blob,
+  .particle-canvas,
+  .custom-cursor,
+  .custom-cursor-dot {
+    display: none !important;
+  }
+  
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
