@@ -1,6 +1,7 @@
 // BuildBridge - Main JavaScript
-// Fortune 500 Interactive Features v2.0
+// Fortune 500 Interactive Features v4.0
 // Enhanced with: Scroll Physics, Image Reveals, Marquee, Split Text, Page Transitions
+// NEW v4.0: Animated Counters, Typewriter Effect, Magnetic Buttons, Timeline, 3D Carousel
 
 // =========================================
 // 1. LENIS SMOOTH SCROLL SIMULATION
@@ -1841,9 +1842,403 @@ class SmoothPageTransition {
 }
 
 // =========================================
-// INITIALIZE ALL FORTUNE 500 v3.0 FEATURES
+// FORTUNE 500 v4.0 - ENHANCED COUNTERS
+// =========================================
+class EnhancedCounter {
+  constructor(element, options = {}) {
+    this.element = element;
+    this.target = parseInt(element.dataset.target) || 0;
+    this.prefix = element.dataset.prefix || '';
+    this.suffix = element.dataset.suffix || '';
+    this.duration = options.duration || 2500;
+    this.easing = options.easing || 'easeOutExpo';
+    this.hasAnimated = false;
+    
+    this.init();
+  }
+  
+  init() {
+    // Set initial value
+    this.element.textContent = this.prefix + '0' + this.suffix;
+    
+    // Create intersection observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !this.hasAnimated) {
+          this.hasAnimated = true;
+          this.animate();
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    
+    observer.observe(this.element);
+  }
+  
+  animate() {
+    const startTime = performance.now();
+    const startValue = 0;
+    const endValue = this.target;
+    
+    const updateCounter = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / this.duration, 1);
+      
+      // Apply easing
+      const easedProgress = this.applyEasing(progress);
+      
+      const currentValue = Math.floor(startValue + (endValue - startValue) * easedProgress);
+      this.element.textContent = this.prefix + this.formatNumber(currentValue) + this.suffix;
+      
+      if (progress < 1) {
+        requestAnimationFrame(updateCounter);
+      }
+    };
+    
+    requestAnimationFrame(updateCounter);
+  }
+  
+  applyEasing(t) {
+    switch(this.easing) {
+      case 'easeOutExpo':
+        return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+      case 'easeOutQuart':
+        return 1 - Math.pow(1 - t, 4);
+      case 'easeOutCubic':
+        return 1 - Math.pow(1 - t, 3);
+      default:
+        return t;
+    }
+  }
+  
+  formatNumber(num) {
+    return num.toLocaleString('en-ZA');
+  }
+}
+
+// =========================================
+// TYPEWRITER EFFECT
+// =========================================
+class TypewriterEffect {
+  constructor(element, options = {}) {
+    this.element = element;
+    this.text = element.textContent;
+    this.speed = options.speed || 50;
+    this.delay = options.delay || 0;
+    this.cursor = options.cursor !== false;
+    this.deleteSpeed = options.deleteSpeed || 30;
+    this.loop = options.loop || false;
+    this.pauseDuration = options.pauseDuration || 2000;
+    
+    this.init();
+  }
+  
+  init() {
+    this.element.textContent = '';
+    this.element.classList.add('typewriter');
+    
+    if (this.cursor) {
+      this.cursorSpan = document.createElement('span');
+      this.cursorSpan.className = 'typewriter-cursor';
+      this.cursorSpan.textContent = '|';
+      this.element.appendChild(this.cursorSpan);
+    }
+    
+    setTimeout(() => this.type(), this.delay);
+  }
+  
+  type() {
+    let charIndex = 0;
+    
+    const typeChar = () => {
+      if (charIndex < this.text.length) {
+        if (this.cursor) {
+          this.cursorSpan.before(this.text[charIndex]);
+        } else {
+          this.element.textContent += this.text[charIndex];
+        }
+        charIndex++;
+        setTimeout(typeChar, this.speed);
+      } else if (this.loop) {
+        setTimeout(() => this.delete(), this.pauseDuration);
+      }
+    };
+    
+    typeChar();
+  }
+  
+  delete() {
+    let charIndex = this.text.length;
+    
+    const deleteChar = () => {
+      if (charIndex > 0) {
+        const text = this.element.textContent;
+        this.element.textContent = text.substring(0, text.length - 1);
+        charIndex--;
+        setTimeout(deleteChar, this.deleteSpeed);
+      } else {
+        setTimeout(() => this.type(), 500);
+      }
+    };
+    
+    deleteChar();
+  }
+}
+
+// =========================================
+// MAGNETIC BUTTON EFFECT
+// =========================================
+class MagneticButton {
+  constructor(element, options = {}) {
+    this.element = element;
+    this.strength = options.strength || 0.3;
+    this.radius = options.radius || 100;
+    this.isHovering = false;
+    
+    this.init();
+  }
+  
+  init() {
+    // Skip on touch devices
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+    
+    this.element.addEventListener('mouseenter', () => this.isHovering = true);
+    this.element.addEventListener('mouseleave', () => {
+      this.isHovering = false;
+      this.reset();
+    });
+    this.element.addEventListener('mousemove', (e) => this.onMouseMove(e));
+  }
+  
+  onMouseMove(e) {
+    if (!this.isHovering) return;
+    
+    const rect = this.element.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    const deltaX = (e.clientX - centerX) * this.strength;
+    const deltaY = (e.clientY - centerY) * this.strength;
+    
+    this.element.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+  }
+  
+  reset() {
+    this.element.style.transform = 'translate(0, 0)';
+  }
+}
+
+// =========================================
+// PROCESS TIMELINE
+// =========================================
+class ProcessTimeline {
+  constructor(container) {
+    this.container = container;
+    this.items = container.querySelectorAll('.timeline-item');
+    this.progress = container.querySelector('.timeline-progress');
+    
+    this.init();
+  }
+  
+  init() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('timeline-visible');
+          this.updateProgress();
+        }
+      });
+    }, { threshold: 0.3 });
+    
+    this.items.forEach((item, index) => {
+      item.style.transitionDelay = `${index * 0.15}s`;
+      observer.observe(item);
+    });
+    
+    window.addEventListener('scroll', () => this.updateProgress(), { passive: true });
+  }
+  
+  updateProgress() {
+    if (!this.progress) return;
+    
+    const containerRect = this.container.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+    
+    // Calculate progress based on container visibility
+    const containerTop = containerRect.top;
+    const containerHeight = containerRect.height;
+    
+    let progress = 0;
+    if (containerTop < windowHeight) {
+      progress = Math.min(100, Math.max(0, (windowHeight - containerTop) / (containerHeight + windowHeight) * 100));
+    }
+    
+    this.progress.style.height = `${progress}%`;
+  }
+}
+
+// =========================================
+// 3D TESTIMONIAL CAROUSEL
+// =========================================
+class TestimonialCarousel3D {
+  constructor(container) {
+    this.container = container;
+    this.cards = container.querySelectorAll('.testimonial-carousel-card');
+    this.currentIndex = 0;
+    this.isAnimating = false;
+    
+    this.init();
+  }
+  
+  init() {
+    this.createControls();
+    this.positionCards();
+    this.startAutoPlay();
+  }
+  
+  createControls() {
+    const controls = document.createElement('div');
+    controls.className = 'carousel-controls';
+    
+    const prevBtn = document.createElement('button');
+    prevBtn.innerHTML = '←';
+    prevBtn.className = 'carousel-btn prev';
+    prevBtn.addEventListener('click', () => this.prev());
+    
+    const nextBtn = document.createElement('button');
+    nextBtn.innerHTML = '→';
+    nextBtn.className = 'carousel-btn next';
+    nextBtn.addEventListener('click', () => this.next());
+    
+    controls.appendChild(prevBtn);
+    controls.appendChild(nextBtn);
+    this.container.appendChild(controls);
+    
+    // Create dots
+    const dotsContainer = document.createElement('div');
+    dotsContainer.className = 'carousel-dots';
+    
+    this.cards.forEach((_, index) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
+      dot.addEventListener('click', () => this.goTo(index));
+      dotsContainer.appendChild(dot);
+    });
+    
+    this.container.appendChild(dotsContainer);
+    this.dots = dotsContainer.querySelectorAll('.carousel-dot');
+  }
+  
+  positionCards() {
+    this.cards.forEach((card, index) => {
+      card.classList.remove('active', 'prev', 'next');
+      
+      if (index === this.currentIndex) {
+        card.classList.add('active');
+      } else if (index === this.getPrevIndex()) {
+        card.classList.add('prev');
+      } else if (index === this.getNextIndex()) {
+        card.classList.add('next');
+      }
+    });
+    
+    // Update dots
+    if (this.dots) {
+      this.dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === this.currentIndex);
+      });
+    }
+  }
+  
+  getPrevIndex() {
+    return (this.currentIndex - 1 + this.cards.length) % this.cards.length;
+  }
+  
+  getNextIndex() {
+    return (this.currentIndex + 1) % this.cards.length;
+  }
+  
+  next() {
+    if (this.isAnimating) return;
+    this.currentIndex = this.getNextIndex();
+    this.positionCards();
+  }
+  
+  prev() {
+    if (this.isAnimating) return;
+    this.currentIndex = this.getPrevIndex();
+    this.positionCards();
+  }
+  
+  goTo(index) {
+    if (this.isAnimating || index === this.currentIndex) return;
+    this.currentIndex = index;
+    this.positionCards();
+  }
+  
+  startAutoPlay() {
+    setInterval(() => {
+      if (!this.isAnimating) {
+        this.next();
+      }
+    }, 5000);
+  }
+}
+
+// =========================================
+// SCROLL PROGRESS READING
+// =========================================
+class ReadingProgress {
+  constructor() {
+    this.progressBar = document.querySelector('.reading-progress');
+    if (!this.progressBar) return;
+    
+    this.init();
+  }
+  
+  init() {
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      
+      this.progressBar.style.width = `${progress}%`;
+    }, { passive: true });
+  }
+}
+
+// =========================================
+// INITIALIZE ALL FORTUNE 500 v4.0 FEATURES
 // =========================================
 document.addEventListener('DOMContentLoaded', () => {
+  
+  // Enhanced Counters
+  document.querySelectorAll('.enhanced-counter').forEach(el => {
+    new EnhancedCounter(el);
+  });
+  
+  // Typewriter Effect on eyebrow text
+  document.querySelectorAll('.eyebrow').forEach(el => {
+    new TypewriterEffect(el, { speed: 30, delay: 500 });
+  });
+  
+  // Magnetic Buttons
+  document.querySelectorAll('.btn, .magnetic').forEach(el => {
+    new MagneticButton(el, { strength: 0.4 });
+  });
+  
+  // Reading Progress
+  new ReadingProgress();
+  
+  // Process Timeline (if exists)
+  document.querySelectorAll('.process-timeline').forEach(el => {
+    new ProcessTimeline(el);
+  });
+  
+  // 3D Testimonial Carousel (if exists)
+  document.querySelectorAll('.testimonial-carousel-3d').forEach(el => {
+    new TestimonialCarousel3D(el);
+  });
   
   // Text Scramble Effect on headings
   document.querySelectorAll('.scramble-text, .section-header h2').forEach(el => {
@@ -1878,6 +2273,24 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Staggered List Reveal
   new StaggeredListReveal(document.querySelectorAll('.footer-links ul, .trust'));
+  
+  // FAQ Accordion
+  document.querySelectorAll('.faq-question').forEach(question => {
+    question.addEventListener('click', () => {
+      const faqItem = question.parentElement;
+      const isActive = faqItem.classList.contains('active');
+      
+      // Close all others
+      document.querySelectorAll('.faq-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      // Toggle current
+      if (!isActive) {
+        faqItem.classList.add('active');
+      }
+    });
+  });
   
   // Smooth Page Transitions
   const pageTransitions = new SmoothPageTransition();
