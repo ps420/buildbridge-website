@@ -1842,6 +1842,463 @@ class SmoothPageTransition {
 }
 
 // =========================================
+// FORTUNE 500 v5.0 - PROFESSIONAL FEATURES
+// Advanced Interactive Systems
+// =========================================
+
+// 1. TOAST NOTIFICATION SYSTEM
+class ToastNotification {
+  constructor() {
+    this.container = this.createContainer();
+    this.toasts = [];
+  }
+  
+  createContainer() {
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.className = 'toast-container';
+      document.body.appendChild(container);
+    }
+    return container;
+  }
+  
+  show(message, options = {}) {
+    const {
+      title = '',
+      type = 'info',
+      duration = 5000,
+      icon = this.getIcon(type)
+    } = options;
+    
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
+    toast.innerHTML = `
+      <div class="toast-icon">${icon}</div>
+      <div class="toast-content">
+        ${title ? `<div class="toast-title">${title}</div>` : ''}
+        <div class="toast-message">${message}</div>
+      </div>
+      <button class="toast-close">&times;</button>
+      <div class="toast-progress"></div>
+    `;
+    
+    this.container.appendChild(toast);
+    this.toasts.push(toast);
+    
+    // Trigger animation
+    requestAnimationFrame(() => {
+      toast.classList.add('show');
+    });
+    
+    // Auto remove
+    const timeout = setTimeout(() => {
+      this.hide(toast);
+    }, duration);
+    
+    // Close button
+    toast.querySelector('.toast-close').addEventListener('click', () => {
+      clearTimeout(timeout);
+      this.hide(toast);
+    });
+    
+    return toast;
+  }
+  
+  hide(toast) {
+    toast.classList.add('hiding');
+    setTimeout(() => {
+      toast.remove();
+      this.toasts = this.toasts.filter(t => t !== toast);
+    }, 500);
+  }
+  
+  getIcon(type) {
+    const icons = {
+      success: '✓',
+      error: '✕',
+      warning: '⚠',
+      info: 'ℹ'
+    };
+    return icons[type] || icons.info;
+  }
+  
+  // Convenience methods
+  success(message, options = {}) {
+    return this.show(message, { ...options, type: 'success', icon: '✓' });
+  }
+  
+  error(message, options = {}) {
+    return this.show(message, { ...options, type: 'error', icon: '✕' });
+  }
+  
+  warning(message, options = {}) {
+    return this.show(message, { ...options, type: 'warning', icon: '⚠' });
+  }
+  
+  info(message, options = {}) {
+    return this.show(message, { ...options, type: 'info', icon: 'ℹ' });
+  }
+}
+
+// Global toast instance
+const toast = new ToastNotification();
+
+// 2. SCROLL NAVIGATION WITH PROGRESS
+class ScrollNavigation {
+  constructor() {
+    this.sections = [];
+    this.navItems = [];
+    this.currentSection = 0;
+    this.init();
+  }
+  
+  init() {
+    this.findSections();
+    this.createNavigation();
+    this.bindEvents();
+    this.updateActiveSection();
+  }
+  
+  findSections() {
+    // Find all major sections
+    this.sections = Array.from(document.querySelectorAll('section[id], .section')).map(section => ({
+      element: section,
+      id: section.id || section.className.split(' ')[0],
+      label: section.dataset.navLabel || this.formatLabel(section.id || section.className.split(' ')[0])
+    })).filter(s => s.element);
+  }
+  
+  formatLabel(id) {
+    return id.replace(/-/g, ' ').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  }
+  
+  createNavigation() {
+    // Remove existing
+    const existing = document.querySelector('.scroll-nav');
+    if (existing) existing.remove();
+    
+    const nav = document.createElement('nav');
+    nav.className = 'scroll-nav';
+    nav.innerHTML = '<div class="scroll-nav-progress"><div class="scroll-nav-progress-bar"></div></div>';
+    
+    this.sections.forEach((section, index) => {
+      const item = document.createElement('div');
+      item.className = 'scroll-nav-item';
+      item.dataset.index = index;
+      item.dataset.label = section.label;
+      item.addEventListener('click', () => this.scrollToSection(index));
+      nav.appendChild(item);
+      this.navItems.push(item);
+    });
+    
+    document.body.appendChild(nav);
+  }
+  
+  bindEvents() {
+    window.addEventListener('scroll', () => {
+      this.updateActiveSection();
+      this.updateProgress();
+    }, { passive: true });
+  }
+  
+  updateActiveSection() {
+    const scrollPos = window.scrollY + window.innerHeight / 2;
+    
+    this.sections.forEach((section, index) => {
+      const rect = section.element.getBoundingClientRect();
+      const top = rect.top + window.scrollY;
+      const bottom = top + rect.height;
+      
+      if (scrollPos >= top && scrollPos < bottom) {
+        this.navItems.forEach((item, i) => {
+          item.classList.toggle('active', i === index);
+        });
+        this.currentSection = index;
+      }
+    });
+  }
+  
+  updateProgress() {
+    const progressBar = document.querySelector('.scroll-nav-progress-bar');
+    if (!progressBar) return;
+    
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / docHeight) * 100;
+    progressBar.style.height = `${progress}%`;
+  }
+  
+  scrollToSection(index) {
+    const section = this.sections[index];
+    if (section) {
+      section.element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+}
+
+// 3. SLOT MACHINE COUNTER
+class SlotMachineCounter {
+  constructor(element, options = {}) {
+    this.element = element;
+    this.target = parseInt(element.dataset.target) || 0;
+    this.prefix = element.dataset.prefix || '';
+    this.suffix = element.dataset.suffix || '';
+    this.duration = options.duration || 2500;
+    this.hasAnimated = false;
+    
+    this.init();
+  }
+  
+  init() {
+    // Create slot machine structure
+    this.element.innerHTML = '';
+    this.element.classList.add('slot-counter');
+    
+    const targetStr = this.target.toString();
+    this.digits = [];
+    
+    // Add prefix
+    if (this.prefix) {
+      const prefix = document.createElement('span');
+      prefix.textContent = this.prefix;
+      prefix.style.marginRight = '0.1em';
+      this.element.appendChild(prefix);
+    }
+    
+    // Create digit slots
+    for (let i = 0; i < targetStr.length; i++) {
+      const digitContainer = document.createElement('span');
+      digitContainer.className = 'slot-digit';
+      
+      const digitInner = document.createElement('span');
+      digitContainer.appendChild(digitInner);
+      
+      this.element.appendChild(digitContainer);
+      this.digits.push({
+        container: digitContainer,
+        inner: digitInner,
+        target: parseInt(targetStr[i])
+      });
+    }
+    
+    // Add suffix
+    if (this.suffix) {
+      const suffix = document.createElement('span');
+      suffix.textContent = this.suffix;
+      suffix.style.marginLeft = '0.1em';
+      this.element.appendChild(suffix);
+    }
+    
+    // Observe for animation
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !this.hasAnimated) {
+          this.hasAnimated = true;
+          this.animate();
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    
+    observer.observe(this.element);
+  }
+  
+  animate() {
+    this.digits.forEach((digit, index) => {
+      setTimeout(() => {
+        this.spinDigit(digit);
+      }, index * 200);
+    });
+  }
+  
+  spinDigit(digit) {
+    digit.container.classList.add('spinning');
+    
+    // Create numbers 0-9 animation
+    let current = 0;
+    const spins = 10 + Math.floor(Math.random() * 5);
+    const interval = setInterval(() => {
+      digit.inner.textContent = current;
+      current = (current + 1) % 10;
+      
+      if (current === digit.target + 1 || (digit.target === 9 && current === 0)) {
+        if (spins <= 0) {
+          clearInterval(interval);
+          digit.inner.textContent = digit.target;
+          digit.container.classList.remove('spinning');
+          digit.container.style.setProperty('--target-offset', `-${digit.target * 10}%`);
+        }
+      }
+    }, 50);
+  }
+}
+
+// 4. SCROLL VELOCITY DETECTOR
+class ScrollVelocityDetector {
+  constructor() {
+    this.lastScrollY = 0;
+    this.lastTime = performance.now();
+    this.velocity = 0;
+    this.isScrolling = false;
+    this.textElements = [];
+    this.init();
+  }
+  
+  init() {
+    this.findTextElements();
+    window.addEventListener('scroll', () => this.onScroll(), { passive: true });
+    this.animate();
+  }
+  
+  findTextElements() {
+    // Add velocity-text class to headings and key text
+    document.querySelectorAll('h1, h2, .hero-copy p, .section-header p').forEach(el => {
+      el.classList.add('velocity-text');
+      this.textElements.push(el);
+    });
+  }
+  
+  onScroll() {
+    this.isScrolling = true;
+    const currentTime = performance.now();
+    const currentScrollY = window.scrollY;
+    const timeDelta = currentTime - this.lastTime;
+    
+    if (timeDelta > 0) {
+      this.velocity = Math.abs(currentScrollY - this.lastScrollY) / timeDelta;
+    }
+    
+    this.lastScrollY = currentScrollY;
+    this.lastTime = currentTime;
+    
+    clearTimeout(this.scrollTimeout);
+    this.scrollTimeout = setTimeout(() => {
+      this.isScrolling = false;
+      this.velocity = 0;
+    }, 150);
+  }
+  
+  animate() {
+    if (this.isScrolling) {
+      const speedClass = this.velocity > 0.5 ? 'fast' : this.velocity < 0.1 ? 'slow' : '';
+      this.textElements.forEach(el => {
+        el.classList.remove('fast', 'slow');
+        if (speedClass) el.classList.add(speedClass);
+      });
+    }
+    
+    requestAnimationFrame(() => this.animate());
+  }
+}
+
+// 5. HERO IMAGE PERSPECTIVE TILT
+class HeroPerspectiveTilt {
+  constructor() {
+    this.heroImage = document.querySelector('.hero-main-image');
+    this.heroWrapper = document.querySelector('.hero-image-wrapper');
+    if (!this.heroImage || !this.heroWrapper) return;
+    
+    this.init();
+  }
+  
+  init() {
+    // Skip on mobile
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+    
+    this.heroWrapper.classList.add('hero-perspective');
+    this.heroImage.classList.add('hero-tilt-image');
+    
+    this.heroWrapper.addEventListener('mousemove', (e) => this.onMouseMove(e));
+    this.heroWrapper.addEventListener('mouseleave', () => this.onMouseLeave());
+  }
+  
+  onMouseMove(e) {
+    const rect = this.heroWrapper.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const rotateX = ((y - centerY) / centerY) * -5;
+    const rotateY = ((x - centerX) / centerX) * 5;
+    
+    this.heroImage.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+  }
+  
+  onMouseLeave() {
+    this.heroImage.style.transform = 'rotateX(0) rotateY(0) scale(1)';
+  }
+}
+
+// 6. MASONRY GALLERY WITH LAZY LOADING
+class MasonryGallery {
+  constructor(container) {
+    this.container = container;
+    this.items = [];
+    this.init();
+  }
+  
+  init() {
+    this.createGallery();
+    this.observeImages();
+  }
+  
+  createGallery() {
+    const images = [
+      { src: 'assets/02_Website_Heroes/Hero_1.png', title: 'Modern Design', category: 'Residential' },
+      { src: 'assets/02_Website_Heroes/Hero_2.png', title: 'Urban Living', category: 'Commercial' },
+      { src: 'assets/03_Social_Campaign/Campaign_4.png', title: 'Luxury Spaces', category: 'Residential' },
+      { src: 'assets/03_Social_Campaign/Campaign_5.png', title: 'Corporate HQ', category: 'Commercial' },
+      { src: 'assets/02_Website_Heroes/Hero_1.png', title: 'Eco Building', category: 'Industrial' },
+      { src: 'assets/03_Social_Campaign/Campaign_4.png', title: 'Smart Office', category: 'Commercial' }
+    ];
+    
+    this.container.innerHTML = '<div class="masonry-grid"></div>';
+    const grid = this.container.querySelector('.masonry-grid');
+    
+    images.forEach((img, index) => {
+      const item = document.createElement('div');
+      item.className = 'masonry-item chromatic-hover shimmer-container';
+      item.innerHTML = `
+        <img data-src="${img.src}" alt="${img.title}" class="lazy-load">
+        <div class="masonry-overlay">
+          <h4>${img.title}</h4>
+          <p>${img.category}</p>
+        </div>
+      `;
+      grid.appendChild(item);
+      this.items.push(item);
+    });
+  }
+  
+  observeImages() {
+    const lazyImages = this.container.querySelectorAll('.lazy-load');
+    
+    const imageObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          img.src = img.dataset.src;
+          img.classList.add('loaded');
+          img.addEventListener('load', () => {
+            img.style.opacity = '1';
+          });
+          imageObserver.unobserve(img);
+        }
+      });
+    }, { rootMargin: '50px' });
+    
+    lazyImages.forEach(img => {
+      img.style.opacity = '0';
+      img.style.transition = 'opacity 0.5s ease';
+      imageObserver.observe(img);
+    });
+  }
+}
+
+// =========================================
 // FORTUNE 500 v4.0 - ENHANCED COUNTERS
 // =========================================
 class EnhancedCounter {
@@ -2208,11 +2665,11 @@ class ReadingProgress {
 }
 
 // =========================================
-// INITIALIZE ALL FORTUNE 500 v4.0 FEATURES
+// INITIALIZE ALL FORTUNE 500 v5.0 FEATURES
 // =========================================
 document.addEventListener('DOMContentLoaded', () => {
   
-  // Enhanced Counters
+  // ENHANCED COUNTERS (v4.0)
   document.querySelectorAll('.enhanced-counter').forEach(el => {
     new EnhancedCounter(el);
   });
@@ -2295,6 +2752,56 @@ document.addEventListener('DOMContentLoaded', () => {
   // Smooth Page Transitions
   const pageTransitions = new SmoothPageTransition();
   
+  // =========================================
+  // NEW v5.0 PROFESSIONAL FEATURES
+  // =========================================
+  
+  // Toast Notification System - demo after 3 seconds
+  setTimeout(() => {
+    toast.success('Welcome to BuildBridge! Explore our new features.', {
+      title: 'Welcome'
+    });
+  }, 3000);
+  
+  // Scroll Navigation
+  const scrollNav = new ScrollNavigation();
+  
+  // Slot Machine Counters for hero stats
+  document.querySelectorAll('.floating-stats .enhanced-counter').forEach(el => {
+    new SlotMachineCounter(el);
+  });
+  
+  // Scroll Velocity Detector
+  const velocityDetector = new ScrollVelocityDetector();
+  
+  // Hero Perspective Tilt
+  const heroTilt = new HeroPerspectiveTilt();
+  
+  // Masonry Gallery (if container exists)
+  const masonryContainer = document.querySelector('.masonry-gallery-container');
+  if (masonryContainer) {
+    new MasonryGallery(masonryContainer);
+  }
+  
+  // Show shimmer effects on hero image
+  const heroImageWrapper = document.querySelector('.hero-image-wrapper');
+  if (heroImageWrapper) {
+    heroImageWrapper.classList.add('shimmer-container', 'chromatic-hover', 'distortion-wave');
+  }
+  
+  // Add liquid button effect to CTA buttons
+  document.querySelectorAll('.btn').forEach(btn => {
+    btn.classList.add('liquid-btn');
+  });
+  
+  // Bind toast demo to floating WhatsApp
+  const floatingWhatsApp = document.querySelector('.floating-whatsapp');
+  if (floatingWhatsApp) {
+    floatingWhatsApp.addEventListener('click', (e) => {
+      toast.info('Opening WhatsApp chat...', { title: 'Connecting' });
+    });
+  }
+  
   // Remove preloader faster with new animation
   const preloader = document.querySelector('.preloader');
   if (preloader) {
@@ -2305,10 +2812,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Console easter egg for v3.0
+// Console easter egg for v5.0
 console.log('%c🏗️ BuildBridge', 'font-size: 40px; font-weight: bold; color: #C9CED6; text-shadow: 0 0 30px rgba(201,206,214,0.5);');
-console.log('%cFortune 500 Construction Management System v3.0', 'font-size: 14px; color: #525862;');
-console.log('%c✨ New Features: Text Scramble | Advanced 3D Tilt | Custom Cursor | Particles Network | Kinetic Typography', 'font-size: 11px; color: #C9CED6; font-style: italic;');
-console.log('%c💫 Premium: Parallax Layers | Ripple Effects | Smooth Transitions | Glare & Shine', 'font-size: 11px; color: #3B82F6; font-style: italic;');
+console.log('%cFortune 500 Construction Management System v5.0', 'font-size: 14px; color: #525862;');
+console.log('%c✨ Professional Features: Toast Notifications | Scroll Navigation | Slot Machine Counters | Velocity Effects', 'font-size: 11px; color: #C9CED6; font-style: italic;');
+console.log('%c💫 Premium: Masonry Gallery | Hero Perspective Tilt | WebGL-style Shimmer | Liquid Buttons', 'font-size: 11px; color: #3B82F6; font-style: italic;');
+console.log('%c🚀 Version 5.0 - Auto-Update: ' + new Date().toLocaleDateString(), 'font-size: 11px; color: #22c55e; font-style: italic;');
 console.log('%cConnecting Clients. Delivering Projects. Building Trust.', 'font-size: 12px; color: #525862;');
 console.log('%c💬 WhatsApp: +27 66 120 0064', 'font-size: 14px; color: #25D366; font-weight: bold;');
