@@ -3220,3 +3220,408 @@ console.log('%c   • Shimmer Loading Effects - Premium loading states', 'font-s
 console.log('%c═════════════════════════════════════════════════════', 'font-size: 12px; color: #333;');
 console.log('%c💬 WhatsApp: +27 66 120 0064', 'font-size: 14px; color: #25D366; font-weight: bold;');
 console.log('%c🌐 Auto-Update Timestamp: ' + new Date().toISOString(), 'font-size: 10px; color: #666; font-style: italic;');
+
+// =========================================
+// v6.1 ADDITIONAL PROFESSIONAL FEATURES
+// =========================================
+
+// Typewriter Effect
+class TypewriterEffect {
+  constructor(element, options = {}) {
+    this.element = element;
+    this.text = element.textContent;
+    this.speed = options.speed || 100;
+    this.delay = options.delay || 0;
+    this.cursor = options.cursor !== false;
+    this.cursorChar = options.cursorChar || '|';
+    this.loop = options.loop || false;
+    this.loopDelay = options.loopDelay || 2000;
+    
+    this.init();
+  }
+  
+  init() {
+    this.element.classList.add('typewriter');
+    this.element.innerHTML = `<span class="typewriter-text"></span>${this.cursor ? '<span class="typewriter-cursor"></span>' : ''}`;
+    this.textSpan = this.element.querySelector('.typewriter-text');
+    
+    setTimeout(() => this.type(), this.delay);
+  }
+  
+  type() {
+    let charIndex = 0;
+    
+    const typeChar = () => {
+      if (charIndex < this.text.length) {
+        this.textSpan.textContent += this.text.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeChar, this.speed);
+      } else if (this.loop) {
+        setTimeout(() => this.delete(), this.loopDelay);
+      }
+    };
+    
+    typeChar();
+  }
+  
+  delete() {
+    let charIndex = this.text.length;
+    
+    const deleteChar = () => {
+      if (charIndex > 0) {
+        this.textSpan.textContent = this.text.substring(0, charIndex - 1);
+        charIndex--;
+        setTimeout(deleteChar, this.speed / 2);
+      } else if (this.loop) {
+        setTimeout(() => this.type(), this.speed * 5);
+      }
+    };
+    
+    deleteChar();
+  }
+}
+
+// Parallax Scroll Sections
+class ParallaxSection {
+  constructor(element) {
+    this.element = element;
+    this.layers = element.querySelectorAll('.parallax-layer');
+    this.speed = element.dataset.parallaxSpeed || 0.5;
+    this.init();
+  }
+  
+  init() {
+    window.addEventListener('scroll', () => this.update(), { passive: true });
+    this.update();
+  }
+  
+  update() {
+    const rect = this.element.getBoundingClientRect();
+    const scrolled = window.scrollY;
+    const elementTop = rect.top + scrolled;
+    const relativeScroll = scrolled - elementTop + window.innerHeight;
+    
+    this.layers.forEach((layer, index) => {
+      const speed = (index + 1) * 0.1 * this.speed;
+      const yPos = relativeScroll * speed;
+      layer.style.transform = `translateY(${yPos}px)`;
+    });
+  }
+}
+
+// Lightbox Gallery
+class LightboxGallery {
+  constructor() {
+    this.overlay = null;
+    this.images = [];
+    this.currentIndex = 0;
+    this.init();
+  }
+  
+  init() {
+    // Find all project images
+    document.querySelectorAll('.project-card img').forEach((img, index) => {
+      this.images.push({
+        src: img.src,
+        alt: img.alt,
+        caption: img.closest('.project-card')?.querySelector('h3')?.textContent || img.alt
+      });
+      
+      img.closest('.project-card').addEventListener('click', () => this.open(index));
+      img.closest('.project-card').style.cursor = 'zoom-in';
+    });
+    
+    // Create overlay
+    this.createOverlay();
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (!this.overlay.classList.contains('active')) return;
+      
+      if (e.key === 'Escape') this.close();
+      if (e.key === 'ArrowLeft') this.prev();
+      if (e.key === 'ArrowRight') this.next();
+    });
+  }
+  
+  createOverlay() {
+    this.overlay = document.createElement('div');
+    this.overlay.className = 'lightbox-overlay';
+    this.overlay.innerHTML = `
+      <div class="lightbox-container">
+        <button class="lightbox-close">✕</button>
+        <button class="lightbox-nav lightbox-prev">‹</button>
+        <button class="lightbox-nav lightbox-next">›</button>
+        <img class="lightbox-image" src="" alt="">
+        <div class="lightbox-caption"></div>
+      </div>
+    `;
+    
+    document.body.appendChild(this.overlay);
+    
+    // Event listeners
+    this.overlay.querySelector('.lightbox-close').addEventListener('click', () => this.close());
+    this.overlay.querySelector('.lightbox-prev').addEventListener('click', () => this.prev());
+    this.overlay.querySelector('.lightbox-next').addEventListener('click', () => this.next());
+    this.overlay.addEventListener('click', (e) => {
+      if (e.target === this.overlay) this.close();
+    });
+  }
+  
+  open(index) {
+    this.currentIndex = index;
+    this.updateImage();
+    this.overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  close() {
+    this.overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  
+  prev() {
+    this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+    this.updateImage();
+  }
+  
+  next() {
+    this.currentIndex = (this.currentIndex + 1) % this.images.length;
+    this.updateImage();
+  }
+  
+  updateImage() {
+    const img = this.images[this.currentIndex];
+    const overlayImg = this.overlay.querySelector('.lightbox-image');
+    const caption = this.overlay.querySelector('.lightbox-caption');
+    
+    overlayImg.style.opacity = '0';
+    
+    setTimeout(() => {
+      overlayImg.src = img.src;
+      overlayImg.alt = img.alt;
+      caption.textContent = img.caption;
+      overlayImg.style.opacity = '1';
+    }, 200);
+  }
+}
+
+// Scroll Reveal Animation
+class ScrollRevealPro {
+  constructor(elements, options = {}) {
+    this.elements = Array.from(elements);
+    this.threshold = options.threshold || 0.1;
+    this.rootMargin = options.rootMargin || '0px';
+    this.animation = options.animation || 'fade-up';
+    
+    this.init();
+  }
+  
+  init() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.animate(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: this.threshold,
+      rootMargin: this.rootMargin
+    });
+    
+    this.elements.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = this.getInitialTransform();
+      el.style.transition = 'opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+      observer.observe(el);
+    });
+  }
+  
+  getInitialTransform() {
+    switch (this.animation) {
+      case 'fade-up': return 'translateY(40px)';
+      case 'fade-down': return 'translateY(-40px)';
+      case 'fade-left': return 'translateX(40px)';
+      case 'fade-right': return 'translateX(-40px)';
+      case 'scale': return 'scale(0.9)';
+      case 'rotate': return 'rotateX(-15deg) translateY(30px)';
+      default: return 'translateY(40px)';
+    }
+  }
+  
+  animate(element) {
+    element.style.opacity = '1';
+    element.style.transform = 'none';
+  }
+}
+
+// Hero Spotlight Mask for Mouse Tracking
+class HeroSpotlightMask {
+  constructor() {
+    this.hero = document.querySelector('.hero');
+    if (!this.hero) return;
+    
+    this.init();
+  }
+  
+  init() {
+    const mask = document.createElement('div');
+    mask.className = 'hero-spotlight-mask';
+    this.hero.appendChild(mask);
+    
+    this.hero.addEventListener('mousemove', (e) => {
+      const rect = this.hero.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      
+      mask.style.setProperty('--mouse-x', `${x}%`);
+      mask.style.setProperty('--mouse-y', `${y}%`);
+    }, { passive: true });
+  }
+}
+
+// Stats Counter Animation with Slot Effect
+class AnimatedCounter {
+  constructor(element) {
+    this.element = element;
+    this.target = parseInt(element.dataset.target) || 0;
+    this.prefix = element.dataset.prefix || '';
+    this.suffix = element.dataset.suffix || '';
+    this.duration = parseInt(element.dataset.duration) || 2000;
+    
+    this.init();
+  }
+  
+  init() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.animate();
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    
+    observer.observe(this.element);
+  }
+  
+  animate() {
+    const startTime = performance.now();
+    const startValue = 0;
+    
+    const tick = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / this.duration, 1);
+      
+      // Ease out quart
+      const easeProgress = 1 - Math.pow(1 - progress, 4);
+      const currentValue = Math.floor(startValue + (this.target - startValue) * easeProgress);
+      
+      // Add slot machine effect
+      if (progress < 0.8) {
+        const randomDigit = Math.floor(Math.random() * 10);
+        this.element.textContent = this.prefix + currentValue + randomDigit + this.suffix;
+      } else {
+        this.element.textContent = this.prefix + currentValue + this.suffix;
+      }
+      
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        this.element.textContent = this.prefix + this.target + this.suffix;
+      }
+    };
+    
+    requestAnimationFrame(tick);
+  }
+}
+
+// Smooth Scroll Anchor Links
+class SmoothAnchorScroll {
+  constructor() {
+    this.init();
+  }
+  
+  init() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
+        const href = anchor.getAttribute('href');
+        if (href === '#') return;
+        
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          
+          const offset = 80; // Account for fixed header
+          const targetPosition = target.getBoundingClientRect().top + window.scrollY - offset;
+          
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  }
+}
+
+// Initialize all v6.1 features
+document.addEventListener('DOMContentLoaded', () => {
+  // Typewriter effect for hero eyebrow
+  const heroEyebrow = document.querySelector('.hero .eyebrow');
+  if (heroEyebrow) {
+    new TypewriterEffect(heroEyebrow, { speed: 80, delay: 1500 });
+  }
+  
+  // Lightbox Gallery for projects
+  const lightbox = new LightboxGallery();
+  
+  // Scroll Reveal Pro for sections
+  new ScrollRevealPro(document.querySelectorAll('.section-header'), { animation: 'fade-up' });
+  new ScrollRevealPro(document.querySelectorAll('.service-card'), { animation: 'fade-up', threshold: 0.2 });
+  new ScrollRevealPro(document.querySelectorAll('.stat-item'), { animation: 'scale' });
+  new ScrollRevealPro(document.querySelectorAll('.timeline-item'), { animation: 'fade-right' });
+  new ScrollRevealPro(document.querySelectorAll('.faq-item'), { animation: 'fade-left' });
+  
+  // Hero Spotlight Mask
+  new HeroSpotlightMask();
+  
+  // Animated counters for stats
+  document.querySelectorAll('.enhanced-counter').forEach(counter => {
+    new AnimatedCounter(counter);
+  });
+  
+  // Smooth anchor scroll
+  new SmoothAnchorScroll();
+  
+  // Add Ken Burns effect to hero image
+  const heroImage = document.querySelector('.hero-main-image');
+  if (heroImage) {
+    heroImage.classList.add('ken-burns');
+  }
+  
+  // Add grid overlay to hero
+  const hero = document.querySelector('.hero');
+  if (hero) {
+    const gridOverlay = document.createElement('div');
+    gridOverlay.className = 'hero-grid-overlay';
+    hero.insertBefore(gridOverlay, hero.firstChild);
+  }
+  
+  // Glitch effect on brand logo hover
+  const brandName = document.querySelector('.brand span');
+  if (brandName) {
+    brandName.classList.add('glitch-text');
+    brandName.setAttribute('data-text', brandName.textContent);
+  }
+});
+
+console.log('%c✨ v6.1 Features Loaded:', 'font-size: 12px; color: #C9CED6; font-weight: bold;');
+console.log('%c   • Typewriter effect on hero eyebrow', 'font-size: 10px; color: #888;');
+console.log('%c   • Lightbox gallery for project images', 'font-size: 10px; color: #888;');
+console.log('%c   • Scroll reveal animations (fade, scale, rotate)', 'font-size: 10px; color: #888;');
+console.log('%c   • Hero spotlight mask with mouse tracking', 'font-size: 10px; color: #888;');
+console.log('%c   • Slot machine counters for stats', 'font-size: 10px; color: #888;');
+console.log('%c   • Ken Burns effect on hero image', 'font-size: 10px; color: #888;');
+console.log('%c   • Grid overlay and glitch text effects', 'font-size: 10px; color: #888;');
