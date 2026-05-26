@@ -465,23 +465,37 @@ class AudioBars {
 // ORIGINAL FEATURES (Preserved & Enhanced)
 // =========================================
 
-// Preloader
-window.addEventListener('load', () => {
-  const preloader = document.querySelector('.preloader');
-  if (preloader) {
-    preloader.classList.add('fade-out');
-    setTimeout(() => {
-      preloader.style.display = 'none';
-    }, 500);
+// Preloader - hide on load OR timeout fallback
+(function() {
+  let preloaderHidden = false;
+  const MAX_PRELOADER_WAIT = 5000; // Max 5 seconds
+  
+  function hidePreloader() {
+    if (preloaderHidden) return;
+    preloaderHidden = true;
+    
+    const preloader = document.querySelector('.preloader');
+    if (preloader) {
+      preloader.classList.add('fade-out');
+      setTimeout(() => {
+        preloader.style.display = 'none';
+      }, 500);
+    }
+    
+    // Animate elements on page load
+    document.querySelectorAll('.animate-on-load').forEach((el, index) => {
+      setTimeout(() => {
+        el.classList.add('animated');
+      }, index * 100);
+    });
   }
   
-  // Animate elements on page load
-  document.querySelectorAll('.animate-on-load').forEach((el, index) => {
-    setTimeout(() => {
-      el.classList.add('animated');
-    }, index * 100);
-  });
-});
+  // Hide on window load
+  window.addEventListener('load', hidePreloader);
+  
+  // Fallback: force hide after timeout in case resources hang
+  setTimeout(hidePreloader, MAX_PRELOADER_WAIT);
+})();
 
 // Mobile menu toggle with animation
 function toggleMenu() {
