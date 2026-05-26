@@ -44,13 +44,39 @@
   <div class="orb orb-1 breathing"></div>
   <div class="orb orb-2 breathing"></div>
 
-  <!-- Preloader -->
+  <!-- Preloader - DISABLED -->
+  <!--
   <div class="preloader" role="progressbar" aria-label="Loading BuildBridge" aria-valuemin="0" aria-valuemax="100">
     <img src="assets/BuildBridge_Icon_Mark.svg" alt="BuildBridge" class="preloader-logo">
     <div class="preloader-bar">
       <div class="preloader-progress"></div>
     </div>
   </div>
+  -->
+  <style>
+    @keyframes force-hide-preloader {
+      0%, 85% { opacity: 1; visibility: visible; }
+      100% { opacity: 0; visibility: hidden; pointer-events: none; display: none; }
+    }
+    .preloader {
+      animation: force-hide-preloader 3s ease forwards !important;
+    }
+    /* Ensure content is visible */
+    body { visibility: visible !important; opacity: 1 !important; }
+  </style>
+  <script>
+    // Force unregister service workers (clear old caches)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for (let reg of registrations) reg.unregister();
+      });
+    }
+    // Aggressive preloader kill
+    setTimeout(function() {
+      var p = document.querySelector('.preloader');
+      if (p) p.remove();
+    }, 3000);
+  </script>
 
   <!-- Scroll Progress Bar -->
   <div class="reading-progress" role="progressbar" aria-label="Page scroll progress" aria-valuemin="0" aria-valuemax="100"></div>
@@ -724,7 +750,7 @@
     });
   </script>
 
-  <script src="scripts.js"></script>
+  <script src="scripts.js?v=2"></script>
   <script src="js/particles.js"></script>
   <script src="js/premium-effects.js"></script>
   <script src="js/advanced-animations.js"></script>
