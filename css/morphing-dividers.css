@@ -1,0 +1,410 @@
+/* ============================================
+   BuildBridge v12.0 - Morphing Section Dividers
+   Organic Animated Transitions Between Sections
+   ============================================ */
+
+.section-divider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  z-index: 1;
+}
+
+.section-divider svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 120px;
+}
+
+.section-divider-top {
+  margin-bottom: -1px;
+}
+
+.section-divider-bottom {
+  margin-top: -1px;
+}
+
+/* Wave Divider */
+.wave-divider svg {
+  height: 80px;
+}
+
+.wave-divider path {
+  fill: rgba(212, 175, 55, 0.05);
+  animation: waveFloat 8s ease-in-out infinite;
+}
+
+.wave-divider-alt path {
+  fill: rgba(15, 15, 16, 0.95);
+}
+
+@keyframes waveFloat {
+  0%, 100% {
+    d: path("M0,32L48,37.3C96,43,192,53,288,53.3C384,53,480,43,576,42.7C672,43,768,53,864,58.7C960,64,1056,64,1152,58.7C1248,53,1344,43,1392,37.3L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z");
+  }
+  50% {
+    d: path("M0,64L48,58.7C96,53,192,43,288,48C384,53,480,75,576,80C672,85,768,75,864,69.3C960,64,1056,64,1152,69.3C1248,75,1344,85,1392,90.7L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z");
+  }
+}
+
+/* Organic Blob Divider */
+.blob-divider {
+  height: 100px;
+}
+
+.blob-divider svg {
+  height: 100%;
+}
+
+.blob-divider path {
+  fill: rgba(212, 175, 55, 0.08);
+  animation: blobMorph 12s ease-in-out infinite;
+}
+
+@keyframes blobMorph {
+  0%, 100% {
+    d: path("M0,64 C200,120 400,20 600,64 C800,108 1000,40 1200,64 L1200,120 L0,120 Z");
+  }
+  33% {
+    d: path("M0,48 C200,80 400,120 600,48 C800,-24 1000,96 1200,48 L1200,120 L0,120 Z");
+  }
+  66% {
+    d: path("M0,80 C200,40 400,96 600,80 C800,64 1000,24 1200,80 L1200,120 L0,120 Z");
+  }
+}
+
+/* Curve Divider Variations */
+.curve-divider svg {
+  height: 100px;
+}
+
+.curve-divider .curve-fill {
+  fill: #0f0f10;
+}
+
+.curve-divider-gold .curve-fill {
+  fill: rgba(212, 175, 55, 0.1);
+}
+
+/* Tilt Divider */
+.tilt-divider {
+  height: 80px;
+  background: linear-gradient(135deg, transparent 50%, #0f0f10 50%);
+}
+
+.tilt-divider-reverse {
+  background: linear-gradient(-135deg, transparent 50%, #0f0f10 50%);
+}
+
+/* Angled Divider */
+.angled-divider {
+  position: relative;
+  height: 100px;
+  overflow: hidden;
+}
+
+.angled-divider::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200%;
+  background: #0f0f10;
+  transform: skewY(-3deg);
+  transform-origin: top left;
+}
+
+.angled-divider-reverse::before {
+  transform: skewY(3deg);
+  transform-origin: top right;
+}
+
+/* Gradient Fade Divider */
+.gradient-fade-divider {
+  height: 150px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(15, 15, 16, 0.5) 50%,
+    #0f0f10 100%
+  );
+}
+
+.gradient-fade-divider-reverse {
+  background: linear-gradient(
+    to top,
+    transparent 0%,
+    rgba(15, 15, 16, 0.5) 50%,
+    #0f0f10 100%
+  );
+}
+
+/* Steps Divider */
+.steps-divider {
+  display: flex;
+  height: 40px;
+}
+
+.steps-divider span {
+  flex: 1;
+  background: #0f0f10;
+  transform: skewX(-20deg);
+  margin: 0 2px;
+  animation: stepPulse 2s ease-in-out infinite;
+}
+
+.steps-divider span:nth-child(2) { animation-delay: 0.2s; }
+.steps-divider span:nth-child(3) { animation-delay: 0.4s; }
+.steps-divider span:nth-child(4) { animation-delay: 0.6s; }
+.steps-divider span:nth-child(5) { animation-delay: 0.8s; }
+
+@keyframes stepPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Particle Divider */
+.particle-divider {
+  position: relative;
+  height: 60px;
+  overflow: hidden;
+}
+
+.particle-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212, 175, 55, 0.3) 20%,
+    rgba(212, 175, 55, 0.3) 80%,
+    transparent 100%
+  );
+}
+
+.particle-divider-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #d4af37;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  animation: particleFloat 3s ease-in-out infinite;
+}
+
+@keyframes particleFloat {
+  0%, 100% {
+    transform: translateY(-50%) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-50%) translateX(100vw);
+    opacity: 0;
+  }
+}
+
+/* Animated Line Divider */
+.line-divider {
+  position: relative;
+  height: 2px;
+  margin: 60px 0;
+  overflow: hidden;
+}
+
+.line-divider::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #d4af37 50%,
+    transparent 100%
+  );
+  animation: lineSweep 3s ease-in-out infinite;
+}
+
+@keyframes lineSweep {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Zigzag Divider */
+.zigzag-divider {
+  height: 20px;
+  background: linear-gradient(
+    135deg,
+    #0f0f10 25%,
+    transparent 25%
+  ) -10px 0,
+  linear-gradient(
+    225deg,
+    #0f0f10 25%,
+    transparent 25%
+  ) -10px 0,
+  linear-gradient(
+    315deg,
+    #0f0f10 25%,
+    transparent 25%
+  ),
+  linear-gradient(
+    45deg,
+    #0f0f10 25%,
+    transparent 25%
+  );
+  background-size: 20px 20px;
+  background-color: transparent;
+}
+
+/* Scroll-linked Morphing Divider */
+.morphing-divider-scroll {
+  height: 120px;
+  position: relative;
+  overflow: hidden;
+}
+
+.morphing-divider-scroll svg {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.morphing-divider-scroll path {
+  fill: #0f0f10;
+  transition: d 0.1s linear;
+}
+
+/* Section Transition Overlay */
+.section-transition {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.section-transition-reveal {
+  background: linear-gradient(
+    180deg,
+    rgba(15, 15, 16, 0) 0%,
+    rgba(15, 15, 16, 1) 100%
+  );
+}
+
+/* Divider Combinations */
+.divider-combo-wave-blob {
+  position: relative;
+}
+
+.divider-combo-wave-blob .wave-divider {
+  position: absolute;
+  bottom: 0;
+}
+
+/* Gold Accent Divider */
+.gold-accent-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px 0;
+}
+
+.gold-accent-divider::before,
+.gold-accent-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212, 175, 55, 0.5) 50%,
+    transparent 100%
+  );
+}
+
+.gold-accent-divider-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #d4af37, #f4e4ba);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: goldPulse 2s ease-in-out infinite;
+}
+
+@keyframes goldPulse {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 0 20px 10px rgba(212, 175, 55, 0);
+    transform: scale(1.05);
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .section-divider svg {
+    height: 60px;
+  }
+  
+  .wave-divider svg {
+    height: 40px;
+  }
+  
+  .blob-divider {
+    height: 60px;
+  }
+  
+  .angled-divider {
+    height: 60px;
+  }
+  
+  .angled-divider::before {
+    height: 150%;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .wave-divider path,
+  .blob-divider path {
+    animation: none;
+  }
+  
+  .steps-divider span {
+    animation: none;
+  }
+  
+  .line-divider::before {
+    animation: none;
+    left: 0;
+  }
+  
+  .gold-accent-divider-icon {
+    animation: none;
+  }
+}
