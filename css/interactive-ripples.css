@@ -1,0 +1,332 @@
+/**
+ * BuildBridge Interactive Ripple Effects v13.0
+ * Fortune 500-grade click feedback system
+ * Material Design-inspired with premium enhancements
+ */
+
+/* Ripple Container Base */
+.ripple-container {
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+}
+
+/* Ripple Element */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: rippleEffect 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* Light Ripple (for dark backgrounds) */
+.ripple-light {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 70%);
+}
+
+/* Dark Ripple (for light backgrounds) */
+.ripple-dark {
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
+}
+
+/* Chrome Ripple (brand color) */
+.ripple-chrome {
+  background: radial-gradient(circle, rgba(201, 206, 214, 0.5) 0%, rgba(201, 206, 214, 0) 70%);
+}
+
+/* Colored Ripple Variants */
+.ripple-gold {
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.4) 0%, transparent 70%);
+}
+
+.ripple-blue {
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 70%);
+}
+
+.ripple-green {
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.4) 0%, transparent 70%);
+}
+
+.ripple-red {
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.4) 0%, transparent 70%);
+}
+
+@keyframes rippleEffect {
+  0% {
+    transform: scale(0);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Hold Ripple (for long press) */
+.ripple-hold {
+  animation: rippleHold 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes rippleHold {
+  0% {
+    transform: scale(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(2);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Double Ripple Effect */
+.ripple-double {
+  animation: rippleDouble 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes rippleDouble {
+  0% {
+    transform: scale(0);
+    opacity: 0.6;
+  }
+  40% {
+    transform: scale(2);
+    opacity: 0.4;
+  }
+  60% {
+    transform: scale(2);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Ripple on Buttons */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 60%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.btn-ripple:active::after {
+  transform: translate(-50%, -50%) scale(2);
+  opacity: 1;
+  transition: 0s;
+}
+
+/* Pulse Ripple (continuous animation) */
+.ripple-pulse {
+  animation: ripplePulse 2s ease-in-out infinite;
+}
+
+@keyframes ripplePulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Card Press Effect */
+.card-press {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card-press:active {
+  transform: scale(0.98);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Button Press Effect */
+.btn-press {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn-press:active {
+  transform: scale(0.96);
+}
+
+/* Link Underline Ripple */
+.link-ripple {
+  position: relative;
+  text-decoration: none;
+}
+
+.link-ripple::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.link-ripple:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+.link-ripple:active::after {
+  animation: linkRipple 0.4s ease;
+}
+
+@keyframes linkRipple {
+  0% { transform: scaleX(1); }
+  50% { transform: scaleX(0.8); }
+  100% { transform: scaleX(1); }
+}
+
+/* Focus Ripple (for accessibility) */
+.focus-ripple:focus-visible {
+  outline: none;
+  position: relative;
+}
+
+.focus-ripple:focus-visible::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  border: 2px solid rgba(201, 206, 214, 0.5);
+  animation: focusRipple 0.3s ease;
+}
+
+@keyframes focusRipple {
+  0% {
+    transform: scale(1.1);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Image Ripple Effect */
+.img-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.img-ripple::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--ripple-x, 50%) var(--ripple-y, 50%), 
+    rgba(201, 206, 214, 0.3) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.img-ripple:hover::before {
+  opacity: 1;
+}
+
+/* Checkbox/Radio Ripple */
+.checkbox-ripple,
+.radio-ripple {
+  position: relative;
+}
+
+.checkbox-ripple::after,
+.radio-ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  background: rgba(201, 206, 214, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.3s ease;
+}
+
+.checkbox-ripple:active::after,
+.radio-ripple:active::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Tab Ripple */
+.tab-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-ripple .tab-indicator {
+  position: absolute;
+  bottom: 0;
+  height: 2px;
+  background: #c9ced6;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Notification Ripple */
+.notification-ripple {
+  position: relative;
+}
+
+.notification-ripple::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  background: #ef4444;
+  border-radius: 50%;
+  animation: notificationPulse 2s ease-in-out infinite;
+}
+
+@keyframes notificationPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .ripple,
+  .ripple-pulse {
+    animation: none;
+    opacity: 0;
+  }
+  
+  .btn-ripple::after,
+  .link-ripple::after {
+    transition: none;
+  }
+}

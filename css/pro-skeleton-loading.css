@@ -1,0 +1,404 @@
+/**
+ * BuildBridge Pro Skeleton Loading v13.0
+ * Fortune 500-grade loading states with shimmer effects
+ * Modern, accessible, and visually polished
+ */
+
+/* Base Skeleton */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-tertiary, #252532) 25%,
+    var(--bg-elevated, #2a2a3a) 50%,
+    var(--bg-tertiary, #252532) 75%
+  );
+  background-size: 200% 100%;
+  border-radius: 4px;
+  animation: skeletonShimmer 1.5s ease-in-out infinite;
+  will-change: background-position;
+}
+
+@keyframes skeletonShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Skeleton Variants */
+.skeleton-text {
+  height: 1em;
+  margin-bottom: 0.5em;
+}
+
+.skeleton-text.sm { height: 0.75em; }
+.skeleton-text.md { height: 1em; }
+.skeleton-text.lg { height: 1.25em; }
+.skeleton-text.xl { height: 1.5em; }
+
+.skeleton-title {
+  height: 1.5em;
+  width: 60%;
+  margin-bottom: 1em;
+}
+
+.skeleton-title.lg {
+  height: 2em;
+  width: 75%;
+}
+
+.skeleton-paragraph {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.skeleton-paragraph .skeleton:last-child {
+  width: 80%;
+}
+
+.skeleton-circle {
+  border-radius: 50%;
+  aspect-ratio: 1;
+}
+
+.skeleton-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+.skeleton-avatar.sm {
+  width: 32px;
+  height: 32px;
+}
+
+.skeleton-avatar.lg {
+  width: 64px;
+  height: 64px;
+}
+
+.skeleton-image {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 8px;
+}
+
+.skeleton-image.square {
+  aspect-ratio: 1;
+}
+
+.skeleton-image.portrait {
+  aspect-ratio: 3/4;
+}
+
+.skeleton-button {
+  height: 44px;
+  width: 120px;
+  border-radius: 8px;
+}
+
+.skeleton-input {
+  height: 48px;
+  width: 100%;
+  border-radius: 6px;
+}
+
+.skeleton-card {
+  border-radius: 12px;
+  padding: 20px;
+  background: var(--card-bg, rgba(255, 255, 255, 0.03));
+}
+
+.skeleton-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.skeleton-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Loading Card Component */
+.skeleton-service-card {
+  background: var(--card-bg, rgba(255, 255, 255, 0.03));
+  border-radius: 12px;
+  padding: 32px;
+  border: 1px solid var(--border-color, rgba(201, 206, 214, 0.1));
+}
+
+.skeleton-service-card .skeleton-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.skeleton-service-card .skeleton-title {
+  width: 70%;
+  margin-bottom: 12px;
+}
+
+.skeleton-service-card .skeleton-text {
+  width: 100%;
+}
+
+.skeleton-service-card .skeleton-text:last-child {
+  width: 60%;
+}
+
+/* Loading Project Card */
+.skeleton-project-card {
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--card-bg, rgba(255, 255, 255, 0.03));
+}
+
+.skeleton-project-card .skeleton-image {
+  border-radius: 0;
+}
+
+.skeleton-project-card .skeleton-content {
+  padding: 20px;
+}
+
+.skeleton-project-card .skeleton-title {
+  width: 60%;
+}
+
+/* Loading Stats */
+.skeleton-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 32px;
+}
+
+.skeleton-stat-item {
+  text-align: center;
+}
+
+.skeleton-stat-item .skeleton-number {
+  height: 48px;
+  width: 80%;
+  margin: 0 auto 8px;
+}
+
+.skeleton-stat-item .skeleton-label {
+  height: 16px;
+  width: 60%;
+  margin: 0 auto;
+}
+
+/* Loading Hero */
+.skeleton-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+  min-height: 70vh;
+}
+
+.skeleton-hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.skeleton-hero-content .skeleton-title {
+  width: 90%;
+}
+
+.skeleton-hero-content .skeleton-paragraph {
+  max-width: 80%;
+}
+
+.skeleton-hero-content .skeleton-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.skeleton-hero-content .skeleton-button {
+  width: 150px;
+}
+
+.skeleton-hero-content .skeleton-button:last-child {
+  width: 130px;
+}
+
+.skeleton-hero-image {
+  aspect-ratio: 4/3;
+  border-radius: 16px;
+}
+
+/* Loading Testimonial */
+.skeleton-testimonial {
+  background: var(--card-bg, rgba(255, 255, 255, 0.03));
+  border-radius: 16px;
+  padding: 32px;
+}
+
+.skeleton-testimonial .skeleton-quote {
+  height: 80px;
+  margin-bottom: 24px;
+}
+
+.skeleton-testimonial .skeleton-author {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.skeleton-testimonial .skeleton-avatar {
+  flex-shrink: 0;
+}
+
+.skeleton-testimonial .skeleton-author-info {
+  flex: 1;
+}
+
+.skeleton-testimonial .skeleton-author-info .skeleton-text:first-child {
+  width: 120px;
+  margin-bottom: 8px;
+}
+
+.skeleton-testimonial .skeleton-author-info .skeleton-text:last-child {
+  width: 80px;
+}
+
+/* Loading Nav */
+.skeleton-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+}
+
+.skeleton-nav .skeleton-logo {
+  width: 140px;
+  height: 32px;
+}
+
+.skeleton-nav .skeleton-links {
+  display: flex;
+  gap: 32px;
+}
+
+.skeleton-nav .skeleton-links .skeleton {
+  width: 60px;
+  height: 20px;
+}
+
+.skeleton-nav .skeleton-cta {
+  width: 100px;
+  height: 40px;
+}
+
+/* Wave Animation Alternative */
+.skeleton-wave {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-wave::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 100%
+  );
+  animation: waveMove 1.5s ease-in-out infinite;
+}
+
+@keyframes waveMove {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Pulsing Animation Alternative */
+.skeleton-pulse {
+  animation: skeletonPulse 2s ease-in-out infinite;
+}
+
+@keyframes skeletonPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton,
+  .skeleton-wave::after {
+    animation: none;
+  }
+  
+  .skeleton {
+    background: var(--bg-tertiary, #252532);
+  }
+}
+
+/* Skeleton Container */
+.skeleton-container {
+  position: relative;
+}
+
+.skeleton-container.loaded .skeleton {
+  animation: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.skeleton-container.loaded .skeleton-content {
+  opacity: 1;
+}
+
+.skeleton-content {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Progress Skeleton */
+.skeleton-progress {
+  height: 4px;
+  background: var(--bg-tertiary, #252532);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.skeleton-progress-bar {
+  height: 100%;
+  width: 30%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--text-muted, #5a6270),
+    transparent
+  );
+  animation: progressSlide 1.5s ease-in-out infinite;
+}
+
+@keyframes progressSlide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}

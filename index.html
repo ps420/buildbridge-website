@@ -35,14 +35,202 @@
   <link rel="stylesheet" href="css/parallax-tilt.css">
   <link rel="stylesheet" href="css/rolling-counters.css">
   <link rel="stylesheet" href="css/smart-sticky-nav.css">
+  
+  <!-- v13.0 Professional Enhancements -->
+  <link rel="stylesheet" href="css/floating-scroll-progress.css">
+  <link rel="stylesheet" href="css/print-styles.css" media="print">
 
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
   <link rel="manifest" href="manifest.json">
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="BuildBridge is South Africa's premier construction management company, connecting clients with trusted contractors. 150+ projects delivered with 98% client satisfaction. Get your free consultation today.">
+  <meta name="keywords" content="construction management, building contractors, project management, construction company South Africa, residential construction, commercial buildout, contractor matching, construction consultation">
+  <meta name="author" content="BuildBridge">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://buildbridge.co.za/">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://buildbridge.co.za/">
+  <meta property="og:title" content="BuildBridge | Construction Management & Contractor Matching">
+  <meta property="og:description" content="Connect with trusted contractors for your construction project. 150+ projects delivered with transparency and expertise. Free consultation available.">
+  <meta property="og:image" content="https://buildbridge.co.za/assets/02_Website_Heroes/Hero_1.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="BuildBridge Construction Management - Modern construction project">
+  <meta property="og:locale" content="en_ZA">
+  <meta property="og:site_name" content="BuildBridge">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://buildbridge.co.za/">
+  <meta property="twitter:title" content="BuildBridge | Construction Management & Contractor Matching">
+  <meta property="twitter:description" content="Connect with trusted contractors for your construction project. 150+ projects delivered with transparency and expertise.">
+  <meta property="twitter:image" content="https://buildbridge.co.za/assets/02_Website_Heroes/Hero_1.png">
+  
+  <!-- Mobile App Capabilities -->
   <meta name="theme-color" content="#0f0f10">
+  <meta name="msapplication-TileColor" content="#0f0f10">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="BuildBridge">
   <link rel="apple-touch-icon" href="assets/BuildBridge_Icon_Mark.svg">
+  
+  <!-- Structured Data / Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://buildbridge.co.za/#organization",
+        "name": "BuildBridge",
+        "url": "https://buildbridge.co.za/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://buildbridge.co.za/assets/BuildBridge_Logo.svg"
+        },
+        "description": "Construction management company connecting clients with trusted contractors",
+        "telephone": "+27-66-120-0064",
+        "email": "info@buildbridge.co.za",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "ZA",
+          "addressRegion": "Western Cape"
+        },
+        "sameAs": [
+          "https://linkedin.com/company/buildbridge",
+          "https://instagram.com/buildbridge",
+          "https://facebook.com/buildbridge"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://buildbridge.co.za/#website",
+        "url": "https://buildbridge.co.za/",
+        "name": "BuildBridge",
+        "publisher": {
+          "@id": "https://buildbridge.co.za/#organization"
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://buildbridge.co.za/search?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://buildbridge.co.za/#webpage",
+        "url": "https://buildbridge.co.za/",
+        "name": "BuildBridge | Construction Management & Contractor Matching",
+        "isPartOf": {
+          "@id": "https://buildbridge.co.za/#website"
+        },
+        "about": {
+          "@id": "https://buildbridge.co.za/#organization"
+        },
+        "description": "South Africa's premier construction management company connecting clients with trusted contractors. 150+ projects delivered with 98% client satisfaction.",
+        "breadcrumb": {
+          "@id": "https://buildbridge.co.za/#breadcrumb"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://buildbridge.co.za/#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://buildbridge.co.za/"
+          }
+        ]
+      },
+      {
+        "@type": "LocalBusiness",
+        "@id": "https://buildbridge.co.za/#localbusiness",
+        "name": "BuildBridge Construction Management",
+        "image": "https://buildbridge.co.za/assets/02_Website_Heroes/Hero_1.png",
+        "telephone": "+27-66-120-0064",
+        "email": "info@buildbridge.co.za",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "South Africa"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": -33.9249,
+          "longitude": 18.4241
+        },
+        "url": "https://buildbridge.co.za/",
+        "priceRange": "$$$",
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            "opens": "08:00",
+            "closes": "18:00"
+          }
+        ],
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "reviewCount": "150"
+        }
+      },
+      {
+        "@type": "Service",
+        "serviceType": "Construction Management",
+        "provider": {
+          "@id": "https://buildbridge.co.za/#organization"
+        },
+        "areaServed": {
+          "@type": "Country",
+          "name": "South Africa"
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Construction Services",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Project Consultation"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Contractor Matching"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Project Management"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Quality Assurance"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body class="focus-ring-accessible" role="document">
   <noscript>
@@ -787,6 +975,17 @@
   <script src="js/circular-scroll-progress.js"></script>
   <script src="js/rolling-counters.js"></script>
   <script src="js/smart-sticky-nav.js"></script>
+  
+  <!-- v13.0 Professional Enhancements -->
+  <script src="js/floating-scroll-progress.js"></script>
+  
+  <!-- Print Button -->
+  <button class="print-button" onclick="window.print()" title="Print this page" aria-label="Print page">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+      <path d="M6 14h12v8H6z"/>
+    </svg>
+  </button>
 
   <script>
     // Mobile menu toggle with animation

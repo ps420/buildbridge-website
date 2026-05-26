@@ -1,0 +1,205 @@
+/**
+ * BuildBridge Premium Cursor System v13.0
+ * Fortune 500-grade custom cursor with magnetic effects
+ * Professional, smooth, and accessible
+ */
+
+/* Hide default cursor on desktop */
+@media (pointer: fine) {
+  html.premium-cursor-enabled,
+  html.premium-cursor-enabled * {
+    cursor: none !important;
+  }
+  
+  /* Restore cursor for specific elements */
+  html.premium-cursor-enabled input,
+  html.premium-cursor-enabled textarea,
+  html.premium-cursor-enabled select,
+  html.premium-cursor-enabled [contenteditable] {
+    cursor: text !important;
+  }
+}
+
+/* Cursor Container */
+.premium-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 999999;
+  mix-blend-mode: difference;
+  will-change: transform;
+}
+
+/* Main Cursor Dot */
+.cursor-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #ffffff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.15s ease, height 0.15s ease, background 0.15s ease;
+  will-change: width, height, transform;
+}
+
+/* Cursor Ring */
+.cursor-ring {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease,
+              background 0.3s ease,
+              opacity 0.3s ease;
+  will-change: width, height, transform;
+}
+
+/* Cursor States */
+.cursor--hover .cursor-dot {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.cursor--hover .cursor-ring {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.cursor--click .cursor-ring {
+  width: 30px;
+  height: 30px;
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.cursor--text .cursor-dot {
+  width: 2px;
+  height: 24px;
+  border-radius: 1px;
+  background: #ffffff;
+}
+
+.cursor--text .cursor-ring {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+/* Magnetic Effect Override */
+.cursor--magnetic .cursor-ring {
+  width: 80px;
+  height: 80px;
+  background: rgba(201, 206, 214, 0.1);
+  border-color: rgba(201, 206, 214, 0.6);
+}
+
+/* Cursor Label */
+.cursor-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffffff;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.cursor--hover .cursor-label {
+  opacity: 1;
+}
+
+/* Trail Effect */
+.cursor-trail {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 999998;
+}
+
+.cursor-trail-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: trailFade 0.5s ease forwards;
+}
+
+@keyframes trailFade {
+  0% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+}
+
+/* Magnetic Elements */
+[data-magnetic] {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Loading State */
+.cursor--loading .cursor-ring {
+  animation: cursorSpin 1s linear infinite;
+  border-top-color: transparent;
+  border-right-color: transparent;
+}
+
+@keyframes cursorSpin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Hide on mobile/tablet */
+@media (pointer: coarse) {
+  .premium-cursor,
+  .cursor-trail {
+    display: none !important;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .cursor-dot,
+  .cursor-ring {
+    transition: none;
+  }
+}
+
+/* Cursor Glow Effect (optional enhancement) */
+.cursor-glow {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(201, 206, 214, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.cursor--hover .cursor-glow {
+  opacity: 1;
+}

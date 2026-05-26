@@ -1,0 +1,365 @@
+/* ========================================
+   ANIMATED GRADIENT TEXT v13.0
+   Fortune 500 Kinetic Typography
+======================================== */
+
+.animated-gradient-text {
+  background: linear-gradient(
+    135deg,
+    #C9CED6 0%,
+    #F5F7FA 25%,
+    #C9CED6 50%,
+    #8B92A0 75%,
+    #C9CED6 100%
+  );
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 8s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Shimmer effect - horizontal sweep */
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--chrome) 0%,
+    var(--white) 25%,
+    var(--chrome) 50%,
+    var(--white) 75%,
+    var(--chrome) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer-sweep 3s linear infinite;
+}
+
+@keyframes shimmer-sweep {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+/* Wave gradient animation */
+.wave-gradient-text {
+  background: linear-gradient(
+    180deg,
+    #C9CED6 0%,
+    #F5F7FA 30%,
+    #8B92A0 60%,
+    #C9CED6 100%
+  );
+  background-size: 100% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: wave-gradient 4s ease-in-out infinite;
+}
+
+@keyframes wave-gradient {
+  0%, 100% {
+    background-position: center 0%;
+  }
+  50% {
+    background-position: center 100%;
+  }
+}
+
+/* Chromatic text effect */
+.chromatic-text {
+  position: relative;
+  color: var(--white);
+}
+
+.chromatic-text::before,
+.chromatic-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+}
+
+.chromatic-text::before {
+  color: #ff3366;
+  animation: chromatic-offset-1 3s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+.chromatic-text::after {
+  color: #00ffff;
+  animation: chromatic-offset-2 3s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes chromatic-offset-1 {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.5;
+  }
+  25% {
+    transform: translate(2px, -1px);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(-1px, 2px);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translate(-2px, -2px);
+    opacity: 0.6;
+  }
+}
+
+@keyframes chromatic-offset-2 {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.5;
+  }
+  25% {
+    transform: translate(-2px, 1px);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(1px, -2px);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translate(2px, 2px);
+    opacity: 0.7;
+  }
+}
+
+/* Neon glow text */
+.neon-glow-text {
+  color: var(--white);
+  text-shadow:
+    0 0 10px rgba(201, 206, 214, 0.5),
+    0 0 20px rgba(201, 206, 214, 0.3),
+    0 0 30px rgba(201, 206, 214, 0.2),
+    0 0 40px rgba(201, 206, 214, 0.1);
+  animation: neon-pulse 2s ease-in-out infinite;
+}
+
+@keyframes neon-pulse {
+  0%, 100% {
+    text-shadow:
+      0 0 10px rgba(201, 206, 214, 0.5),
+      0 0 20px rgba(201, 206, 214, 0.3),
+      0 0 30px rgba(201, 206, 214, 0.2),
+      0 0 40px rgba(201, 206, 214, 0.1);
+  }
+  50% {
+    text-shadow:
+      0 0 20px rgba(201, 206, 214, 0.7),
+      0 0 40px rgba(201, 206, 214, 0.5),
+      0 0 60px rgba(201, 206, 214, 0.3),
+      0 0 80px rgba(201, 206, 214, 0.2);
+  }
+}
+
+/* Glitch text effect */
+.glitch-text {
+  position: relative;
+  color: var(--white);
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+}
+
+.glitch-text::before {
+  left: 2px;
+  text-shadow: -2px 0 #ff3366;
+  clip: rect(24px, 550px, 90px, 0);
+  animation: glitch-anim-1 3s infinite linear alternate-reverse;
+}
+
+.glitch-text::after {
+  left: -2px;
+  text-shadow: -2px 0 #00ffff;
+  clip: rect(85px, 550px, 140px, 0);
+  animation: glitch-anim-2 2.5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim-1 {
+  0% { clip: rect(20px, 9999px, 15px, 0); }
+  20% { clip: rect(10px, 9999px, 85px, 0); }
+  40% { clip: rect(90px, 9999px, 45px, 0); }
+  60% { clip: rect(15px, 9999px, 60px, 0); }
+  80% { clip: rect(70px, 9999px, 30px, 0); }
+  100% { clip: rect(50px, 9999px, 95px, 0); }
+}
+
+@keyframes glitch-anim-2 {
+  0% { clip: rect(65px, 9999px, 100px, 0); }
+  20% { clip: rect(25px, 9999px, 15px, 0); }
+  40% { clip: rect(85px, 9999px, 45px, 0); }
+  60% { clip: rect(5px, 9999px, 35px, 0); }
+  80% { clip: rect(55px, 9999px, 20px, 0); }
+  100% { clip: rect(40px, 9999px, 80px, 0); }
+}
+
+/* Split text character animation */
+.split-char-text {
+  display: inline-block;
+}
+
+.split-char-text .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(100%);
+  animation: char-reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes char-reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Wave character animation */
+.wave-text .char {
+  display: inline-block;
+  animation: wave-char 2s ease-in-out infinite;
+}
+
+@keyframes wave-char {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Bouncing text */
+.bounce-text .char {
+  display: inline-block;
+  animation: bounce-char 1s ease infinite;
+}
+
+@keyframes bounce-char {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+/* Rotating gradient text */
+.rotate-gradient-text {
+  background: conic-gradient(
+    from 0deg,
+    #C9CED6 0deg,
+    #F5F7FA 60deg,
+    #8B92A0 120deg,
+    #C9CED6 180deg,
+    #F5F7FA 240deg,
+    #8B92A0 300deg,
+    #C9CED6 360deg
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: rotate-gradient 10s linear infinite;
+}
+
+@keyframes rotate-gradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 200% 200%;
+  }
+}
+
+/* Metallic text effect */
+.metallic-text {
+  background: linear-gradient(
+    180deg,
+    #F5F7FA 0%,
+    #C9CED6 30%,
+    #8B92A0 50%,
+    #C9CED6 70%,
+    #F5F7FA 100%
+  );
+  background-size: 100% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: metallic-sheen 3s ease-in-out infinite;
+}
+
+@keyframes metallic-sheen {
+  0%, 100% {
+    background-position: center 0%;
+  }
+  50% {
+    background-position: center 100%;
+  }
+}
+
+/* Outline fill animation */
+.outline-fill-text {
+  position: relative;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--chrome);
+}
+
+.outline-fill-text::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  color: var(--white);
+  -webkit-text-stroke: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.outline-fill-text.filled::before {
+  width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .glitch-text::before,
+  .glitch-text::after {
+    display: none;
+  }
+
+  .chromatic-text::before,
+  .chromatic-text::after {
+    display: none;
+  }
+}

@@ -1,0 +1,378 @@
+/* ========================================
+   MAGNETIC SOCIAL SHARE BUTTONS v13.0
+   Fortune 500 Interactive Social Elements
+======================================== */
+
+.magnetic-social-container {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.magnetic-social-btn {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s ease,
+              border-color 0.3s ease;
+  border: 2px solid rgba(201, 206, 214, 0.2);
+  background: linear-gradient(145deg, #1a1c21, #17191d);
+  overflow: hidden;
+  will-change: transform;
+}
+
+.magnetic-social-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, var(--brand-color), var(--brand-color-dark));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 50%;
+}
+
+.magnetic-social-btn:hover {
+  border-color: var(--brand-color);
+  box-shadow: 0 10px 40px var(--brand-glow);
+}
+
+.magnetic-social-btn:hover::before {
+  opacity: 1;
+}
+
+.magnetic-social-btn svg,
+.magnetic-social-btn .icon {
+  position: relative;
+  z-index: 1;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Platform-specific brand colors */
+.magnetic-social-btn--whatsapp {
+  --brand-color: #25D366;
+  --brand-color-dark: #128C7E;
+  --brand-glow: rgba(37, 211, 102, 0.3);
+}
+
+.magnetic-social-btn--linkedin {
+  --brand-color: #0077B5;
+  --brand-color-dark: #005885;
+  --brand-glow: rgba(0, 119, 181, 0.3);
+}
+
+.magnetic-social-btn--twitter {
+  --brand-color: #1DA1F2;
+  --brand-color-dark: #0d8bd9;
+  --brand-glow: rgba(29, 161, 242, 0.3);
+}
+
+.magnetic-social-btn--facebook {
+  --brand-color: #4267B2;
+  --brand-color-dark: #365899;
+  --brand-glow: rgba(66, 103, 178, 0.3);
+}
+
+.magnetic-social-btn--instagram {
+  --brand-color: #E4405F;
+  --brand-color-dark: #C13584;
+  --brand-glow: rgba(228, 64, 95, 0.3);
+  background: linear-gradient(145deg, #1a1c21, #17191d);
+}
+
+.magnetic-social-btn--instagram::before {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+.magnetic-social-btn--email {
+  --brand-color: #EA4335;
+  --brand-color-dark: #D33B28;
+  --brand-glow: rgba(234, 67, 53, 0.3);
+}
+
+.magnetic-social-btn--copy {
+  --brand-color: #C9CED6;
+  --brand-color-dark: #8B92A0;
+  --brand-glow: rgba(201, 206, 214, 0.2);
+}
+
+/* Ripple effect on click */
+.magnetic-social-btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(0);
+  animation: social-ripple 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes social-ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Magnetic attraction zone (invisible but interactive) */
+.magnetic-zone {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
+
+/* Tooltip on hover */
+.magnetic-social-tooltip {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  padding: 8px 16px;
+  background: var(--gun);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--white);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.magnetic-social-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--gun);
+}
+
+.magnetic-social-btn:hover .magnetic-social-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Success state for copy button */
+.magnetic-social-btn.copied {
+  border-color: #22c55e;
+  box-shadow: 0 10px 40px rgba(34, 197, 94, 0.3);
+}
+
+.magnetic-social-btn.copied::before {
+  background: linear-gradient(145deg, #22c55e, #16a34a);
+  opacity: 1;
+}
+
+/* Floating label variant */
+.magnetic-social-btn--labeled {
+  width: auto;
+  padding: 14px 24px 14px 56px;
+  border-radius: 50px;
+  gap: 12px;
+}
+
+.magnetic-social-btn--labeled .label {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: 'Montserrat', sans-serif;
+  color: var(--white);
+  transition: color 0.3s ease;
+}
+
+.magnetic-social-btn--labeled svg,
+.magnetic-social-btn--labeled .icon {
+  position: absolute;
+  left: 16px;
+}
+
+/* Social share bar for projects/cards */
+.social-share-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: linear-gradient(145deg, rgba(23, 25, 29, 0.9), rgba(26, 28, 33, 0.9));
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.social-share-bar__label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--slate);
+  margin-right: 8px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.social-share-bar .magnetic-social-btn {
+  width: 44px;
+  height: 44px;
+}
+
+.social-share-bar .magnetic-social-btn svg,
+.social-share-bar .magnetic-social-btn .icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Project card social overlay */
+.project-card .social-share-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(15, 15, 16, 0.95), transparent);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-card:hover .social-share-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.project-card .social-share-overlay .magnetic-social-btn {
+  width: 40px;
+  height: 40px;
+  border-width: 1px;
+}
+
+.project-card .social-share-overlay .magnetic-social-btn svg,
+.project-card .social-share-overlay .magnetic-social-btn .icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Sticky social sidebar */
+.social-sidebar {
+  position: fixed;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 100;
+}
+
+.social-sidebar .magnetic-social-btn {
+  width: 48px;
+  height: 48px;
+}
+
+.social-sidebar::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -60px;
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, transparent, rgba(201, 206, 214, 0.3));
+  transform: translateX(-50%);
+}
+
+.social-sidebar::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -60px;
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to top, transparent, rgba(201, 206, 214, 0.3));
+  transform: translateX(-50%);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .magnetic-social-btn {
+    width: 48px;
+    height: 48px;
+  }
+
+  .magnetic-social-btn svg,
+  .magnetic-social-btn .icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .social-sidebar {
+    left: auto;
+    right: 20px;
+    bottom: 100px;
+    top: auto;
+    transform: none;
+    flex-direction: row;
+  }
+
+  .social-sidebar::before,
+  .social-sidebar::after {
+    display: none;
+  }
+
+  .magnetic-social-tooltip {
+    display: none;
+  }
+
+  .social-share-bar {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .social-share-bar__label {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 8px;
+    margin-right: 0;
+  }
+}
+
+/* Animation variants */
+.magnetic-social-btn--pop {
+  animation: social-pop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes social-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Stagger animation delays */
+.magnetic-social-container.stagger-animate .magnetic-social-btn:nth-child(1) { animation-delay: 0s; }
+.magnetic-social-container.stagger-animate .magnetic-social-btn:nth-child(2) { animation-delay: 0.1s; }
+.magnetic-social-container.stagger-animate .magnetic-social-btn:nth-child(3) { animation-delay: 0.2s; }
+.magnetic-social-container.stagger-animate .magnetic-social-btn:nth-child(4) { animation-delay: 0.3s; }
+.magnetic-social-container.stagger-animate .magnetic-social-btn:nth-child(5) { animation-delay: 0.4s; }
+.magnetic-social-container.stagger-animate .magnetic-social-btn:nth-child(6) { animation-delay: 0.5s; }

@@ -1,0 +1,575 @@
+/**
+ * PRINT STYLESHEET
+ * Professional Print-Optimized Styles for BuildBridge
+ * Ensures clean, readable output when printing any page
+ */
+
+@media print {
+  /* ============================================
+     RESET & BASE
+     ============================================ */
+  
+  *,
+  *::before,
+  *::after {
+    text-shadow: none !important;
+    box-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  html {
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-family: 'Montserrat', Georgia, serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ============================================
+     HIDE INTERACTIVE ELEMENTS
+     ============================================ */
+  
+  /* Navigation & UI */
+  .nav,
+  .mobile-menu-btn,
+  .quote-btn,
+  .back-to-top,
+  .floating-scroll-progress,
+  .quick-contact-widget,
+  .live-chat-widget,
+  .cookie-consent,
+  .newsletter-modal-overlay,
+  .command-palette,
+  #cookieConsent,
+  
+  /* Interactive elements */
+  .marquee-section,
+  .testimonial-carousel-3d,
+  .before-after-showcase,
+  .showcase-3d,
+  
+  /* Buttons in content */
+  .btn.ghost,
+  .actions .btn:not(:first-child),
+  .social-links,
+  .social-share-container,
+  
+  /* Decorative elements */
+  .bg-gradient,
+  .living-gradient,
+  .noise-overlay,
+  .orb,
+  .error-visual,
+  .crane-container,
+  .particles-canvas,
+  .webgl-canvas,
+  
+  /* Forms hidden elements */
+  .form-hint,
+  .input-icon,
+  .validation-icon {
+    display: none !important;
+  }
+
+  /* ============================================
+     LAYOUT ADJUSTMENTS
+     ============================================ */
+  
+  /* Remove padding for print */
+  .section {
+    padding: 20pt 0 !important;
+    margin: 0 !important;
+    page-break-inside: avoid;
+  }
+
+  .hero {
+    min-height: auto !important;
+    padding: 40pt 0 30pt !important;
+    text-align: left !important;
+  }
+
+  .hero-visual,
+  .hero-image-wrapper {
+    display: none !important;
+  }
+
+  .hero-copy {
+    max-width: 100% !important;
+  }
+
+  /* Grid layouts for print */
+  .services-grid,
+  .projects-grid,
+  .contact-grid,
+  .footer-grid {
+    display: block !important;
+  }
+
+  .service-card,
+  .project-card {
+    page-break-inside: avoid;
+    margin-bottom: 15pt;
+    border: 1pt solid #ddd;
+    padding: 15pt;
+  }
+
+  /* Stats section */
+  .stats-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 10pt;
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: 10pt;
+  }
+
+  /* ============================================
+     TYPOGRAPHY
+     ============================================ */
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: black !important;
+    page-break-after: avoid;
+    page-break-inside: avoid;
+    margin-top: 20pt;
+    margin-bottom: 10pt;
+  }
+
+  h1 {
+    font-size: 24pt;
+    font-weight: 700;
+  }
+
+  h2 {
+    font-size: 18pt;
+    font-weight: 600;
+    border-bottom: 1pt solid #ddd;
+    padding-bottom: 5pt;
+  }
+
+  h3 {
+    font-size: 14pt;
+    font-weight: 600;
+  }
+
+  p {
+    orphans: 3;
+    widows: 3;
+    margin-bottom: 10pt;
+  }
+
+  .eyebrow {
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #666 !important;
+  }
+
+  /* Links */
+  a {
+    color: black !important;
+    text-decoration: none !important;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #666;
+    word-break: break-all;
+  }
+
+  a[href^="#"]::after,
+  a[href^="javascript:"]::after,
+  .brand[href]::after,
+  .nav-links a[href]::after {
+    content: "" !important;
+  }
+
+  /* ============================================
+     HEADER & BRANDING FOR PRINT
+     ============================================ */
+  
+  .nav {
+    display: block !important;
+    position: static !important;
+    background: none !important;
+    border: none !important;
+    padding: 0 0 20pt !important;
+    margin-bottom: 20pt;
+    border-bottom: 2pt solid black !important;
+  }
+
+  .brand {
+    display: flex !important;
+    align-items: center;
+    gap: 10pt;
+    text-decoration: none !important;
+  }
+
+  .brand img {
+    width: 30pt !important;
+    height: 30pt !important;
+    display: block;
+  }
+
+  .brand span {
+    font-size: 18pt;
+    font-weight: 700;
+    color: black !important;
+  }
+
+  /* Print header info */
+  .nav::after {
+    content: "Printed from buildbridge.co.za on " attr(data-print-date);
+    display: block;
+    font-size: 8pt;
+    color: #666;
+    margin-top: 5pt;
+  }
+
+  /* ============================================
+     CONTENT SECTIONS
+     ============================================ */
+  
+  .trust {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15pt;
+    padding: 15pt 0 !important;
+  }
+
+  .trust > div {
+    text-align: center;
+    padding: 10pt;
+    border: 1pt solid #ddd;
+  }
+
+  .trust b {
+    display: block;
+    font-size: 10pt;
+    margin-bottom: 5pt;
+  }
+
+  .trust p {
+    font-size: 9pt;
+    color: #333;
+    margin: 0;
+  }
+
+  /* Process timeline */
+  .process-timeline {
+    padding-left: 30pt;
+  }
+
+  .timeline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15pt;
+    margin-bottom: 15pt;
+    page-break-inside: avoid;
+  }
+
+  .timeline-node {
+    width: 24pt;
+    height: 24pt;
+    background: black !important;
+    color: white !important;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 10pt;
+    flex-shrink: 0;
+  }
+
+  .timeline-progress,
+  .timeline-icon {
+    display: none !important;
+  }
+
+  /* FAQ section */
+  .faq-container {
+    border: none !important;
+  }
+
+  .faq-item {
+    border-bottom: 1pt solid #ddd;
+    page-break-inside: avoid;
+    margin-bottom: 10pt;
+    padding-bottom: 10pt;
+  }
+
+  .faq-question {
+    background: none !important;
+    padding: 0 !important;
+    font-weight: 600;
+    cursor: default !important;
+  }
+
+  .faq-icon {
+    display: none !important;
+  }
+
+  .faq-answer {
+    display: block !important;
+    height: auto !important;
+    opacity: 1 !important;
+    padding: 5pt 0 0 !important;
+  }
+
+  .faq-answer-content {
+    padding: 0 !important;
+    color: #333 !important;
+  }
+
+  /* ============================================
+     CONTACT PAGE
+     ============================================ */
+  
+  .contact-info-card {
+    border: 1pt solid #ddd;
+    padding: 20pt;
+    page-break-inside: avoid;
+    margin-bottom: 20pt;
+  }
+
+  .contact-detail {
+    display: flex;
+    align-items: flex-start;
+    gap: 10pt;
+    margin-bottom: 15pt;
+  }
+
+  .contact-detail .icon {
+    font-size: 14pt;
+  }
+
+  .contact-detail h4 {
+    margin: 0 0 3pt;
+    font-size: 10pt;
+  }
+
+  .contact-detail p {
+    margin: 0;
+    font-size: 10pt;
+  }
+
+  /* Form for print - show as text */
+  form {
+    border: 1pt solid #ddd;
+    padding: 20pt;
+    page-break-inside: avoid;
+  }
+
+  .form-group {
+    margin-bottom: 15pt;
+  }
+
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 3pt;
+    font-size: 10pt;
+  }
+
+  input, select, textarea {
+    border: 1pt solid #999 !important;
+    background: #f5f5f5 !important;
+    padding: 5pt !important;
+    width: 100% !important;
+    font-size: 10pt;
+  }
+
+  textarea {
+    min-height: 60pt;
+    resize: none;
+  }
+
+  /* Submit button as text */
+  button[type="submit"],
+  .btn[type="submit"] {
+    background: black !important;
+    color: white !important;
+    border: none !important;
+    padding: 8pt 20pt !important;
+    font-weight: 600;
+  }
+
+  /* ============================================
+     FOOTER
+     ============================================ */
+  
+  footer {
+    margin-top: 30pt;
+    padding-top: 20pt !important;
+    border-top: 2pt solid black !important;
+    page-break-inside: avoid;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 20pt;
+    margin-bottom: 20pt;
+  }
+
+  .footer-links h4 {
+    font-size: 10pt;
+    margin-bottom: 8pt;
+  }
+
+  .footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer-links li {
+    margin-bottom: 3pt;
+  }
+
+  .footer-links a {
+    font-size: 9pt;
+    color: #333 !important;
+  }
+
+  .footer-brand p {
+    font-size: 9pt;
+    color: #333 !important;
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10pt;
+    border-top: 1pt solid #ddd;
+    font-size: 8pt;
+  }
+
+  /* ============================================
+     UTILITIES
+     ============================================ */
+  
+  /* Page breaks */
+  .page-break {
+    page-break-before: always;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  /* Ensure images don't break pages */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    border: 1pt solid #ddd;
+    padding: 8pt;
+    text-align: left;
+  }
+
+  th {
+    background: #f5f5f5 !important;
+    font-weight: 600;
+  }
+
+  /* Blockquotes */
+  blockquote {
+    border-left: 3pt solid black;
+    padding-left: 15pt;
+    margin: 15pt 0;
+    font-style: italic;
+    color: #333;
+  }
+
+  /* Lists */
+  ul, ol {
+    padding-left: 20pt;
+    margin-bottom: 10pt;
+  }
+
+  li {
+    margin-bottom: 3pt;
+  }
+}
+
+/* ============================================
+   PRINT-ONLY ELEMENTS (hidden on screen)
+   ============================================ */
+
+@media screen {
+  .print-only {
+    display: none !important;
+  }
+}
+
+/* Print button - visible on screen, hidden when printing */
+.print-button {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: rgba(15, 15, 16, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 9997;
+  transition: all 0.3s ease;
+}
+
+.print-button:hover {
+  background: var(--chrome);
+  transform: scale(1.1);
+}
+
+.print-button svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--slate);
+  transition: stroke 0.3s ease;
+}
+
+.print-button:hover svg {
+  stroke: var(--black);
+}
+
+@media (max-width: 768px) {
+  .print-button {
+    display: none !important;
+  }
+}
+
+@media print {
+  .print-button {
+    display: none !important;
+  }
+}
