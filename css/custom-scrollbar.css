@@ -1,0 +1,187 @@
+/* ========================================
+   CUSTOM SCROLLBAR - v8.0 Fortune 500
+======================================== */
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--slate) 0%, var(--elevation) 100%);
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--chrome) 0%, var(--slate) 100%);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--chrome);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--elevation) rgba(0, 0, 0, 0.2);
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar for specific elements */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom scrollbar overlay style (overlay scrollbar) */
+.scrollbar-overlay {
+  overflow-y: overlay;
+}
+
+.scrollbar-overlay::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
+}
+
+.scrollbar-overlay::-webkit-scrollbar-thumb {
+  background: rgba(201, 206, 214, 0.3);
+}
+
+.scrollbar-overlay::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 206, 214, 0.5);
+}
+
+/* Thin scrollbar variant */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  border: 1px solid transparent;
+}
+
+/* Accent colored scrollbar */
+.scrollbar-accent::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--chrome) 0%, var(--accent) 100%);
+}
+
+.scrollbar-accent::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--white) 0%, var(--chrome) 100%);
+}
+
+/* Scrollbar with glow effect */
+.scrollbar-glow::-webkit-scrollbar-thumb {
+  box-shadow: 0 0 10px rgba(201, 206, 214, 0.3);
+}
+
+.scrollbar-glow::-webkit-scrollbar-thumb:hover {
+  box-shadow: 0 0 15px rgba(201, 206, 214, 0.5);
+}
+
+/* Horizontal scrollbar styling */
+.scrollbar-horizontal::-webkit-scrollbar {
+  height: 8px;
+}
+
+.scrollbar-horizontal::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, var(--slate) 0%, var(--elevation) 100%);
+}
+
+.scrollbar-horizontal::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, var(--chrome) 0%, var(--slate) 100%);
+}
+
+/* Scrollbar corner styling for tables */
+.scrollbar-table::-webkit-scrollbar-corner {
+  background: var(--elevation);
+}
+
+/* Animated scrollbar (appears on hover) */
+.scrollbar-appear {
+  scrollbar-width: none;
+}
+
+.scrollbar-appear::-webkit-scrollbar {
+  width: 0;
+  transition: width 0.3s ease;
+}
+
+.scrollbar-appear:hover {
+  scrollbar-width: thin;
+}
+
+.scrollbar-appear:hover::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Dark section scrollbar override */
+.section-dark::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Modal/Dialog scrollbar */
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 10px 0;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: rgba(201, 206, 214, 0.2);
+  border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 206, 214, 0.4);
+}
+
+/* Smooth momentum scrolling for iOS */
+.scroll-momentum {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hidden {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+/* Scrollbar with custom handle size */
+.scrollbar-handle-large::-webkit-scrollbar {
+  width: 14px;
+}
+
+.scrollbar-handle-large::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+}

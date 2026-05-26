@@ -1,0 +1,378 @@
+/* ========================================
+   HORIZONTAL SCROLL GALLERY
+   Smooth horizontal scrolling project showcase
+======================================== */
+
+.horizontal-gallery-section {
+  position: relative;
+  padding: 100px 0;
+  overflow: hidden;
+}
+
+.horizontal-gallery-header {
+  text-align: center;
+  margin-bottom: 60px;
+  padding: 0 5%;
+}
+
+.horizontal-gallery-container {
+  position: relative;
+  width: 100%;
+}
+
+.horizontal-gallery-track {
+  display: flex;
+  gap: 30px;
+  padding: 20px 5%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  cursor: grab;
+}
+
+.horizontal-gallery-track::-webkit-scrollbar {
+  display: none;
+}
+
+.horizontal-gallery-track:active {
+  cursor: grabbing;
+}
+
+.horizontal-gallery-track.dragging {
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+}
+
+/* Gallery Card */
+.gallery-card {
+  flex: 0 0 auto;
+  width: 400px;
+  height: 500px;
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  scroll-snap-align: center;
+  background: var(--surface);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.4s ease;
+}
+
+.gallery-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+}
+
+.gallery-card-image {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.gallery-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gallery-card:hover .gallery-card-image img {
+  transform: scale(1.1);
+}
+
+.gallery-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(15, 15, 18, 0.95) 0%,
+    rgba(15, 15, 18, 0.6) 40%,
+    transparent 70%
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 30px;
+}
+
+.gallery-card-badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(248, 199, 77, 0.9);
+  color: var(--black);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(10px);
+}
+
+.gallery-card-category {
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.gallery-card-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+.gallery-card-location {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gallery-card-stats {
+  display: flex;
+  gap: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.gallery-card-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gallery-card-stat-value {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.gallery-card-stat-label {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Navigation Arrows */
+.gallery-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(26, 26, 34, 0.9);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  color: var(--white);
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+}
+
+.gallery-nav:hover {
+  background: var(--brand);
+  color: var(--black);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.gallery-nav.prev {
+  left: 20px;
+}
+
+.gallery-nav.next {
+  right: 20px;
+}
+
+.gallery-nav:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Progress Indicator */
+.gallery-progress {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 40px;
+}
+
+.gallery-progress-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.gallery-progress-dot.active {
+  background: var(--brand);
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* Drag hint */
+.gallery-drag-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.gallery-drag-hint svg {
+  width: 20px;
+  height: 20px;
+  animation: drag-hint 2s ease-in-out infinite;
+}
+
+@keyframes drag-hint {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+}
+
+/* Featured card (larger) */
+.gallery-card.featured {
+  width: 500px;
+  height: 550px;
+}
+
+.gallery-card.featured .gallery-card-title {
+  font-size: 28px;
+}
+
+/* Video card variant */
+.gallery-card.video .gallery-card-video {
+  position: absolute;
+  inset: 0;
+  object-fit: cover;
+}
+
+.gallery-card.video .gallery-card-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(248, 199, 77, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.gallery-card.video .gallery-card-play:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.gallery-card.video .gallery-card-play svg {
+  width: 24px;
+  height: 24px;
+  fill: var(--black);
+  margin-left: 4px;
+}
+
+/* Before/After slider card */
+.gallery-card.before-after .ba-slider {
+  position: absolute;
+  inset: 0;
+}
+
+/* Scroll velocity skew effect */
+.gallery-track-skew {
+  transition: transform 0.1s ease;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .horizontal-gallery-track {
+    scroll-behavior: auto;
+  }
+  
+  .gallery-card {
+    transition: none;
+  }
+  
+  .gallery-card-image img {
+    transition: none;
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .horizontal-gallery-section {
+    padding: 60px 0;
+  }
+  
+  .gallery-card {
+    width: 300px;
+    height: 400px;
+  }
+  
+  .gallery-card.featured {
+    width: 340px;
+    height: 450px;
+  }
+  
+  .gallery-card-title {
+    font-size: 20px;
+  }
+  
+  .gallery-card.featured .gallery-card-title {
+    font-size: 22px;
+  }
+  
+  .gallery-nav {
+    display: none;
+  }
+  
+  .gallery-card-stats {
+    gap: 20px;
+  }
+  
+  .gallery-card-stat-value {
+    font-size: 16px;
+  }
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .gallery-card {
+    width: 350px;
+    height: 450px;
+  }
+  
+  .gallery-card.featured {
+    width: 420px;
+    height: 500px;
+  }
+}

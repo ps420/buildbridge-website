@@ -1,0 +1,255 @@
+/* ========================================
+   SMART BUTTON STATES - v8.0 Fortune 500
+======================================== */
+
+/* Base button with loading state support */
+.btn-smart {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 32px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: 2px solid var(--chrome);
+  background: var(--chrome);
+  color: var(--black);
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 160px;
+  min-height: 52px;
+}
+
+.btn-smart::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.btn-smart:hover::before {
+  transform: translateX(100%);
+}
+
+.btn-smart:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(201, 206, 214, 0.2);
+}
+
+.btn-smart:active {
+  transform: translateY(0);
+}
+
+/* Loading state */
+.btn-smart.is-loading {
+  color: transparent;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.btn-spinner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.btn-smart.is-loading .btn-spinner {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.btn-spinner svg {
+  width: 100%;
+  height: 100%;
+  animation: btn-spin 1s linear infinite;
+}
+
+.btn-spinner circle {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: btn-spinner-dash 1.5s ease-in-out infinite;
+}
+
+@keyframes btn-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes btn-spinner-dash {
+  0% { stroke-dashoffset: 60; }
+  50% { stroke-dashoffset: 20; }
+  100% { stroke-dashoffset: 60; }
+}
+
+/* Success state */
+.btn-smart.is-success {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: white;
+}
+
+.btn-success-icon {
+  position: absolute;
+  opacity: 0;
+  transform: scale(0.5) rotate(-180deg);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.btn-smart.is-success .btn-success-icon {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.btn-success-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Error state */
+.btn-smart.is-error {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: white;
+  animation: btn-shake 0.5s ease;
+}
+
+.btn-error-icon {
+  position: absolute;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.btn-smart.is-error .btn-error-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.btn-error-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+@keyframes btn-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+
+/* Ripple effect */
+.btn-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(0);
+  animation: btn-ripple-anim 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes btn-ripple-anim {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Ghost button variant */
+.btn-smart.ghost {
+  background: transparent;
+  color: var(--white);
+}
+
+.btn-smart.ghost:hover {
+  background: var(--chrome);
+  color: var(--black);
+}
+
+/* Progress button (for file uploads, etc) */
+.btn-progress {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-progress-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.2);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.btn-progress-text {
+  position: relative;
+  z-index: 1;
+}
+
+/* Morphing button icon */
+.btn-morph-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.btn-smart:hover .btn-morph-icon {
+  transform: translateX(3px);
+}
+
+.btn-smart.is-loading:hover .btn-morph-icon,
+.btn-smart.is-success:hover .btn-morph-icon,
+.btn-smart.is-error:hover .btn-morph-icon {
+  transform: none;
+}
+
+/* Pulse animation for attention */
+.btn-smart.pulse-attention {
+  animation: btn-attention-pulse 2s ease-in-out infinite;
+}
+
+@keyframes btn-attention-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201, 206, 214, 0.4); }
+  50% { box-shadow: 0 0 0 10px rgba(201, 206, 214, 0); }
+}
+
+/* Floating action button */
+.btn-fab {
+  position: fixed;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  padding: 0;
+  min-width: auto;
+  min-height: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 999;
+}
+
+.btn-fab:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Micro button (for inline actions) */
+.btn-micro {
+  padding: 8px 16px;
+  font-size: 11px;
+  min-width: auto;
+  min-height: 36px;
+}

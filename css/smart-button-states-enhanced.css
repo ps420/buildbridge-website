@@ -1,0 +1,323 @@
+/* ========================================
+   SMART BUTTON STATES - ENHANCED
+   Micro-interactions & State Management
+======================================== */
+
+/* Base Button Reset */
+.btn-smart {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 32px;
+  background: #fff;
+  border: 1px solid #fff;
+  color: #0f0f10;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  border-radius: 4px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Hover State */
+.btn-smart:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(255, 255, 255, 0.15);
+}
+
+.btn-smart:hover .btn-icon {
+  transform: translateX(4px);
+}
+
+/* Active/Press State */
+.btn-smart:active {
+  transform: translateY(-1px) scale(0.98);
+  box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
+  transition-duration: 0.1s;
+}
+
+/* Focus State (Accessibility) */
+.btn-smart:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(201, 206, 214, 0.4), 0 15px 40px rgba(255, 255, 255, 0.15);
+}
+
+/* Loading State */
+.btn-smart.loading {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.btn-smart.loading .btn-text {
+  opacity: 0;
+}
+
+.btn-smart.loading .btn-loader {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top-color: #0f0f10;
+  border-radius: 50%;
+  animation: btn-spin 0.8s linear infinite;
+}
+
+@keyframes btn-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Success State */
+.btn-smart.success {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: #fff;
+  pointer-events: none;
+}
+
+.btn-smart.success .btn-text {
+  opacity: 0;
+}
+
+.btn-smart.success .btn-success-icon {
+  position: absolute;
+  font-size: 20px;
+  animation: btn-success-pop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes btn-success-pop {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Error State */
+.btn-smart.error {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #fff;
+  animation: btn-shake 0.5s ease;
+}
+
+@keyframes btn-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+/* Disabled State */
+.btn-smart:disabled,
+.btn-smart.disabled {
+  background: rgba(201, 206, 214, 0.1);
+  border-color: rgba(201, 206, 214, 0.1);
+  color: rgba(201, 206, 214, 0.4);
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Ghost Variant */
+.btn-smart.ghost {
+  background: transparent;
+  border-color: rgba(201, 206, 214, 0.4);
+  color: #fff;
+}
+
+.btn-smart.ghost:hover {
+  background: rgba(201, 206, 214, 0.1);
+  border-color: #c9ced6;
+}
+
+.btn-smart.ghost.loading .btn-loader {
+  border-top-color: #fff;
+}
+
+/* Chrome Variant */
+.btn-smart.chrome {
+  background: #c9ced6;
+  border-color: #c9ced6;
+  color: #0f0f10;
+}
+
+.btn-smart.chrome:hover {
+  background: #fff;
+  border-color: #fff;
+}
+
+/* Gradient Variant */
+.btn-smart.gradient {
+  background: linear-gradient(135deg, #c9ced6 0%, #fff 50%, #c9ced6 100%);
+  background-size: 200% 200%;
+  border-color: transparent;
+  animation: btn-gradient-shift 3s ease infinite;
+}
+
+@keyframes btn-gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Magnetic Effect */
+.btn-smart.magnetic {
+  transition: transform 0.2s ease;
+}
+
+/* Ripple Effect */
+.btn-smart.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(15, 15, 16, 0.3);
+  transform: scale(0);
+  animation: btn-ripple-anim 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes btn-ripple-anim {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Badge/Notification on Button */
+.btn-smart .btn-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: btn-badge-pulse 2s ease infinite;
+}
+
+@keyframes btn-badge-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Size Variants */
+.btn-smart.small {
+  padding: 10px 20px;
+  font-size: 11px;
+}
+
+.btn-smart.large {
+  padding: 20px 40px;
+  font-size: 14px;
+}
+
+.btn-smart.full-width {
+  width: 100%;
+}
+
+/* Icon-only Button */
+.btn-smart.icon-only {
+  padding: 12px;
+  aspect-ratio: 1;
+}
+
+.btn-smart.icon-only .btn-icon {
+  margin: 0;
+}
+
+/* Glow Effect on Hover */
+.btn-smart.glow:hover {
+  box-shadow: 
+    0 0 30px rgba(255, 255, 255, 0.2),
+    0 15px 40px rgba(255, 255, 255, 0.1);
+}
+
+/* 3D Press Effect */
+.btn-smart.press-3d {
+  transition: transform 0.1s ease, box-shadow 0.3s ease;
+}
+
+.btn-smart.press-3d:active {
+  transform: translateY(2px);
+  box-shadow: 
+    0 2px 5px rgba(0, 0, 0, 0.2),
+    inset 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Stagger Animation for Button Groups */
+.btn-group-stagger .btn-smart {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: btn-stagger-in 0.4s ease forwards;
+}
+
+.btn-group-stagger .btn-smart:nth-child(1) { animation-delay: 0.1s; }
+.btn-group-stagger .btn-smart:nth-child(2) { animation-delay: 0.2s; }
+.btn-group-stagger .btn-smart:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes btn-stagger-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Button Group */
+.btn-group {
+  display: inline-flex;
+  gap: 0;
+}
+
+.btn-group .btn-smart {
+  border-radius: 0;
+}
+
+.btn-group .btn-smart:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.btn-group .btn-smart:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+.btn-group .btn-smart:not(:last-child) {
+  border-right-color: rgba(15, 15, 16, 0.1);
+}
+
+/* Pulse Animation for CTA */
+.btn-smart.pulse {
+  animation: btn-pulse 2s ease infinite;
+}
+
+@keyframes btn-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+  50% { box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
+}
+
+/* WhatsApp Button Variant */
+.btn-smart.whatsapp {
+  background: linear-gradient(135deg, #25d366, #128c7e);
+  border-color: transparent;
+  color: #fff;
+}
+
+.btn-smart.whatsapp:hover {
+  box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+}

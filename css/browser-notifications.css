@@ -1,0 +1,359 @@
+/* ========================================
+   BROWSER NOTIFICATIONS - v8.0 Fortune 500
+======================================== */
+
+.notification-permission-banner {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  background: var(--elevation);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 16px;
+  padding: 20px 24px;
+  max-width: 380px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  z-index: 10000;
+  transform: translateY(150%);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.notification-permission-banner.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.notification-banner-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.notification-banner-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--chrome) 0%, var(--white) 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.notification-banner-icon svg {
+  width: 24px;
+  height: 24px;
+  fill: var(--black);
+}
+
+.notification-banner-text h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--white);
+  margin: 0 0 4px 0;
+}
+
+.notification-banner-text p {
+  font-size: 13px;
+  color: var(--slate);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.notification-banner-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.notification-banner-btn {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.notification-banner-btn.primary {
+  background: var(--chrome);
+  color: var(--black);
+}
+
+.notification-banner-btn.primary:hover {
+  background: var(--white);
+  transform: translateY(-2px);
+}
+
+.notification-banner-btn.secondary {
+  background: transparent;
+  color: var(--slate);
+  border: 1px solid rgba(201, 206, 214, 0.3);
+}
+
+.notification-banner-btn.secondary:hover {
+  background: rgba(201, 206, 214, 0.1);
+  color: var(--white);
+}
+
+.notification-banner-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--slate);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.notification-banner-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--white);
+}
+
+/* Custom notification toast */
+.custom-notification {
+  position: fixed;
+  top: 100px;
+  right: 30px;
+  background: var(--elevation);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 16px;
+  padding: 20px;
+  min-width: 320px;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  z-index: 10001;
+  transform: translateX(150%);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.custom-notification.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.custom-notification-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.custom-notification-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-notification-icon.info {
+  background: rgba(74, 144, 217, 0.2);
+  color: #4a90d9;
+}
+
+.custom-notification-icon.success {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.custom-notification-icon.warning {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+.custom-notification-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.custom-notification-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white);
+  margin: 0;
+  flex: 1;
+}
+
+.custom-notification-close {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--slate);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.custom-notification-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+}
+
+.custom-notification-body {
+  font-size: 13px;
+  color: var(--slate);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.custom-notification-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.custom-notification-btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.custom-notification-btn.primary {
+  background: var(--chrome);
+  color: var(--black);
+}
+
+.custom-notification-btn.secondary {
+  background: transparent;
+  color: var(--slate);
+  border: 1px solid rgba(201, 206, 214, 0.3);
+}
+
+/* Progress bar for auto-dismiss */
+.notification-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--chrome) 0%, var(--white) 100%);
+  border-radius: 0 0 0 16px;
+  transition: width 0.1s linear;
+}
+
+/* Status indicator dot */
+.notification-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: status-pulse 2s ease-in-out infinite;
+}
+
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.2); }
+}
+
+/* Notification permission settings panel */
+.notification-settings {
+  background: var(--elevation);
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.notification-settings-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.notification-settings-item:last-child {
+  border-bottom: none;
+}
+
+.notification-settings-info h5 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+  margin: 0 0 4px 0;
+}
+
+.notification-settings-info p {
+  font-size: 12px;
+  color: var(--slate);
+  margin: 0;
+}
+
+/* Toggle switch */
+.notification-toggle {
+  width: 52px;
+  height: 28px;
+  background: rgba(201, 206, 214, 0.2);
+  border-radius: 14px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.notification-toggle.active {
+  background: var(--chrome);
+}
+
+.notification-toggle-knob {
+  width: 22px;
+  height: 22px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.notification-toggle.active .notification-toggle-knob {
+  transform: translateX(24px);
+}
+
+@media (max-width: 768px) {
+  .notification-permission-banner {
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    max-width: none;
+  }
+  
+  .custom-notification {
+    left: 20px;
+    right: 20px;
+    top: auto;
+    bottom: 20px;
+    min-width: auto;
+    max-width: none;
+    transform: translateY(150%);
+  }
+  
+  .custom-notification.show {
+    transform: translateY(0);
+  }
+}
