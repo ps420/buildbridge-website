@@ -36,12 +36,12 @@ class CursorParticles {
     }
     
     this.createCanvas();
-    this.createCustomCursor();
+    // this.createCustomCursor();
     this.bindEvents();
     this.animate();
     
     // Add class to body
-    document.body.classList.add('custom-cursor-active');
+    // document.body.classList.add('custom-cursor-active');
   }
   
   createCanvas() {

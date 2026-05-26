@@ -695,13 +695,13 @@ class ParallaxImages {
 // INITIALIZE ALL FORTUNE 500 ANIMATIONS
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize in order
-  new MagneticCursor();
-  new TiltCard3D();
-  new ScrollVelocity();
-  new FloatingActionButton();
+  // Initialize in order - DISABLED heavy effects for performance
+  // new MagneticCursor();
+  // new TiltCard3D();
+  // new ScrollVelocity();
+  // new FloatingActionButton();
   new AdvancedMobileMenu();
-  new AmbientParticles(40);
+  // new AmbientParticles(40);
   new SectionIndicator();
   new TextReveal();
   new StaggerList();

@@ -632,18 +632,18 @@ class AccordionEnhanced {
 // INITIALIZE ALL EFFECTS
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
-  // Custom cursor
-  new CustomCursor();
+  // Custom cursor - DISABLED for performance
+  // new CustomCursor();
   
-  // Magnetic effects
-  new MagneticEffect('.magnetic', 0.3);
-  new MagneticButton('.btn, .quote-btn');
+  // Magnetic effects - reduced for performance
+  // new MagneticEffect('.magnetic', 0.3);
+  // new MagneticButton('.btn, .quote-btn');
   
   // Ripple effects
   new RippleEffect('.btn, button:not(.mobile-menu-btn)');
   
-  // 3D tilt cards
-  new TiltCard3D('.service-card, .project-card');
+  // 3D tilt cards - DISABLED for performance
+  // new TiltCard3D('.service-card, .project-card');
   
   // Scroll spy
   new ScrollSpy('.nav-links', 'section[id]');
