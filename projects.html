@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="css/premium-effects.css">
   <link rel="stylesheet" href="css/advanced-effects.css">
   <link rel="stylesheet" href="css/fortune500-effects.css">
+  <link rel="stylesheet" href="css/project-filter.css">
+  <link rel="stylesheet" href="css/cursor-particles.css">
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
 </head>
 <body class="focus-ring-accessible cursor-enabled">
@@ -54,61 +56,191 @@
     <p>Explore our portfolio of successful construction projects across residential, commercial, and industrial sectors throughout South Africa.</p>
   </section>
 
-  <section class="section">
+  <section class="section" id="portfolio">
     <div class="section-header fade-in-up">
       <p class="eyebrow">Portfolio</p>
       <h2>Featured Work</h2>
     </div>
     
-    <!-- Project Filters -->
-    <div class="filter-container fade-in-up">
-      <button class="filter-btn active" data-filter="all">All Projects</button>
-      <button class="filter-btn" data-filter="residential">Residential</button>
-      <button class="filter-btn" data-filter="commercial">Commercial</button>
-      <button class="filter-btn" data-filter="industrial">Industrial</button>
-    </div>
-    
-    <div class="projects-grid">
-      <div class="project-card">
-        <img src="assets/02_Website_Heroes/Hero_1.png" alt="Modern Residential Complex">
-        <div class="project-overlay">
-          <h3>Modern Residential Complex</h3>
-          <p>Cape Town, South Africa • R12M Value</p>
+    <!-- Project Filters with Masonry -->
+    <div class="projects-filter-container fade-in-up">
+      <div class="filter-header">
+        <div class="filter-group">
+          <button class="filter-btn active" data-filter="all">All Projects</button>
+          <button class="filter-btn" data-filter="residential">Residential</button>
+          <button class="filter-btn" data-filter="commercial">Commercial</button>
+          <button class="filter-btn" data-filter="industrial">Industrial</button>
+          <button class="filter-btn" data-filter="renovation">Renovation</button>
+        </div>
+        <div class="filter-controls">
+          <input type="text" class="project-search" placeholder="Search projects...">
+          <div class="view-toggle">
+            <button class="view-btn active" data-view="grid" title="Grid View">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
+              </svg>
+            </button>
+            <button class="view-btn" data-view="list" title="List View">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6"/>
+                <line x1="8" y1="12" x2="21" y2="12"/>
+                <line x1="8" y1="18" x2="21" y2="18"/>
+                <line x1="3" y1="6" x2="3.01" y2="6"/>
+                <line x1="3" y1="12" x2="3.01" y2="12"/>
+                <line x1="3" y1="18" x2="3.01" y2="18"/>
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
-      <div class="project-card">
-        <img src="assets/02_Website_Heroes/Hero_2.png" alt="Corporate Headquarters">
-        <div class="project-overlay">
-          <h3>Corporate Headquarters</h3>
-          <p>Johannesburg, South Africa • R25M Value</p>
+      <p class="project-count">6 projects</p>
+      
+      <div class="projects-masonry">
+        <div class="project-item" data-category="residential" data-tags="luxury,residential,cape town,modern" 
+             data-description="A stunning modern residential complex in Cape Town featuring 24 luxury units with ocean views, rooftop gardens, and sustainable design elements. This project showcases our ability to deliver high-end residential developments on challenging hillside terrain."
+             data-value="R12,500,000" data-duration="18 months" data-year="2024" data-size="3,200m²"
+             data-images="assets/02_Website_Heroes/Hero_1.png">
+          <div class="project-image">
+            <img src="assets/02_Website_Heroes/Hero_1.png" alt="Modern Residential Complex">
+          </div>
+          <div class="project-overlay">
+            <span class="project-category">Residential</span>
+            <h3>Cape Town Modern Complex</h3>
+            <p class="project-location">Cape Town, South Africa</p>
+            <div class="project-meta">
+              <div class="project-meta-item">
+                <strong>R12M</strong>
+                <span>Value</span>
+              </div>
+              <div class="project-meta-item">
+                <strong>18 Mo</strong>
+                <span>Duration</span>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="project-card">
-        <img src="assets/02_Website_Heroes/Hero_3.png" alt="Luxury Villa Estate">
-        <div class="project-overlay">
-          <h3>Luxury Villa Estate</h3>
-          <p>Durban, South Africa • R8M Value</p>
+        
+        <div class="project-item" data-category="commercial" data-tags="office,corporate,johannesburg,headquarters" 
+             data-description="A prestigious 8-story corporate headquarters in the heart of Johannesburg's business district. The building features state-of-the-art facilities, green building certification, and accommodates 500+ employees across modern office spaces."
+             data-value="R45,000,000" data-duration="24 months" data-year="2023" data-size="12,000m²"
+             data-images="assets/02_Website_Heroes/Hero_2.png">
+          <div class="project-image">
+            <img src="assets/02_Website_Heroes/Hero_2.png" alt="Corporate Headquarters">
+          </div>
+          <div class="project-overlay">
+            <span class="project-category">Commercial</span>
+            <h3>Corporate HQ Johannesburg</h3>
+            <p class="project-location">Johannesburg CBD, South Africa</p>
+            <div class="project-meta">
+              <div class="project-meta-item">
+                <strong>R45M</strong>
+                <span>Value</span>
+              </div>
+              <div class="project-meta-item">
+                <strong>24 Mo</strong>
+                <span>Duration</span>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="project-card">
-        <img src="assets/02_Website_Heroes/Hero_4.png" alt="Commercial Development">
-        <div class="project-overlay">
-          <h3>Commercial Development</h3>
-          <p>Pretoria, South Africa • R15M Value</p>
+        
+        <div class="project-item" data-category="residential" data-tags="estate,luxury,durban,waterfront" 
+             data-description="An exclusive luxury villa estate on Durban's prestigious waterfront. Each of the 8 villas features private pools, smart home technology, and panoramic ocean views. The development set new standards for luxury living in KwaZulu-Natal."
+             data-value="R28,000,000" data-duration="14 months" data-year="2024" data-size="4,500m²"
+             data-images="assets/02_Website_Heroes/Hero_3.png">
+          <div class="project-image">
+            <img src="assets/02_Website_Heroes/Hero_3.png" alt="Luxury Villa Estate">
+          </div>
+          <div class="project-overlay">
+            <span class="project-category">Residential</span>
+            <h3>Durban Waterfront Estate</h3>
+            <p class="project-location">Durban North, South Africa</p>
+            <div class="project-meta">
+              <div class="project-meta-item">
+                <strong>R28M</strong>
+                <span>Value</span>
+              </div>
+              <div class="project-meta-item">
+                <strong>14 Mo</strong>
+                <span>Duration</span>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="project-card">
-        <img src="assets/03_Social_Campaign/Campaign_1.png" alt="Industrial Warehouse">
-        <div class="project-overlay">
-          <h3>Industrial Warehouse</h3>
-          <p>Port Elizabeth, South Africa • R18M Value</p>
+        
+        <div class="project-item" data-category="commercial" data-tags="retail,shopping,pretoria,mall" 
+             data-description="A vibrant mixed-use commercial development featuring retail spaces, restaurants, and offices. The architectural design incorporates open plazas, natural lighting, and modern amenities that have made it a community hub in Pretoria East."
+             data-value="R22,000,000" data-duration="16 months" data-year="2023" data-size="8,500m²"
+             data-images="assets/02_Website_Heroes/Hero_4.png">
+          <div class="project-image">
+            <img src="assets/02_Website_Heroes/Hero_4.png" alt="Commercial Development">
+          </div>
+          <div class="project-overlay">
+            <span class="project-category">Commercial</span>
+            <h3>Pretoria East Retail Hub</h3>
+            <p class="project-location">Pretoria, South Africa</p>
+            <div class="project-meta">
+              <div class="project-meta-item">
+                <strong>R22M</strong>
+                <span>Value</span>
+              </div>
+              <div class="project-meta-item">
+                <strong>16 Mo</strong>
+                <span>Duration</span>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="project-card">
-        <img src="assets/03_Social_Campaign/Campaign_2.png" alt="Office Renovation">
-        <div class="project-overlay">
-          <h3>Office Renovation</h3>
-          <p>Sandton, South Africa • R3M Value</p>
+        
+        <div class="project-item" data-category="industrial" data-tags="warehouse,logistics,port elizabeth,storage" 
+             data-description="A state-of-the-art industrial warehouse facility designed for modern logistics operations. Features include automated systems, solar power integration, and advanced security. Built to accommodate large-scale distribution for a major retail client."
+             data-value="R35,000,000" data-duration="12 months" data-year="2024" data-size="15,000m²"
+             data-images="assets/03_Social_Campaign/Campaign_1.png">
+          <div class="project-image">
+            <img src="assets/03_Social_Campaign/Campaign_1.png" alt="Industrial Warehouse">
+          </div>
+          <div class="project-overlay">
+            <span class="project-category">Industrial</span>
+            <h3>PE Logistics Center</h3>
+            <p class="project-location">Port Elizabeth, South Africa</p>
+            <div class="project-meta">
+              <div class="project-meta-item">
+                <strong>R35M</strong>
+                <span>Value</span>
+              </div>
+              <div class="project-meta-item">
+                <strong>12 Mo</strong>
+                <span>Duration</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="project-item" data-category="renovation" data-tags="office,renovation,sandton,upgrade" 
+             data-description="A complete transformation of a dated office building into a modern workspace. The renovation included structural changes, new MEP systems, and contemporary finishes while minimizing disruption to ongoing business operations."
+             data-value="R8,500,000" data-duration="8 months" data-year="2023" data-size="2,800m²"
+             data-images="assets/03_Social_Campaign/Campaign_2.png">
+          <div class="project-image">
+            <img src="assets/03_Social_Campaign/Campaign_2.png" alt="Office Renovation">
+          </div>
+          <div class="project-overlay">
+            <span class="project-category">Renovation</span>
+            <h3>Sandton Office Upgrade</h3>
+            <p class="project-location">Sandton, South Africa</p>
+            <div class="project-meta">
+              <div class="project-meta-item">
+                <strong>R8.5M</strong>
+                <span>Value</span>
+              </div>
+              <div class="project-meta-item">
+                <strong>8 Mo</strong>
+                <span>Duration</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -300,6 +432,8 @@
 
   <script src="scripts.js"></script>
   <script src="js/particles.js"></script>
+  <script src="js/project-filter.js"></script>
+  <script src="js/cursor-particles.js"></script>
   <script src="js/premium-effects.js"></script>
   <script src="js/advanced-animations.js"></script>
   <script src="js/fortune500-animations.js"></script>
