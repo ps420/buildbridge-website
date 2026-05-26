@@ -1,0 +1,176 @@
+/* ========================================
+   SCROLL PROGRESS RING
+   Circular Progress Indicator
+======================================== */
+
+.scroll-progress-ring {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 56px;
+  height: 56px;
+  z-index: 999;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.8);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-progress-ring.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.scroll-progress-ring:hover {
+  transform: scale(1.1);
+}
+
+.scroll-progress-ring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.scroll-progress-ring-bg {
+  fill: none;
+  stroke: rgba(201, 206, 214, 0.1);
+  stroke-width: 3;
+}
+
+.scroll-progress-ring-fill {
+  fill: none;
+  stroke: url(#progressGradient);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 157;
+  stroke-dashoffset: 157;
+  transition: stroke-dashoffset 0.1s ease;
+}
+
+.scroll-progress-ring-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 42px;
+  height: 42px;
+  background: rgba(15, 15, 16, 0.95);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.scroll-progress-ring:hover .scroll-progress-ring-inner {
+  background: rgba(201, 206, 214, 0.1);
+  border-color: rgba(201, 206, 214, 0.3);
+}
+
+.scroll-progress-ring-arrow {
+  font-size: 16px;
+  color: #c9ced6;
+  transition: all 0.3s ease;
+  transform: translateY(2px);
+}
+
+.scroll-progress-ring:hover .scroll-progress-ring-arrow {
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* Progress Percentage Display */
+.scroll-progress-percentage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #c9ced6;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.scroll-progress-ring:hover .scroll-progress-percentage {
+  opacity: 1;
+}
+
+.scroll-progress-ring:hover .scroll-progress-ring-arrow {
+  opacity: 0;
+}
+
+/* Pulse Animation on Complete */
+@keyframes ring-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(201, 206, 214, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(201, 206, 214, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(201, 206, 214, 0);
+  }
+}
+
+.scroll-progress-ring.complete {
+  animation: ring-pulse 1.5s ease infinite;
+}
+
+.scroll-progress-ring.complete .scroll-progress-ring-fill {
+  stroke: #22c55e;
+}
+
+/* Tooltip */
+.scroll-progress-ring::after {
+  content: 'Back to Top';
+  position: absolute;
+  right: 70px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(15, 15, 16, 0.95);
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #c9ced6;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.scroll-progress-ring:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(-5px);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .scroll-progress-ring {
+    width: 48px;
+    height: 48px;
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .scroll-progress-ring-inner {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .scroll-progress-ring-arrow {
+    font-size: 14px;
+  }
+  
+  .scroll-progress-ring::after {
+    display: none;
+  }
+}
