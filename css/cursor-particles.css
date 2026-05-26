@@ -1,0 +1,122 @@
+/**
+ * BuildBridge Premium Cursor Styles
+ * Fortune 500 Quality - Custom cursor with particle trail
+ */
+
+/* Hide default cursor when custom cursor is active */
+body.custom-cursor-active,
+body.custom-cursor-active *,
+body.custom-cursor-active a,
+body.custom-cursor-active button {
+  cursor: none !important;
+}
+
+/* Cursor ring */
+.cursor-ring {
+  will-change: transform;
+}
+
+.cursor-ring.hovering {
+  background: rgba(201, 206, 214, 0.1) !important;
+}
+
+/* Cursor dot */
+.cursor-dot {
+  will-change: transform;
+}
+
+/* Cursor glow */
+.cursor-glow {
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+/* Click animation */
+@keyframes cursorClick {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.cursor-ring.clicking {
+  animation: cursorClick 0.2s ease;
+}
+
+/* Magnetic effect enhancement for cursor */
+.magnetic-el:hover ~ .cursor-ring,
+a:hover ~ .cursor-ring,
+button:hover ~ .cursor-ring {
+  width: 50px !important;
+  height: 50px !important;
+}
+
+/* Loading state for cursor */
+.cursor-loading {
+  animation: cursorSpin 1s linear infinite;
+}
+
+@keyframes cursorSpin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Custom cursor for specific elements */
+.custom-cursor-text .cursor-ring {
+  width: 2px !important;
+  height: 24px !important;
+  border-radius: 1px !important;
+  background: rgba(201, 206, 214, 0.8) !important;
+}
+
+/* Responsive - disable on touch devices */
+@media (pointer: coarse) {
+  body.custom-cursor-active,
+  body.custom-cursor-active *,
+  body.custom-cursor-active a,
+  body.custom-cursor-active button {
+    cursor: auto !important;
+  }
+  
+  .cursor-ring,
+  .cursor-dot,
+  .cursor-glow {
+    display: none !important;
+  }
+}
+
+/* Performance optimization */
+.cursor-ring,
+.cursor-dot,
+.cursor-glow {
+  contain: layout style paint;
+}
+
+/* Accessibility - respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cursor-ring,
+  .cursor-dot {
+    transition: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .cursor-ring {
+    border-color: #fff !important;
+    border-width: 3px !important;
+  }
+  
+  .cursor-dot {
+    background: #fff !important;
+  }
+}
