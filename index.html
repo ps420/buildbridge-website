@@ -328,6 +328,153 @@
     </div>
   </section>
 
+  <!-- 3D Scroll Showcase Section -->
+  <link rel="stylesheet" href="css/scroll-3d-showcase.css">
+  <section class="showcase-3d" id="showcase-3d" data-section="Showcase3D" data-nav-label="Featured">
+    <div class="section-header" style="position: absolute; top: 80px; left: 0; right: 0; z-index: 10;">
+      <p class="eyebrow">Featured Work</p>
+      <h2 class="scramble-text">Project Showcase</h2>
+      <p>Scroll to explore our portfolio in immersive 3D</p>
+    </div>
+    
+    <div class="showcase-3d-container">
+      <div class="showcase-3d-progress"></div>
+      
+      <div class="showcase-3d-nav">
+        <div class="showcase-3d-dot dot--active" data-scene="0"></div>
+        <div class="showcase-3d-dot" data-scene="1"></div>
+        <div class="showcase-3d-dot" data-scene="2"></div>
+        <div class="showcase-3d-dot" data-scene="3"></div>
+      </div>
+      
+      <div class="showcase-3d-scenes">
+        <!-- Scene 1 -->
+        <div class="showcase-3d-scene scene--active" data-scene="0">
+          <div class="scene-content">
+            <div class="scene-visual">
+              <div class="scene-image-wrapper">
+                <img src="assets/02_Website_Heroes/Hero_1.png" alt="Cape Town Residential">
+              </div>
+              <div class="scene-stat-card stat-1">
+                <div class="stat-number">R12M</div>
+                <div class="stat-label">Project Value</div>
+              </div>
+              <div class="scene-stat-card stat-2">
+                <div class="stat-number">8mo</div>
+                <div class="stat-label">Timeline</div>
+              </div>
+            </div>
+            <div class="scene-text">
+              <span class="scene-number">01</span>
+              <h3>Cape Town Luxury Estate</h3>
+              <p>A stunning 5-bedroom luxury residence featuring modern architecture, floor-to-ceiling windows, and sustainable design elements. Our team managed every aspect from concept to completion.</p>
+              <div class="scene-tags">
+                <span class="scene-tag">Residential</span>
+                <span class="scene-tag">Modern</span>
+                <span class="scene-tag">Sustainable</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Scene 2 -->
+        <div class="showcase-3d-scene" data-scene="1">
+          <div class="scene-content">
+            <div class="scene-visual">
+              <div class="scene-image-wrapper">
+                <img src="assets/02_Website_Heroes/Hero_2.png" alt="Johannesburg Commercial">
+              </div>
+              <div class="scene-stat-card stat-1">
+                <div class="stat-number">R45M</div>
+                <div class="stat-label">Project Value</div>
+              </div>
+              <div class="scene-stat-card stat-2">
+                <div class="stat-number">18mo</div>
+                <div class="stat-label">Timeline</div>
+              </div>
+            </div>
+            <div class="scene-text">
+              <span class="scene-number">02</span>
+              <h3>Johannesburg Corporate HQ</h3>
+              <p>A 12-story commercial development in Sandton featuring Class A office space, green building certification, and state-of-the-art facilities for a multinational client.</p>
+              <div class="scene-tags">
+                <span class="scene-tag">Commercial</span>
+                <span class="scene-tag">Green Cert</span>
+                <span class="scene-tag">High-Rise</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Scene 3 -->
+        <div class="showcase-3d-scene" data-scene="2">
+          <div class="scene-content">
+            <div class="scene-visual">
+              <div class="scene-image-wrapper">
+                <img src="assets/03_Social_Campaign/Campaign_4.png" alt="Durban Development">
+              </div>
+              <div class="scene-stat-card stat-1">
+                <div class="stat-number">R28M</div>
+                <div class="stat-label">Project Value</div>
+              </div>
+              <div class="scene-stat-card stat-2">
+                <div class="stat-number">14mo</div>
+                <div class="stat-label">Timeline</div>
+              </div>
+            </div>
+            <div class="scene-text">
+              <span class="scene-number">03</span>
+              <h3>Durban Waterfront Complex</h3>
+              <p>Mixed-use development featuring luxury apartments, retail spaces, and restaurants with breathtaking ocean views. Successfully delivered ahead of schedule.</p>
+              <div class="scene-tags">
+                <span class="scene-tag">Mixed-Use</span>
+                <span class="scene-tag">Waterfront</span>
+                <span class="scene-tag">Retail</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Scene 4 -->
+        <div class="showcase-3d-scene" data-scene="3">
+          <div class="scene-content">
+            <div class="scene-visual">
+              <div class="scene-image-wrapper">
+                <img src="assets/03_Social_Campaign/Campaign_5.png" alt="Pretoria Industrial">
+              </div>
+              <div class="scene-stat-card stat-1">
+                <div class="stat-number">R65M</div>
+                <div class="stat-label">Project Value</div>
+              </div>
+              <div class="scene-stat-card stat-2">
+                <div class="stat-number">24mo</div>
+                <div class="stat-label">Timeline</div>
+              </div>
+            </div>
+            <div class="scene-text">
+              <span class="scene-number">04</span>
+              <h3>Pretoria Industrial Park</h3>
+              <p>Large-scale industrial facility with warehouse automation, solar power integration, and advanced logistics infrastructure for a leading distribution company.</p>
+              <div class="scene-tags">
+                <span class="scene-tag">Industrial</span>
+                <span class="scene-tag">Logistics</span>
+                <span class="scene-tag">Solar</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="showcase-3d-scroll">
+        <span>Scroll to Explore</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 5v14M19 12l-7 7-7-7"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+  <script src="js/scroll-3d-showcase.js"></script>
+
   <!-- Testimonials -->
   <section id="testimonials" class="section testimonials" data-section="Testimonials" data-nav-label="Reviews">
     <div class="section-header reveal-section">
