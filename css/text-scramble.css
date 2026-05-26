@@ -1,0 +1,55 @@
+/**
+ * BuildBridge Text Scramble Effect Styles
+ * Fortune 500 Quality - Cyberpunk text animation
+ */
+
+/* Scramble hover effect base styles */
+[data-scramble],
+.scramble-hover {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+[data-scramble]:hover,
+.scramble-hover:hover,
+[data-scramble]:focus,
+.scramble-hover:focus {
+  color: var(--chrome, #c9ced6);
+}
+
+/* Scramble animation keyframes */
+@keyframes scramble-glow {
+  0%, 100% { text-shadow: 0 0 5px rgba(201, 206, 214, 0.3); }
+  50% { text-shadow: 0 0 20px rgba(201, 206, 214, 0.6), 0 0 40px rgba(201, 206, 214, 0.3); }
+}
+
+[data-scramble].scrambling,
+.scramble-hover.scrambling {
+  animation: scramble-glow 0.8s ease-in-out;
+}
+
+/* Section header specific styles */
+.section-header h2[data-scramble]:hover,
+.section-header h2.scramble-hover:hover {
+  letter-spacing: 0.02em;
+}
+
+/* Focus visible for accessibility */
+[data-scramble]:focus-visible,
+.scramble-hover:focus-visible {
+  outline: 2px solid var(--chrome, #c9ced6);
+  outline-offset: 4px;
+}
+
+/* Disable on touch devices */
+@media (pointer: coarse) {
+  [data-scramble],
+  .scramble-hover {
+    cursor: default;
+  }
+  
+  [data-scramble]:hover,
+  .scramble-hover:hover {
+    color: inherit;
+  }
+}

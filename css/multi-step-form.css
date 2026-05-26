@@ -1,0 +1,406 @@
+/**
+ * BuildBridge Multi-Step Form Styles
+ * Fortune 500 Quality - Progressive form with animations
+ */
+
+/* Form Container */
+.multi-step-form {
+  background: rgba(15, 15, 18, 0.8);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 16px;
+  padding: 40px;
+  backdrop-filter: blur(10px);
+}
+
+/* Progress Bar */
+.form-progress {
+  margin-bottom: 40px;
+}
+
+.form-progress-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.form-progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+
+.form-progress-step.active,
+.form-progress-step.completed {
+  opacity: 1;
+}
+
+.form-progress-step .step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.1);
+  border: 2px solid rgba(201, 206, 214, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.form-progress-step.active .step-number {
+  background: var(--chrome, #c9ced6);
+  border-color: var(--chrome, #c9ced6);
+  color: #0f0f10;
+  transform: scale(1.1);
+}
+
+.form-progress-step.completed .step-number {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: white;
+}
+
+.form-progress-step.completed .step-number::after {
+  content: '✓';
+}
+
+.form-progress-step.completed .step-number {
+  font-size: 0;
+}
+
+.form-progress-step .step-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--slate, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.form-progress-step.active .step-label {
+  color: var(--white, #ffffff);
+}
+
+.form-progress-line {
+  flex: 1;
+  height: 2px;
+  background: rgba(201, 206, 214, 0.2);
+  margin: 0 10px;
+  position: relative;
+  top: -14px;
+}
+
+.form-progress-line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: var(--chrome, #c9ced6);
+  transition: width 0.5s ease;
+}
+
+.form-progress-step.completed + .form-progress-line::after {
+  width: 100%;
+}
+
+.form-progress-track {
+  height: 4px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.form-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--chrome, #c9ced6), var(--white, #ffffff));
+  border-radius: 2px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Form Steps */
+.form-step {
+  display: none;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.form-step.active {
+  display: block;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Step animations */
+.form-step.slide-in-right {
+  animation: slideInRight 0.3s forwards;
+}
+
+.form-step.slide-out-left {
+  animation: slideOutLeft 0.3s forwards;
+}
+
+.form-step.slide-in-left {
+  animation: slideInLeft 0.3s forwards;
+}
+
+.form-step.slide-out-right {
+  animation: slideOutRight 0.3s forwards;
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideOutLeft {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(-30px); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideOutRight {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(30px); }
+}
+
+/* Shake animation for validation errors */
+.form-step.shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Form Fields */
+.form-step h3 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--white, #ffffff);
+}
+
+.form-step > p {
+  color: var(--slate, #6b7280);
+  margin-bottom: 30px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--white, #ffffff);
+}
+
+.form-group label .required {
+  color: #ef4444;
+  margin-left: 4px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 10px;
+  color: var(--white, #ffffff);
+  font-size: 16px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--chrome, #c9ced6);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(201, 206, 214, 0.1);
+}
+
+.form-group input.error,
+.form-group select.error,
+.form-group textarea.error {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: rgba(107, 114, 128, 0.7);
+}
+
+.form-group select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 20px;
+  padding-right: 46px;
+}
+
+.form-group select option {
+  background: #1a1a22;
+  color: var(--white, #ffffff);
+}
+
+/* Field Error */
+.field-error {
+  display: none;
+  color: #ef4444;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+/* Form Navigation */
+.form-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.form-navigation .btn-secondary {
+  background: transparent;
+  border: 1px solid rgba(201, 206, 214, 0.3);
+}
+
+.form-navigation button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Form Loading State */
+.form-loading {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.form-loading .spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(201, 206, 214, 0.2);
+  border-top-color: var(--chrome, #c9ced6);
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.form-loading p {
+  color: var(--slate, #6b7280);
+}
+
+/* Form Success State */
+.form-success {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.form-success .success-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  margin: 0 auto 24px;
+  animation: successPop 0.5s ease-out;
+}
+
+@keyframes successPop {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.form-success h3 {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.form-success > p {
+  color: var(--slate, #6b7280);
+  margin-bottom: 30px;
+}
+
+.success-next-steps {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.success-next-steps p {
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--white, #ffffff);
+}
+
+.success-next-steps ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.success-next-steps li {
+  padding: 8px 0;
+  color: var(--slate, #6b7280);
+  font-size: 15px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .multi-step-form {
+    padding: 24px;
+  }
+  
+  .form-progress-step .step-label {
+    display: none;
+  }
+  
+  .form-progress-line {
+    margin: 0 5px;
+  }
+  
+  .form-navigation {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+  
+  .form-navigation button {
+    width: 100%;
+  }
+  
+  .form-navigation .btn-secondary {
+    order: 1;
+  }
+}
