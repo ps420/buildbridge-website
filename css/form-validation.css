@@ -1,0 +1,531 @@
+/**
+ * ADVANCED FORM VALIDATION
+ * Fortune 500 Quality Form Interactions
+ * Real-time validation with visual feedback
+ */
+
+/* ============================================
+   FORM CONTAINER
+   ============================================ */
+
+.form-validated {
+  --valid-color: #22c55e;
+  --invalid-color: #ef4444;
+  --focus-color: var(--chrome);
+}
+
+/* ============================================
+   INPUT WRAPPER
+   ============================================ */
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper .form-control {
+  padding-right: 45px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ============================================
+   VALIDATION ICONS
+   ============================================ */
+
+.validation-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.validation-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Valid state */
+.input-wrapper.is-valid .validation-icon.valid {
+  opacity: 1;
+  color: var(--valid-color);
+}
+
+.input-wrapper.is-valid .form-control {
+  border-color: var(--valid-color);
+  background: linear-gradient(to right, rgba(34, 197, 94, 0.05), transparent);
+}
+
+/* Invalid state */
+.input-wrapper.is-invalid .validation-icon.invalid {
+  opacity: 1;
+  color: var(--invalid-color);
+}
+
+.input-wrapper.is-invalid .form-control {
+  border-color: var(--invalid-color);
+  background: linear-gradient(to right, rgba(239, 68, 68, 0.05), transparent);
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+  20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+/* Validating state (loading) */
+.input-wrapper.is-validating .validation-icon {
+  opacity: 1;
+}
+
+.input-wrapper.is-validating .validation-icon.validating {
+  display: block;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: translateY(-50%) rotate(0deg); }
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* ============================================
+   VALIDATION MESSAGES
+   ============================================ */
+
+.validation-message {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  margin-top: 6px;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: all 0.3s ease;
+  height: 0;
+  overflow: hidden;
+}
+
+.validation-message.show {
+  opacity: 1;
+  transform: translateY(0);
+  height: auto;
+  margin-top: 8px;
+}
+
+.validation-message.error {
+  color: var(--invalid-color);
+}
+
+.validation-message.success {
+  color: var(--valid-color);
+}
+
+.validation-message svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   FLOATING LABELS
+   ============================================ */
+
+.form-group.floating-label {
+  position: relative;
+}
+
+.form-group.floating-label label {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: var(--slate);
+  transition: all 0.2s ease;
+  pointer-events: none;
+  background: transparent;
+  padding: 0 4px;
+}
+
+.form-group.floating-label .form-control {
+  padding-top: 20px;
+  padding-bottom: 8px;
+}
+
+.form-group.floating-label .form-control:focus ~ label,
+.form-group.floating-label .form-control:not(:placeholder-shown) ~ label {
+  top: 0;
+  transform: translateY(-50%) scale(0.85);
+  color: var(--focus-color);
+  background: var(--black);
+}
+
+.form-group.floating-label.is-valid label {
+  color: var(--valid-color);
+}
+
+.form-group.floating-label.is-invalid label {
+  color: var(--invalid-color);
+}
+
+/* ============================================
+   PASSWORD STRENGTH METER
+   ============================================ */
+
+.password-strength {
+  margin-top: 8px;
+}
+
+.strength-bar {
+  height: 4px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.strength-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 2px;
+  transition: all 0.4s ease;
+}
+
+.strength-fill.weak {
+  width: 33%;
+  background: var(--invalid-color);
+}
+
+.strength-fill.fair {
+  width: 66%;
+  background: #f59e0b;
+}
+
+.strength-fill.strong {
+  width: 100%;
+  background: var(--valid-color);
+}
+
+.strength-text {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  justify-content: space-between;
+}
+
+.strength-label {
+  color: var(--slate);
+}
+
+.strength-status {
+  font-weight: 600;
+}
+
+.strength-status.weak { color: var(--invalid-color); }
+.strength-status.fair { color: #f59e0b; }
+.strength-status.strong { color: var(--valid-color); }
+
+/* ============================================
+   CHARACTER COUNTER
+   ============================================ */
+
+.char-counter {
+  font-size: 11px;
+  color: var(--slate);
+  text-align: right;
+  margin-top: 4px;
+  transition: color 0.3s ease;
+}
+
+.char-counter.warning {
+  color: #f59e0b;
+}
+
+.char-counter.danger {
+  color: var(--invalid-color);
+}
+
+/* ============================================
+   FORM PROGRESS BAR
+   ============================================ */
+
+.form-progress {
+  margin-bottom: 30px;
+}
+
+.form-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.form-progress-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.form-progress-percent {
+  font-size: 13px;
+  color: var(--chrome);
+  font-weight: 600;
+}
+
+.form-progress-bar {
+  height: 6px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.form-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--chrome), var(--slate));
+  border-radius: 3px;
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.form-progress-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ============================================
+   FIELDSET & GROUP VALIDATION
+   ============================================ */
+
+.form-fieldset {
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  transition: all 0.3s ease;
+}
+
+.form-fieldset:hover {
+  border-color: rgba(201, 206, 214, 0.2);
+}
+
+.form-fieldset.is-valid {
+  border-color: var(--valid-color);
+  background: rgba(34, 197, 94, 0.02);
+}
+
+.form-fieldset.is-invalid {
+  border-color: var(--invalid-color);
+  background: rgba(239, 68, 68, 0.02);
+}
+
+.form-fieldset-legend {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0 12px;
+  color: var(--white);
+}
+
+.form-fieldset-status {
+  float: right;
+  font-size: 12px;
+}
+
+.form-fieldset-status.valid {
+  color: var(--valid-color);
+}
+
+.form-fieldset-status.invalid {
+  color: var(--invalid-color);
+}
+
+/* ============================================
+   FORM SUBMIT BUTTON STATES
+   ============================================ */
+
+.form-submit-wrapper {
+  position: relative;
+}
+
+.form-submit-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.form-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Loading state */
+.form-submit-btn.is-loading {
+  color: transparent !important;
+}
+
+.form-submit-btn.is-loading::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: spin 0.8s linear infinite;
+}
+
+/* Success state */
+.form-submit-btn.is-success {
+  background: var(--valid-color) !important;
+  border-color: var(--valid-color) !important;
+}
+
+.form-submit-btn.is-success::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+}
+
+/* Error state */
+.form-submit-btn.is-error {
+  background: var(--invalid-color) !important;
+  border-color: var(--invalid-color) !important;
+  animation: shake 0.5s ease;
+}
+
+/* ============================================
+   REAL-TIME VALIDATION TOOLTIPS
+   ============================================ */
+
+.validation-tooltip {
+  position: absolute;
+  z-index: 100;
+  background: rgba(239, 68, 68, 0.95);
+  backdrop-filter: blur(10px);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  max-width: 250px;
+  white-space: normal;
+}
+
+.validation-tooltip::before {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 20px;
+  border-width: 5px 5px 0;
+  border-style: solid;
+  border-color: rgba(239, 68, 68, 0.95) transparent transparent;
+}
+
+.validation-tooltip.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   FORM SUMMARY PANEL
+   ============================================ */
+
+.form-summary {
+  background: rgba(201, 206, 214, 0.03);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 24px;
+}
+
+.form-summary-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--white);
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-summary-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.form-summary-stat {
+  text-align: center;
+  padding: 12px;
+  background: rgba(15, 15, 16, 0.5);
+  border-radius: 8px;
+}
+
+.form-summary-stat-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--chrome);
+}
+
+.form-summary-stat-label {
+  font-size: 11px;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+}
+
+.form-summary-stat.is-complete .form-summary-stat-value {
+  color: var(--valid-color);
+}
+
+.form-summary-stat.has-errors .form-summary-stat-value {
+  color: var(--invalid-color);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 600px) {
+  .form-summary-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .validation-tooltip {
+    max-width: 200px;
+    font-size: 11px;
+  }
+
+  .form-fieldset {
+    padding: 16px;
+  }
+}
