@@ -743,32 +743,6 @@
 }
 
 /* ========================================
-   CUSTOM CURSOR
-======================================== */
-@media(min-width:900px){
-  .custom-cursor{
-    cursor:none;
-  }
-  
-  .cursor{
-    width:20px;
-    height:20px;
-    border:2px solid var(--chrome);
-    border-radius:50%;
-    position:fixed;
-    pointer-events:none;
-    z-index:99999;
-    transition:transform 0.1s ease, background 0.3s ease;
-    transform:translate(-50%,-50%);
-  }
-  
-  .cursor.hover{
-    transform:translate(-50%,-50%) scale(2);
-    background:rgba(201,206,214,.1);
-  }
-}
-
-/* ========================================
    LOADING SKELETON
 ======================================== */
 .skeleton{
@@ -2944,16 +2918,7 @@ html, body{
   transform:translate(-50%,-50%) scale(0.8);
 }
 
-@media(pointer:fine){
-  body.cursor-enabled{
-    cursor:none;
-  }
-  body.cursor-enabled a,
-  body.cursor-enabled button,
-  body.cursor-enabled .magnetic-el{
-    cursor:none;
-  }
-}
+/* Default cursor restored */
 
 /* ========================================
    PARALLAX DEPTH LAYERS
