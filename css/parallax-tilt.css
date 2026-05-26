@@ -1,0 +1,234 @@
+/**
+ * BuildBridge Parallax Tilt Cards CSS
+ * Fortune 500 Quality - Styles for 3D perspective tilt effects
+ */
+
+/* Base tilt card styles */
+[data-tilt] {
+  transform-style: preserve-3d;
+  will-change: transform;
+  position: relative;
+}
+
+[data-tilt]:hover {
+  z-index: 10;
+}
+
+/* Glare overlay */
+.tilt-glare {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+/* Parallax layers inside tilt cards */
+[data-tilt-parallax] {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Floating elements with extra depth */
+.tilt-float {
+  transform: translateZ(50px);
+}
+
+.tilt-float-high {
+  transform: translateZ(100px);
+}
+
+/* Shadow that moves with tilt */
+[data-tilt-shadow] {
+  position: relative;
+}
+
+[data-tilt-shadow]::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: 10%;
+  right: 10%;
+  height: 20px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.3) 0%, transparent 70%);
+  filter: blur(10px);
+  transition: all 0.4s ease;
+  transform: translateZ(-50px);
+  pointer-events: none;
+}
+
+[data-tilt-shadow]:hover::after {
+  bottom: -30px;
+  left: 5%;
+  right: 5%;
+  opacity: 0.6;
+}
+
+/* Preset tilt intensities */
+[data-tilt="subtle"] { --tilt-amount: 5deg; }
+[data-tilt="medium"] { --tilt-amount: 15deg; }
+[data-tilt="extreme"] { --tilt-amount: 25deg; }
+
+/* Service cards with enhanced tilt */
+.service-card[data-tilt] {
+  overflow: visible;
+}
+
+.service-card[data-tilt]:hover {
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(201, 206, 214, 0.1);
+}
+
+.service-card[data-tilt] .service-icon {
+  transform: translateZ(30px);
+}
+
+.service-card[data-tilt] h3 {
+  transform: translateZ(20px);
+}
+
+.service-card[data-tilt] p {
+  transform: translateZ(10px);
+}
+
+/* Project cards with enhanced tilt */
+.project-card[data-tilt] {
+  overflow: hidden;
+}
+
+.project-card[data-tilt] img {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-card[data-tilt]:hover img {
+  transform: scale(1.1);
+}
+
+.project-card[data-tilt] .project-overlay {
+  transform: translateZ(40px);
+}
+
+/* Testimonial cards with tilt */
+.testimonial-card[data-tilt] {
+  background: rgba(15, 15, 16, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+/* 3D Card Flip on hover */
+.card-flip-3d {
+  perspective: 1000px;
+}
+
+.card-flip-3d-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-flip-3d:hover .card-flip-3d-inner {
+  transform: rotateY(180deg);
+}
+
+.card-flip-3d-front,
+.card-flip-3d-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: inherit;
+}
+
+.card-flip-3d-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(145deg, #17191d, #1a1c21);
+  border: 1px solid rgba(201, 206, 214, 0.12);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  text-align: center;
+}
+
+.card-flip-3d-back .card-back-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.card-flip-3d-back h4 {
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.card-flip-3d-back p {
+  color: var(--slate, #525862);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Magnetic button tilt effect */
+.magnetic-tilt {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Glowing border on tilt */
+.tilt-glow {
+  position: relative;
+}
+
+.tilt-glow::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, 
+    rgba(201, 206, 214, 0), 
+    rgba(201, 206, 214, 0.5), 
+    rgba(201, 206, 214, 0)
+  );
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.tilt-glow:hover::before {
+  opacity: 1;
+  animation: glow-rotate 3s linear infinite;
+}
+
+@keyframes glow-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  [data-tilt] {
+    transform: none !important;
+  }
+  
+  [data-tilt-parallax] {
+    transform: none !important;
+  }
+  
+  .tilt-glare {
+    display: none;
+  }
+  
+  .card-flip-3d-inner {
+    transition: none;
+  }
+  
+  .card-flip-3d:hover .card-flip-3d-inner {
+    transform: none;
+  }
+}

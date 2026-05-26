@@ -1,0 +1,350 @@
+/**
+ * BuildBridge Clip-Path Reveal Animations
+ * Fortune 500 Quality - Modern geometric reveal effects
+ * Creates stunning entrance animations using CSS clip-path
+ */
+
+/* =========================================
+   BASE CLIP-PATH REVEAL STYLES
+======================================== */
+.clip-reveal {
+  opacity: 0;
+  will-change: clip-path, opacity;
+}
+
+.clip-reveal.revealed {
+  opacity: 1;
+}
+
+/* =========================================
+   CIRCLE REVEAL (expands from center)
+======================================== */
+.clip-reveal-circle {
+  clip-path: circle(0% at 50% 50%);
+  opacity: 0;
+  transition: clip-path 1.2s cubic-bezier(0.77, 0, 0.175, 1), 
+              opacity 0.6s ease;
+}
+
+.clip-reveal-circle.revealed {
+  clip-path: circle(150% at 50% 50%);
+  opacity: 1;
+}
+
+/* Circle from different positions */
+.clip-reveal-circle-tl { clip-path: circle(0% at 0% 0%); }
+.clip-reveal-circle-tl.revealed { clip-path: circle(150% at 0% 0%); }
+
+.clip-reveal-circle-tr { clip-path: circle(0% at 100% 0%); }
+.clip-reveal-circle-tr.revealed { clip-path: circle(150% at 100% 0%); }
+
+.clip-reveal-circle-bl { clip-path: circle(0% at 0% 100%); }
+.clip-reveal-circle-bl.revealed { clip-path: circle(150% at 0% 100%); }
+
+.clip-reveal-circle-br { clip-path: circle(0% at 100% 100%); }
+.clip-reveal-circle-br.revealed { clip-path: circle(150% at 100% 100%); }
+
+/* =========================================
+   POLYGON REVEALS
+======================================== */
+
+/* Diagonal wipe from left */
+.clip-reveal-diagonal-left {
+  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.clip-reveal-diagonal-left.revealed {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Diagonal wipe from right */
+.clip-reveal-diagonal-right {
+  clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+  transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.clip-reveal-diagonal-right.revealed {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Diamond reveal */
+.clip-reveal-diamond {
+  clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
+  transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clip-reveal-diamond.revealed {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+/* Hexagon reveal */
+.clip-reveal-hexagon {
+  clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%);
+  transition: clip-path 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clip-reveal-hexagon.revealed {
+  clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
+}
+
+/* =========================================
+   SPLIT REVEALS
+======================================== */
+
+/* Vertical split */
+.clip-reveal-split-v {
+  clip-path: polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%);
+  transition: clip-path 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.clip-reveal-split-v.revealed {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+/* Horizontal split */
+.clip-reveal-split-h {
+  clip-path: polygon(0% 50%, 100% 50%, 100% 50%, 0% 50%);
+  transition: clip-path 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.clip-reveal-split-h.revealed {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+/* Corner reveal (from top-left) */
+.clip-reveal-corner-tl {
+  clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+  transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.clip-reveal-corner-tl.revealed {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Corner reveal (from bottom-right) */
+.clip-reveal-corner-br {
+  clip-path: polygon(100% 100%, 100% 100%, 100% 100%, 100% 100%);
+  transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.clip-reveal-corner-br.revealed {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* =========================================
+   SLICE REVEALS
+======================================== */
+
+/* Zig zag reveal */
+.clip-reveal-zigzag {
+  clip-path: polygon(
+    0% 0%, 0% 0%, 0% 0%, 0% 0%,
+    0% 0%, 0% 0%, 0% 0%, 0% 0%
+  );
+  transition: clip-path 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clip-reveal-zigzag.revealed {
+  clip-path: polygon(
+    0% 0%, 20% 20%, 40% 0%, 60% 20%,
+    80% 0%, 100% 20%, 100% 100%, 0% 100%
+  );
+}
+
+/* Curved edge reveal */
+.clip-reveal-curved {
+  clip-path: ellipse(0% 0% at 50% 50%);
+  transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clip-reveal-curved.revealed {
+  clip-path: ellipse(100% 100% at 50% 50%);
+}
+
+/* Inset reveal (border grows inward) */
+.clip-reveal-inset {
+  clip-path: inset(50% 50% 50% 50% round 0px);
+  transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.clip-reveal-inset.revealed {
+  clip-path: inset(0% 0% 0% 0% round 0px);
+}
+
+.clip-reveal-inset.rounded.revealed {
+  clip-path: inset(0% 0% 0% 0% round 20px);
+}
+
+/* =========================================
+   MASKED IMAGE REVEALS
+======================================== */
+
+.image-clip-reveal {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-clip-reveal img {
+  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.image-clip-reveal.revealed img {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Image reveal from center line */
+.image-clip-reveal-center img {
+  clip-path: polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%);
+}
+
+.image-clip-reveal-center.revealed img {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+/* =========================================
+   TEXT CLIP REVEALS
+======================================== */
+
+.text-clip-reveal {
+  overflow: hidden;
+}
+
+.text-clip-reveal > * {
+  transform: translateY(100%);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.text-clip-reveal.revealed > * {
+  transform: translateY(0);
+}
+
+/* Stagger children */
+.text-clip-reveal.stagger-1 > *:nth-child(1) { transition-delay: 0s; }
+.text-clip-reveal.stagger-1 > *:nth-child(2) { transition-delay: 0.1s; }
+.text-clip-reveal.stagger-1 > *:nth-child(3) { transition-delay: 0.2s; }
+.text-clip-reveal.stagger-1 > *:nth-child(4) { transition-delay: 0.3s; }
+.text-clip-reveal.stagger-1 > *:nth-child(5) { transition-delay: 0.4s; }
+
+/* =========================================
+   CARD 3D FLIP WITH CLIP
+======================================== */
+
+.card-3d-flip {
+  perspective: 1000px;
+}
+
+.card-3d-flip-inner {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-3d-flip:hover .card-3d-flip-inner {
+  transform: rotateY(180deg);
+}
+
+.card-3d-flip-front,
+.card-3d-flip-back {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.card-3d-flip-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: rotateY(180deg);
+}
+
+/* =========================================
+   FANCY BORDER ANIMATIONS
+======================================== */
+
+.animated-border {
+  position: relative;
+}
+
+.animated-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid transparent;
+  background: linear-gradient(90deg, var(--chrome, #C9CED6), var(--white, #F5F7FA), var(--chrome, #C9CED6)) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.animated-border:hover::before {
+  opacity: 1;
+  animation: border-rotate 3s linear infinite;
+}
+
+@keyframes border-rotate {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+/* =========================================
+   DURATION MODIFIERS
+======================================== */
+
+.clip-reveal-fast { transition-duration: 0.6s; }
+.clip-reveal-slow { transition-duration: 1.8s; }
+
+/* =========================================
+   EASING MODIFIERS
+======================================== */
+
+.clip-reveal-bounce {
+  transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.clip-reveal-smooth {
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* =========================================
+   INTERSECTION OBSERVER READY STATE
+======================================== */
+
+.clip-reveal-ready {
+  opacity: 1;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .clip-reveal,
+  .clip-reveal-circle,
+  .clip-reveal-circle-tl,
+  .clip-reveal-circle-tr,
+  .clip-reveal-circle-bl,
+  .clip-reveal-circle-br,
+  .clip-reveal-diagonal-left,
+  .clip-reveal-diagonal-right,
+  .clip-reveal-diamond,
+  .clip-reveal-hexagon,
+  .clip-reveal-split-v,
+  .clip-reveal-split-h,
+  .clip-reveal-corner-tl,
+  .clip-reveal-corner-br,
+  .clip-reveal-zigzag,
+  .clip-reveal-curved,
+  .clip-reveal-inset {
+    clip-path: none;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+  
+  .image-clip-reveal img,
+  .image-clip-reveal-center img {
+    clip-path: none;
+  }
+}
