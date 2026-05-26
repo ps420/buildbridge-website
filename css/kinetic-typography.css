@@ -1,0 +1,288 @@
+/* ========================================
+   KINETIC TYPOGRAPHY
+   Animated text effects for hero headings
+======================================== */
+
+/* Base kinetic text */
+.kinetic-text {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.kinetic-text .char {
+  display: inline-block;
+  transform: translateY(100%);
+  opacity: 0;
+  animation: kinetic-reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes kinetic-reveal {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Stagger delay for each character */
+.kinetic-text .char:nth-child(1) { animation-delay: 0.0s; }
+.kinetic-text .char:nth-child(2) { animation-delay: 0.03s; }
+.kinetic-text .char:nth-child(3) { animation-delay: 0.06s; }
+.kinetic-text .char:nth-child(4) { animation-delay: 0.09s; }
+.kinetic-text .char:nth-child(5) { animation-delay: 0.12s; }
+.kinetic-text .char:nth-child(6) { animation-delay: 0.15s; }
+.kinetic-text .char:nth-child(7) { animation-delay: 0.18s; }
+.kinetic-text .char:nth-child(8) { animation-delay: 0.21s; }
+.kinetic-text .char:nth-child(9) { animation-delay: 0.24s; }
+.kinetic-text .char:nth-child(10) { animation-delay: 0.27s; }
+.kinetic-text .char:nth-child(11) { animation-delay: 0.30s; }
+.kinetic-text .char:nth-child(12) { animation-delay: 0.33s; }
+.kinetic-text .char:nth-child(13) { animation-delay: 0.36s; }
+.kinetic-text .char:nth-child(14) { animation-delay: 0.39s; }
+.kinetic-text .char:nth-child(15) { animation-delay: 0.42s; }
+.kinetic-text .char:nth-child(16) { animation-delay: 0.45s; }
+.kinetic-text .char:nth-child(17) { animation-delay: 0.48s; }
+.kinetic-text .char:nth-child(18) { animation-delay: 0.51s; }
+.kinetic-text .char:nth-child(19) { animation-delay: 0.54s; }
+.kinetic-text .char:nth-child(20) { animation-delay: 0.57s; }
+
+/* Word-based kinetic animation */
+.kinetic-words .word {
+  display: inline-block;
+  overflow: hidden;
+  margin-right: 0.3em;
+}
+
+.kinetic-words .word span {
+  display: inline-block;
+  transform: translateY(100%) rotateX(-90deg);
+  transform-origin: center top;
+  opacity: 0;
+  animation: kinetic-word-reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes kinetic-word-reveal {
+  to {
+    transform: translateY(0) rotateX(0);
+    opacity: 1;
+  }
+}
+
+.kinetic-words .word:nth-child(1) span { animation-delay: 0.0s; }
+.kinetic-words .word:nth-child(2) span { animation-delay: 0.1s; }
+.kinetic-words .word:nth-child(3) span { animation-delay: 0.2s; }
+.kinetic-words .word:nth-child(4) span { animation-delay: 0.3s; }
+.kinetic-words .word:nth-child(5) span { animation-delay: 0.4s; }
+.kinetic-words .word:nth-child(6) span { animation-delay: 0.5s; }
+
+/* Split text reveal (line by line) */
+.split-lines .line {
+  display: block;
+  overflow: hidden;
+}
+
+.split-lines .line-inner {
+  display: block;
+  transform: translateY(100%);
+  animation: line-reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.split-lines .line:nth-child(1) .line-inner { animation-delay: 0.1s; }
+.split-lines .line:nth-child(2) .line-inner { animation-delay: 0.25s; }
+.split-lines .line:nth-child(3) .line-inner { animation-delay: 0.4s; }
+
+@keyframes line-reveal {
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Scramble text decode effect */
+.scramble-decode {
+  display: inline-block;
+}
+
+.scramble-decode .char {
+  display: inline-block;
+  min-width: 0.5em;
+}
+
+/* Typewriter effect */
+.typewriter {
+  display: inline-block;
+  overflow: hidden;
+  border-right: 3px solid #c9ced6;
+  white-space: nowrap;
+  animation: 
+    typing 2s steps(40, end),
+    blink-caret 0.75s step-end infinite;
+  animation-fill-mode: forwards;
+  width: 0;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: #c9ced6; }
+}
+
+/* Glitch effect */
+.glitch-text {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.glitch-text.active::before {
+  animation: glitch-1 0.3s linear;
+  color: #ff0040;
+  z-index: -1;
+  opacity: 0.8;
+}
+
+.glitch-text.active::after {
+  animation: glitch-2 0.3s linear;
+  color: #00ff9f;
+  z-index: -2;
+  opacity: 0.8;
+}
+
+@keyframes glitch-1 {
+  0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+  20% { clip-path: inset(20% 0 60% 0); transform: translate(-3px, 2px); }
+  40% { clip-path: inset(50% 0 30% 0); transform: translate(3px, -2px); }
+  60% { clip-path: inset(10% 0 80% 0); transform: translate(-2px, 3px); }
+  80% { clip-path: inset(70% 0 10% 0); transform: translate(2px, -3px); }
+}
+
+@keyframes glitch-2 {
+  0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+  20% { clip-path: inset(60% 0 20% 0); transform: translate(3px, -2px); }
+  40% { clip-path: inset(30% 0 50% 0); transform: translate(-3px, 2px); }
+  60% { clip-path: inset(80% 0 10% 0); transform: translate(2px, 3px); }
+  80% { clip-path: inset(10% 0 70% 0); transform: translate(-2px, -3px); }
+}
+
+/* Text wave animation */
+.wave-text .char {
+  display: inline-block;
+  animation: wave 2s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.wave-text .char:nth-child(1) { animation-delay: 0s; }
+.wave-text .char:nth-child(2) { animation-delay: 0.05s; }
+.wave-text .char:nth-child(3) { animation-delay: 0.1s; }
+.wave-text .char:nth-child(4) { animation-delay: 0.15s; }
+.wave-text .char:nth-child(5) { animation-delay: 0.2s; }
+.wave-text .char:nth-child(6) { animation-delay: 0.25s; }
+.wave-text .char:nth-child(7) { animation-delay: 0.3s; }
+.wave-text .char:nth-child(8) { animation-delay: 0.35s; }
+.wave-text .char:nth-child(9) { animation-delay: 0.4s; }
+.wave-text .char:nth-child(10) { animation-delay: 0.45s; }
+
+/* Scale in word by word */
+.scale-words .word {
+  display: inline-block;
+  transform: scale(0);
+  opacity: 0;
+  animation: scale-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes scale-in {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.scale-words .word:nth-child(1) { animation-delay: 0s; }
+.scale-words .word:nth-child(2) { animation-delay: 0.15s; }
+.scale-words .word:nth-child(3) { animation-delay: 0.3s; }
+.scale-words .word:nth-child(4) { animation-delay: 0.45s; }
+.scale-words .word:nth-child(5) { animation-delay: 0.6s; }
+
+/* Hero H1 specific enhancements */
+.hero h1 {
+  position: relative;
+}
+
+.hero h1 .highlight {
+  position: relative;
+  display: inline-block;
+}
+
+.hero h1 .highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 0.1em;
+  left: 0;
+  width: 0;
+  height: 0.15em;
+  background: linear-gradient(90deg, #c9ced6, transparent);
+  animation: highlight-grow 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 1s;
+  border-radius: 2px;
+}
+
+@keyframes highlight-grow {
+  to { width: 100%; }
+}
+
+/* Magnetic text effect */
+.magnetic-text {
+  display: inline-block;
+}
+
+.magnetic-text .char {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .kinetic-text .char,
+  .kinetic-words .word span,
+  .split-lines .line-inner,
+  .typewriter,
+  .wave-text .char,
+  .scale-words .word {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    width: auto !important;
+    border: none !important;
+  }
+  
+  .hero h1 .highlight::after {
+    animation: none;
+    width: 100%;
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .typewriter {
+    white-space: normal;
+    border-right: none;
+    animation: none;
+    width: auto;
+  }
+}

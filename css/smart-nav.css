@@ -1,0 +1,244 @@
+/* ========================================
+   SMART NAVIGATION
+   Hides on scroll down, shows on scroll up
+======================================== */
+
+.nav {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+/* Hidden state */
+.nav.nav-hidden {
+  transform: translateY(-100%);
+}
+
+/* Visible with glassmorphism */
+.nav.nav-visible {
+  transform: translateY(0);
+}
+
+/* Enhanced scrolled state */
+.nav.scrolled {
+  background: rgba(15, 15, 16, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* At top - transparent */
+.nav.at-top {
+  background: transparent;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+/* Immersive mode (for hero sections) */
+.nav.immersive {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+.nav.immersive .brand span,
+.nav.immersive .nav-links a {
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.nav.immersive .nav-links a::after {
+  background: #fff;
+}
+
+/* Scroll progress in nav */
+.nav-scroll-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #c9ced6, #fff);
+  width: 0;
+  transition: width 0.1s linear;
+}
+
+/* Section indicator pill */
+.nav-section-indicator {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(201, 206, 214, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #c9ced6;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.nav.nav-visible.scrolled .nav-section-indicator {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.nav.nav-hidden .nav-section-indicator {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-10px);
+}
+
+/* Reading progress bar */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #c9ced6 0%, #ffffff 50%, #c9ced6 100%);
+  background-size: 200% 100%;
+  z-index: 100001;
+  width: 0;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 10px rgba(201, 206, 214, 0.3);
+}
+
+/* Section markers (for scroll spy) */
+.section-marker {
+  position: relative;
+}
+
+.section-marker::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Active nav link enhancement */
+.nav-links a {
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #c9ced6;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 2px;
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+  width: 100%;
+}
+
+/* Nav reveal animation from top */
+@keyframes nav-reveal {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.nav-initial-load {
+  animation: nav-reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Mobile menu animation */
+.mobile-menu-btn {
+  transition: transform 0.3s ease;
+}
+
+.mobile-menu-btn.active {
+  transform: rotate(90deg);
+}
+
+.mobile-menu-btn span {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mobile-menu-btn.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.mobile-menu-btn.active span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.mobile-menu-btn.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Mobile nav enhancements */
+@media (max-width: 768px) {
+  .nav {
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .nav.nav-hidden {
+    transform: translateY(-100%);
+  }
+  
+  .nav-links {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.3s ease;
+  }
+  
+  .nav-links:not(.active) {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  
+  .nav-links.active {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  
+  .nav-section-indicator {
+    display: none;
+  }
+}
+
+/* Accessibility: prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .nav,
+  .nav-links,
+  .nav-links a::after,
+  .nav-section-indicator,
+  .reading-progress {
+    transition: none;
+  }
+  
+  .nav-initial-load {
+    animation: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .nav {
+    position: static;
+    transform: none !important;
+  }
+  
+  .reading-progress,
+  .nav-section-indicator {
+    display: none;
+  }
+}
