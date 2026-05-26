@@ -11,6 +11,10 @@
   <link rel="stylesheet" href="css/lazy-load.css">
   <link rel="stylesheet" href="css/smart-nav.css">
   <link rel="stylesheet" href="css/kinetic-typography.css">
+  <!-- v6.0 Professional Enhancements -->
+  <link rel="stylesheet" href="css/newsletter-modal.css">
+  <link rel="stylesheet" href="css/quick-contact-widget.css">
+  <link rel="stylesheet" href="css/social-share-enhanced.css">
 
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
   <link rel="manifest" href="manifest.json">
@@ -741,6 +745,7 @@
   </script>
 
   <script src="scripts.js?v=3"></script>
+  <script src="js/unified-feature-loader.js"></script>
 
   <script>
     // Mobile menu toggle with animation
@@ -802,6 +807,175 @@
         // Swipe up near top - could add pull to refresh here
       }
     }
+  </script>
+  
+  <!-- BuildBridge Professional Enhancements v6.0 -->
+  <script>
+  (function() {
+    // Quick Contact Widget
+    const qcWidget = document.createElement('div');
+    qcWidget.className = 'quick-contact-widget';
+    qcWidget.id = 'quick-contact';
+    qcWidget.setAttribute('role', 'region');
+    qcWidget.setAttribute('aria-label', 'Quick contact options');
+    qcWidget.innerHTML = `
+      <div class="quick-contact-menu" role="menu">
+        <a href="https://wa.me/27661200064" class="quick-contact-item" role="menuitem" target="_blank">
+          <div class="quick-contact-icon whatsapp">💬</div>
+          <div class="quick-contact-info">
+            <span class="quick-contact-label">WhatsApp</span>
+            <span class="quick-contact-value">Chat Now</span>
+          </div>
+        </a>
+        <a href="tel:+27661200064" class="quick-contact-item" role="menuitem">
+          <div class="quick-contact-icon phone">📞</div>
+          <div class="quick-contact-info">
+            <span class="quick-contact-label">Call Us</span>
+            <span class="quick-contact-value">+27 66 120 0064</span>
+          </div>
+        </a>
+        <a href="mailto:info@buildbridge.co.za" class="quick-contact-item" role="menuitem">
+          <div class="quick-contact-icon email">✉️</div>
+          <div class="quick-contact-info">
+            <span class="quick-contact-label">Email</span>
+            <span class="quick-contact-value">Send Message</span>
+          </div>
+        </a>
+        <a href="contact.html" class="quick-contact-item" role="menuitem">
+          <div class="quick-contact-icon chat">📋</div>
+          <div class="quick-contact-info">
+            <span class="quick-contact-label">Contact Form</span>
+            <span class="quick-contact-value">Get Quote</span>
+          </div>
+        </a>
+      </div>
+      <button class="quick-contact-trigger" id="quickContactTrigger" aria-label="Open contact menu" aria-expanded="false">
+        <span class="quick-contact-pulse"></span>
+        <span class="quick-contact-status online"></span>
+        <span>💬</span>
+        <div class="quick-contact-tooltip">How can we help?</div>
+      </button>
+    `;
+    document.body.appendChild(qcWidget);
+    
+    // Quick Contact Toggle
+    document.getElementById('quickContactTrigger').addEventListener('click', function() {
+      qcWidget.classList.toggle('open');
+      this.classList.toggle('active');
+      this.setAttribute('aria-expanded', qcWidget.classList.contains('open'));
+    });
+    
+    // Newsletter Modal (delayed for engagement)
+    if (!localStorage.getItem('newsletter-subscribed') && !localStorage.getItem('newsletter-closed')) {
+      setTimeout(() => {
+        const modal = document.createElement('div');
+        modal.className = 'newsletter-modal-overlay';
+        modal.id = 'newsletter-modal';
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
+        modal.innerHTML = `
+          <div class="newsletter-modal">
+            <button class="newsletter-modal-close" aria-label="Close newsletter signup">&times;</button>
+            <div class="newsletter-modal-icon">📧</div>
+            <h3>Stay Updated</h3>
+            <p>Get construction tips, industry insights, and exclusive project updates delivered to your inbox.</p>
+            <form class="newsletter-form" id="newsletter-form">
+              <div class="newsletter-input-group">
+                <input type="email" class="newsletter-input" placeholder="Enter your email address" required aria-label="Email address">
+              </div>
+              <button type="submit" class="newsletter-submit">Subscribe Now</button>
+            </form>
+            <div class="newsletter-success" id="newsletter-success">
+              <div class="newsletter-success-icon">✓</div>
+              <h4>You're Subscribed!</h4>
+              <p>Thank you for joining our newsletter.</p>
+            </div>
+            <p class="newsletter-privacy">By subscribing, you agree to our <a href="#">Privacy Policy</a></p>
+          </div>
+        `;
+        document.body.appendChild(modal);
+        
+        // Modal handlers
+        const closeBtn = modal.querySelector('.newsletter-modal-close');
+        const form = modal.querySelector('#newsletter-form');
+        const success = modal.querySelector('#newsletter-success');
+        
+        closeBtn.addEventListener('click', () => {
+          modal.classList.remove('active');
+          localStorage.setItem('newsletter-closed', 'true');
+        });
+        
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            modal.classList.remove('active');
+            localStorage.setItem('newsletter-closed', 'true');
+          }
+        });
+        
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const submitBtn = form.querySelector('.newsletter-submit');
+          submitBtn.classList.add('loading');
+          submitBtn.textContent = 'Subscribing...';
+          
+          setTimeout(() => {
+            form.style.display = 'none';
+            modal.querySelector('h3').nextElementSibling.style.display = 'none';
+            success.style.display = 'block';
+            setTimeout(() => success.classList.add('show'), 10);
+            localStorage.setItem('newsletter-subscribed', 'true');
+            if (window.Toast) Toast.success('Successfully subscribed!');
+            setTimeout(() => modal.classList.remove('active'), 3000);
+          }, 1500);
+        });
+        
+        // Show after delay
+        setTimeout(() => modal.classList.add('active'), 2000);
+      }, 500);
+    }
+    
+    // Social Share for Projects
+    document.querySelectorAll('.project-card').forEach(card => {
+      const title = card.querySelector('h3')?.textContent || 'BuildBridge Project';
+      const overlay = card.querySelector('.project-overlay');
+      if (overlay) {
+        const shareContainer = document.createElement('div');
+        shareContainer.className = 'social-share-container';
+        shareContainer.style.cssText = 'margin-top: 15px; justify-content: flex-start;';
+        shareContainer.innerHTML = `
+          <button class="social-share-btn copy" data-label="Copy Link" title="Copy link">🔗</button>
+          <button class="social-share-btn whatsapp" data-label="WhatsApp" title="Share on WhatsApp">📱</button>
+          <button class="social-share-btn facebook" data-label="Facebook" title="Share on Facebook">📘</button>
+        `;
+        
+        // Copy link handler
+        shareContainer.querySelector('.copy').addEventListener('click', (e) => {
+          e.stopPropagation();
+          navigator.clipboard.writeText(window.location.href);
+          e.target.classList.add('copied');
+          if (window.Toast) Toast.success('Link copied!');
+          setTimeout(() => e.target.classList.remove('copied'), 2000);
+        });
+        
+        // WhatsApp share
+        shareContainer.querySelector('.whatsapp').addEventListener('click', (e) => {
+          e.stopPropagation();
+          const text = encodeURIComponent(`Check out this project: ${title} by BuildBridge`);
+          window.open(`https://wa.me/?text=${text}%20${encodeURIComponent(window.location.href)}`, '_blank');
+        });
+        
+        // Facebook share
+        shareContainer.querySelector('.facebook').addEventListener('click', (e) => {
+          e.stopPropagation();
+          window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
+        });
+        
+        overlay.appendChild(shareContainer);
+      }
+    });
+    
+    console.log('🚀 BuildBridge Professional Features v6.0 activated');
+  })();
   </script>
 </body>
 </html>

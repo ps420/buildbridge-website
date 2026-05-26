@@ -1,0 +1,306 @@
+/* ========================================
+   SOCIAL SHARE BUTTONS
+   Share projects on social media
+======================================== */
+
+.social-share {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.social-share-label {
+  font-size: 12px;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-right: 8px;
+}
+
+.social-share-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(201,206,214,0.08);
+  border: 1px solid rgba(201,206,214,0.15);
+  color: var(--chrome);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.social-share-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--chrome), var(--white));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.social-share-btn svg,
+.social-share-btn span {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.social-share-btn:hover {
+  transform: translateY(-3px) scale(1.1);
+  border-color: transparent;
+}
+
+.social-share-btn:hover::before {
+  opacity: 1;
+}
+
+.social-share-btn:hover svg,
+.social-share-btn:hover span {
+  color: var(--black);
+  transform: scale(1.1);
+}
+
+/* Platform-specific colors */
+.social-share-btn[data-platform="whatsapp"]:hover {
+  background: #25D366;
+}
+
+.social-share-btn[data-platform="facebook"]:hover {
+  background: #1877F2;
+}
+
+.social-share-btn[data-platform="twitter"]:hover {
+  background: #1DA1F2;
+}
+
+.social-share-btn[data-platform="linkedin"]:hover {
+  background: #0A66C2;
+}
+
+.social-share-btn[data-platform="email"]:hover {
+  background: #EA4335;
+}
+
+.social-share-btn[data-platform="copy"]:hover {
+  background: var(--white);
+}
+
+/* Tooltip */
+.social-share-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  padding: 6px 12px;
+  background: var(--gun);
+  color: var(--white);
+  font-size: 11px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.social-share-btn:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-4px);
+}
+
+/* Copy success state */
+.social-share-btn.copied {
+  background: #22c55e !important;
+  border-color: #22c55e !important;
+}
+
+.social-share-btn.copied::after {
+  content: 'Copied!';
+}
+
+/* Project card share integration */
+.project-card {
+  position: relative;
+}
+
+.project-card .social-share {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+}
+
+.project-card:hover .social-share {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.project-card .social-share-btn {
+  width: 36px;
+  height: 36px;
+  font-size: 14px;
+  background: rgba(15,15,16,0.9);
+  backdrop-filter: blur(10px);
+}
+
+/* Share modal */
+.share-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.share-modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.share-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+}
+
+.share-modal-content {
+  position: relative;
+  background: var(--black);
+  border: 1px solid rgba(201,206,214,0.2);
+  border-radius: 8px;
+  padding: 40px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  transform: translateY(20px) scale(0.95);
+  transition: transform 0.3s ease;
+}
+
+.share-modal.active .share-modal-content {
+  transform: translateY(0) scale(1);
+}
+
+.share-modal h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+}
+
+.share-modal p {
+  color: var(--chrome);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.share-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(201,206,214,0.2);
+  background: transparent;
+  color: var(--chrome);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.share-modal-close:hover {
+  background: rgba(201,206,214,0.1);
+  border-color: var(--chrome);
+  color: var(--white);
+}
+
+.share-modal .social-share {
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.share-modal .social-share-btn {
+  width: 50px;
+  height: 50px;
+  font-size: 20px;
+}
+
+/* URL copy section */
+.share-url-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(201,206,214,0.1);
+}
+
+.share-url-input {
+  display: flex;
+  gap: 8px;
+}
+
+.share-url-input input {
+  flex: 1;
+  padding: 12px 16px;
+  background: rgba(201,206,214,0.05);
+  border: 1px solid rgba(201,206,214,0.2);
+  border-radius: 4px;
+  color: var(--chrome);
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  outline: none;
+}
+
+.share-url-input button {
+  padding: 12px 20px;
+  background: var(--white);
+  color: var(--black);
+  border: none;
+  border-radius: 4px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.share-url-input button:hover {
+  background: var(--chrome);
+}
+
+.share-url-input button.copied {
+  background: #22c55e;
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .project-card .social-share {
+    opacity: 1;
+    transform: translateY(0);
+    top: 12px;
+    right: 12px;
+  }
+  
+  .social-share-label {
+    display: none;
+  }
+}

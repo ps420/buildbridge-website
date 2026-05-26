@@ -1,0 +1,320 @@
+/**
+ * BuildBridge Newsletter Modal v6.0
+ * Professional lead capture with elegant animations
+ */
+
+.newsletter-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 15, 16, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.newsletter-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.newsletter-modal {
+  background: linear-gradient(145deg, #17191d, #1a1c21);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 16px;
+  padding: 60px;
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+  transform: translateY(30px) scale(0.95);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5);
+}
+
+.newsletter-modal-overlay.active .newsletter-modal {
+  transform: translateY(0) scale(1);
+}
+
+.newsletter-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  background: rgba(201, 206, 214, 0.05);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 50%;
+  color: var(--chrome);
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.newsletter-modal-close:hover {
+  background: rgba(201, 206, 214, 0.15);
+  color: var(--white);
+  transform: rotate(90deg);
+}
+
+.newsletter-modal-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--chrome), var(--white));
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  margin: 0 auto 30px;
+  box-shadow: 0 20px 40px rgba(201, 206, 214, 0.2);
+  animation: float-icon 3s ease-in-out infinite;
+}
+
+@keyframes float-icon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.newsletter-modal h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 28px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.newsletter-modal p {
+  color: var(--chrome);
+  text-align: center;
+  margin-bottom: 30px;
+  line-height: 1.7;
+}
+
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.newsletter-input-group {
+  position: relative;
+}
+
+.newsletter-input {
+  width: 100%;
+  padding: 18px 24px;
+  background: rgba(201, 206, 214, 0.05);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 8px;
+  color: var(--white);
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.newsletter-input:focus {
+  outline: none;
+  border-color: var(--chrome);
+  background: rgba(201, 206, 214, 0.08);
+  box-shadow: 0 0 0 4px rgba(201, 206, 214, 0.1);
+}
+
+.newsletter-input::placeholder {
+  color: var(--slate);
+}
+
+.newsletter-submit {
+  padding: 18px 40px;
+  background: var(--white);
+  border: none;
+  border-radius: 8px;
+  color: var(--black);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.newsletter-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(201, 206, 214, 0.3);
+}
+
+.newsletter-submit:active {
+  transform: translateY(0);
+}
+
+.newsletter-submit.loading {
+  pointer-events: none;
+}
+
+.newsletter-submit.loading::after {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top-color: var(--black);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.newsletter-success {
+  text-align: center;
+  padding: 40px 0;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease;
+}
+
+.newsletter-success.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.newsletter-success-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  margin: 0 auto 25px;
+  animation: scale-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes scale-in {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+.newsletter-success h4 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.newsletter-success p {
+  margin-bottom: 0;
+}
+
+.newsletter-privacy {
+  text-align: center;
+  font-size: 12px;
+  color: var(--slate);
+  margin-top: 20px;
+}
+
+.newsletter-privacy a {
+  color: var(--chrome);
+  text-decoration: underline;
+}
+
+/* Inline newsletter in footer */
+.newsletter-inline {
+  background: linear-gradient(145deg, rgba(201, 206, 214, 0.05), rgba(201, 206, 214, 0.02));
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 12px;
+  padding: 40px;
+  margin: 40px 0;
+}
+
+.newsletter-inline h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.newsletter-inline p {
+  color: var(--chrome);
+  margin-bottom: 25px;
+  font-size: 14px;
+}
+
+.newsletter-inline-form {
+  display: flex;
+  gap: 12px;
+}
+
+.newsletter-inline-form input {
+  flex: 1;
+  padding: 14px 20px;
+  background: rgba(201, 206, 214, 0.05);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 8px;
+  color: var(--white);
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.newsletter-inline-form input:focus {
+  outline: none;
+  border-color: var(--chrome);
+}
+
+.newsletter-inline-form button {
+  padding: 14px 28px;
+  background: var(--white);
+  border: none;
+  border-radius: 8px;
+  color: var(--black);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.newsletter-inline-form button:hover {
+  background: var(--chrome);
+}
+
+@media (max-width: 768px) {
+  .newsletter-modal {
+    padding: 40px 30px;
+    margin: 20px;
+  }
+  
+  .newsletter-modal h3 {
+    font-size: 22px;
+  }
+  
+  .newsletter-modal-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 30px;
+  }
+  
+  .newsletter-inline-form {
+    flex-direction: column;
+  }
+  
+  .newsletter-inline-form button {
+    width: 100%;
+  }
+}
