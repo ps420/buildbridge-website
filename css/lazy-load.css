@@ -1,0 +1,361 @@
+/* ========================================
+   LAZY LOADING WITH SKELETON SCREENS
+   Performance + UX optimization
+======================================== */
+
+/* Base lazy image styles */
+.lazy-image {
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.lazy-image.loaded {
+  opacity: 1;
+}
+
+/* Skeleton container */
+.skeleton-wrapper {
+  position: relative;
+  overflow: hidden;
+  background: rgba(201, 206, 214, 0.05);
+  border-radius: inherit;
+}
+
+.skeleton-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(201, 206, 214, 0) 0%,
+    rgba(201, 206, 214, 0.08) 50%,
+    rgba(201, 206, 214, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+  z-index: 1;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-wrapper.loaded::before {
+  animation: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Placeholder blur effect */
+.image-placeholder {
+  position: absolute;
+  inset: 0;
+  filter: blur(20px);
+  transform: scale(1.1);
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  z-index: 0;
+}
+
+.image-placeholder.hidden {
+  opacity: 0;
+}
+
+/* Different skeleton styles for different contexts */
+
+/* Card skeleton */
+.skeleton-card {
+  background: rgba(201, 206, 214, 0.05);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.skeleton-card-image {
+  aspect-ratio: 16 / 10;
+  background: rgba(201, 206, 214, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-card-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 206, 214, 0.1) 50%,
+    transparent 100%
+  );
+  animation: skeleton-shimmer 1.5s infinite;
+}
+
+.skeleton-card-content {
+  padding: 20px;
+}
+
+.skeleton-card-title {
+  height: 24px;
+  width: 70%;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 6px;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-card-title::after,
+.skeleton-card-text::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 206, 214, 0.15) 50%,
+    transparent 100%
+  );
+  animation: skeleton-shimmer 1.5s infinite;
+}
+
+.skeleton-card-text {
+  height: 16px;
+  width: 90%;
+  background: rgba(201, 206, 214, 0.08);
+  border-radius: 4px;
+  margin-bottom: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-card-text.short {
+  width: 60%;
+}
+
+/* Avatar skeleton */
+.skeleton-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.1);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.skeleton-avatar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 206, 214, 0.15) 50%,
+    transparent 100%
+  );
+  animation: skeleton-shimmer 1.5s infinite;
+}
+
+.skeleton-avatar.large {
+  width: 64px;
+  height: 64px;
+}
+
+.skeleton-avatar.small {
+  width: 32px;
+  height: 32px;
+}
+
+/* Text line skeleton */
+.skeleton-text {
+  height: 16px;
+  background: rgba(201, 206, 214, 0.08);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-text::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 206, 214, 0.1) 50%,
+    transparent 100%
+  );
+  animation: skeleton-shimmer 1.5s infinite;
+}
+
+.skeleton-text.title {
+  height: 24px;
+  width: 60%;
+  background: rgba(201, 206, 214, 0.12);
+}
+
+/* Hero image skeleton */
+.skeleton-hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(201, 206, 214, 0.03) 0%,
+    rgba(201, 206, 214, 0.08) 100%
+  );
+}
+
+.skeleton-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 206, 214, 0.05) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 2s infinite;
+}
+
+/* Project card skeleton grid */
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+/* Image reveal animation */
+@keyframes image-reveal {
+  from {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.lazy-image.loaded {
+  animation: image-reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Progressive image loading */
+.progressive-image {
+  position: relative;
+}
+
+.progressive-image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.progressive-image img.preview {
+  filter: blur(20px);
+  transform: scale(1.1);
+}
+
+.progressive-image img.full {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.progressive-image.loaded img.full {
+  opacity: 1;
+}
+
+/* LQIP (Low Quality Image Placeholder) */
+.lqip-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.lqip-container .lqip {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(10px);
+  transform: scale(1.05);
+  transition: opacity 0.3s ease;
+}
+
+.lqip-container .full-image {
+  position: relative;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.lqip-container.loaded .full-image {
+  opacity: 1;
+}
+
+.lqip-container.loaded .lqip {
+  opacity: 0;
+}
+
+/* Loading spinner for specific cases */
+.image-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.skeleton-wrapper.loading .image-loader {
+  opacity: 1;
+}
+
+.image-loader::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 2px solid rgba(201, 206, 214, 0.1);
+  border-top-color: rgba(201, 206, 214, 0.5);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-wrapper::before,
+  .skeleton-card-image::after,
+  .skeleton-card-title::after,
+  .skeleton-card-text::after,
+  .skeleton-avatar::after,
+  .skeleton-text::after,
+  .skeleton-hero::before,
+  .image-loader::before {
+    animation: none;
+  }
+  
+  .lazy-image {
+    opacity: 1;
+    transition: none;
+  }
+}
+
+/* Print styles - hide skeletons */
+@media print {
+  .skeleton-wrapper::before,
+  .skeleton-card::after,
+  .image-loader {
+    display: none !important;
+  }
+}
