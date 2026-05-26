@@ -1,0 +1,313 @@
+/**
+ * BuildBridge Before/After Slider Styles
+ * Professional image comparison component
+ * Version: 1.0.0
+ */
+
+/* ========================================
+   BEFORE/AFTER SLIDER
+======================================== */
+.before-after-slider {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.before-after-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  background: #0a0a0b;
+  overflow: hidden;
+}
+
+.before-after-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* Before/After Layers */
+.before-after-after,
+.before-after-before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.before-after-before {
+  z-index: 2;
+  will-change: clip-path;
+}
+
+.before-after-after {
+  z-index: 1;
+}
+
+/* Labels */
+.before-after-label {
+  position: absolute;
+  padding: 8px 16px;
+  background: rgba(15, 15, 16, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 30px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  z-index: 3;
+  transition: all 0.3s ease;
+}
+
+.before-after-label-before {
+  left: 20px;
+  bottom: 20px;
+}
+
+.before-after-label-after {
+  right: 20px;
+  bottom: 20px;
+}
+
+.before-after-slider:hover .before-after-label {
+  background: rgba(201, 206, 214, 0.95);
+  color: #0f0f12;
+}
+
+/* Handle */
+.before-after-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  background: #fff;
+  border-radius: 50%;
+  cursor: ew-resize;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    0 0 0 4px rgba(201, 206, 214, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.before-after-handle::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 2px solid rgba(201, 206, 214, 0.3);
+  animation: handle-pulse 2s ease-in-out infinite;
+}
+
+@keyframes handle-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+.before-after-handle:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 
+    0 6px 30px rgba(0, 0, 0, 0.4),
+    0 0 0 6px rgba(201, 206, 214, 0.4);
+}
+
+.before-after-handle.dragging {
+  transform: translate(-50%, -50%) scale(0.95);
+  cursor: grabbing;
+}
+
+.before-after-slider.dragging {
+  cursor: grabbing;
+}
+
+/* Handle Line */
+.before-after-handle-line {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 100vh;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 255, 255, 0.8) 10%,
+    rgba(255, 255, 255, 0.8) 90%,
+    transparent 100%
+  );
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* Handle Arrows */
+.before-after-handle-arrows {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: #0f0f12;
+}
+
+.before-after-handle-arrows svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.5;
+}
+
+/* Vertical Orientation */
+.before-after-vertical .before-after-wrapper {
+  padding-bottom: 75%; /* 4:3 aspect ratio */
+}
+
+.before-after-vertical .before-after-handle {
+  cursor: ns-resize;
+}
+
+.before-after-vertical .before-after-handle-line {
+  width: 100vw;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.8) 10%,
+    rgba(255, 255, 255, 0.8) 90%,
+    transparent 100%
+  );
+}
+
+.before-after-vertical .before-after-handle-arrows {
+  transform: rotate(90deg);
+}
+
+/* Focus Styles for Accessibility */
+.before-after-handle:focus {
+  outline: none;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    0 0 0 4px rgba(201, 206, 214, 0.5),
+    0 0 0 8px rgba(201, 206, 214, 0.2);
+}
+
+/* Smooth transitions when not dragging */
+.before-after-slider:not(.dragging) .before-after-before {
+  transition: clip-path 0.1s ease-out;
+}
+
+.before-after-slider:not(.dragging) .before-after-handle {
+  transition: left 0.1s ease-out, top 0.1s ease-out, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Loading State */
+.before-after-slider.loading {
+  background: linear-gradient(90deg, #1a1a1f 25%, #25252a 50%, #1a1a1f 75%);
+  background-size: 200% 100%;
+  animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Gallery Grid for Multiple Sliders */
+.before-after-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 30px;
+  padding: 40px 0;
+}
+
+.before-after-gallery .before-after-slider {
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .before-after-slider {
+    border-radius: 12px;
+  }
+  
+  .before-after-handle {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .before-after-handle-arrows svg {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .before-after-label {
+    font-size: 10px;
+    padding: 6px 12px;
+  }
+  
+  .before-after-label-before {
+    left: 12px;
+    bottom: 12px;
+  }
+  
+  .before-after-label-after {
+    right: 12px;
+    bottom: 12px;
+  }
+  
+  .before-after-gallery {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .before-after-wrapper {
+    padding-bottom: 75%; /* 4:3 for mobile */
+  }
+  
+  .before-after-label {
+    display: none;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .before-after-handle::before {
+    animation: none;
+  }
+  
+  .before-after-slider:not(.dragging) .before-after-before,
+  .before-after-slider:not(.dragging) .before-after-handle {
+    transition: none;
+  }
+}
+
+/* Dark mode adjustments (already dark, but for consistency) */
+@media (prefers-color-scheme: dark) {
+  .before-after-slider {
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+  }
+}

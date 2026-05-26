@@ -8,6 +8,14 @@
   <link rel="stylesheet" href="css/premium-effects.css">
   <link rel="stylesheet" href="css/advanced-effects.css">
   <link rel="stylesheet" href="css/fortune500-effects.css">
+  <link rel="stylesheet" href="css/before-after-slider.css">
+  <link rel="stylesheet" href="css/toast-notifications.css">
+  <link rel="stylesheet" href="css/animated-icons.css">
+  <link rel="stylesheet" href="css/scroll-reveal-nav.css">
+  <link rel="stylesheet" href="css/card-flip-effects.css">
+  <link rel="stylesheet" href="css/text-spotlight.css">
+  <link rel="stylesheet" href="css/scroll-smear.css">
+  <link rel="stylesheet" href="css/animated-lines.css">
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0f0f10">
@@ -71,7 +79,7 @@
   <section class="hero" id="main-content">
     <div class="hero-copy animate-on-load">
       <p class="eyebrow fade-in-up">Construction Management</p>
-      <h1 class="split-heading fade-in-up stagger-1">Connecting Clients.<br>Delivering Projects.<br><span class="gradient-text">Building Trust.</span></h1>
+      <h1 class="split-heading fade-in-up stagger-1" data-spotlight="scroll">Connecting Clients.<br>Delivering Projects.<br><span class="gradient-text">Building Trust.</span></h1>
       <p class="fade-in-up stagger-2">BuildBridge acts as the trusted link between clients and contractors — managing projects with transparency, expertise and care from concept to completion. We bridge the gap between vision and reality.</p>
       <div class="actions fade-in-up stagger-3">
         <a href="https://wa.me/27661200064" class="btn magnetic magnetic-el" target="_blank" data-magnetic="0.3">💬 Chat on WhatsApp</a>
@@ -149,28 +157,28 @@
       <p>From initial consultation to final handover, we provide comprehensive construction management services that ensure your project succeeds on time, within budget, and to the highest standards.</p>
     </div>
     <div class="services-grid">
-      <article class="service-card tilt-card-3d tilt-card-advanced fade-in-up stagger-1" data-magnetic="0.2">
+      <article class="service-card tilt-card-3d tilt-card-advanced flip-card fade-in-up stagger-1" data-magnetic="0.2" data-flip="true" data-back-content="<div class='card-back-content'><span class='card-back-icon'>📋</span><h4>Expert Consultation</h4><p>From concept to blueprint, we guide every step of your construction journey.</p><a href='contact.html' class='btn btn-sm'>Start Now</a></div>">
         <div class="card-content">
           <div class="service-icon">📋</div>
           <h3 class="scramble-text">Project Consultation</h3>
           <p>We understand your goals, scope, budget and ideal delivery plan. Our experts help define clear objectives and realistic timelines.</p>
         </div>
       </article>
-      <article class="service-card tilt-card-3d tilt-card-advanced fade-in-up stagger-2" data-magnetic="0.2">
+      <article class="service-card tilt-card-3d tilt-card-advanced flip-card fade-in-up stagger-2" data-magnetic="0.2" data-flip="true" data-back-content="<div class='card-back-content'><span class='card-back-icon'>🤝</span><h4>Perfect Match</h4><p>Access our vetted network of 50+ qualified contractors for your specific needs.</p><a href='contact.html' class='btn btn-sm'>Meet Contractors</a></div>">
         <div class="card-content">
           <div class="service-icon">🤝</div>
           <h3 class="scramble-text">Contractor Matching</h3>
           <p>We connect you with qualified contractors suited to the work. Our vetted network ensures quality craftsmanship every time.</p>
         </div>
       </article>
-      <article class="service-card tilt-card-3d tilt-card-advanced fade-in-up stagger-3" data-magnetic="0.2">
+      <article class="service-card tilt-card-3d tilt-card-advanced flip-card fade-in-up stagger-3" data-magnetic="0.2" data-flip="true" data-back-content="<div class='card-back-content'><span class='card-back-icon'>📊</span><h4>Full Oversight</h4><p>Real-time tracking, milestone management, and quality control throughout.</p><a href='contact.html' class='btn btn-sm'>Learn More</a></div>">
         <div class="card-content">
           <div class="service-icon">📊</div>
           <h3 class="scramble-text">Project Management</h3>
           <p>We oversee timelines, communication, quality and progress. Full oversight from groundbreaking to ribbon cutting.</p>
         </div>
       </article>
-      <article class="service-card tilt-card-3d tilt-card-advanced fade-in-up stagger-4" data-magnetic="0.2">
+      <article class="service-card tilt-card-3d tilt-card-advanced flip-card fade-in-up stagger-4" data-magnetic="0.2" data-flip="true" data-back-content="<div class='card-back-content'><span class='card-back-icon'>✓</span><h4>Total Transparency</h4><p>No hidden costs, no surprises. Regular updates and honest communication always.</p><a href='contact.html' class='btn btn-sm'>Get Started</a></div>">
         <div class="card-content">
           <div class="service-icon">✓</div>
           <h3 class="scramble-text">Quality & Transparency</h3>
@@ -240,6 +248,27 @@
     </div>
     <div style="text-align:center;margin-top:50px;">
       <a href="projects.html" class="btn ghost">View All Projects →</a>
+    </div>
+  </section>
+
+  <!-- Before/After Showcase Section -->
+  <section id="showcase" class="section" data-nav-label="Showcase">
+    <div class="section-header reveal-section">
+      <p class="eyebrow">Transformations</p>
+      <h2 class="scramble-text">Before & After</h2>
+      <p>Drag the slider to see the remarkable transformations we've delivered for our clients.</p>
+    </div>
+    <div class="before-after-showcase">
+      <div class="before-after-slider" 
+           data-before="assets/02_Website_Heroes/Hero_3.png" 
+           data-after="assets/02_Website_Heroes/Hero_1.png"
+           data-before-label="Original"
+           data-after-label="Completed">
+      </div>
+      <div class="showcase-caption">
+        <h3>Cape Town Residential Renovation</h3>
+        <p>A complete transformation from outdated structure to modern luxury living space</p>
+      </div>
     </div>
   </section>
 
@@ -508,7 +537,28 @@
     // Show cookie consent after delay
     setTimeout(() => {
       document.getElementById('cookieConsent').classList.add('show');
+      
+      // Show welcome toast
+      if (window.Toast) {
+        setTimeout(() => {
+          Toast.info('Welcome to BuildBridge! Explore our services or start a chat.', {
+            title: '👋 Hello!',
+            duration: 6000
+          });
+        }, 2000);
+      }
     }, 3000);
+    
+    // Add click handler to WhatsApp button for toast
+    document.querySelectorAll('a[href*="wa.me"]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        if (window.Toast) {
+          Toast.success('Opening WhatsApp chat...', {
+            duration: 3000
+          });
+        }
+      });
+    });
   </script>
 
   <script src="scripts.js"></script>
@@ -516,6 +566,15 @@
   <script src="js/premium-effects.js"></script>
   <script src="js/advanced-animations.js"></script>
   <script src="js/fortune500-animations.js"></script>
+  <script src="js/webgl-hero.js"></script>
+  <script src="js/before-after-slider.js"></script>
+  <script src="js/toast-notifications.js"></script>
+  <script src="js/animated-icons.js"></script>
+  <script src="js/scroll-reveal-nav.js"></script>
+  <script src="js/card-flip-effects.js"></script>
+  <script src="js/text-spotlight.js"></script>
+  <script src="js/scroll-smear-effect.js"></script>
+  <script src="js/animated-lines.js"></script>
   <script>
     // Mobile menu toggle with animation
     function toggleMenu() {

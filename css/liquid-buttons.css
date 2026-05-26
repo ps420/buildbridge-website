@@ -1,0 +1,454 @@
+/* ========================================
+   LIQUID MORPHING BUTTONS v1.0
+   Fortune 500 Premium Button Interactions
+======================================== */
+
+.liquid-btn {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--chrome), var(--white), var(--chrome));
+  z-index: -2;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.liquid-btn::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: var(--white);
+  z-index: -1;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-btn:hover::before {
+  opacity: 1;
+}
+
+.liquid-btn:hover::after {
+  inset: 0;
+  background: transparent;
+}
+
+.liquid-btn:hover {
+  color: var(--black);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(201, 206, 214, 0.3);
+}
+
+/* Liquid Fill Effect */
+.liquid-fill-btn {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  border: 1px solid var(--chrome);
+  color: var(--white);
+  z-index: 1;
+}
+
+.liquid-fill-btn .liquid-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: var(--chrome);
+  transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
+}
+
+.liquid-fill-btn:hover .liquid-fill {
+  height: 100%;
+}
+
+.liquid-fill-btn:hover {
+  color: var(--black);
+}
+
+/* Morphing Border Button */
+.morph-border-btn {
+  position: relative;
+  background: transparent;
+  border: none;
+  color: var(--white);
+  padding: 16px 40px;
+}
+
+.morph-border-btn::before,
+.morph-border-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--chrome);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.morph-border-btn::before {
+  transform: rotate(0deg);
+}
+
+.morph-border-btn::after {
+  transform: rotate(0deg);
+}
+
+.morph-border-btn:hover::before {
+  transform: rotate(2deg) scale(1.02);
+  border-color: var(--white);
+}
+
+.morph-border-btn:hover::after {
+  transform: rotate(-2deg) scale(1.02);
+  border-color: var(--chrome);
+}
+
+.morph-border-btn:hover {
+  background: rgba(201, 206, 214, 0.1);
+}
+
+/* Elastic Button */
+.elastic-btn {
+  position: relative;
+  overflow: hidden;
+  background: var(--chrome);
+  color: var(--black);
+  border: none;
+  font-weight: 700;
+  transform-origin: center;
+  animation: elastic-idle 3s ease-in-out infinite;
+}
+
+@keyframes elastic-idle {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+.elastic-btn:active {
+  animation: elastic-click 0.4s ease;
+}
+
+@keyframes elastic-click {
+  0% { transform: scale(1); }
+  40% { transform: scale(0.95); }
+  80% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Glowing Pulse Button */
+.pulse-glow-btn {
+  position: relative;
+  background: var(--white);
+  color: var(--black);
+  border: none;
+  overflow: visible;
+}
+
+.pulse-glow-btn::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  background: linear-gradient(45deg, var(--chrome), var(--white), var(--chrome));
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  filter: blur(10px);
+  transition: opacity 0.3s ease;
+}
+
+.pulse-glow-btn::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, var(--chrome), var(--white), var(--chrome));
+  border-radius: inherit;
+  z-index: -1;
+  animation: pulse-glow-rotate 3s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.pulse-glow-btn:hover::before,
+.pulse-glow-btn:hover::after {
+  opacity: 1;
+}
+
+@keyframes pulse-glow-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Ripple Wave Button */
+.ripple-wave-btn {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  border: 1px solid var(--chrome);
+  color: var(--white);
+}
+
+.ripple-wave-btn .ripple-wave {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.3);
+  transform: scale(0);
+  animation: ripple-wave-anim 0.6s linear;
+  pointer-events: none;
+}
+
+@keyframes ripple-wave-anim {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Magnetic Liquid Button */
+.magnetic-liquid-btn {
+  position: relative;
+  background: linear-gradient(135deg, var(--gun), var(--slate));
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  color: var(--white);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.magnetic-liquid-btn .btn-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.magnetic-liquid-btn .liquid-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--chrome), var(--white));
+  transform: translateY(100%);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+
+.magnetic-liquid-btn:hover .liquid-bg {
+  transform: translateY(0);
+}
+
+.magnetic-liquid-btn:hover {
+  color: var(--black);
+}
+
+/* Neumorphic Button (Soft UI) */
+.neumorphic-btn {
+  background: linear-gradient(145deg, #1a1c21, #15171a);
+  border: none;
+  color: var(--chrome);
+  box-shadow: 
+    8px 8px 16px #0d0e11,
+    -8px -8px 16px #23252b;
+  transition: all 0.3s ease;
+}
+
+.neumorphic-btn:hover {
+  box-shadow: 
+    4px 4px 8px #0d0e11,
+    -4px -4px 8px #23252b;
+  transform: translateY(-2px);
+  color: var(--white);
+}
+
+.neumorphic-btn:active {
+  box-shadow: inset 4px 4px 8px #0d0e11, inset -4px -4px 8px #23252b;
+  transform: translateY(0);
+}
+
+/* Glassmorphism Button */
+.glass-btn {
+  background: rgba(201, 206, 214, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.1), 
+    transparent 50%,
+    rgba(255, 255, 255, 0.05));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glass-btn:hover::before {
+  opacity: 1;
+}
+
+.glass-btn:hover {
+  background: rgba(201, 206, 214, 0.15);
+  border-color: rgba(201, 206, 214, 0.4);
+  transform: translateY(-2px);
+}
+
+/* 3D Press Button */
+.press-3d-btn {
+  background: var(--chrome);
+  color: var(--black);
+  border: none;
+  box-shadow: 
+    0 4px 0 var(--slate),
+    0 5px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.1s ease;
+}
+
+.press-3d-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 0 var(--slate),
+    0 8px 15px rgba(0, 0, 0, 0.3);
+}
+
+.press-3d-btn:active {
+  transform: translateY(4px);
+  box-shadow: 
+    0 0 0 var(--slate),
+    0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Underline Expand Button */
+.underline-expand-btn {
+  background: transparent;
+  border: none;
+  color: var(--chrome);
+  padding: 10px 0;
+  position: relative;
+}
+
+.underline-expand-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--chrome);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateX(-50%);
+}
+
+.underline-expand-btn:hover::after {
+  width: 100%;
+}
+
+.underline-expand-btn:hover {
+  color: var(--white);
+}
+
+/* Split Text Button */
+.split-text-btn {
+  background: transparent;
+  border: 1px solid var(--chrome);
+  color: var(--white);
+  overflow: hidden;
+  position: relative;
+}
+
+.split-text-btn span {
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.split-text-btn:hover span {
+  transform: translateY(-100%);
+}
+
+.split-text-btn::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  transition: top 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.split-text-btn:hover::after {
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Button Group Styles */
+.btn-group {
+  display: flex;
+  gap: 0;
+}
+
+.btn-group .btn {
+  border-radius: 0;
+}
+
+.btn-group .btn:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.btn-group .btn:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+.btn-group .btn:not(:first-child) {
+  border-left: none;
+}
+
+/* Button Loader State */
+.btn-loading {
+  position: relative;
+  pointer-events: none;
+  color: transparent !important;
+}
+
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: btn-loader 0.8s linear infinite;
+  left: 50%;
+  top: 50%;
+  margin-left: -10px;
+  margin-top: -10px;
+}
+
+@keyframes btn-loader {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .liquid-btn,
+  .liquid-fill-btn,
+  .morph-border-btn,
+  .elastic-btn,
+  .pulse-glow-btn,
+  .ripple-wave-btn,
+  .magnetic-liquid-btn,
+  .neumorphic-btn,
+  .glass-btn,
+  .press-3d-btn,
+  .underline-expand-btn,
+  .split-text-btn {
+    padding: 14px 28px;
+    font-size: 13px;
+  }
+}

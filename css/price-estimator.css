@@ -1,0 +1,399 @@
+/* ========================================
+   PRICE ESTIMATOR WIDGET v1.0
+   Interactive Construction Cost Calculator
+======================================== */
+
+.price-estimator {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 50px;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.price-estimator::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-color), var(--text-primary));
+}
+
+.estimator-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.estimator-header h3 {
+  font-size: 28px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.estimator-header p {
+  color: var(--text-secondary);
+}
+
+/* Form Steps */
+.estimator-form {
+  position: relative;
+}
+
+.estimator-step {
+  display: none;
+  animation: step-fade-in 0.4s ease;
+}
+
+.estimator-step.active {
+  display: block;
+}
+
+@keyframes step-fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.estimator-step h4 {
+  font-size: 18px;
+  margin-bottom: 24px;
+  color: var(--text-secondary);
+}
+
+/* Option Cards */
+.estimator-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.estimator-option {
+  background: var(--input-bg);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  position: relative;
+}
+
+.estimator-option:hover {
+  border-color: var(--border-color);
+  transform: translateY(-2px);
+}
+
+.estimator-option.selected {
+  border-color: var(--accent-color);
+  background: rgba(201, 206, 214, 0.1);
+}
+
+.estimator-option-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.estimator-option-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+
+.estimator-option-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.estimator-option-check {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  color: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s ease;
+}
+
+.estimator-option.selected .estimator-option-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Range Sliders */
+.estimator-slider-group {
+  margin-bottom: 30px;
+}
+
+.estimator-slider-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.estimator-slider-label span:first-child {
+  color: var(--text-secondary);
+}
+
+.estimator-slider-label span:last-child {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+.estimator-slider {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--input-bg);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.estimator-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  cursor: pointer;
+  border: 3px solid var(--bg-primary);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.estimator-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.estimator-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  cursor: pointer;
+  border: 3px solid var(--bg-primary);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Progress Bar */
+.estimator-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 40px;
+}
+
+.estimator-progress-step {
+  flex: 1;
+  height: 4px;
+  background: var(--input-bg);
+  border-radius: 2px;
+  transition: all 0.4s ease;
+}
+
+.estimator-progress-step.completed {
+  background: var(--accent-color);
+}
+
+.estimator-progress-step.active {
+  background: linear-gradient(90deg, var(--accent-color), var(--text-primary));
+  animation: progress-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes progress-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Navigation Buttons */
+.estimator-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.estimator-nav button {
+  flex: 1;
+  padding: 16px 32px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.estimator-nav .btn-prev {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+.estimator-nav .btn-prev:hover {
+  border-color: var(--accent-color);
+  color: var(--text-primary);
+}
+
+.estimator-nav .btn-next {
+  background: var(--text-primary);
+  border: none;
+  color: var(--bg-primary);
+}
+
+.estimator-nav .btn-next:hover {
+  background: var(--accent-color);
+  transform: translateY(-2px);
+}
+
+.estimator-nav .btn-next:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Results Section */
+.estimator-result {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.estimator-result-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.estimator-result h4 {
+  font-size: 24px;
+  margin-bottom: 30px;
+  color: var(--text-primary);
+}
+
+.estimator-price {
+  font-size: 72px;
+  font-weight: 800;
+  font-family: 'Montserrat', sans-serif;
+  color: var(--accent-color);
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.estimator-price-range {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-bottom: 30px;
+}
+
+.estimator-breakdown {
+  background: var(--input-bg);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 30px 0;
+  text-align: left;
+}
+
+.estimator-breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.estimator-breakdown-item:last-child {
+  border-bottom: none;
+}
+
+.estimator-breakdown-item span:first-child {
+  color: var(--text-secondary);
+}
+
+.estimator-breakdown-item span:last-child {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.estimator-note {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 20px;
+}
+
+.estimator-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .price-estimator {
+    padding: 30px 20px;
+    margin: 0 16px;
+  }
+
+  .estimator-header h3 {
+    font-size: 22px;
+  }
+
+  .estimator-options {
+    grid-template-columns: 1fr;
+  }
+
+  .estimator-option {
+    padding: 20px;
+  }
+
+  .estimator-price {
+    font-size: 48px;
+  }
+
+  .estimator-actions {
+    flex-direction: column;
+  }
+
+  .estimator-nav {
+    flex-direction: column-reverse;
+  }
+}
+
+/* Animation for price reveal */
+@keyframes price-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  50% {
+    transform: scale(1.05) translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.estimator-price.animate {
+  animation: price-reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}

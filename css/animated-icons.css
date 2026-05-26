@@ -1,0 +1,461 @@
+/**
+ * BuildBridge Animated SVG Icon Styles
+ * Professional icon animations and styling
+ * Version: 1.0.0
+ */
+
+/* ========================================
+   ICON BASE STYLES
+======================================== */
+.icon-animated {
+  width: 48px;
+  height: 48px;
+  color: currentColor;
+}
+
+.icon-replaced {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.service-icon.icon-replaced .icon-animated {
+  width: 40px;
+  height: 40px;
+}
+
+.timeline-icon-inner.icon-replaced .icon-animated {
+  width: 24px;
+  height: 24px;
+}
+
+.contact-item .icon.icon-replaced .icon-animated {
+  width: 20px;
+  height: 20px;
+}
+
+/* ========================================
+   CONSULTATION ICON
+======================================== */
+.icon-consultation .icon-circle {
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: icon-draw 1s ease forwards;
+}
+
+.icon-consultation .icon-path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: icon-draw 1s ease 0.3s forwards;
+}
+
+.icon-consultation .icon-pulse {
+  transform-origin: center;
+  animation: icon-pulse 2s ease-in-out infinite;
+}
+
+/* ========================================
+   CONTRACTOR ICON
+======================================== */
+.icon-contractor .icon-handshake-left,
+.icon-contractor .icon-handshake-right {
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: icon-draw 0.8s ease forwards;
+}
+
+.icon-contractor .icon-handshake-right {
+  animation-delay: 0.2s;
+}
+
+.icon-contractor .icon-handshake-center {
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: icon-draw 0.6s ease 0.4s forwards;
+}
+
+.icon-contractor .icon-dot-left,
+.icon-contractor .icon-dot-right {
+  transform-origin: center;
+  animation: icon-pop 0.4s ease 0.6s backwards;
+}
+
+.icon-contractor .icon-dot-right {
+  animation-delay: 0.7s;
+}
+
+/* ========================================
+   MANAGEMENT ICON
+======================================== */
+.icon-management .icon-rect {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: icon-draw 1s ease forwards;
+}
+
+.icon-management .icon-chart {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: icon-draw 0.8s ease 0.5s forwards;
+}
+
+.icon-management .icon-point-1,
+.icon-management .icon-point-2,
+.icon-management .icon-point-3 {
+  transform-origin: center;
+  animation: icon-point-pop 0.3s ease backwards;
+}
+
+.icon-management .icon-point-1 { animation-delay: 1s; }
+.icon-management .icon-point-2 { animation-delay: 1.1s; }
+.icon-management .icon-point-3 { animation-delay: 1.2s; }
+
+/* ========================================
+   QUALITY ICON
+======================================== */
+.icon-quality .icon-shield {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: icon-draw 1.2s ease forwards;
+}
+
+.icon-quality .icon-check {
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  animation: icon-draw 0.5s ease 0.8s forwards;
+}
+
+/* ========================================
+   CHAT ICON
+======================================== */
+.icon-chat .icon-bubble {
+  stroke-dasharray: 150;
+  stroke-dashoffset: 150;
+  animation: icon-draw 1s ease forwards;
+}
+
+.icon-chat .icon-tail {
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  animation: icon-draw 0.4s ease 0.6s forwards;
+}
+
+.icon-chat .icon-line-1,
+.icon-chat .icon-line-2,
+.icon-chat .icon-line-3 {
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  animation: icon-draw 0.4s ease backwards;
+}
+
+.icon-chat .icon-line-1 { animation-delay: 0.8s; }
+.icon-chat .icon-line-2 { animation-delay: 0.9s; }
+.icon-chat .icon-line-3 { animation-delay: 1s; }
+
+/* ========================================
+   SEARCH ICON
+======================================== */
+.icon-search .icon-circle {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: icon-draw 0.8s ease forwards;
+  transform-origin: center;
+}
+
+.icon-search .icon-handle {
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  animation: icon-draw 0.4s ease 0.5s forwards;
+}
+
+.icon-search .icon-ring {
+  opacity: 0;
+  animation: icon-fade-in 0.5s ease 0.8s forwards;
+}
+
+/* ========================================
+   CLIPBOARD ICON
+======================================== */
+.icon-clipboard .icon-board {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: icon-draw 0.8s ease forwards;
+}
+
+.icon-clipboard .icon-clip {
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: icon-draw 0.5s ease 0.4s forwards;
+}
+
+.icon-clipboard .icon-check-1,
+.icon-clipboard .icon-check-2 {
+  stroke-dasharray: 20;
+  stroke-dashoffset: 20;
+  animation: icon-draw 0.3s ease 0.8s forwards;
+}
+
+.icon-clipboard .icon-check-2 {
+  animation-delay: 0.95s;
+}
+
+/* ========================================
+   SOCIAL ICONS
+======================================== */
+.icon-social {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+a:hover .icon-social {
+  transform: translateY(-2px);
+  color: #C9CED6;
+}
+
+/* ========================================
+   CONTACT ICONS
+======================================== */
+.icon-contact {
+  width: 20px;
+  height: 20px;
+}
+
+/* ========================================
+   ARROW ICONS
+======================================== */
+.icon-arrow,
+.icon-arrow-right {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+}
+
+.btn:hover .icon-arrow-right,
+a:hover .icon-arrow-right {
+  transform: translateX(4px);
+}
+
+/* ========================================
+   CHECK ICON
+======================================== */
+.icon-check {
+  width: 20px;
+  height: 20px;
+}
+
+.icon-check polyline {
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  animation: icon-check-draw 0.4s ease forwards;
+}
+
+@keyframes icon-check-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ========================================
+   ANIMATION KEYFRAMES
+======================================== */
+@keyframes icon-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes icon-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes icon-pop {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes icon-point-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes icon-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.5;
+  }
+}
+
+/* ========================================
+   HOVER ANIMATIONS
+======================================== */
+.service-card:hover .icon-consultation .icon-pulse {
+  animation-duration: 1s;
+}
+
+.service-card:hover .icon-contractor .icon-handshake-left {
+  animation: icon-handshake-left 0.6s ease;
+}
+
+.service-card:hover .icon-contractor .icon-handshake-right {
+  animation: icon-handshake-right 0.6s ease;
+}
+
+@keyframes icon-handshake-left {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(3px); }
+  50% { transform: translateX(0); }
+  75% { transform: translateX(3px); }
+}
+
+@keyframes icon-handshake-right {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  50% { transform: translateX(0); }
+  75% { transform: translateX(-3px); }
+}
+
+.service-card:hover .icon-management .icon-point-1,
+.service-card:hover .icon-management .icon-point-2,
+.service-card:hover .icon-management .icon-point-3 {
+  animation: icon-point-bounce 0.6s ease;
+}
+
+.service-card:hover .icon-management .icon-point-1 { animation-delay: 0s; }
+.service-card:hover .icon-management .icon-point-2 { animation-delay: 0.1s; }
+.service-card:hover .icon-management .icon-point-3 { animation-delay: 0.2s; }
+
+@keyframes icon-point-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.service-card:hover .icon-quality .icon-check {
+  animation: icon-check-bounce 0.5s ease;
+}
+
+@keyframes icon-check-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+/* ========================================
+   TIMELINE ICON ANIMATIONS
+======================================== */
+.timeline-item:hover .icon-chat .icon-line-1,
+.timeline-item:hover .icon-chat .icon-line-2,
+.timeline-item:hover .icon-chat .icon-line-3 {
+  animation: icon-line-wave 0.6s ease;
+}
+
+.timeline-item:hover .icon-chat .icon-line-1 { animation-delay: 0s; }
+.timeline-item:hover .icon-chat .icon-line-2 { animation-delay: 0.1s; }
+.timeline-item:hover .icon-chat .icon-line-3 { animation-delay: 0.2s; }
+
+@keyframes icon-line-wave {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(3px); }
+}
+
+.timeline-item:hover .icon-search .icon-circle {
+  animation: icon-search-pulse 0.8s ease;
+}
+
+@keyframes icon-search-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.timeline-item:hover .icon-clipboard .icon-check-1,
+.timeline-item:hover .icon-clipboard .icon-check-2 {
+  animation: icon-check-draw 0.4s ease;
+}
+
+/* ========================================
+   SVG ICON SIZING HELPERS
+======================================== */
+.icon-sm .icon-animated {
+  width: 24px;
+  height: 24px;
+}
+
+.icon-md .icon-animated {
+  width: 48px;
+  height: 48px;
+}
+
+.icon-lg .icon-animated {
+  width: 64px;
+  height: 64px;
+}
+
+/* ========================================
+   SOCIAL LINKS STYLING
+======================================== */
+.social-links a.icon-only {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.3s ease;
+}
+
+.social-links a.icon-only:hover {
+  background: rgba(201, 206, 214, 0.2);
+  color: #fff;
+  transform: translateY(-3px);
+}
+
+.social-links a.icon-only .icon-social {
+  width: 18px;
+  height: 18px;
+}
+
+/* ========================================
+   REDUCED MOTION
+======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .icon-animated *,
+  .icon-social,
+  .icon-contact,
+  .icon-arrow,
+  .icon-check {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  
+  .icon-animated .icon-pulse {
+    display: none;
+  }
+}

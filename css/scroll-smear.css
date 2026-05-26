@@ -1,0 +1,302 @@
+/* ========================================
+   BuildBridge - Scroll Smear / Motion Effects
+   Fortune 500-style velocity-based animations
+   Version 5.0 Professional Enhancement
+======================================== */
+
+/* Motion blur filter - applied via JS during scroll */
+[data-smear] {
+  will-change: transform, filter, opacity;
+  transition: filter 0.1s ease, transform 0.1s ease, opacity 0.1s ease;
+}
+
+/* Velocity tilt elements */
+[data-velocity-tilt] {
+  will-change: transform;
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease-out;
+}
+
+/* Motion trail effect */
+.motion-trail {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: rgba(201, 206, 214, 0.3);
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(4px);
+}
+
+.motion-trail::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  background: radial-gradient(circle, rgba(201, 206, 214, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+/* Cursor trail variants */
+.motion-trail.glow {
+  box-shadow: 
+    0 0 10px var(--chrome),
+    0 0 20px var(--chrome),
+    0 0 30px var(--chrome);
+}
+
+.motion-trail.rainbow {
+  background: linear-gradient(45deg, #ff0080, #ff8c00, #40e0d0, #ff0080);
+  background-size: 300% 300%;
+  animation: rainbow-shift 2s linear infinite;
+}
+
+@keyframes rainbow-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Speed lines effect */
+.speed-lines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9995;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  overflow: hidden;
+}
+
+.speed-lines.active {
+  opacity: 1;
+}
+
+.speed-line {
+  position: absolute;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(201, 206, 214, 0.1),
+    rgba(201, 206, 214, 0.2),
+    rgba(201, 206, 214, 0.1),
+    transparent
+  );
+  width: 2px;
+  height: 100px;
+  animation: speed-line-fall 0.5s linear infinite;
+}
+
+@keyframes speed-line-fall {
+  0% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+/* Scroll velocity scale effect */
+.velocity-scale {
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+}
+
+/* Skew based on velocity */
+.velocity-skew-element {
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+}
+
+/* Parallax layers with different speeds */
+.parallax-layer {
+  will-change: transform;
+}
+
+.parallax-slow {
+  --parallax-speed: 0.3;
+}
+
+.parallax-medium {
+  --parallax-speed: 0.6;
+}
+
+.parallax-fast {
+  --parallax-speed: 1;
+}
+
+/* Sticky parallax container */
+.parallax-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Scroll-linked opacity */
+.scroll-opacity {
+  transition: opacity 0.3s ease;
+}
+
+/* Depth layers for 3D effect */
+.depth-layer-1 { transform: translateZ(0); }
+.depth-layer-2 { transform: translateZ(50px); }
+.depth-layer-3 { transform: translateZ(100px); }
+
+/* Clip path reveal on scroll */
+.clip-reveal {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clip-reveal.revealed {
+  clip-path: inset(0 0 0 0);
+}
+
+.clip-reveal-up {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clip-reveal-up.revealed {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Mask image scroll reveal */
+.mask-reveal {
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 0%);
+  mask-image: linear-gradient(to bottom, black 0%, transparent 0%);
+  transition: mask-image 0.5s ease, -webkit-mask-image 0.5s ease;
+}
+
+.mask-reveal.revealed {
+  -webkit-mask-image: linear-gradient(to bottom, black 100%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 100%, transparent 100%);
+}
+
+/* Scroll-based rotation */
+.scroll-rotate {
+  will-change: transform;
+  transition: transform 0.1s linear;
+}
+
+/* Horizontal scroll section */
+.horizontal-scroll-section {
+  height: 300vh;
+  position: relative;
+}
+
+.horizontal-scroll-container {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.horizontal-scroll-track {
+  display: flex;
+  gap: 40px;
+  will-change: transform;
+}
+
+/* Scroll progress indicator for sections */
+.section-progress {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: rgba(201, 206, 214, 0.1);
+  z-index: 999;
+}
+
+.section-progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(to bottom, var(--chrome), var(--white));
+  transition: height 0.1s ease;
+  box-shadow: 0 0 10px var(--chrome);
+}
+
+/* Elastic scroll effect container */
+.elastic-scroll {
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Scroll snap container */
+.scroll-snap-container {
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 100vh;
+}
+
+.scroll-snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  min-height: 100vh;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  [data-smear],
+  [data-velocity-tilt],
+  .motion-trail,
+  .speed-lines,
+  .velocity-scale,
+  .velocity-skew-element,
+  .parallax-layer,
+  .scroll-opacity,
+  .clip-reveal,
+  .clip-reveal-up,
+  .mask-reveal,
+  .scroll-rotate,
+  .elastic-scroll {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+    filter: none !important;
+    clip-path: none !important;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+  }
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .speed-lines {
+    display: none;
+  }
+  
+  .parallax-layer {
+    transform: none !important;
+  }
+  
+  .horizontal-scroll-section {
+    height: auto;
+  }
+  
+  .horizontal-scroll-container {
+    position: relative;
+    height: auto;
+    flex-direction: column;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+  
+  .horizontal-scroll-track {
+    flex-direction: row;
+    gap: 20px;
+    padding: 0 20px;
+  }
+}

@@ -1,0 +1,292 @@
+/* ========================================
+   WebGL-Style Animated Mesh Gradient v8.0
+   Fortune 500 Premium Background Effect
+======================================== */
+
+.mesh-gradient-container {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  background: #0f0f10;
+}
+
+.mesh-gradient-container::before {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background: 
+    radial-gradient(ellipse 80% 50% at 20% 40%, rgba(42, 45, 52, 0.6) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(82, 88, 98, 0.4) 0%, transparent 40%),
+    radial-gradient(ellipse 70% 60% at 60% 80%, rgba(42, 45, 52, 0.5) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 30% 70%, rgba(201, 206, 214, 0.1) 0%, transparent 40%);
+  animation: mesh-blob-1 20s ease-in-out infinite;
+  filter: blur(60px);
+}
+
+.mesh-gradient-container::after {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background: 
+    radial-gradient(ellipse 70% 50% at 70% 30%, rgba(82, 88, 98, 0.5) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 60% at 30% 60%, rgba(42, 45, 52, 0.4) 0%, transparent 40%),
+    radial-gradient(ellipse 60% 50% at 80% 70%, rgba(201, 206, 214, 0.08) 0%, transparent 30%);
+  animation: mesh-blob-2 25s ease-in-out infinite reverse;
+  filter: blur(80px);
+}
+
+.mesh-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+  mix-blend-mode: screen;
+}
+
+.mesh-blob:nth-child(1) {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(42, 45, 52, 0.8) 0%, transparent 70%);
+  top: -10%;
+  left: -10%;
+  animation: float-blob-1 15s ease-in-out infinite;
+}
+
+.mesh-blob:nth-child(2) {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(82, 88, 98, 0.6) 0%, transparent 70%);
+  top: 40%;
+  right: -5%;
+  animation: float-blob-2 18s ease-in-out infinite;
+}
+
+.mesh-blob:nth-child(3) {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(201, 206, 214, 0.15) 0%, transparent 70%);
+  bottom: 10%;
+  left: 30%;
+  animation: float-blob-3 20s ease-in-out infinite;
+}
+
+.mesh-blob:nth-child(4) {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(42, 45, 52, 0.7) 0%, transparent 70%);
+  top: 20%;
+  right: 20%;
+  animation: float-blob-4 22s ease-in-out infinite;
+}
+
+@keyframes mesh-blob-1 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  25% { transform: translate(5%, 5%) rotate(2deg) scale(1.05); }
+  50% { transform: translate(-3%, 8%) rotate(-1deg) scale(0.95); }
+  75% { transform: translate(8%, -5%) rotate(1deg) scale(1.02); }
+}
+
+@keyframes mesh-blob-2 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  33% { transform: translate(-5%, 5%) rotate(-2deg) scale(1.03); }
+  66% { transform: translate(5%, -3%) rotate(1deg) scale(0.98); }
+}
+
+@keyframes float-blob-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(50px, 30px) scale(1.1); }
+  50% { transform: translate(-30px, 50px) scale(0.9); }
+  75% { transform: translate(40px, -40px) scale(1.05); }
+}
+
+@keyframes float-blob-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-40px, -30px) scale(1.15); }
+  66% { transform: translate(30px, -50px) scale(0.95); }
+}
+
+@keyframes float-blob-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(60px, -40px) scale(1.08); }
+}
+
+@keyframes float-blob-4 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-50px, 20px) scale(1.05); }
+  75% { transform: translate(30px, -30px) scale(0.92); }
+}
+
+/* Animated Grid Lines */
+.mesh-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(201, 206, 214, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 206, 214, 0.02) 1px, transparent 1px);
+  background-size: 80px 80px;
+  animation: grid-pulse 8s ease-in-out infinite;
+}
+
+@keyframes grid-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+/* Flowing Lines Animation */
+.flowing-lines {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.flow-line {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(201, 206, 214, 0.1) 20%, 
+    rgba(201, 206, 214, 0.2) 50%, 
+    rgba(201, 206, 214, 0.1) 80%, 
+    transparent 100%
+  );
+  animation: flow-line 15s linear infinite;
+}
+
+.flow-line:nth-child(1) { top: 20%; width: 100%; animation-duration: 20s; animation-delay: 0s; }
+.flow-line:nth-child(2) { top: 40%; width: 80%; left: 10%; animation-duration: 25s; animation-delay: -5s; }
+.flow-line:nth-child(3) { top: 60%; width: 60%; left: 20%; animation-duration: 18s; animation-delay: -10s; }
+.flow-line:nth-child(4) { top: 80%; width: 90%; left: 5%; animation-duration: 22s; animation-delay: -15s; }
+
+@keyframes flow-line {
+  0% { transform: translateX(-100%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateX(200%); opacity: 0; }
+}
+
+/* Floating Particles */
+.mesh-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.mesh-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(201, 206, 214, 0.3);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(201, 206, 214, 0.3);
+}
+
+.mesh-particle:nth-child(1) { left: 10%; top: 20%; animation: particle-drift 30s ease-in-out infinite; }
+.mesh-particle:nth-child(2) { left: 30%; top: 60%; animation: particle-drift 35s ease-in-out infinite 2s; }
+.mesh-particle:nth-child(3) { left: 50%; top: 30%; animation: particle-drift 28s ease-in-out infinite 4s; }
+.mesh-particle:nth-child(4) { left: 70%; top: 70%; animation: particle-drift 32s ease-in-out infinite 6s; }
+.mesh-particle:nth-child(5) { left: 90%; top: 40%; animation: particle-drift 40s ease-in-out infinite 8s; }
+.mesh-particle:nth-child(6) { left: 20%; top: 80%; animation: particle-drift 25s ease-in-out infinite 10s; }
+.mesh-particle:nth-child(7) { left: 80%; top: 10%; animation: particle-drift 33s ease-in-out infinite 12s; }
+
+@keyframes particle-drift {
+  0%, 100% { 
+    transform: translate(0, 0) scale(1); 
+    opacity: 0.3;
+  }
+  25% { 
+    transform: translate(100px, -50px) scale(1.2); 
+    opacity: 0.6;
+  }
+  50% { 
+    transform: translate(-50px, -100px) scale(0.8); 
+    opacity: 0.4;
+  }
+  75% { 
+    transform: translate(50px, 30px) scale(1.1); 
+    opacity: 0.5;
+  }
+}
+
+/* Interactive Glow on Mouse Move */
+.mesh-interactive-glow {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(201, 206, 214, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  transform: translate(-50%, -50%);
+}
+
+body:hover .mesh-interactive-glow {
+  opacity: 1;
+}
+
+/* Scan Line Effect */
+.mesh-scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(201, 206, 214, 0.1) 50%, 
+    transparent 100%
+  );
+  animation: scan-line 10s linear infinite;
+  opacity: 0.3;
+}
+
+@keyframes scan-line {
+  0% { top: -2px; }
+  100% { top: 100%; }
+}
+
+/* Vignette Overlay */
+.mesh-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(15, 15, 16, 0.8) 100%);
+  pointer-events: none;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .mesh-gradient-container::before,
+  .mesh-gradient-container::after,
+  .mesh-blob,
+  .flow-line,
+  .mesh-particle,
+  .mesh-scan-line {
+    animation: none !important;
+  }
+  
+  .mesh-blob {
+    opacity: 0.3;
+  }
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+  .mesh-blob {
+    opacity: 0.3;
+    filter: blur(60px);
+  }
+  
+  .mesh-blob:nth-child(1),
+  .mesh-blob:nth-child(2),
+  .mesh-blob:nth-child(3),
+  .mesh-blob:nth-child(4) {
+    width: 300px;
+    height: 300px;
+  }
+  
+  .mesh-particle {
+    display: none;
+  }
+}

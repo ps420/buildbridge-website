@@ -1,0 +1,361 @@
+/* ========================================
+   Scroll Velocity Effects v8.0
+   Dynamic animations based on scroll speed
+======================================== */
+
+/* Base velocity variables */
+:root {
+  --scroll-velocity: 0;
+  --scroll-direction: 0;
+  --skew-amount: 0deg;
+  --scale-velocity: 1;
+}
+
+/* Velocity Skew Container */
+.velocity-container {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+/* Dynamic Skew Effect */
+.velocity-skew-dynamic {
+  transition: transform 0.15s ease-out;
+  will-change: transform;
+}
+
+.velocity-skew-dynamic.scrolling-up {
+  transform: skewY(calc(var(--scroll-velocity) * 0.02deg));
+}
+
+.velocity-skew-dynamic.scrolling-down {
+  transform: skewY(calc(var(--scroll-velocity) * -0.02deg));
+}
+
+/* Scale on Scroll Velocity */
+.velocity-scale {
+  transition: transform 0.2s ease-out;
+  will-change: transform;
+}
+
+.velocity-scale.velocity-active {
+  transform: scale(calc(1 - var(--scroll-velocity) * 0.001));
+}
+
+/* Blur on High Velocity */
+.velocity-blur {
+  transition: filter 0.3s ease-out;
+}
+
+.velocity-blur.velocity-active {
+  filter: blur(calc(var(--scroll-velocity) * 0.05px));
+}
+
+/* Opacity on Scroll Velocity */
+.velocity-opacity {
+  transition: opacity 0.2s ease-out;
+}
+
+.velocity-opacity.velocity-active {
+  opacity: calc(1 - var(--scroll-velocity) * 0.002);
+}
+
+/* Stretched Text Effect */
+.velocity-stretch {
+  display: inline-block;
+  transition: transform 0.15s ease-out;
+  will-change: transform;
+}
+
+.velocity-stretch.velocity-active {
+  transform: scaleY(calc(1 + var(--scroll-velocity) * 0.001));
+}
+
+/* Parallax Layers with Velocity */
+.velocity-parallax {
+  transition: transform 0.1s ease-out;
+  will-change: transform;
+}
+
+.velocity-parallax.layer-1 {
+  transform: translateY(calc(var(--scroll-velocity) * 0.5px));
+}
+
+.velocity-parallax.layer-2 {
+  transform: translateY(calc(var(--scroll-velocity) * 1px));
+}
+
+.velocity-parallax.layer-3 {
+  transform: translateY(calc(var(--scroll-velocity) * 1.5px));
+}
+
+/* Rotation on Velocity */
+.velocity-rotate {
+  transition: transform 0.2s ease-out;
+  will-change: transform;
+}
+
+.velocity-rotate.velocity-active {
+  transform: rotate(calc(var(--scroll-velocity) * 0.1deg));
+}
+
+/* Elastic Snap Back */
+.velocity-elastic {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* Blur Depth Effect */
+.blur-depth {
+  position: relative;
+}
+
+.blur-depth::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  background: inherit;
+  filter: blur(20px);
+  opacity: calc(var(--scroll-velocity) * 0.005);
+  z-index: -1;
+  transition: opacity 0.3s ease;
+}
+
+/* Speed Lines Effect */
+.speed-lines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.speed-lines.active {
+  opacity: calc(var(--scroll-velocity) * 0.003);
+}
+
+.speed-line {
+  position: absolute;
+  width: 2px;
+  height: 100px;
+  background: linear-gradient(to bottom, transparent, rgba(201, 206, 214, 0.3), transparent);
+  animation: speed-line-fall 0.5s linear infinite;
+}
+
+.speed-line:nth-child(1) { left: 10%; animation-delay: 0s; }
+.speed-line:nth-child(2) { left: 25%; animation-delay: 0.1s; }
+.speed-line:nth-child(3) { left: 40%; animation-delay: 0.2s; }
+.speed-line:nth-child(4) { left: 60%; animation-delay: 0.15s; }
+.speed-line:nth-child(5) { left: 75%; animation-delay: 0.05s; }
+.speed-line:nth-child(6) { left: 90%; animation-delay: 0.25s; }
+
+@keyframes speed-line-fall {
+  0% { transform: translateY(-100vh); }
+  100% { transform: translateY(100vh); }
+}
+
+/* Distortion Grid Effect */
+.distortion-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  pointer-events: none;
+  opacity: calc(var(--scroll-velocity) * 0.002);
+  transition: opacity 0.2s ease;
+}
+
+.distortion-cell {
+  border: 1px solid rgba(201, 206, 214, 0.05);
+  transition: transform 0.2s ease-out;
+}
+
+.distortion-cell.warp {
+  transform: scale(0.95);
+  background: rgba(201, 206, 214, 0.02);
+}
+
+/* Scroll Momentum Indicator */
+.momentum-indicator {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 100px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 3px;
+  z-index: 999;
+  overflow: hidden;
+}
+
+.momentum-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, var(--chrome), var(--white));
+  transition: height 0.1s ease-out;
+  height: calc(var(--scroll-velocity) * 2%);
+  max-height: 100%;
+  border-radius: 3px;
+}
+
+.momentum-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, transparent, rgba(255, 255, 255, 0.5));
+  animation: momentum-pulse 1s ease-in-out infinite;
+}
+
+@keyframes momentum-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Velocity Border Glow */
+.velocity-glow {
+  position: relative;
+  transition: box-shadow 0.2s ease-out;
+}
+
+.velocity-glow.velocity-active::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(45deg, 
+    rgba(201, 206, 214, calc(var(--scroll-velocity) * 0.01)), 
+    transparent, 
+    rgba(201, 206, 214, calc(var(--scroll-velocity) * 0.01))
+  );
+  z-index: -1;
+  opacity: calc(var(--scroll-velocity) * 0.005);
+}
+
+/* Marquee Speed Boost */
+.marquee-velocity-boost {
+  --base-speed: 40;
+  --boost-speed: calc(var(--base-speed) + var(--scroll-velocity) * 0.5);
+}
+
+.marquee-velocity-boost .marquee-track {
+  animation-duration: calc(60s / var(--boost-speed));
+}
+
+/* Scroll Direction Indicators */
+.scroll-indicator {
+  position: fixed;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 60px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.scroll-arrow {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  opacity: 0.3;
+  transition: all 0.3s ease;
+}
+
+.scroll-arrow.up {
+  border-bottom: 8px solid var(--chrome);
+  transform: translateY(calc(var(--scroll-velocity) * var(--scroll-direction) * 0.1px));
+  opacity: calc(0.3 + var(--scroll-velocity) * var(--scroll-direction) * 0.01);
+}
+
+.scroll-arrow.down {
+  border-top: 8px solid var(--chrome);
+  transform: translateY(calc(var(--scroll-velocity) * var(--scroll-direction) * -0.1px));
+  opacity: calc(0.3 - var(--scroll-velocity) * var(--scroll-direction) * 0.01);
+}
+
+/* Weight Shift Typography */
+.weight-shift-text {
+  font-variation-settings: 'wght' calc(400 + var(--scroll-velocity) * 2);
+  transition: font-variation-settings 0.1s ease-out;
+}
+
+/* Letter Spacing Expansion */
+.tracking-expand {
+  transition: letter-spacing 0.2s ease-out;
+}
+
+.tracking-expand.velocity-active {
+  letter-spacing: calc(0.02em + var(--scroll-velocity) * 0.001em);
+}
+
+/* Image Slice Effect */
+.image-slice-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-slice {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.image-slice:nth-child(1) { clip-path: polygon(0 0, 25% 0, 25% 100%, 0 100%); transform: translateX(calc(var(--scroll-velocity) * 0.5px)); }
+.image-slice:nth-child(2) { clip-path: polygon(25% 0, 50% 0, 50% 100%, 25% 100%); transform: translateX(calc(var(--scroll-velocity) * 0.3px)); }
+.image-slice:nth-child(3) { clip-path: polygon(50% 0, 75% 0, 75% 100%, 50% 100%); transform: translateX(calc(var(--scroll-velocity) * -0.3px)); }
+.image-slice:nth-child(4) { clip-path: polygon(75% 0, 100% 0, 100% 100%, 75% 100%); transform: translateX(calc(var(--scroll-velocity) * -0.5px)); }
+
+/* Section Velocity Trigger */
+.section-velocity-trigger {
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.section-velocity-trigger.fast-scroll {
+  opacity: 0.5;
+  transform: scale(0.98);
+  filter: blur(2px);
+}
+
+/* Velocity Responsive */
+@media (prefers-reduced-motion: reduce) {
+  .velocity-skew-dynamic,
+  .velocity-scale,
+  .velocity-blur,
+  .velocity-opacity,
+  .velocity-stretch,
+  .velocity-parallax,
+  .velocity-rotate,
+  .velocity-elastic {
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+  }
+  
+  .speed-lines,
+  .momentum-indicator,
+  .scroll-indicator {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .momentum-indicator,
+  .scroll-indicator {
+    display: none;
+  }
+  
+  .speed-lines {
+    display: none;
+  }
+}

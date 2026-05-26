@@ -1,0 +1,227 @@
+/* ========================================
+   BuildBridge - Scroll Reveal Navigation
+   Fortune 500-style section navigation
+   Version 5.0 Professional Enhancement
+======================================== */
+
+.scroll-reveal-nav {
+  position: fixed;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%) translateX(100px);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 30px 15px;
+  background: rgba(15, 15, 16, 0.8);
+  backdrop-filter: blur(20px);
+  border-radius: 30px;
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.scroll-reveal-nav.visible {
+  transform: translateY(-50%) translateX(0);
+  opacity: 1;
+}
+
+/* Progress line background */
+.scroll-nav-line {
+  position: absolute;
+  left: 50%;
+  top: 30px;
+  bottom: 30px;
+  width: 2px;
+  background: rgba(201, 206, 214, 0.1);
+  transform: translateX(-50%);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.scroll-nav-line::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--progress, 0%);
+  background: linear-gradient(to bottom, var(--chrome), var(--white));
+  transition: height 0.1s ease;
+  box-shadow: 0 0 10px var(--chrome);
+}
+
+/* Navigation items */
+.scroll-nav-item {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: transparent;
+  border: 2px solid rgba(201, 206, 214, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.scroll-nav-item:hover {
+  border-color: var(--chrome);
+  transform: scale(1.2);
+}
+
+.scroll-nav-item.active {
+  border-color: var(--white);
+  background: var(--white);
+  box-shadow: 0 0 20px rgba(201, 206, 214, 0.5);
+}
+
+.scroll-nav-item.in-view {
+  border-color: var(--chrome);
+}
+
+.scroll-nav-item.clicked {
+  animation: nav-pulse 0.3s ease;
+}
+
+@keyframes nav-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+
+/* Progress ring SVG */
+.scroll-nav-progress {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.scroll-nav-progress circle {
+  fill: none;
+  stroke: var(--chrome);
+  stroke-width: 2;
+  stroke-dasharray: 88; /* 2 * PI * 14 */
+  stroke-dashoffset: 88;
+  transition: stroke-dashoffset 0.3s ease;
+}
+
+/* Tooltip */
+.scroll-nav-tooltip {
+  position: absolute;
+  right: 35px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--gun);
+  padding: 8px 16px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--chrome);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(201, 206, 214, 0.2);
+}
+
+.scroll-nav-item:hover .scroll-nav-tooltip,
+.scroll-nav-item.active .scroll-nav-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(-5px);
+}
+
+/* Alternative horizontal variant */
+.scroll-reveal-nav.horizontal {
+  right: auto;
+  left: 50%;
+  top: auto;
+  bottom: 30px;
+  transform: translateX(-50%) translateY(100px);
+  flex-direction: row;
+  padding: 15px 30px;
+}
+
+.scroll-reveal-nav.horizontal.visible {
+  transform: translateX(-50%) translateY(0);
+}
+
+.scroll-reveal-nav.horizontal .scroll-nav-line {
+  left: 30px;
+  right: 30px;
+  top: 50%;
+  bottom: auto;
+  width: auto;
+  height: 2px;
+  transform: translateY(-50%);
+}
+
+.scroll-reveal-nav.horizontal .scroll-nav-line::before {
+  width: var(--progress, 0%);
+  height: 100%;
+}
+
+.scroll-reveal-nav.horizontal .scroll-nav-tooltip {
+  right: auto;
+  top: auto;
+  bottom: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.scroll-reveal-nav.horizontal .scroll-nav-item:hover .scroll-nav-tooltip,
+.scroll-reveal-nav.horizontal .scroll-nav-item.active .scroll-nav-tooltip {
+  transform: translateX(-50%) translateY(-5px);
+}
+
+/* Screen reader only text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .scroll-reveal-nav {
+    right: 10px;
+    gap: 15px;
+    padding: 20px 10px;
+  }
+  
+  .scroll-nav-item {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .scroll-nav-tooltip {
+    display: none;
+  }
+  
+  .scroll-reveal-nav.horizontal {
+    bottom: 10px;
+    padding: 10px 20px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal-nav {
+    transition: none;
+  }
+  
+  .scroll-nav-item {
+    transition: none;
+  }
+}

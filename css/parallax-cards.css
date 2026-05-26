@@ -1,0 +1,274 @@
+/* ========================================
+   PARALLAX CARDS v1.0
+   Scroll-Triggered Depth Effect Cards
+======================================== */
+
+.parallax-card-section {
+  padding: 120px 0;
+  overflow: hidden;
+}
+
+.parallax-cards-container {
+  display: flex;
+  gap: 30px;
+  padding: 0 70px;
+  perspective: 1000px;
+}
+
+/* Individual Parallax Card */
+.parallax-card {
+  flex: 1;
+  min-height: 500px;
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+}
+
+.parallax-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.parallax-card-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translateZ(-50px) scale(1.1);
+}
+
+.parallax-card-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 40px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(15, 15, 16, 0.8) 50%,
+    rgba(15, 15, 16, 0.98) 100%
+  );
+  transform: translateZ(30px);
+}
+
+.parallax-card-number {
+  font-size: 80px;
+  font-weight: 800;
+  font-family: 'Montserrat', sans-serif;
+  color: var(--accent-color);
+  opacity: 0.3;
+  line-height: 1;
+  margin-bottom: -20px;
+  transform: translateZ(50px);
+}
+
+.parallax-card-title {
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-family: 'Montserrat', sans-serif;
+  transform: translateZ(40px);
+}
+
+.parallax-card-description {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.7;
+  transform: translateZ(30px);
+}
+
+/* Card depth variations */
+.parallax-card:nth-child(1) { --depth: 0.3; }
+.parallax-card:nth-child(2) { --depth: 0.5; }
+.parallax-card:nth-child(3) { --depth: 0.7; }
+
+/* Hover effects */
+.parallax-card:hover .parallax-card-image {
+  transform: translateZ(-30px) scale(1.15);
+}
+
+.parallax-card:hover .parallax-card-content {
+  transform: translateZ(50px);
+}
+
+/* Staggered animation on scroll */
+.parallax-card {
+  opacity: 0;
+  transform: translateY(100px) rotateX(10deg);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.parallax-card.visible {
+  opacity: 1;
+  transform: translateY(0) rotateX(0);
+}
+
+.parallax-card:nth-child(1).visible { transition-delay: 0s; }
+.parallax-card:nth-child(2).visible { transition-delay: 0.15s; }
+.parallax-card:nth-child(3).visible { transition-delay: 0.3s; }
+
+/* Floating elements inside cards */
+.parallax-card-floating {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: var(--accent-color);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  transform: translateZ(80px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: float-element 4s ease-in-out infinite;
+}
+
+@keyframes float-element {
+  0%, 100% { transform: translateZ(80px) translateY(0); }
+  50% { transform: translateZ(80px) translateY(-10px); }
+}
+
+.parallax-card:nth-child(1) .parallax-card-floating {
+  top: 30px;
+  right: 30px;
+  animation-delay: 0s;
+}
+
+.parallax-card:nth-child(2) .parallax-card-floating {
+  top: 50px;
+  left: 30px;
+  animation-delay: 0.5s;
+}
+
+.parallax-card:nth-child(3) .parallax-card-floating {
+  bottom: 150px;
+  right: 30px;
+  animation-delay: 1s;
+}
+
+/* Card border glow on scroll */
+.parallax-card::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, var(--accent-color), transparent, var(--accent-color));
+  border-radius: 18px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.parallax-card.visible::before {
+  opacity: 0.5;
+}
+
+/* Grid Layout Alternative */
+.parallax-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  padding: 0 70px;
+}
+
+.parallax-cards-grid .parallax-card {
+  min-height: 400px;
+}
+
+/* Featured Card (larger) */
+.parallax-card.featured {
+  grid-column: span 2;
+  min-height: 450px;
+}
+
+.parallax-card.featured .parallax-card-title {
+  font-size: 32px;
+}
+
+.parallax-card.featured .parallax-card-description {
+  font-size: 16px;
+  max-width: 400px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .parallax-cards-container {
+    flex-direction: column;
+    padding: 0 40px;
+  }
+  
+  .parallax-card {
+    min-height: 400px;
+  }
+  
+  .parallax-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 40px;
+  }
+  
+  .parallax-card.featured {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .parallax-cards-container,
+  .parallax-cards-grid {
+    padding: 0 20px;
+    gap: 20px;
+  }
+  
+  .parallax-card {
+    min-height: 350px;
+  }
+  
+  .parallax-card-content {
+    padding: 30px;
+  }
+  
+  .parallax-card-number {
+    font-size: 60px;
+  }
+  
+  .parallax-card-title {
+    font-size: 20px;
+  }
+  
+  .parallax-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .parallax-card.featured {
+    grid-column: span 1;
+  }
+  
+  .parallax-card-floating {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .parallax-card {
+    transform: none;
+    transition: opacity 0.5s ease;
+  }
+  
+  .parallax-card-image {
+    transform: none;
+  }
+  
+  .parallax-card-floating {
+    animation: none;
+  }
+}
