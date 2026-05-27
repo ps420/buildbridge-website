@@ -1,0 +1,323 @@
+/**
+ * BuildBridge - Morphing SVG Shapes v17.1
+ * Organic shape morphing animations for premium visual appeal
+ * Fortune 500 Quality Shape Transformations
+ */
+
+/* ============================================
+   MORPHING SVG CONTAINER
+   ============================================ */
+
+.morphing-shapes-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.morphing-shape {
+  position: absolute;
+  opacity: 0.6;
+  mix-blend-mode: screen;
+}
+
+/* ============================================
+   SHAPE VARIANTS
+   ============================================ */
+
+.morphing-shape--1 {
+  top: 10%;
+  left: -5%;
+  width: 500px;
+  height: 500px;
+  animation: shape-morph-1 20s ease-in-out infinite;
+}
+
+.morphing-shape--2 {
+  top: 50%;
+  right: -10%;
+  width: 400px;
+  height: 400px;
+  animation: shape-morph-2 18s ease-in-out infinite;
+}
+
+.morphing-shape--3 {
+  bottom: 5%;
+  left: 30%;
+  width: 350px;
+  height: 350px;
+  animation: shape-morph-3 22s ease-in-out infinite;
+}
+
+/* ============================================
+   SVG PATH ANIMATIONS
+   ============================================ */
+
+.morphing-shape path {
+  fill: url(#shape-gradient-1);
+  animation: color-shift 10s ease-in-out infinite;
+}
+
+.morphing-shape--2 path {
+  fill: url(#shape-gradient-2);
+  animation-delay: -3s;
+}
+
+.morphing-shape--3 path {
+  fill: url(#shape-gradient-3);
+  animation-delay: -6s;
+}
+
+/* ============================================
+   LIQUID BLOB EFFECTS
+   ============================================ */
+
+.liquid-blob {
+  position: absolute;
+  filter: blur(1px);
+}
+
+.liquid-blob svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================================
+   FLOATING DECORATION SHAPES
+   ============================================ */
+
+.floating-decoration {
+  position: absolute;
+  pointer-events: none;
+}
+
+.floating-decoration--hexagon {
+  width: 60px;
+  height: 60px;
+  opacity: 0.3;
+  animation: float-rotate 15s ease-in-out infinite;
+}
+
+.floating-decoration--triangle {
+  width: 40px;
+  height: 40px;
+  opacity: 0.2;
+  animation: float-rotate 12s ease-in-out infinite reverse;
+}
+
+.floating-decoration--diamond {
+  width: 50px;
+  height: 50px;
+  opacity: 0.25;
+  animation: float-rotate 18s ease-in-out infinite;
+}
+
+/* ============================================
+   ORGANIC BACKGROUND PATTERNS
+   ============================================ */
+
+.organic-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0C13.432 0 0 13.432 0 30s13.432 30 30 30 30-13.432 30-30S46.568 0 30 0zm0 50c-11.046 0-20-8.954-20-20s8.954-20 20-20 20 8.954 20 20-8.954 20-20 20z' fill='%23ffc107' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E");
+  animation: pattern-drift 60s linear infinite;
+}
+
+/* ============================================
+   MORPHING TEXT EFFECT
+   ============================================ */
+
+.morphing-text-container {
+  position: relative;
+  display: inline-block;
+}
+
+.morphing-text-bg {
+  position: absolute;
+  inset: -20px;
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 152, 0, 0.05));
+  border-radius: 20px;
+  filter: blur(20px);
+  animation: text-bg-morph 8s ease-in-out infinite;
+}
+
+/* ============================================
+   SHAPE REVEAL ANIMATIONS
+   ============================================ */
+
+.shape-reveal {
+  opacity: 0;
+  transform: scale(0.8) rotate(-10deg);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.shape-reveal.visible {
+  opacity: 0.6;
+  transform: scale(1) rotate(0deg);
+}
+
+/* ============================================
+   HOVER MORPH EFFECTS
+   ============================================ */
+
+.hover-morph {
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hover-morph:hover {
+  transform: scale(1.05) rotate(2deg);
+  filter: brightness(1.2);
+}
+
+/* ============================================
+   GRADIENT DEFINITIONS
+   ============================================ */
+
+.shape-gradients {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* ============================================
+   KEYFRAME ANIMATIONS
+   ============================================ */
+
+@keyframes shape-morph-1 {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    filter: blur(0px);
+  }
+  25% {
+    transform: translate(30px, -20px) rotate(5deg) scale(1.1);
+    filter: blur(2px);
+  }
+  50% {
+    transform: translate(-20px, 30px) rotate(-3deg) scale(0.95);
+    filter: blur(0px);
+  }
+  75% {
+    transform: translate(20px, 20px) rotate(2deg) scale(1.05);
+    filter: blur(1px);
+  }
+}
+
+@keyframes shape-morph-2 {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  33% {
+    transform: translate(-40px, 30px) rotate(-8deg) scale(1.15);
+  }
+  66% {
+    transform: translate(30px, -40px) rotate(5deg) scale(0.9);
+  }
+}
+
+@keyframes shape-morph-3 {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(0, -50px) rotate(10deg);
+  }
+}
+
+@keyframes color-shift {
+  0%, 100% {
+    filter: hue-rotate(0deg) saturate(1);
+  }
+  50% {
+    filter: hue-rotate(15deg) saturate(1.2);
+  }
+}
+
+@keyframes float-rotate {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-15px) rotate(90deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(180deg);
+  }
+  75% {
+    transform: translateY(-25px) rotate(270deg);
+  }
+}
+
+@keyframes pattern-drift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 60px 60px;
+  }
+}
+
+@keyframes text-bg-morph {
+  0%, 100% {
+    border-radius: 20px 40px 30px 50px;
+    transform: scale(1);
+  }
+  25% {
+    border-radius: 40px 20px 50px 30px;
+    transform: scale(1.05);
+  }
+  50% {
+    border-radius: 30px 50px 20px 40px;
+    transform: scale(0.95);
+  }
+  75% {
+    border-radius: 50px 30px 40px 20px;
+    transform: scale(1.02);
+  }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .morphing-shape--1 {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .morphing-shape--2 {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .morphing-shape--3 {
+    width: 180px;
+    height: 180px;
+  }
+  
+  .floating-decoration {
+    display: none;
+  }
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .morphing-shape,
+  .liquid-blob,
+  .floating-decoration,
+  .organic-pattern,
+  .morphing-text-bg {
+    animation: none !important;
+  }
+  
+  .shape-reveal {
+    opacity: 0.6;
+    transform: none;
+  }
+}

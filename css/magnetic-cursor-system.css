@@ -1,0 +1,348 @@
+/**
+ * BuildBridge - Magnetic Cursor System v17.4
+ * Magnetic attraction effects for interactive elements
+ * Fortune 500 Quality Cursor Interactions
+ */
+
+/* ============================================
+   CUSTOM CURSOR
+   ============================================ */
+
+.custom-cursor {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ffc107;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: 
+    width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.3s ease,
+    border-color 0.3s ease,
+    mix-blend-mode 0.3s ease;
+  mix-blend-mode: difference;
+}
+
+.custom-cursor.hover {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 193, 7, 0.1);
+  border-color: rgba(255, 193, 7, 0.5);
+}
+
+.custom-cursor.click {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 193, 7, 0.3);
+  border-color: #ffc107;
+}
+
+.custom-cursor.hide {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+}
+
+/* Cursor dot */
+.custom-cursor-dot {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  background: #ffc107;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease;
+}
+
+/* ============================================
+   MAGNETIC ELEMENTS
+   ============================================ */
+
+.magnetic {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-btn {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 193, 7, 0.3) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.magnetic-btn:hover::before {
+  opacity: 1;
+}
+
+/* Magnetic link underline effect */
+.magnetic-link {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.magnetic-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #ffc107;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Magnetic circle effect */
+.magnetic-circle {
+  position: relative;
+}
+
+.magnetic-circle::before {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 50%;
+  transform: scale(0.8);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-circle:hover::before {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* ============================================
+   STICKY CURSOR EFFECTS
+   ============================================ */
+
+.cursor-sticky {
+  position: relative;
+}
+
+.cursor-sticky::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 193, 7, 0.1) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.cursor-sticky:hover::before {
+  opacity: 1;
+}
+
+/* ============================================
+   CURSOR TRAIL EFFECT
+   ============================================ */
+
+.cursor-trail {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 193, 7, 0.4);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  animation: trail-fade 0.5s ease forwards;
+}
+
+@keyframes trail-fade {
+  0% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+}
+
+/* ============================================
+   CURSOR-FOLLOWING ELEMENTS
+   ============================================ */
+
+.cursor-follower {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9997;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+}
+
+.cursor-follower.visible {
+  opacity: 1;
+}
+
+.cursor-follower--view {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255, 193, 7, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f0f10;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.cursor-follower--drag {
+  width: 100px;
+  height: 40px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: #fff;
+  gap: 5px;
+}
+
+.cursor-follower--drag::before,
+.cursor-follower--drag::after {
+  content: '←';
+  font-size: 10px;
+}
+
+.cursor-follower--drag::after {
+  content: '→';
+}
+
+/* ============================================
+   TEXT MAGNETIC EFFECT
+   ============================================ */
+
+.magnetic-text {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.magnetic-text .char {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+/* ============================================
+   CURSOR BLEND MODES
+   ============================================ */
+
+.cursor-exclusion {
+  mix-blend-mode: exclusion;
+}
+
+.cursor-difference {
+  mix-blend-mode: difference;
+}
+
+/* ============================================
+   HOVER STATE INDICATORS
+   ============================================ */
+
+[data-cursor="pointer"] {
+  cursor: none;
+}
+
+[data-cursor="text"] {
+  cursor: none;
+}
+
+[data-cursor="view"] {
+  cursor: none;
+}
+
+[data-cursor="drag"] {
+  cursor: none;
+}
+
+/* ============================================
+   CURSOR-LOCKED SECTIONS
+   ============================================ */
+
+.cursor-locked {
+  cursor: none !important;
+}
+
+.cursor-locked * {
+  cursor: none !important;
+}
+
+/* ============================================
+   RESPONSIVE - Disable on touch devices
+   ============================================ */
+
+@media (pointer: coarse) {
+  .custom-cursor,
+  .custom-cursor-dot,
+  .cursor-follower {
+    display: none !important;
+  }
+  
+  [data-cursor] {
+    cursor: auto !important;
+  }
+  
+  .magnetic {
+    transform: none !important;
+  }
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .custom-cursor,
+  .custom-cursor-dot {
+    transition: none !important;
+  }
+  
+  .magnetic,
+  .magnetic-btn,
+  .magnetic-link::after {
+    transition: none !important;
+  }
+  
+  .cursor-trail {
+    display: none;
+  }
+}

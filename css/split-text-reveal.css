@@ -1,0 +1,406 @@
+/**
+ * BuildBridge - Split Text Reveal v17.2
+ * Character-by-character text reveal animations
+ * Fortune 500 Quality Typography Animations
+ */
+
+/* ============================================
+   SPLIT TEXT BASE
+   ============================================ */
+
+.split-text {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.split-text .char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+.split-text .word {
+  display: inline-block;
+  overflow: hidden;
+  margin-right: 0.25em;
+}
+
+.split-text .word:last-child {
+  margin-right: 0;
+}
+
+.split-text .line {
+  display: block;
+  overflow: hidden;
+}
+
+/* ============================================
+   REVEAL ANIMATION TYPES
+   ============================================ */
+
+/* Character reveal from bottom */
+.split-text--reveal-up .char {
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.split-text--reveal-up.revealed .char {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Character reveal from left */
+.split-text--reveal-left .char {
+  transform: translateX(-50px);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.split-text--reveal-left.revealed .char {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Character scale reveal */
+.split-text--reveal-scale .char {
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.split-text--reveal-scale.revealed .char {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* Character rotate reveal */
+.split-text--reveal-rotate .char {
+  transform: rotateX(-90deg) translateY(20px);
+  opacity: 0;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: center bottom;
+}
+
+.split-text--reveal-rotate.revealed .char {
+  transform: rotateX(0) translateY(0);
+  opacity: 1;
+}
+
+/* Character blur reveal */
+.split-text--reveal-blur .char {
+  filter: blur(10px);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: filter 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.split-text--reveal-blur.revealed .char {
+  filter: blur(0);
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   WORD-LEVEL REVEALS
+   ============================================ */
+
+/* Word slide up */
+.split-text--word-up .word {
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.split-text--word-up.revealed .word {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Word fade in with delay */
+.split-text--word-fade .word {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.split-text--word-fade.revealed .word {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   STAGGER DELAYS
+   ============================================ */
+
+/* Stagger by character */
+.split-text[data-stagger="char"] .char:nth-child(1) { transition-delay: 0ms; }
+.split-text[data-stagger="char"] .char:nth-child(2) { transition-delay: 30ms; }
+.split-text[data-stagger="char"] .char:nth-child(3) { transition-delay: 60ms; }
+.split-text[data-stagger="char"] .char:nth-child(4) { transition-delay: 90ms; }
+.split-text[data-stagger="char"] .char:nth-child(5) { transition-delay: 120ms; }
+.split-text[data-stagger="char"] .char:nth-child(6) { transition-delay: 150ms; }
+.split-text[data-stagger="char"] .char:nth-child(7) { transition-delay: 180ms; }
+.split-text[data-stagger="char"] .char:nth-child(8) { transition-delay: 210ms; }
+.split-text[data-stagger="char"] .char:nth-child(9) { transition-delay: 240ms; }
+.split-text[data-stagger="char"] .char:nth-child(10) { transition-delay: 270ms; }
+.split-text[data-stagger="char"] .char:nth-child(11) { transition-delay: 300ms; }
+.split-text[data-stagger="char"] .char:nth-child(12) { transition-delay: 330ms; }
+.split-text[data-stagger="char"] .char:nth-child(13) { transition-delay: 360ms; }
+.split-text[data-stagger="char"] .char:nth-child(14) { transition-delay: 390ms; }
+.split-text[data-stagger="char"] .char:nth-child(15) { transition-delay: 420ms; }
+.split-text[data-stagger="char"] .char:nth-child(16) { transition-delay: 450ms; }
+.split-text[data-stagger="char"] .char:nth-child(17) { transition-delay: 480ms; }
+.split-text[data-stagger="char"] .char:nth-child(18) { transition-delay: 510ms; }
+.split-text[data-stagger="char"] .char:nth-child(19) { transition-delay: 540ms; }
+.split-text[data-stagger="char"] .char:nth-child(20) { transition-delay: 570ms; }
+
+/* Stagger by word */
+.split-text[data-stagger="word"] .word:nth-child(1) { transition-delay: 0ms; }
+.split-text[data-stagger="word"] .word:nth-child(2) { transition-delay: 100ms; }
+.split-text[data-stagger="word"] .word:nth-child(3) { transition-delay: 200ms; }
+.split-text[data-stagger="word"] .word:nth-child(4) { transition-delay: 300ms; }
+.split-text[data-stagger="word"] .word:nth-child(5) { transition-delay: 400ms; }
+.split-text[data-stagger="word"] .word:nth-child(6) { transition-delay: 500ms; }
+.split-text[data-stagger="word"] .word:nth-child(7) { transition-delay: 600ms; }
+.split-text[data-stagger="word"] .word:nth-child(8) { transition-delay: 700ms; }
+
+/* ============================================
+   TYPEWRITER EFFECT
+   ============================================ */
+
+.typewriter {
+  display: inline;
+  border-right: 2px solid #ffc107;
+  animation: typewriter-cursor 0.8s step-end infinite;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.typewriter.typing-complete {
+  border-right: none;
+  animation: none;
+}
+
+/* ============================================
+   SHIMMER TEXT EFFECT
+   ============================================ */
+
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    #ffc107 0%,
+    #ffec9f 25%,
+    #ffc107 50%,
+    #ffec9f 75%,
+    #ffc107 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ============================================
+   GLITCH TEXT EFFECT
+   ============================================ */
+
+.glitch-text {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.glitch-text.active::before {
+  animation: glitch-1 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  color: #ff0000;
+  z-index: -1;
+}
+
+.glitch-text.active::after {
+  animation: glitch-2 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both;
+  color: #00ff00;
+  z-index: -2;
+}
+
+/* ============================================
+   MASK REVEAL EFFECT
+   ============================================ */
+
+.mask-reveal {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.mask-reveal__content {
+  display: inline-block;
+  transform: translateY(100%);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mask-reveal.revealed .mask-reveal__content {
+  transform: translateY(0);
+}
+
+/* ============================================
+   WAVE TEXT ANIMATION
+   ============================================ */
+
+.wave-text .char {
+  display: inline-block;
+  animation: wave-bounce 1s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.wave-text.active .char {
+  animation-play-state: running;
+}
+
+.wave-text .char:nth-child(1) { animation-delay: 0s; }
+.wave-text .char:nth-child(2) { animation-delay: 0.05s; }
+.wave-text .char:nth-child(3) { animation-delay: 0.1s; }
+.wave-text .char:nth-child(4) { animation-delay: 0.15s; }
+.wave-text .char:nth-child(5) { animation-delay: 0.2s; }
+.wave-text .char:nth-child(6) { animation-delay: 0.25s; }
+.wave-text .char:nth-child(7) { animation-delay: 0.3s; }
+.wave-text .char:nth-child(8) { animation-delay: 0.35s; }
+.wave-text .char:nth-child(9) { animation-delay: 0.4s; }
+.wave-text .char:nth-child(10) { animation-delay: 0.45s; }
+
+/* ============================================
+   KEYFRAME ANIMATIONS
+   ============================================ */
+
+@keyframes typewriter-cursor {
+  0%, 100% {
+    border-color: #ffc107;
+  }
+  50% {
+    border-color: transparent;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+@keyframes glitch-1 {
+  0% {
+    opacity: 1;
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-3px, 3px);
+  }
+  40% {
+    transform: translate(-3px, -3px);
+  }
+  60% {
+    transform: translate(3px, 3px);
+  }
+  80% {
+    transform: translate(3px, -3px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0);
+  }
+}
+
+@keyframes glitch-2 {
+  0% {
+    opacity: 1;
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(3px, -3px);
+  }
+  40% {
+    transform: translate(3px, 3px);
+  }
+  60% {
+    transform: translate(-3px, -3px);
+  }
+  80% {
+    transform: translate(-3px, 3px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0);
+  }
+}
+
+@keyframes wave-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .split-text .word {
+    margin-right: 0.15em;
+  }
+  
+  /* Reduce animation complexity on mobile */
+  .split-text--reveal-rotate .char {
+    transform: rotateX(-45deg) translateY(10px);
+  }
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .split-text .char,
+  .split-text .word,
+  .mask-reveal__content {
+    transition: opacity 0.3s ease !important;
+    transform: none !important;
+  }
+  
+  .typewriter {
+    border-right: none;
+    animation: none;
+    white-space: normal;
+  }
+  
+  .shimmer-text {
+    animation: none;
+    background: #ffc107;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .wave-text .char {
+    animation: none;
+  }
+}
