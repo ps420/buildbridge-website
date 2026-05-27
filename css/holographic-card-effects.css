@@ -1,0 +1,505 @@
+/* ============================================
+   HOLOGRAPHIC 3D CARD EFFECTS v35.0
+   Fortune 500 Next-Gen Card Interactions
+   ============================================ */
+
+/* Holographic Card Base */
+.holo-card {
+  position: relative;
+  background: linear-gradient(145deg, 
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  border-radius: 24px;
+  padding: 2px;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.holo-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(
+    from var(--angle, 0deg),
+    transparent 0deg,
+    rgba(201, 206, 214, 0.4) 20deg,
+    rgba(245, 247, 250, 0.6) 40deg,
+    rgba(201, 206, 214, 0.4) 60deg,
+    transparent 80deg,
+    transparent 360deg
+  );
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  animation: holoRotate 4s linear infinite;
+}
+
+@keyframes holoRotate {
+  0% { --angle: 0deg; }
+  100% { --angle: 360deg; }
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.holo-card:hover::before {
+  opacity: 1;
+}
+
+.holo-card-inner {
+  position: relative;
+  background: linear-gradient(145deg, 
+    rgba(20, 20, 22, 0.95) 0%,
+    rgba(15, 15, 16, 0.98) 100%
+  );
+  border-radius: 22px;
+  padding: 40px;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+}
+
+/* Holographic Sheen Effect */
+.holo-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.1) 45%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0.1) 55%,
+    transparent 60%
+  );
+  transform: translateX(-100%);
+  transition: transform 0s;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.holo-card:hover .holo-sheen {
+  animation: holoSheen 1.5s ease-in-out;
+}
+
+@keyframes holoSheen {
+  0% { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(200%) skewX(-15deg); }
+}
+
+/* 3D Flip Card */
+.flip-card-3d {
+  perspective: 1000px;
+  height: 400px;
+}
+
+.flip-card-3d-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flip-card-3d:hover .flip-card-3d-inner,
+.flip-card-3d.flipped .flip-card-3d-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-3d-front,
+.flip-card-3d-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 24px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.flip-card-3d-front {
+  background: linear-gradient(145deg, 
+    rgba(201, 206, 214, 0.08) 0%,
+    rgba(201, 206, 214, 0.03) 100%
+  );
+  border: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.flip-card-3d-back {
+  background: linear-gradient(145deg, 
+    rgba(201, 206, 214, 0.12) 0%,
+    rgba(201, 206, 214, 0.06) 100%
+  );
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  transform: rotateY(180deg);
+}
+
+/* Floating Holographic Card */
+.holo-float {
+  animation: holoFloat 6s ease-in-out infinite;
+}
+
+@keyframes holoFloat {
+  0%, 100% {
+    transform: translateY(0) rotateX(0) rotateY(0);
+  }
+  25% {
+    transform: translateY(-10px) rotateX(2deg) rotateY(2deg);
+  }
+  50% {
+    transform: translateY(-5px) rotateX(-1deg) rotateY(3deg);
+  }
+  75% {
+    transform: translateY(-15px) rotateX(3deg) rotateY(-1deg);
+  }
+}
+
+/* Chromatic Aberration Effect */
+.holo-chromatic {
+  position: relative;
+}
+
+.holo-chromatic::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  border-radius: inherit;
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.holo-chromatic:hover::after {
+  opacity: 0.5;
+  animation: chromaticShift 0.3s ease infinite;
+}
+
+@keyframes chromaticShift {
+  0%, 100% {
+    transform: translate(0, 0);
+    filter: none;
+  }
+  25% {
+    transform: translate(1px, 0);
+    filter: drop-shadow(-2px 0 0 rgba(255, 0, 0, 0.3)) drop-shadow(2px 0 0 rgba(0, 255, 255, 0.3));
+  }
+  50% {
+    transform: translate(-1px, 1px);
+    filter: drop-shadow(2px 0 0 rgba(0, 255, 0, 0.3)) drop-shadow(-2px 0 0 rgba(255, 0, 255, 0.3));
+  }
+  75% {
+    transform: translate(0, -1px);
+    filter: drop-shadow(0 2px 0 rgba(0, 0, 255, 0.3)) drop-shadow(0 -2px 0 rgba(255, 255, 0, 0.3));
+  }
+}
+
+/* Prism Border Effect */
+.prism-border {
+  position: relative;
+}
+
+.prism-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(
+    var(--border-angle, 0deg),
+    #ff0055 0%,
+    #ff7700 16%,
+    #ffff00 33%,
+    #00ff00 50%,
+    #00ffff 66%,
+    #0000ff 83%,
+    #ff00ff 100%
+  );
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+@property --border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.prism-border:hover::before {
+  opacity: 1;
+  animation: prismRotate 3s linear infinite;
+}
+
+@keyframes prismRotate {
+  0% { --border-angle: 0deg; }
+  100% { --border-angle: 360deg; }
+}
+
+/* Glass Reflection */
+.glass-reflection {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-reflection::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(45deg) translateX(-100%);
+  transition: transform 0s;
+  pointer-events: none;
+}
+
+.glass-reflection:hover::after {
+  animation: glassReflect 1s ease-in-out;
+}
+
+@keyframes glassReflect {
+  0% { transform: rotate(45deg) translateX(-100%); }
+  100% { transform: rotate(45deg) translateX(100%); }
+}
+
+/* Neon Glow Effect */
+.neon-glow {
+  position: relative;
+}
+
+.neon-glow::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, 
+    rgba(201, 206, 214, 0.5),
+    rgba(245, 247, 250, 0.3),
+    rgba(201, 206, 214, 0.5)
+  );
+  z-index: -1;
+  opacity: 0;
+  filter: blur(20px);
+  transition: opacity 0.5s ease;
+}
+
+.neon-glow:hover::before {
+  opacity: 0.5;
+  animation: neonPulse 2s ease-in-out infinite;
+}
+
+@keyframes neonPulse {
+  0%, 100% {
+    opacity: 0.3;
+    filter: blur(15px);
+  }
+  50% {
+    opacity: 0.6;
+    filter: blur(25px);
+  }
+}
+
+/* Shattered Glass Effect */
+.shattered-glass {
+  position: relative;
+}
+
+.shattered-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: 
+    linear-gradient(135deg, transparent 48%, rgba(255,255,255,0.1) 49%, rgba(255,255,255,0.1) 51%, transparent 52%),
+    linear-gradient(45deg, transparent 48%, rgba(255,255,255,0.05) 49%, rgba(255,255,255,0.05) 51%, transparent 52%);
+  background-size: 60px 60px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.shattered-glass:hover::before {
+  opacity: 1;
+}
+
+/* Iridescent Background */
+.iridescent {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 0, 128, 0.05) 0%,
+    rgba(128, 0, 255, 0.05) 25%,
+    rgba(0, 128, 255, 0.05) 50%,
+    rgba(0, 255, 128, 0.05) 75%,
+    rgba(255, 128, 0, 0.05) 100%
+  );
+  background-size: 400% 400%;
+  animation: iridescentShift 8s ease infinite;
+}
+
+@keyframes iridescentShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Card Tilt on Mouse Move */
+.tilt-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease-out;
+}
+
+.tilt-3d .tilt-content {
+  transform: translateZ(50px);
+}
+
+.tilt-3d .tilt-shadow {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  filter: blur(30px);
+  transform: translateZ(-50px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tilt-3d:hover .tilt-shadow {
+  opacity: 1;
+}
+
+/* Holographic Text */
+.holo-text {
+  background: linear-gradient(
+    90deg,
+    #ff0055 0%,
+    #ff7700 16%,
+    #ffff00 33%,
+    #00ff00 50%,
+    #00ffff 66%,
+    #0000ff 83%,
+    #ff00ff 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+  animation: holoTextShift 3s linear infinite;
+}
+
+@keyframes holoTextShift {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+/* 3D Layer Stack */
+.layer-stack {
+  position: relative;
+}
+
+.layer-stack::before,
+.layer-stack::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.layer-stack::before {
+  transform: translateZ(-20px);
+  opacity: 0.6;
+  filter: blur(5px);
+}
+
+.layer-stack::after {
+  transform: translateZ(-40px);
+  opacity: 0.3;
+  filter: blur(10px);
+}
+
+.layer-stack:hover::before {
+  transform: translateZ(-30px) rotate(2deg);
+}
+
+.layer-stack:hover::after {
+  transform: translateZ(-60px) rotate(-2deg);
+}
+
+/* Holographic Grid Overlay */
+.holo-grid-overlay {
+  position: relative;
+}
+
+.holo-grid-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201, 206, 214, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 206, 214, 0.03) 1px, transparent 1px);
+  background-size: 30px 30px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.holo-grid-overlay:hover::after {
+  opacity: 1;
+  animation: gridScan 2s ease-in-out infinite;
+}
+
+@keyframes gridScan {
+  0%, 100% { background-position: 0 0; }
+  50% { background-position: 15px 15px; }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .holo-card-inner {
+    padding: 24px;
+  }
+  
+  .flip-card-3d {
+    height: 350px;
+  }
+  
+  .flip-card-3d-front,
+  .flip-card-3d-back {
+    padding: 24px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .holo-card::before,
+  .holo-sheen,
+  .holo-float,
+  .holo-chromatic::after,
+  .prism-border::before,
+  .glass-reflection::after,
+  .neon-glow::before,
+  .iridescent,
+  .holo-text,
+  .layer-stack::before,
+  .layer-stack::after,
+  .holo-grid-overlay::after {
+    animation: none;
+    transition: none;
+  }
+}
