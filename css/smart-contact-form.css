@@ -1,0 +1,527 @@
+/* ========================================
+   SMART CONTACT FORM
+   v34.0 - Professional Form with Real-time Validation
+======================================== */
+
+.smart-form-section {
+  padding: 120px 70px;
+  background: linear-gradient(135deg, #0f0f10 0%, #1a1a22 100%);
+  position: relative;
+}
+
+.smart-form-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(ellipse at 20% 30%, rgba(201, 206, 214, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(82, 88, 98, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.smart-form-container {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.smart-form-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.smart-form-header .eyebrow {
+  justify-content: center;
+}
+
+.smart-form-header .eyebrow::before,
+.smart-form-header .eyebrow::after {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: #c9ced6;
+}
+
+.smart-form-header h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(36px, 4vw, 48px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+
+.smart-form-header h2 span {
+  color: #c9ced6;
+}
+
+.smart-form-header p {
+  color: rgba(201, 206, 214, 0.7);
+  font-size: 17px;
+}
+
+/* Form Card */
+.smart-form-card {
+  background: linear-gradient(145deg, rgba(26, 28, 33, 0.9), rgba(15, 15, 16, 0.95));
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 16px;
+  padding: 50px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+}
+
+/* Form Steps */
+.smart-form-steps {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin-bottom: 50px;
+  position: relative;
+}
+
+.smart-form-steps::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 25%;
+  right: 25%;
+  height: 2px;
+  background: rgba(201, 206, 214, 0.1);
+  z-index: 0;
+}
+
+.form-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-step-number {
+  width: 40px;
+  height: 40px;
+  background: rgba(201, 206, 214, 0.1);
+  border: 2px solid rgba(201, 206, 214, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: rgba(201, 206, 214, 0.5);
+  transition: all 0.3s ease;
+}
+
+.form-step-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(201, 206, 214, 0.5);
+  transition: color 0.3s ease;
+}
+
+.form-step.active .form-step-number {
+  background: #c9ced6;
+  border-color: #c9ced6;
+  color: #0f0f10;
+  box-shadow: 0 0 30px rgba(201, 206, 214, 0.3);
+}
+
+.form-step.active .form-step-label {
+  color: #c9ced6;
+}
+
+.form-step.completed .form-step-number {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: white;
+}
+
+.form-step.completed .form-step-label {
+  color: #22c55e;
+}
+
+/* Form Fields */
+.smart-form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.form-group {
+  position: relative;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-label {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(201, 206, 214, 0.7);
+  margin-bottom: 12px;
+  transition: color 0.3s ease;
+}
+
+.form-group:focus-within .form-label {
+  color: #c9ced6;
+}
+
+.form-input {
+  width: 100%;
+  padding: 18px 20px;
+  background: rgba(15, 15, 16, 0.6);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 8px;
+  color: #f5f7fa;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.form-input::placeholder {
+  color: rgba(201, 206, 214, 0.3);
+}
+
+.form-input:hover {
+  border-color: rgba(201, 206, 214, 0.3);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #c9ced6;
+  box-shadow: 0 0 0 3px rgba(201, 206, 214, 0.1);
+}
+
+.form-input.error {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.form-input.success {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.05);
+}
+
+/* Input with icon */
+.form-input-wrapper {
+  position: relative;
+}
+
+.form-input-icon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+
+.form-input-wrapper .form-input {
+  padding-left: 50px;
+}
+
+.form-group:focus-within .form-input-icon {
+  opacity: 0.8;
+}
+
+/* Validation indicators */
+.validation-indicator {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.form-input.error ~ .validation-indicator {
+  opacity: 1;
+  color: #ef4444;
+}
+
+.form-input.success ~ .validation-indicator {
+  opacity: 1;
+  color: #22c55e;
+}
+
+.validation-message {
+  position: absolute;
+  bottom: -22px;
+  left: 0;
+  font-size: 12px;
+  color: #ef4444;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.form-input.error ~ .validation-message {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Textarea specific */
+textarea.form-input {
+  min-height: 150px;
+  resize: vertical;
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.7;
+}
+
+/* Select styling */
+select.form-input {
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23c9ced6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 20px;
+  padding-right: 50px;
+}
+
+/* Checkbox and Radio */
+.form-checkbox-group,
+.form-radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.form-checkbox,
+.form-radio {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 12px 16px;
+  background: rgba(15, 15, 16, 0.4);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.form-checkbox:hover,
+.form-radio:hover {
+  border-color: rgba(201, 206, 214, 0.3);
+}
+
+.form-checkbox input,
+.form-radio input {
+  width: 20px;
+  height: 20px;
+  accent-color: #c9ced6;
+  cursor: pointer;
+}
+
+.form-checkbox-label,
+.form-radio-label {
+  font-size: 14px;
+  color: rgba(201, 206, 214, 0.8);
+}
+
+/* Character counter */
+.char-counter {
+  text-align: right;
+  font-size: 12px;
+  color: rgba(201, 206, 214, 0.4);
+  margin-top: 8px;
+}
+
+.char-counter.warning {
+  color: #f59e0b;
+}
+
+.char-counter.error {
+  color: #ef4444;
+}
+
+/* Form Progress Bar */
+.form-progress {
+  margin-bottom: 40px;
+}
+
+.form-progress-bar {
+  height: 4px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.form-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #c9ced6, #f5f7fa);
+  border-radius: 2px;
+  width: 0%;
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.form-progress-text {
+  text-align: center;
+  font-size: 13px;
+  color: rgba(201, 206, 214, 0.6);
+  margin-top: 15px;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.form-btn {
+  padding: 18px 40px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-btn-secondary {
+  background: transparent;
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  color: #c9ced6;
+}
+
+.form-btn-secondary:hover {
+  background: rgba(201, 206, 214, 0.1);
+  border-color: rgba(201, 206, 214, 0.4);
+}
+
+.form-btn-primary {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c9ced6 100%);
+  border: none;
+  color: #0f0f10;
+}
+
+.form-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(201, 206, 214, 0.3);
+}
+
+.form-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Submit spinner */
+.btn-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(15, 15, 16, 0.3);
+  border-top-color: #0f0f10;
+  border-radius: 50%;
+  animation: btn-spin 0.8s linear infinite;
+}
+
+@keyframes btn-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Success State */
+.form-success {
+  text-align: center;
+  padding: 60px 40px;
+}
+
+.form-success-icon {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 30px;
+  font-size: 48px;
+  animation: success-pop 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes success-pop {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.form-success h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.form-success p {
+  color: rgba(201, 206, 214, 0.7);
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .smart-form-section {
+    padding: 60px 20px;
+  }
+  
+  .smart-form-card {
+    padding: 30px 20px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .smart-form-steps {
+    gap: 20px;
+  }
+  
+  .smart-form-steps::before {
+    left: 15%;
+    right: 15%;
+  }
+  
+  .form-step-label {
+    font-size: 10px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .form-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

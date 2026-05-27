@@ -154,6 +154,13 @@
   <link rel="stylesheet" href="css/smart-reading-mode.css">
   <link rel="stylesheet" href="css/velocity-scroll-reveal.css">
   <link rel="stylesheet" href="css/dynamic-gradient-borders.css">
+  
+  <!-- v34.0 Fortune 500 Professional Enhancements -->
+  <link rel="stylesheet" href="css/virtual-tour-section.css">
+  <link rel="stylesheet" href="css/cookie-consent-system.css">
+  <link rel="stylesheet" href="css/smart-prefetch-system.css">
+  <link rel="stylesheet" href="css/mobile-gesture-navigation.css">
+  <link rel="stylesheet" href="css/accessibility-announcer.css">
 
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
   <link rel="manifest" href="manifest.json">
@@ -1369,6 +1376,141 @@
       
       <!-- Vertical Progress Indicator -->
       <div class="timeline-progress-vertical"></div>
+    </div>
+  </section>
+
+  <!-- v34.0: Virtual Tour Section - Interactive 360° Project Walkthrough -->
+  <section class="virtual-tour-section" id="virtual-tour" data-section="VirtualTour" data-nav-label="Virtual Tour">
+    <div class="virtual-tour-container">
+      <div class="virtual-tour-header">
+        <span class="eyebrow">Immersive Experience</span>
+        <h2 class="scramble-text kinetic-text">Take a <span>Virtual Tour</span></h2>
+        <p>Explore our completed projects in immersive 360°. Drag to look around or let it auto-rotate through the space.</p>
+      </div>
+      
+      <div class="virtual-tour-viewer">
+        <!-- Loading State -->
+        <div class="tour-loading">
+          <div class="tour-loading-spinner"></div>
+          <div class="tour-loading-text">Loading 360° Experience...</div>
+        </div>
+        
+        <!-- VR Mode Button -->
+        <button class="tour-vr-btn" aria-label="Enter VR mode">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M2 9a3 3 0 013-3h14a3 3 0 013 3v6a3 3 0 01-3 3H5a3 3 0 01-3-3V9z"/>
+            <path d="M8 12h.01M16 12h.01M12 12h.01"/>
+          </svg>
+          VR Mode
+        </button>
+        
+        <!-- Info Panel -->
+        <div class="tour-info-panel">
+          <button class="tour-info-close" aria-label="Close panel">✕</button>
+          <h3>Feature</h3>
+          <p>Click on any hotspot to learn more about this feature of the property.</p>
+          <div class="tour-info-stats">
+            <div class="tour-info-stat">
+              <div class="tour-info-stat-value">450m²</div>
+              <div class="tour-info-stat-label">Total Area</div>
+            </div>
+            <div class="tour-info-stat">
+              <div class="tour-info-stat-value">5</div>
+              <div class="tour-info-stat-label">Bedrooms</div>
+            </div>
+            <div class="tour-info-stat">
+              <div class="tour-info-stat-value">4.5</div>
+              <div class="tour-info-stat-label">Bathrooms</div>
+            </div>
+            <div class="tour-info-stat">
+              <div class="tour-info-stat-value">2</div>
+              <div class="tour-info-stat-label">Garages</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Main Tour Frame -->
+        <div class="virtual-tour-frame">
+          <div class="panorama-container">
+            <img src="assets/02_Website_Heroes/Hero_1.png" alt="" class="panorama-image">
+            <img src="assets/02_Website_Heroes/Hero_2.png" alt="" class="panorama-image">
+            <img src="assets/03_Social_Campaign/Campaign_4.png" alt="" class="panorama-image">
+          </div>
+          
+          <!-- Hotspots -->
+          <div class="tour-hotspot" style="left: 30%; top: 40%;" data-title="Spacious Living Area" data-description="Open-plan living space with 4.5m ceilings and floor-to-ceiling windows">
+            <div class="hotspot-pulse"></div>
+            <div class="hotspot-marker">+</div>
+            <div class="hotspot-tooltip">
+              <h4>Spacious Living Area</h4>
+              <p>Open-plan living space with 4.5m ceilings</p>
+            </div>
+          </div>
+          
+          <div class="tour-hotspot" style="left: 60%; top: 35%;" data-title="Modern Kitchen" data-description="Chef's kitchen with premium appliances and marble countertops" data-room="1">
+            <div class="hotspot-pulse"></div>
+            <div class="hotspot-marker">+</div>
+            <div class="hotspot-tooltip">
+              <h4>Modern Kitchen</h4>
+              <p>Premium appliances and marble countertops</p>
+            </div>
+          </div>
+          
+          <div class="tour-hotspot" style="left: 75%; top: 50%;" data-title="Master Suite" data-description="Luxurious master bedroom with ensuite and walk-in closet" data-room="2">
+            <div class="hotspot-pulse"></div>
+            <div class="hotspot-marker">+</div>
+            <div class="hotspot-tooltip">
+              <h4>Master Suite</h4>
+              <p>Luxurious bedroom with ensuite bathroom</p>
+            </div>
+          </div>
+          
+          <!-- Navigation Arrows -->
+          <button class="tour-nav-arrow prev" aria-label="Pan left">‹</button>
+          <button class="tour-nav-arrow next" aria-label="Pan right">›</button>
+          
+          <!-- Drag Hint -->
+          <div class="tour-drag-hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+            Drag to Explore
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+          </div>
+        </div>
+        
+        <!-- Tour Controls -->
+        <div class="tour-controls">
+          <button class="tour-control-btn tour-control-play" aria-label="Play/Pause tour">▶</button>
+          <div class="tour-progress-bar">
+            <div class="tour-progress-fill"></div>
+          </div>
+          <span class="tour-view-label">180°</span>
+          <button class="tour-control-btn tour-control-fullscreen" aria-label="Fullscreen">⛶</button>
+        </div>
+        
+        <!-- Room Selector -->
+        <div class="tour-room-selector">
+          <div class="tour-room-thumb active" data-room="0">
+            <img src="assets/02_Website_Heroes/Hero_1.png" alt="Living Room">
+            <span>Living Room</span>
+          </div>
+          <div class="tour-room-thumb" data-room="1">
+            <img src="assets/02_Website_Heroes/Hero_2.png" alt="Kitchen">
+            <span>Kitchen</span>
+          </div>
+          <div class="tour-room-thumb" data-room="2">
+            <img src="assets/03_Social_Campaign/Campaign_4.png" alt="Master Bedroom">
+            <span>Master Bedroom</span>
+          </div>
+          <div class="tour-room-thumb" data-room="3">
+            <img src="assets/03_Social_Campaign/Campaign_5.png" alt="Bathroom">
+            <span>Bathroom</span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -2770,6 +2912,13 @@
   <!-- v33.0 Fortune 500 Next-Gen Professional Features -->
   <script src="js/smart-reading-mode.js"></script>
   <script src="js/velocity-scroll-reveal.js"></script>
+  
+  <!-- v34.0 Fortune 500 Professional Enhancements -->
+  <script src="js/virtual-tour.js"></script>
+  <script src="js/cookie-consent-system.js"></script>
+  <script src="js/smart-prefetch-system.js"></script>
+  <script src="js/mobile-gesture-navigation.js"></script>
+  <script src="js/accessibility-announcer.js"></script>
   <script src="js/dynamic-gradient-borders.js"></script>
   
   <script>
