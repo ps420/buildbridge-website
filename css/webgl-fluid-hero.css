@@ -1,0 +1,152 @@
+/**
+ * WebGL Fluid Hero - v24.0
+ * Premium visual effects for hero section
+ */
+
+/* WebGL Canvas Container */
+.webgl-fluid-canvas,
+.canvas-fluid-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* CSS Fallback for mobile/non-WebGL */
+.webgl-fallback {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse at 20% 30%, rgba(201,206,214,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(82,88,98,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(43,45,48,0.05) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation: fluidPulse 8s ease-in-out infinite;
+}
+
+@keyframes fluidPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+}
+
+/* Enhanced hero with fluid background */
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse at 30% 20%, rgba(201, 206, 214, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(82, 88, 98, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Hero content z-index layering */
+.hero-copy,
+.hero-visual {
+  position: relative;
+  z-index: 2;
+}
+
+/* Fluid glow effect on interactive elements */
+.hero [data-magnetic] {
+  position: relative;
+}
+
+.hero [data-magnetic]::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(circle at center, rgba(201,206,214,0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.hero [data-magnetic]:hover::before {
+  opacity: 1;
+}
+
+/* Floating stats with fluid glow */
+.floating-stats {
+  position: relative;
+}
+
+.floating-stats::before {
+  content: '';
+  position: absolute;
+  inset: -30px;
+  background: radial-gradient(circle at center, rgba(201,206,214,0.08) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.floating-stats:hover::before {
+  opacity: 1;
+}
+
+/* Particle burst on button click */
+.btn,
+.magnetic {
+  position: relative;
+}
+
+.btn::after,
+.magnetic::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--click-x, 50%) var(--click-y, 50%), 
+    rgba(255,255,255,0.3) 0%, transparent 60%);
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.5s ease;
+  pointer-events: none;
+}
+
+.btn:active::after,
+.magnetic:active::after {
+  opacity: 1;
+  transform: scale(2);
+  transition: all 0.3s ease;
+}
+
+/* Performance optimization */
+.webgl-fluid-canvas {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Hide on reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .webgl-fluid-canvas,
+  .canvas-fluid-fallback,
+  .webgl-fallback {
+    display: none;
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .webgl-fluid-canvas,
+  .canvas-fluid-fallback {
+    opacity: 0.5;
+  }
+}
