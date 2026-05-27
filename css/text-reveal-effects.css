@@ -1,0 +1,395 @@
+/* Text Reveal Effects v16.0 - Fortune 500 Professional Feature */
+
+/* Split Text Character Animation */
+.split-text .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.split-text.revealed .char {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered character delays */
+.split-text.revealed .char:nth-child(1) { transition-delay: 0ms; }
+.split-text.revealed .char:nth-child(2) { transition-delay: 30ms; }
+.split-text.revealed .char:nth-child(3) { transition-delay: 60ms; }
+.split-text.revealed .char:nth-child(4) { transition-delay: 90ms; }
+.split-text.revealed .char:nth-child(5) { transition-delay: 120ms; }
+.split-text.revealed .char:nth-child(6) { transition-delay: 150ms; }
+.split-text.revealed .char:nth-child(7) { transition-delay: 180ms; }
+.split-text.revealed .char:nth-child(8) { transition-delay: 210ms; }
+.split-text.revealed .char:nth-child(9) { transition-delay: 240ms; }
+.split-text.revealed .char:nth-child(10) { transition-delay: 270ms; }
+.split-text.revealed .char:nth-child(n+11) { transition-delay: 300ms; }
+
+/* Word by Word Reveal */
+.word-reveal .word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.word-reveal .word-inner {
+  display: inline-block;
+  transform: translateY(100%) rotate(5deg);
+  opacity: 0;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.8s ease;
+}
+
+.word-reveal.revealed .word-inner {
+  transform: translateY(0) rotate(0);
+  opacity: 1;
+}
+
+.word-reveal.revealed .word:nth-child(1) .word-inner { transition-delay: 0ms; }
+.word-reveal.revealed .word:nth-child(2) .word-inner { transition-delay: 100ms; }
+.word-reveal.revealed .word:nth-child(3) .word-inner { transition-delay: 200ms; }
+.word-reveal.revealed .word:nth-child(4) .word-inner { transition-delay: 300ms; }
+.word-reveal.revealed .word:nth-child(5) .word-inner { transition-delay: 400ms; }
+.word-reveal.revealed .word:nth-child(n+6) .word-inner { transition-delay: 500ms; }
+
+/* Line by Line Reveal */
+.line-reveal .line {
+  display: block;
+  overflow: hidden;
+}
+
+.line-reveal .line-inner {
+  display: block;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.8s ease;
+}
+
+.line-reveal.revealed .line-inner {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.line-reveal.revealed .line:nth-child(1) .line-inner { transition-delay: 0ms; }
+.line-reveal.revealed .line:nth-child(2) .line-inner { transition-delay: 150ms; }
+.line-reveal.revealed .line:nth-child(3) .line-inner { transition-delay: 300ms; }
+.line-reveal.revealed .line:nth-child(n+4) .line-inner { transition-delay: 450ms; }
+
+/* Scramble Text Effect */
+.scramble-text {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.scramble-text .scramble-char {
+  display: inline-block;
+  min-width: 0.5em;
+}
+
+.scramble-text .scramble-char.scrambling {
+  animation: scrambleBlink 0.1s ease infinite;
+}
+
+@keyframes scrambleBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Typewriter Effect */
+.typewriter {
+  font-family: 'Montserrat', sans-serif;
+  overflow: hidden;
+  border-right: 2px solid #d4af37;
+  white-space: nowrap;
+  animation: 
+    typing 3.5s steps(40, end),
+    blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: #d4af37; }
+}
+
+/* Highlight Sweep Effect */
+.highlight-sweep {
+  position: relative;
+  display: inline;
+}
+
+.highlight-sweep::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(212,175,55,0.3) 0%, rgba(212,175,55,0.1) 100%);
+  z-index: -1;
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.highlight-sweep.revealed::before {
+  width: 100%;
+}
+
+/* Underline Grow Effect */
+.underline-grow {
+  position: relative;
+  display: inline-block;
+}
+
+.underline-grow::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #d4af37 0%, transparent 100%);
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.underline-grow.revealed::after {
+  width: 100%;
+}
+
+/* Clip Text Reveal */
+.clip-reveal {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.clip-reveal.revealed {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Blur In Text */
+.blur-in {
+  filter: blur(20px);
+  opacity: 0;
+  transform: scale(1.1);
+  transition: 
+    filter 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 1.2s ease,
+    transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.blur-in.revealed {
+  filter: blur(0);
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Fade Up Chars */
+.fade-up-chars .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fade-up-chars.revealed .char {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Random Fade Characters */
+.random-fade .char {
+  display: inline-block;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.random-fade.revealed .char {
+  opacity: 1;
+}
+
+/* Scale In Words */
+.scale-in-words .word {
+  display: inline-block;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.scale-in-words.revealed .word {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Rotate In Text */
+.rotate-in {
+  opacity: 0;
+  transform: rotateX(90deg);
+  transform-origin: center bottom;
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.rotate-in.revealed {
+  opacity: 1;
+  transform: rotateX(0);
+}
+
+/* Slide From Side */
+.slide-from-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide-from-left.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.slide-from-right {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide-from-right.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 3D Flip Text */
+.flip-3d {
+  perspective: 1000px;
+}
+
+.flip-3d .flip-inner {
+  display: inline-block;
+  transform: rotateY(90deg);
+  opacity: 0;
+  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+  transform-style: preserve-3d;
+}
+
+.flip-3d.revealed .flip-inner {
+  transform: rotateY(0);
+  opacity: 1;
+}
+
+/* Gradient Text Reveal */
+.gradient-text-reveal {
+  background: linear-gradient(135deg, #d4af37 0%, #fff 50%, #d4af37 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-position: 100% center;
+  transition: background-position 1.5s ease;
+}
+
+.gradient-text-reveal.revealed {
+  background-position: 0% center;
+}
+
+/* Focus Blur Reveal */
+.focus-blur-reveal {
+  filter: blur(10px);
+  opacity: 0;
+  transition: filter 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
+}
+
+.focus-blur-reveal.revealed {
+  filter: blur(0);
+  opacity: 1;
+}
+
+/* Curtain Text Reveal */
+.curtain-reveal {
+  position: relative;
+  display: inline-block;
+}
+
+.curtain-reveal::before,
+.curtain-reveal::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background: #0f0f10;
+  transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+  z-index: 1;
+}
+
+.curtain-reveal::before {
+  left: 0;
+}
+
+.curtain-reveal::after {
+  right: 0;
+}
+
+.curtain-reveal.revealed::before {
+  transform: translateX(-100%);
+}
+
+.curtain-reveal.revealed::after {
+  transform: translateX(100%);
+}
+
+/* Wave Text Animation */
+.wave-text .char {
+  display: inline-block;
+  animation: wave 1s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.wave-text.revealed .char {
+  animation-play-state: running;
+}
+
+.wave-text.revealed .char:nth-child(1) { animation-delay: 0s; }
+.wave-text.revealed .char:nth-child(2) { animation-delay: 0.05s; }
+.wave-text.revealed .char:nth-child(3) { animation-delay: 0.1s; }
+.wave-text.revealed .char:nth-child(4) { animation-delay: 0.15s; }
+.wave-text.revealed .char:nth-child(5) { animation-delay: 0.2s; }
+.wave-text.revealed .char:nth-child(n+6) { animation-delay: 0.25s; }
+
+@keyframes wave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .split-text .char,
+  .word-reveal .word-inner,
+  .line-reveal .line-inner,
+  .typewriter,
+  .fade-up-chars .char,
+  .random-fade .char,
+  .scale-in-words .word,
+  .rotate-in,
+  .slide-from-left,
+  .slide-from-right,
+  .flip-3d .flip-inner,
+  .blur-in,
+  .clip-reveal,
+  .curtain-reveal::before,
+  .curtain-reveal::after {
+    transition: none;
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+    clip-path: none;
+  }
+  
+  .underline-grow::after,
+  .highlight-sweep::before {
+    transition: none;
+    width: 100%;
+  }
+}

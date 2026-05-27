@@ -52,6 +52,12 @@
   <link rel="stylesheet" href="css/announcement-bar.css">
   <link rel="stylesheet" href="css/keyboard-shortcuts.css">
   <link rel="stylesheet" href="css/smart-tooltips.css">
+  
+  <!-- v16.0 Professional Front-End Enhancements -->
+  <link rel="stylesheet" href="css/business-hours-widget.css">
+  <link rel="stylesheet" href="css/image-mask-reveals.css">
+  <link rel="stylesheet" href="css/animated-counters.css">
+  <link rel="stylesheet" href="css/text-reveal-effects.css">
 
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
   <link rel="manifest" href="manifest.json">
@@ -334,11 +340,11 @@
         <img src="assets/02_Website_Heroes/Hero_1.png" alt="BuildBridge Project" class="hero-main-image">
       </div>
       <div class="floating-stats stat-1">
-        <div class="number enhanced-counter" data-target="150" data-suffix="+">0</div>
+        <div class="number counter-gold" data-counter="150" data-suffix="+" data-duration="2000">0</div>
         <div class="label">Projects Delivered</div>
       </div>
       <div class="floating-stats stat-2 magnetic-el">
-        <div class="number enhanced-counter" data-target="98" data-suffix="%">0</div>
+        <div class="number counter-gold" data-counter="98" data-suffix="%" data-duration="2000">0</div>
         <div class="label">Client Satisfaction</div>
       </div>
     </div>
@@ -435,19 +441,19 @@
   <section id="stats" class="stats-section" data-section="Stats" data-nav-label="Stats">
     <div class="stats-grid">
       <div class="stat-item fade-in-up">
-        <div class="number enhanced-counter" data-target="150" data-suffix="+">0</div>
+        <div class="number counter-gold" data-counter="150" data-suffix="+" data-duration="2000">0</div>
         <div class="label">Projects Completed</div>
       </div>
       <div class="stat-item fade-in-up stagger-1">
-        <div class="number enhanced-counter" data-target="50" data-prefix="R" data-suffix="M+">0</div>
+        <div class="number counter-gold" data-counter="50" data-prefix="R" data-suffix="M+" data-duration="2500">0</div>
         <div class="label">Value Managed</div>
       </div>
       <div class="stat-item fade-in-up stagger-2">
-        <div class="number enhanced-counter" data-target="12" data-suffix="+">0</div>
+        <div class="number counter-gold" data-counter="12" data-suffix="+" data-duration="1800">0</div>
         <div class="label">Years Experience</div>
       </div>
       <div class="stat-item fade-in-up stagger-3">
-        <div class="number enhanced-counter" data-target="50" data-suffix="+">0</div>
+        <div class="number counter-gold" data-counter="50" data-suffix="+" data-duration="2200">0</div>
         <div class="label">Contractor Partners</div>
       </div>
     </div>
@@ -1241,12 +1247,18 @@
   <!-- v15.0 Fortune 500 Next-Gen Professional Features -->
   <script src="js/predictive-preloader.js"></script>
   <script src="js/announcement-bar.js"></script>
+  
+  <!-- v16.0 Professional Front-End Enhancements -->
+  <script src="js/business-hours-widget.js"></script>
+  <script src="js/image-mask-reveals.js"></script>
+  <script src="js/animated-counters.js"></script>
+  <script src="js/text-reveal-effects.js"></script>
   <script src="js/keyboard-shortcuts.js"></script>
   <script src="js/smart-tooltips.js"></script>
   
   <script>
-    // Log v15.0 features loaded
-    console.log('🏢 BuildBridge Fortune 500 v15.0 loaded: Predictive Preloading, Smart Announcements, Keyboard Shortcuts, Professional Tooltips');
+    // Log v16.0 features loaded
+    console.log('🏢 BuildBridge Fortune 500 v16.0 loaded: Business Hours Widget, Image Mask Reveals, Animated Counters, Text Reveal Effects, Predictive Preloading, Smart Announcements, Keyboard Shortcuts, Professional Tooltips');
     
     // Add smart tooltips to key elements
     document.addEventListener('DOMContentLoaded', function() {
