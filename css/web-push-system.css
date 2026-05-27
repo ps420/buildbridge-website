@@ -1,0 +1,495 @@
+/* ========================================
+   WEB PUSH NOTIFICATION SYSTEM
+   Fortune 500 Grade Engagement Platform
+======================================== */
+
+/* Push Permission Widget */
+.push-widget {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: rgba(15, 15, 16, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 20px;
+  padding: 24px;
+  z-index: 100001;
+  width: 320px;
+  transform: translateY(150%);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.push-widget.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.push-widget-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.push-widget-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #C9CED6, #F5F7FA);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.push-widget-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin: 0 0 4px;
+}
+
+.push-widget-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: rgba(201, 206, 214, 0.7);
+  margin: 0;
+}
+
+.push-widget-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: rgba(201, 206, 214, 0.8);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.push-widget-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.push-widget-benefits li {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: rgba(201, 206, 214, 0.7);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.push-widget-benefits li::before {
+  content: '✓';
+  width: 18px;
+  height: 18px;
+  background: rgba(16, 185, 129, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #10B981;
+  flex-shrink: 0;
+}
+
+.push-widget-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.push-widget-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.push-widget-btn-primary {
+  background: linear-gradient(135deg, #C9CED6, #F5F7FA);
+  color: #0f0f10;
+}
+
+.push-widget-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(201, 206, 214, 0.3);
+}
+
+.push-widget-btn-secondary {
+  background: rgba(201, 206, 214, 0.1);
+  color: #C9CED6;
+  border: 1px solid rgba(201, 206, 214, 0.2);
+}
+
+.push-widget-btn-secondary:hover {
+  background: rgba(201, 206, 214, 0.2);
+}
+
+.push-widget-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.1);
+  border: none;
+  color: rgba(201, 206, 214, 0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.push-widget-close:hover {
+  background: rgba(201, 206, 214, 0.2);
+  color: #F5F7FA;
+  transform: rotate(90deg);
+}
+
+/* Push Status Indicator */
+.push-status {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  padding: 12px 20px;
+  background: rgba(15, 15, 16, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 99999;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(20px);
+  visibility: hidden;
+}
+
+.push-status.visible {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+.push-status:hover {
+  background: rgba(201, 206, 214, 0.1);
+}
+
+.push-status-icon {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 10px #10B981;
+  animation: push-pulse 2s infinite;
+}
+
+.push-status-icon.disabled {
+  background: #6B7280;
+  box-shadow: none;
+  animation: none;
+}
+
+@keyframes push-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+}
+
+.push-status-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: rgba(201, 206, 214, 0.8);
+}
+
+/* Web Notification Preview Modal */
+.push-preview-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 100002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease;
+}
+
+.push-preview-modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.push-preview-content {
+  background: rgba(15, 15, 16, 0.98);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 24px;
+  padding: 40px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  transform: scale(0.9);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.push-preview-modal.active .push-preview-content {
+  transform: scale(1);
+}
+
+.push-preview-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.push-preview-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin-bottom: 12px;
+}
+
+.push-preview-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: rgba(201, 206, 214, 0.8);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+/* Notification Preview Card */
+.push-notification-preview {
+  background: rgba(201, 206, 214, 0.05);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  margin: 24px 0;
+  text-align: left;
+}
+
+.push-notification-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.push-notification-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #C9CED6, #F5F7FA);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.push-notification-app {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #F5F7FA;
+}
+
+.push-notification-time {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: rgba(201, 206, 214, 0.5);
+  margin-left: auto;
+}
+
+.push-notification-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin-bottom: 6px;
+}
+
+.push-notification-body {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: rgba(201, 206, 214, 0.7);
+  line-height: 1.5;
+}
+
+/* Push Settings Panel */
+.push-settings {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  background: rgba(15, 15, 16, 0.98);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 24px;
+  padding: 32px;
+  z-index: 100003;
+  width: 90%;
+  max-width: 400px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.push-settings.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.push-settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.push-settings-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #F5F7FA;
+}
+
+.push-settings-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.1);
+  border: none;
+  color: #C9CED6;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.push-settings-close:hover {
+  background: rgba(201, 206, 214, 0.2);
+  transform: rotate(90deg);
+}
+
+.push-settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.push-setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+}
+
+.push-setting-info {
+  flex: 1;
+}
+
+.push-setting-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin-bottom: 4px;
+}
+
+.push-setting-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: rgba(201, 206, 214, 0.6);
+}
+
+/* Push Test Button */
+.push-test-btn {
+  margin-top: 20px;
+  width: 100%;
+  padding: 14px;
+  background: rgba(201, 206, 214, 0.1);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #C9CED6;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.push-test-btn:hover {
+  background: rgba(201, 206, 214, 0.2);
+}
+
+.push-test-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .push-widget {
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    width: auto;
+  }
+  
+  .push-status {
+    right: 20px;
+    bottom: 20px;
+  }
+  
+  .push-preview-content,
+  .push-settings {
+    margin: 20px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .push-widget,
+  .push-status,
+  .push-preview-modal,
+  .push-settings {
+    transition: none;
+  }
+  
+  .push-status-icon {
+    animation: none;
+  }
+}
+
+/* Print */
+@media print {
+  .push-widget,
+  .push-status,
+  .push-preview-modal,
+  .push-settings {
+    display: none !important;
+  }
+}

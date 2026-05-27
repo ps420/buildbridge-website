@@ -1,0 +1,494 @@
+/* ========================================
+   ACCESSIBILITY QUICK MENU (WCAG 2.1 AA)
+   Fortune 500 Grade Inclusive Design
+======================================== */
+
+.accessibility-widget {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  z-index: 100000;
+}
+
+.accessibility-trigger {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #C9CED6, #F5F7FA);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.accessibility-trigger:hover {
+  transform: scale(1.1) rotate(10deg);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.accessibility-trigger:focus-visible {
+  outline: 3px solid #3B82F6;
+  outline-offset: 4px;
+}
+
+.accessibility-trigger.pulse {
+  animation: a11y-pulse 2s infinite;
+}
+
+@keyframes a11y-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201, 206, 214, 0.4); }
+  50% { box-shadow: 0 0 0 15px rgba(201, 206, 214, 0); }
+}
+
+.accessibility-trigger-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 20px;
+  height: 20px;
+  background: #3B82F6;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: a11y-bounce 2s infinite;
+}
+
+@keyframes a11y-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Accessibility Menu Panel */
+.accessibility-menu {
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  width: 320px;
+  background: rgba(15, 15, 16, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.95);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: bottom right;
+}
+
+.accessibility-menu.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.accessibility-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.accessibility-menu-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #F5F7FA;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.accessibility-menu-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.1);
+  border: none;
+  color: #C9CED6;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.accessibility-menu-close:hover {
+  background: rgba(201, 206, 214, 0.2);
+  transform: rotate(90deg);
+}
+
+/* Accessibility Sections */
+.accessibility-section {
+  margin-bottom: 24px;
+}
+
+.accessibility-section:last-child {
+  margin-bottom: 0;
+}
+
+.accessibility-section-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(201, 206, 214, 0.5);
+  margin-bottom: 12px;
+}
+
+/* Accessibility Options */
+.accessibility-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.accessibility-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: rgba(201, 206, 214, 0.05);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.accessibility-option:hover {
+  background: rgba(201, 206, 214, 0.1);
+}
+
+.accessibility-option.active {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.accessibility-option-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.accessibility-option-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(201, 206, 214, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.accessibility-option.active .accessibility-option-icon {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.accessibility-option-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #C9CED6;
+}
+
+.accessibility-option-desc {
+  font-size: 11px;
+  color: rgba(201, 206, 214, 0.5);
+  margin-top: 2px;
+}
+
+/* Toggle Switch */
+.a11y-toggle {
+  width: 44px;
+  height: 24px;
+  background: rgba(201, 206, 214, 0.2);
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  flex-shrink: 0;
+}
+
+.a11y-toggle.active {
+  background: #3B82F6;
+}
+
+.a11y-toggle-slider {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.a11y-toggle.active .a11y-toggle-slider {
+  transform: translateX(20px);
+}
+
+/* Accessibility Profile Buttons */
+.accessibility-profiles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.a11y-profile {
+  padding: 16px 12px;
+  background: rgba(201, 206, 214, 0.05);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.a11y-profile:hover {
+  background: rgba(201, 206, 214, 0.1);
+}
+
+.a11y-profile.active {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.a11y-profile-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.a11y-profile-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #C9CED6;
+  margin-bottom: 2px;
+}
+
+.a11y-profile-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px;
+  color: rgba(201, 206, 214, 0.5);
+}
+
+/* Font Size Slider */
+.a11y-slider-container {
+  padding: 12px;
+  background: rgba(201, 206, 214, 0.05);
+  border-radius: 10px;
+}
+
+.a11y-slider-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: rgba(201, 206, 214, 0.7);
+}
+
+.a11y-slider {
+  width: 100%;
+  height: 6px;
+  background: rgba(201, 206, 214, 0.2);
+  border-radius: 3px;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.a11y-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #C9CED6;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.a11y-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 10px rgba(201, 206, 214, 0.5);
+}
+
+.a11y-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: #C9CED6;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+/* Reset Button */
+.a11y-reset {
+  width: 100%;
+  padding: 14px;
+  margin-top: 16px;
+  background: rgba(201, 206, 214, 0.1);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #C9CED6;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.a11y-reset:hover {
+  background: rgba(201, 206, 214, 0.2);
+}
+
+/* Accessibility Announcement Region */
+.a11y-announcer {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* High Contrast Mode */
+body.a11y-high-contrast {
+  filter: contrast(1.5);
+}
+
+body.a11y-high-contrast img,
+body.a11y-high-contrast video {
+  filter: contrast(1.2);
+}
+
+/* Grayscale Mode */
+body.a11y-grayscale {
+  filter: grayscale(100%);
+}
+
+/* Large Cursor */
+body.a11y-large-cursor {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path fill="%23C9CED6" d="M5.5 4l17 12.5-7.5 1.5 5 8-3 2-5-8-4.5 4z"/></svg>') 0 0, auto !important;
+}
+
+body.a11y-large-cursor * {
+  cursor: inherit !important;
+}
+
+/* Dyslexia-Friendly Font */
+body.a11y-dyslexia-font {
+  font-family: 'OpenDyslexic', 'Comic Sans MS', sans-serif !important;
+}
+
+body.a11y-dyslexia-font * {
+  font-family: inherit !important;
+}
+
+/* Focus Mode */
+body.a11y-focus-mode {
+  --focus-opacity: 0.3;
+}
+
+body.a11y-focus-mode *:not(:focus):not(:focus-within) {
+  opacity: var(--focus-opacity);
+  transition: opacity 0.3s ease;
+}
+
+body.a11y-focus-mode *:focus,
+body.a11y-focus-mode *:focus-within {
+  opacity: 1 !important;
+}
+
+/* Reading Guide */
+.a11y-reading-guide {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: rgba(255, 255, 0, 0.1);
+  border-top: 2px solid rgba(255, 255, 0, 0.3);
+  border-bottom: 2px solid rgba(255, 255, 0, 0.3);
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+body.a11y-reading-guide-active .a11y-reading-guide {
+  opacity: 1;
+}
+
+/* Highlight Links */
+body.a11y-highlight-links a {
+  background: rgba(59, 130, 246, 0.2) !important;
+  border: 2px solid #3B82F6 !important;
+  padding: 2px 4px !important;
+  text-decoration: underline !important;
+}
+
+/* Highlight Headings */
+body.a11y-highlight-headings h1,
+body.a11y-highlight-headings h2,
+body.a11y-highlight-headings h3,
+body.a11y-highlight-headings h4,
+body.a11y-highlight-headings h5,
+body.a11y-highlight-headings h6 {
+  background: rgba(16, 185, 129, 0.2) !important;
+  border-left: 4px solid #10B981 !important;
+  padding-left: 8px !important;
+}
+
+/* Stop Animations */
+@media (prefers-reduced-motion: reduce),
+body.a11y-stop-animations * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .accessibility-widget {
+    bottom: 80px;
+    right: 20px;
+  }
+  
+  .accessibility-trigger {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+  
+  .accessibility-menu {
+    width: calc(100vw - 40px);
+    right: -10px;
+    bottom: 60px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .accessibility-widget {
+    display: none !important;
+  }
+}

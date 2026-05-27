@@ -1,0 +1,430 @@
+/* v32.0 - Skeleton Loading States */
+/* Professional loading placeholders for better perceived performance */
+
+/* Base Skeleton */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(201, 206, 214, 0.05) 25%,
+    rgba(201, 206, 214, 0.1) 50%,
+    rgba(201, 206, 214, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  border-radius: 8px;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Skeleton Variants */
+.skeleton--text {
+  height: 16px;
+  margin-bottom: 12px;
+}
+
+.skeleton--text:last-child {
+  width: 60%;
+}
+
+.skeleton--title {
+  height: 32px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+}
+
+.skeleton--subtitle {
+  height: 20px;
+  width: 40%;
+  margin-bottom: 20px;
+}
+
+.skeleton--image {
+  width: 100%;
+  height: 200px;
+  border-radius: 12px;
+}
+
+.skeleton--avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+}
+
+.skeleton--avatar-lg {
+  width: 100px;
+  height: 100px;
+}
+
+.skeleton--button {
+  height: 48px;
+  width: 140px;
+  border-radius: 12px;
+}
+
+.skeleton--card {
+  min-height: 280px;
+  border-radius: 24px;
+}
+
+.skeleton--badge {
+  height: 24px;
+  width: 80px;
+  border-radius: 12px;
+}
+
+/* Skeleton Card Layout */
+.skeleton-card {
+  background: rgba(201, 206, 214, 0.03);
+  border: 1px solid rgba(201, 206, 214, 0.05);
+  border-radius: 24px;
+  padding: 24px;
+}
+
+.skeleton-card__image {
+  width: 100%;
+  height: 180px;
+  margin-bottom: 20px;
+}
+
+.skeleton-card__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.skeleton-card__title {
+  height: 24px;
+  width: 70%;
+  margin-bottom: 12px;
+}
+
+.skeleton-card__text {
+  height: 16px;
+  margin-bottom: 8px;
+}
+
+.skeleton-card__text:nth-child(3) {
+  width: 90%;
+}
+
+.skeleton-card__text:nth-child(4) {
+  width: 60%;
+}
+
+/* Service Card Skeleton */
+.skeleton-service {
+  padding: 40px;
+  min-height: 320px;
+}
+
+.skeleton-service__icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+}
+
+.skeleton-service__title {
+  height: 28px;
+  width: 60%;
+  margin-bottom: 16px;
+}
+
+.skeleton-service__description {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skeleton-service__description .skeleton {
+  height: 14px;
+}
+
+.skeleton-service__description .skeleton:nth-child(2) {
+  width: 95%;
+}
+
+.skeleton-service__description .skeleton:nth-child(3) {
+  width: 85%;
+  margin-bottom: 24px;
+}
+
+.skeleton-service__link {
+  height: 18px;
+  width: 100px;
+}
+
+/* Project Card Skeleton */
+.skeleton-project {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  min-height: 400px;
+}
+
+.skeleton-project__image {
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
+}
+
+.skeleton-project__overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 32px;
+}
+
+.skeleton-project__title {
+  height: 28px;
+  width: 60%;
+  margin-bottom: 12px;
+}
+
+.skeleton-project__meta {
+  height: 16px;
+  width: 40%;
+}
+
+/* Testimonial Skeleton */
+.skeleton-testimonial {
+  padding: 40px;
+}
+
+.skeleton-testimonial__quote {
+  height: 90px;
+  margin-bottom: 32px;
+}
+
+.skeleton-testimonial__quote .skeleton {
+  height: 18px;
+  margin-bottom: 8px;
+}
+
+.skeleton-testimonial__quote .skeleton:nth-child(3) {
+  width: 70%;
+}
+
+.skeleton-testimonial__author {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.skeleton-testimonial__avatar {
+  flex-shrink: 0;
+}
+
+.skeleton-testimonial__info {
+  flex: 1;
+}
+
+.skeleton-testimonial__name {
+  height: 20px;
+  width: 120px;
+  margin-bottom: 8px;
+}
+
+.skeleton-testimonial__role {
+  height: 14px;
+  width: 80px;
+}
+
+/* Stats Skeleton */
+.skeleton-stat {
+  text-align: center;
+  padding: 40px;
+}
+
+.skeleton-stat__value {
+  height: 48px;
+  width: 80px;
+  margin: 0 auto 12px;
+}
+
+.skeleton-stat__label {
+  height: 14px;
+  width: 100px;
+  margin: 0 auto;
+}
+
+/* Team Card Skeleton */
+.skeleton-team {
+  text-align: center;
+  padding: 40px 24px;
+}
+
+.skeleton-team__avatar {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 20px;
+}
+
+.skeleton-team__name {
+  height: 24px;
+  width: 70%;
+  margin: 0 auto 12px;
+}
+
+.skeleton-team__role {
+  height: 16px;
+  width: 50%;
+  margin: 0 auto;
+}
+
+/* Hero Skeleton */
+.skeleton-hero {
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  padding: 0 8%;
+}
+
+.skeleton-hero__content {
+  max-width: 600px;
+}
+
+.skeleton-hero__eyebrow {
+  height: 14px;
+  width: 150px;
+  margin-bottom: 24px;
+}
+
+.skeleton-hero__title {
+  height: 48px;
+  margin-bottom: 16px;
+}
+
+.skeleton-hero__title:nth-child(2) {
+  width: 80%;
+}
+
+.skeleton-hero__title:nth-child(3) {
+  width: 60%;
+  margin-bottom: 24px;
+}
+
+.skeleton-hero__description {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.skeleton-hero__description .skeleton {
+  height: 16px;
+}
+
+.skeleton-hero__description .skeleton:nth-child(2) {
+  width: 90%;
+}
+
+.skeleton-hero__buttons {
+  display: flex;
+  gap: 16px;
+}
+
+.skeleton-hero__button {
+  height: 48px;
+  width: 160px;
+  border-radius: 12px;
+}
+
+/* Navigation Skeleton */
+.skeleton-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 8%;
+}
+
+.skeleton-nav__logo {
+  width: 150px;
+  height: 32px;
+}
+
+.skeleton-nav__links {
+  display: flex;
+  gap: 32px;
+}
+
+.skeleton-nav__link {
+  width: 60px;
+  height: 16px;
+}
+
+.skeleton-nav__button {
+  width: 120px;
+  height: 40px;
+  border-radius: 8px;
+}
+
+/* Section Header Skeleton */
+.skeleton-section-header {
+  text-align: center;
+  padding: 80px 8% 40px;
+}
+
+.skeleton-section-header__eyebrow {
+  height: 14px;
+  width: 100px;
+  margin: 0 auto 20px;
+}
+
+.skeleton-section-header__title {
+  height: 40px;
+  width: 50%;
+  margin: 0 auto 16px;
+}
+
+.skeleton-section-header__description {
+  height: 16px;
+  width: 60%;
+  margin: 0 auto;
+}
+
+.skeleton-section-header__description:nth-child(4) {
+  width: 40%;
+  margin-top: 8px;
+}
+
+/* Loading Container */
+.skeleton-container {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.skeleton-container.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Content fade in after loading */
+.content-loaded {
+  opacity: 0;
+  animation: content-fade-in 0.5s ease forwards;
+}
+
+@keyframes content-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Staggered loading animations */
+.skeleton-stagger .skeleton:nth-child(1) { animation-delay: 0ms; }
+.skeleton-stagger .skeleton:nth-child(2) { animation-delay: 100ms; }
+.skeleton-stagger .skeleton:nth-child(3) { animation-delay: 200ms; }
+.skeleton-stagger .skeleton:nth-child(4) { animation-delay: 300ms; }
+.skeleton-stagger .skeleton:nth-child(5) { animation-delay: 400ms; }
+.skeleton-stagger .skeleton:nth-child(6) { animation-delay: 500ms; }
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    background: rgba(201, 206, 214, 0.08);
+  }
+}
