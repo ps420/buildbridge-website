@@ -1,0 +1,348 @@
+/**
+ * Physics-Based Cursor System - v23.0
+ * Professional mouse interaction with spring physics and velocity tracking
+ */
+
+/* Cursor Container */
+.physics-cursor-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99997;
+}
+
+/* Main Cursor Dot */
+.physics-cursor {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  background: var(--white);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99997;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.3s ease;
+  mix-blend-mode: difference;
+}
+
+.physics-cursor.hover {
+  width: 64px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(2px);
+}
+
+.physics-cursor.clicking {
+  width: 8px;
+  height: 8px;
+  transform: translate(-50%, -50%) scale(0.8);
+}
+
+.physics-cursor.dragging {
+  width: 80px;
+  height: 80px;
+  background: rgba(201, 206, 214, 0.1);
+  border: 2px dashed var(--chrome);
+}
+
+/* Cursor Trail (Physics Follower) */
+.physics-cursor-trail {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(201, 206, 214, 0.4);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99996;
+  transform: translate(-50%, -50%);
+  transition: border-color 0.3s ease, border-width 0.3s ease;
+}
+
+.physics-cursor-trail.hover {
+  border-color: rgba(255, 255, 255, 0.8);
+  border-width: 2px;
+  width: 80px;
+  height: 80px;
+}
+
+.physics-cursor-trail.clicking {
+  transform: translate(-50%, -50%) scale(0.9);
+}
+
+/* Multiple Trail Dots */
+.physics-trail-dot {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  background: var(--chrome);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99995;
+  transform: translate(-50%, -50%);
+  opacity: 0.3;
+  filter: blur(1px);
+}
+
+/* Cursor Triangle (Direction Indicator) */
+.physics-cursor-arrow {
+  position: fixed;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 10px solid var(--white);
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.physics-cursor.moving-fast + .physics-cursor-arrow,
+.physics-cursor-arrow.visible {
+  opacity: 1;
+}
+
+/* Magnetic Field Effect */
+.magnetic-field {
+  position: relative;
+}
+
+.magnetic-field::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border: 1px solid rgba(201, 206, 214, 0);
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.4s ease;
+  pointer-events: none;
+}
+
+.magnetic-field:hover::before {
+  border-color: rgba(201, 206, 214, 0.2);
+  opacity: 1;
+  animation: magnetic-pulse 1.5s ease-out infinite;
+}
+
+@keyframes magnetic-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Velocity Ripple */
+.velocity-ripple {
+  position: fixed;
+  border-radius: 50%;
+  border: 1px solid var(--chrome);
+  pointer-events: none;
+  z-index: 99994;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+}
+
+.velocity-ripple.active {
+  animation: velocity-ripple-expand 0.6s ease-out forwards;
+}
+
+@keyframes velocity-ripple-expand {
+  0% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(3);
+  }
+}
+
+/* Cursor States */
+.cursor-text {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99999;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--white);
+  background: rgba(15, 15, 16, 0.9);
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  opacity: 0;
+  transform: translate(-50%, -150%);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.cursor-text.visible {
+  opacity: 1;
+  transform: translate(-50%, -160%);
+}
+
+/* Click Burst Particles */
+.click-burst {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99993;
+}
+
+.click-burst-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--chrome);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.click-burst-particle.active {
+  animation: burst-particle 0.6s ease-out forwards;
+}
+
+@keyframes burst-particle {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) scale(0);
+  }
+}
+
+/* Hover-specific Text Labels */
+.cursor-label-view {
+  --cursor-text: 'View';
+}
+
+.cursor-label-drag {
+  --cursor-text: 'Drag';
+}
+
+.cursor-label-click {
+  --cursor-text: 'Click';
+}
+
+.cursor-label-external::after {
+  content: '↗';
+  margin-left: 4px;
+}
+
+/* Section-specific cursor states */
+.physics-cursor.on-dark {
+  background: var(--white);
+}
+
+.physics-cursor.on-light {
+  background: var(--black);
+  mix-blend-mode: normal;
+}
+
+/* Spring physics indicators */
+.cursor-spring {
+  position: fixed;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--chrome), transparent);
+  pointer-events: none;
+  z-index: 99990;
+  transform-origin: top;
+  opacity: 0;
+}
+
+.cursor-spring.stretched {
+  opacity: 0.3;
+  animation: spring-return 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes spring-return {
+  0% {
+    transform: scaleY(1);
+  }
+  100% {
+    transform: scaleY(0);
+  }
+}
+
+/* Interactive Element Highlights */
+[data-cursor="pointer"] {
+  cursor: none;
+}
+
+[data-cursor="text"] {
+  cursor: none;
+}
+
+[data-cursor="grab"] {
+  cursor: none;
+}
+
+/* Cursor Glow Effect */
+.cursor-glow {
+  position: fixed;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(201, 206, 214, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 99989;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cursor-glow.active {
+  opacity: 1;
+}
+
+/* Scroll Velocity Cursor Effect */
+.velocity-skew-cursor {
+  transition: transform 0.1s ease;
+}
+
+/* Mobile - Disable custom cursor */
+@media (pointer: coarse), (max-width: 768px) {
+  .physics-cursor-container,
+  .physics-cursor,
+  .physics-cursor-trail,
+  .physics-trail-dot,
+  .physics-cursor-arrow,
+  .cursor-text,
+  .velocity-ripple,
+  .click-burst,
+  .cursor-spring,
+  .cursor-glow {
+    display: none !important;
+  }
+  
+  body {
+    cursor: auto !important;
+  }
+  
+  [data-cursor] {
+    cursor: auto !important;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .physics-cursor,
+  .physics-cursor-trail,
+  .physics-trail-dot {
+    transition: none;
+  }
+  
+  .velocity-ripple,
+  .click-burst-particle,
+  .cursor-spring {
+    animation: none;
+  }
+}

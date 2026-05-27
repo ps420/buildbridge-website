@@ -1,0 +1,177 @@
+/**
+ * SVG Path Draw Animations - v23.0
+ * Scroll-triggered SVG path drawing effects
+ */
+
+/* Base SVG Drawing Setup */
+[data-svg-draw] {
+  --draw-progress: 0;
+  --draw-duration: 1.5s;
+  --draw-easing: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-svg-draw] path,
+[data-svg-draw] line,
+[data-svg-draw] circle,
+[data-svg-draw] rect,
+[data-svg-draw] polyline,
+[data-svg-draw] polygon {
+  stroke-dasharray: var(--path-length, 1000);
+  stroke-dashoffset: var(--path-length, 1000);
+  transition: stroke-dashoffset var(--draw-duration) var(--draw-easing);
+}
+
+[data-svg-draw].is-drawn path,
+[data-svg-draw].is-drawn line,
+[data-svg-draw].is-drawn circle,
+[data-svg-draw].is-drawn rect,
+[data-svg-draw].is-drawn polyline,
+[data-svg-draw].is-drawn polygon {
+  stroke-dashoffset: 0;
+}
+
+/* Progressive Draw (controlled by scroll) */
+[data-svg-draw-progress] path,
+[data-svg-draw-progress] line,
+[data-svg-draw-progress] circle,
+[data-svg-draw-progress] rect {
+  stroke-dasharray: var(--path-length, 1000);
+  stroke-dashoffset: calc(var(--path-length, 1000) * (1 - var(--draw-progress, 0)));
+  transition: none;
+}
+
+/* Drawing Speed Variants */
+[data-svg-speed="fast"] path { --draw-duration: 0.6s; }
+[data-svg-speed="slow"] path { --draw-duration: 2.5s; }
+[data-svg-speed="slower"] path { --draw-duration: 4s; }
+
+/* Draw Direction Options */
+[data-svg-direction="reverse"] path {
+  stroke-dashoffset: calc(var(--path-length, 1000) * -1);
+}
+
+[data-svg-direction="reverse"].is-drawn path {
+  stroke-dashoffset: 0;
+}
+
+/* Morphing Paths (with fill) */
+[data-svg-morph] {
+  overflow: visible;
+}
+
+[data-svg-morph] path {
+  fill-opacity: 0;
+  transition: fill-opacity 0.6s ease 0.5s,
+              stroke-dashoffset var(--draw-duration) var(--draw-easing);
+}
+
+[data-svg-morph].is-drawn path {
+  fill-opacity: 1;
+}
+
+/* Line Illustrations */
+.svg-illustration {
+  stroke: var(--chrome);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.svg-illustration-thin { stroke-width: 1; }
+.svg-illustration-thick { stroke-width: 3; }
+
+/* Highlighted Paths */
+.svg-highlight path {
+  filter: drop-shadow(0 0 8px rgba(201, 206, 214, 0.4));
+}
+
+/* Animated Underlines */
+.svg-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.svg-underline svg {
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 8px;
+}
+
+.svg-underline path {
+  stroke: var(--chrome);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+}
+
+/* Electric Effect */
+.svg-electric path {
+  filter: drop-shadow(0 0 4px rgba(201, 206, 214, 0.8));
+  animation: electric-flicker 2s infinite;
+}
+
+@keyframes electric-flicker {
+  0%, 100% { opacity: 1; }
+  5% { opacity: 0.8; }
+  10% { opacity: 1; }
+  15% { opacity: 0.9; }
+  20% { opacity: 1; }
+}
+
+/* Pulse on Complete */
+[data-svg-pulse].is-drawn path {
+  animation: draw-pulse 0.6s ease-out;
+}
+
+@keyframes draw-pulse {
+  0% { filter: drop-shadow(0 0 0 rgba(201, 206, 214, 0)); }
+  50% { filter: drop-shadow(0 0 10px rgba(201, 206, 214, 0.6)); }
+  100% { filter: drop-shadow(0 0 0 rgba(201, 206, 214, 0)); }
+}
+
+/* Dots at endpoints */
+.svg-nodes circle {
+  fill: var(--chrome);
+  opacity: 0;
+  transform: scale(0);
+  transform-origin: center;
+  transform-box: fill-box;
+  transition: all 0.3s ease 0.5s;
+}
+
+.svg-nodes.is-drawn circle {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Icon Outlines */
+.svg-icon-outline {
+  width: 64px;
+  height: 64px;
+}
+
+.svg-icon-outline path {
+  stroke: var(--chrome);
+  stroke-width: 1.5;
+  fill: none;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  [data-svg-draw] path {
+    --draw-duration: 1s;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  [data-svg-draw] path,
+  [data-svg-morph] path {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+    transition: none !important;
+  }
+}
