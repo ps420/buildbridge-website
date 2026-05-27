@@ -1,0 +1,594 @@
+/* ============================================
+   BuildBridge Reduced Motion Support v14.2
+   Accessibility-First Animation Respect
+   ============================================ */
+
+/* ============================================
+   PREFERS-REDUCED-MOTION: REDUCE
+   Core accessibility overrides
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  
+  /* Universal animation reset */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Body and HTML */
+  html {
+    scroll-behavior: auto;
+  }
+  
+  body {
+    animation: none !important;
+  }
+  
+  /* Navigation */
+  .nav,
+  .nav.scrolled,
+  .nav-links,
+  .nav-links.active {
+    transition: none !important;
+    transform: none !important;
+  }
+  
+  /* Hero section */
+  .hero,
+  .hero-copy,
+  .hero-visual,
+  .hero-image-wrapper,
+  .floating-stats {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+  
+  /* Marquee */
+  .marquee-track,
+  .marquee-item {
+    animation: none !important;
+    transform: none !important;
+  }
+  
+  /* Cards */
+  .service-card,
+  .project-card,
+  .testimonial-carousel-card,
+  .faq-item,
+  .flip-card,
+  .flip-card-v2,
+  .tilt-card-advanced,
+  .card-lift-glow {
+    transition: none !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  
+  .service-card:hover,
+  .project-card:hover {
+    transform: none !important;
+  }
+  
+  /* 3D effects */
+  .tilt-card-3d,
+  .parallax-tilt,
+  .holographic-card,
+  [data-tilt] {
+    transform: none !important;
+    transform-style: flat !important;
+    perspective: none !important;
+  }
+  
+  /* Text effects */
+  .scramble-text,
+  .text-scramble-v2,
+  .kinetic-text,
+  .gradient-text,
+  .glitch-text,
+  .neon-hover {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  /* Buttons */
+  .btn,
+  .magnetic-btn-v2,
+  .liquid-btn,
+  .magnetic,
+  .magnetic-icon,
+  .pulse-ring,
+  .shine-sweep {
+    transition: background-color 0.2s ease, color 0.2s ease !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  
+  .magnetic-btn-v2::before,
+  .magnetic-btn-v2::after,
+  .liquid-btn::before,
+  .pulse-ring::before,
+  .shine-sweep::before {
+    display: none !important;
+    animation: none !important;
+  }
+  
+  /* Scroll effects */
+  .fade-in-up,
+  .fade-in,
+  .reveal-section,
+  [data-reveal],
+  [data-animate] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  
+  /* Counters */
+  .enhanced-counter,
+  .rolling-counter,
+  .odometer {
+    animation: none !important;
+  }
+  
+  /* Progress indicators */
+  .reading-progress,
+  .floating-scroll-progress,
+  .circular-scroll-progress,
+  .timeline-progress {
+    transition: none !important;
+  }
+  
+  /* Loading states */
+  .preloader,
+  .skeleton,
+  .smart-loader {
+    animation: none !important;
+  }
+  
+  /* Particle effects */
+  .particles-container,
+  .particle-network,
+  .fog-container,
+  .cursor-particles {
+    display: none !important;
+  }
+  
+  /* WebGL effects */
+  canvas[data-webgl],
+  .webgl-canvas,
+  #webgl-hero,
+  #shader-canvas {
+    display: none !important;
+  }
+  
+  /* Floating elements */
+  .float-animation,
+  .floating-stats,
+  .floating-card,
+  [data-float] {
+    animation: none !important;
+    transform: none !important;
+  }
+  
+  /* Image effects */
+  .image-reveal-hover img,
+  .image-zoom-hover img,
+  .horizontal-gallery-item,
+  .showcase-3d-image {
+    transition: none !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  
+  /* FAQ accordion */
+  .faq-answer,
+  .faq-answer-content {
+    transition: none !important;
+  }
+  
+  /* Before/After slider */
+  .before-after-slider,
+  .slider-handle {
+    transition: none !important;
+  }
+  
+  /* Timeline */
+  .timeline-item,
+  .timeline-node,
+  .timeline-icon,
+  .timeline-progress {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  /* 3D showcase */
+  .showcase-3d-scene,
+  .showcase-3d-container,
+  .scene-visual,
+  .scene-image-wrapper {
+    transform: none !important;
+    transition: none !important;
+    perspective: none !important;
+  }
+  
+  /* Carousel */
+  .testimonial-carousel-3d,
+  .carousel-track {
+    animation: none !important;
+    transform: none !important;
+  }
+  
+  /* Modal/Overlay animations */
+  .modal,
+  .modal-overlay,
+  .newsletter-modal,
+  .newsletter-modal-overlay,
+  .command-palette,
+  .live-chat-widget,
+  .quick-contact-widget {
+    transition: opacity 0.2s ease !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  
+  /* Toast notifications */
+  .toast,
+  .toast-container,
+  .advanced-toast {
+    transition: opacity 0.2s ease !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  
+  /* Spotlight effects */
+  .cursor-spotlight,
+  .spotlight-overlay {
+    display: none !important;
+  }
+  
+  /* Ripple effects */
+  .ripple,
+  [class*="ripple"] {
+    display: none !important;
+  }
+  
+  /* Confetti */
+  .confetti-container,
+  .confetti {
+    display: none !important;
+  }
+  
+  /* Typewriter */
+  .typewriter,
+  .typewriter-cursor {
+    animation: none !important;
+    border: none !important;
+  }
+  
+  /* Page transitions */
+  .page-transition-overlay {
+    display: none !important;
+  }
+  
+  /* Sticky elements */
+  .smart-sticky-nav,
+  .sticky-element {
+    transition: none !important;
+  }
+  
+  /* Form elements */
+  input:focus,
+  textarea:focus,
+  select:focus,
+  .form-field:focus-within {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+    transform: none !important;
+  }
+  
+  /* Print button */
+  .print-button {
+    transition: background-color 0.2s ease !important;
+    transform: none !important;
+  }
+  
+  /* Performance dashboard */
+  .perf-dashboard,
+  .perf-toggle {
+    transition: opacity 0.2s ease !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  
+  .perf-score-circle,
+  .perf-resource-segment,
+  .perf-memory-fill,
+  .perf-mini-bar {
+    transition: none !important;
+  }
+  
+  /* Smooth scroll polyfill fallback */
+  .smooth-scroll {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   PREFERS-REDUCED-MOTION: NO-PREFERENCE
+   Normal animations (for reference)
+   ============================================ */
+@media (prefers-reduced-motion: no-preference) {
+  /* Normal animations continue as defined elsewhere */
+}
+
+/* ============================================
+   USER MOTION PREFERENCE TOGGLE
+   Manual override for users
+   ============================================ */
+body.motion-disabled,
+html.motion-disabled {
+  --animation-duration: 0.01ms;
+  --transition-duration: 0.01ms;
+}
+
+body.motion-disabled *,
+body.motion-disabled *::before,
+body.motion-disabled *::after,
+html.motion-disabled *,
+html.motion-disabled *::before,
+html.motion-disabled *::after {
+  animation-duration: var(--animation-duration) !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: var(--transition-duration) !important;
+  scroll-behavior: auto !important;
+}
+
+/* ============================================
+   MOTION PREFERENCE TOGGLE UI
+   ============================================ */
+.motion-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 80px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 9990;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.motion-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.motion-toggle.active {
+  background: #635BFF;
+  border-color: #635BFF;
+}
+
+.motion-toggle-tooltip {
+  position: absolute;
+  right: 60px;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(10px);
+  transition: all 0.3s ease;
+}
+
+.motion-toggle:hover .motion-toggle-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+/* ============================================
+   RESPECTFUL MOTION PATTERNS
+   Subtle alternatives for reduced motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  /* Use color/fade transitions instead of movement */
+  .btn:hover,
+  .service-card:hover,
+  .project-card:hover {
+    background-color: rgba(99, 91, 255, 0.1) !important;
+    border-color: #635BFF !important;
+  }
+  
+  /* Keep opacity transitions for visibility changes */
+  .fade-in-up,
+  .reveal-section,
+  [data-animate] {
+    opacity: 1 !important;
+    transition: opacity 0.2s ease !important;
+  }
+  
+  /* Skip links remain visible */
+  .skip-link:focus {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  
+  /* Focus states preserved */
+  :focus-visible {
+    outline: 2px solid #635BFF;
+    outline-offset: 2px;
+    transition: none !important;
+  }
+  
+  /* Loading states - simple opacity */
+  .skeleton {
+    background: rgba(255, 255, 255, 0.1) !important;
+    animation: none !important;
+  }
+  
+  /* Accordion - instant open/close */
+  .faq-answer {
+    display: none;
+  }
+  
+  .faq-item.open .faq-answer {
+    display: block;
+  }
+  
+  /* Modals - simple fade */
+  .modal-overlay,
+  .newsletter-modal-overlay,
+  .command-palette {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.1s ease, visibility 0.1s ease !important;
+  }
+  
+  .modal-overlay.active,
+  .newsletter-modal-overlay.active,
+  .command-palette.active {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  /* Sticky nav - no transition */
+  .smart-sticky-nav {
+    transition: none !important;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY FOCUS INDICATORS
+   Always visible regardless of motion
+   ============================================ */
+.focus-ring-accessible :focus {
+  outline: 2px solid #635BFF;
+  outline-offset: 3px;
+}
+
+.focus-ring-accessible :focus:not(:focus-visible) {
+  outline: none;
+}
+
+.focus-ring-accessible :focus-visible {
+  outline: 2px solid #635BFF;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(99, 91, 255, 0.2);
+}
+
+/* ============================================
+   SCREEN READER NOTIFICATIONS
+   ============================================ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Announce motion changes to screen readers */
+.motion-status-announcer {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ============================================
+   HIGH CONTRAST MODE SUPPORT
+   ============================================ */
+@media (prefers-contrast: more) {
+  .btn,
+  .magnetic-btn-v2,
+  .liquid-btn {
+    border: 2px solid currentColor !important;
+  }
+  
+  .nav-links a.active,
+  .nav-links a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+  }
+  
+  .service-card,
+  .project-card,
+  .faq-item {
+    border: 2px solid rgba(255, 255, 255, 0.5) !important;
+  }
+  
+  :focus-visible {
+    outline: 3px solid currentColor !important;
+    outline-offset: 4px !important;
+  }
+}
+
+/* ============================================
+   DARK/LIGHT MODE MOTION RESPECT
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  /* Theme transitions */
+  body,
+  .service-card,
+  .project-card,
+  .btn {
+    transition: background-color 0.2s ease, color 0.2s ease !important;
+  }
+}
+
+/* ============================================
+   PRINT MODE - NO MOTION NEEDED
+   ============================================ */
+@media print {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+  
+  .motion-toggle,
+  .perf-toggle {
+    display: none !important;
+  }
+}
+
+/* ============================================
+   MOBILE TOUCH - REDUCED MOTION OPTIMIZATION
+   ============================================ */
+@media (pointer: coarse) {
+  /* Reduce hover animations on touch devices */
+  .magnetic-btn-v2:hover,
+  .magnetic-icon:hover,
+  .card-lift-glow:hover {
+    transform: none !important;
+  }
+  
+  /* Simplify particle effects */
+  .particles-container {
+    opacity: 0.5;
+  }
+}
