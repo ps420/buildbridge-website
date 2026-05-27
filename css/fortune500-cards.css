@@ -1,0 +1,546 @@
+/* ========================================
+   FORTUNE 500 CARD SYSTEM v21.0
+   Premium Interactive Cards
+======================================== */
+
+/* 3D Card Container */
+.f500-card-container {
+  perspective: 1500px;
+  transform-style: preserve-3d;
+}
+
+/* Base Premium Card */
+.f500-card {
+  position: relative;
+  background: linear-gradient(145deg, #181a1f 0%, #1e2128 100%);
+  border: 1px solid rgba(201, 206, 214, 0.08);
+  border-radius: 16px;
+  padding: 40px 32px;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.f500-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(201, 206, 214, 0.03) 0%,
+    transparent 50%,
+    rgba(201, 206, 214, 0.05) 100%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.f500-card:hover {
+  transform: translateY(-8px) rotateX(2deg);
+  border-color: rgba(201, 206, 214, 0.2);
+  box-shadow: 
+    0 30px 60px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(201, 206, 214, 0.1),
+    0 0 100px rgba(201, 206, 214, 0.03);
+}
+
+.f500-card:hover::before {
+  opacity: 1;
+}
+
+/* Card Glare Effect */
+.f500-card .glare {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.15) 0%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.f500-card:hover .glare {
+  opacity: 1;
+}
+
+/* Card Icon Container */
+.f500-card-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.1), rgba(201, 206, 214, 0.02));
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: 24px;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.f500-card:hover .f500-card-icon {
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.15), rgba(201, 206, 214, 0.05));
+  transform: scale(1.1) translateZ(20px);
+  border-color: rgba(201, 206, 214, 0.3);
+}
+
+.f500-card-icon::after {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(201, 206, 214, 0.2) 60deg,
+    transparent 120deg
+  );
+  animation: icon-shimmer 3s linear infinite;
+  opacity: 0;
+}
+
+.f500-card:hover .f500-card-icon::after {
+  opacity: 1;
+}
+
+@keyframes icon-shimmer {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Card Title */
+.f500-card h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 16px;
+  color: #F5F7FA;
+  transition: transform 0.4s ease;
+}
+
+.f500-card:hover h3 {
+  transform: translateZ(30px);
+}
+
+/* Card Description */
+.f500-card p {
+  color: #8a919c;
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 24px;
+  transition: transform 0.4s ease 0.1s;
+}
+
+.f500-card:hover p {
+  transform: translateZ(20px);
+}
+
+/* Card Action Link */
+.f500-card-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #C9CED6;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 8px 0;
+}
+
+.f500-card-action::after {
+  content: '→';
+  transition: transform 0.3s ease;
+}
+
+.f500-card-action::before {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #C9CED6;
+  transition: width 0.3s ease;
+}
+
+.f500-card:hover .f500-card-action {
+  color: #F5F7FA;
+}
+
+.f500-card:hover .f500-card-action::after {
+  transform: translateX(4px);
+}
+
+.f500-card:hover .f500-card-action::before {
+  width: calc(100% - 20px);
+}
+
+/* Large Feature Card */
+.f500-card-large {
+  grid-column: span 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  padding: 48px;
+}
+
+.f500-card-large .card-visual {
+  position: relative;
+  height: 280px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.f500-card-large .card-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.f500-card-large:hover .card-visual img {
+  transform: scale(1.05);
+}
+
+/* Flip Card */
+.f500-flip-card {
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.f500-flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.f500-flip-card.flipped .f500-flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.f500-flip-card-front,
+.f500-flip-card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 16px;
+}
+
+.f500-flip-card-front {
+  background: linear-gradient(145deg, #181a1f 0%, #1e2128 100%);
+  border: 1px solid rgba(201, 206, 214, 0.08);
+}
+
+.f500-flip-card-back {
+  background: linear-gradient(145deg, #1e2128 0%, #252a32 100%);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 32px;
+  text-align: center;
+}
+
+.f500-flip-card-back .card-back-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.f500-flip-card-back h4 {
+  font-size: 22px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.f500-flip-card-back p {
+  font-size: 14px;
+  color: #8a919c;
+  margin-bottom: 24px;
+}
+
+/* Expandable Card */
+.f500-card-expandable {
+  cursor: pointer;
+}
+
+.f500-card-expandable .card-content {
+  max-height: 200px;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.f500-card-expandable.expanded .card-content {
+  max-height: 800px;
+}
+
+.f500-card-expandable .expand-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  color: #C9CED6;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.3s ease;
+}
+
+.f500-card-expandable .expand-indicator::before {
+  content: '↓';
+  margin-right: 8px;
+  transition: transform 0.3s ease;
+}
+
+.f500-card-expandable.expanded .expand-indicator::before {
+  transform: rotate(180deg);
+}
+
+/* Featured Card with Badge */
+.f500-card-featured {
+  position: relative;
+}
+
+.f500-card-featured::after {
+  content: 'Featured';
+  position: absolute;
+  top: 20px;
+  right: -35px;
+  background: linear-gradient(135deg, #C9CED6, #8a919c);
+  color: #0F0F10;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 6px 40px;
+  transform: rotate(45deg);
+}
+
+/* Glass Card Variant */
+.f500-card-glass {
+  background: rgba(24, 26, 31, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.f500-card-glass:hover {
+  background: rgba(24, 26, 31, 0.8);
+  border-color: rgba(201, 206, 214, 0.2);
+}
+
+/* Gradient Border Card */
+.f500-card-gradient-border {
+  position: relative;
+  background: #181a1f;
+}
+
+.f500-card-gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, #C9CED6, #8a919c, #C9CED6);
+  border-radius: 18px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.f500-card-gradient-border:hover::before {
+  opacity: 1;
+}
+
+/* Holographic Card */
+.f500-card-holo {
+  background: linear-gradient(145deg, #181a1f 0%, #1e2128 100%);
+  position: relative;
+}
+
+.f500-card-holo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(201, 206, 214, 0.1) 45%,
+    rgba(201, 206, 214, 0.2) 50%,
+    rgba(201, 206, 214, 0.1) 55%,
+    transparent 60%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.f500-card-holo:hover::after {
+  transform: translateX(100%);
+}
+
+/* Number Card (for stats) */
+.f500-card-number {
+  text-align: center;
+  padding: 48px 32px;
+}
+
+.f500-card-number .number {
+  font-size: 64px;
+  font-weight: 800;
+  font-family: 'Montserrat', sans-serif;
+  background: linear-gradient(135deg, #F5F7FA, #C9CED6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.f500-card-number .label {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #8a919c;
+}
+
+.f500-card-number:hover .number {
+  transform: scale(1.1);
+}
+
+/* Testimonial Card */
+.f500-card-testimonial {
+  padding: 40px;
+}
+
+.f500-card-testimonial blockquote {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #C9CED6;
+  margin-bottom: 32px;
+  position: relative;
+  padding-left: 32px;
+}
+
+.f500-card-testimonial blockquote::before {
+  content: '"';
+  position: absolute;
+  left: 0;
+  top: -10px;
+  font-size: 80px;
+  color: rgba(201, 206, 214, 0.1);
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+
+.f500-card-testimonial .author {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.f500-card-testimonial .author-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2A2D34, #3a3f47);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.f500-card-testimonial .author-info h4 {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.f500-card-testimonial .author-info span {
+  font-size: 13px;
+  color: #8a919c;
+}
+
+/* Card Grid Layouts */
+.f500-card-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.f500-card-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.f500-card-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .f500-card-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .f500-card-large {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .f500-card-grid-2,
+  .f500-card-grid-3,
+  .f500-card-grid-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .f500-card-large {
+    grid-column: span 1;
+    grid-template-columns: 1fr;
+  }
+  
+  .f500-card-large .card-visual {
+    height: 200px;
+  }
+  
+  .f500-card {
+    padding: 32px 24px;
+  }
+}
+
+/* Loading Skeleton Card */
+.f500-card-skeleton {
+  background: linear-gradient(
+    90deg,
+    #181a1f 25%,
+    #1e2128 50%,
+    #181a1f 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+  pointer-events: none;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

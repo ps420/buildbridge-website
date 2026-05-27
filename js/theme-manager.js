@@ -1,262 +1,246 @@
 /**
- * Theme Manager v9.0 - Fortune 500 Dark/Light Mode
- * System preference detection, manual toggle, and persistence
+ * THEME MANAGER v21.0
+ * Fortune 500 Theme System
+ * Dark/Light Mode with Auto Detection
  */
 
 (function() {
   'use strict';
-
-  // Theme Manager Class
-  class ThemeManager {
-    constructor() {
-      this.STORAGE_KEY = 'buildbridge-theme-preference';
-      this.SYSTEM_PREFERS_KEY = 'buildbridge-system-preference';
-      this.themeToggle = null;
-      this.mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
-      
-      this.init();
-    }
-
+  
+  const ThemeManager = {
+    currentTheme: 'dark',
+    storageKey: 'buildbridge-theme',
+    audioContext: null,
+    
+    /**
+     * Initialize theme manager
+     */
     init() {
-      // Create theme toggle button
-      this.createToggleButton();
+      this.loadTheme();
+      this.createToggle();
+      this.setupListeners();
+      this.setupSystemPreference();
       
-      // Initialize theme based on saved preference or system
-      this.initializeTheme();
-      
-      // Listen for system theme changes
-      this.mediaQuery.addEventListener('change', (e) => this.handleSystemChange(e));
-      
-      console.log('🌓 Theme Manager v9.0 initialized');
-    }
-
+      console.log('🎨 Theme Manager initialized');
+    },
+    
     /**
-     * Create the theme toggle button
+     * Load saved theme or detect system preference
      */
-    createToggleButton() {
-      const button = document.createElement('button');
-      button.className = 'theme-toggle';
-      button.setAttribute('aria-label', 'Toggle dark/light mode');
-      button.setAttribute('data-tooltip', 'Toggle theme');
-      button.innerHTML = `
-        <div class="theme-toggle-icons">
-          <span class="theme-toggle-sun">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="5"/>
-              <line x1="12" y1="1" x2="12" y2="3"/>
-              <line x1="12" y1="21" x2="12" y2="23"/>
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-              <line x1="1" y1="12" x2="3" y2="12"/>
-              <line x1="21" y1="12" x2="23" y2="12"/>
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-            </svg>
-          </span>
-          <span class="theme-toggle-moon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-            </svg>
-          </span>
-        </div>
-      `;
-
-      // Add click handler with ripple effect
-      button.addEventListener('click', (e) => this.handleToggle(e));
+    loadTheme() {
+      const savedTheme = localStorage.getItem(this.storageKey);
       
-      document.body.appendChild(button);
-      this.themeToggle = button;
-      
-      // Add keyboard shortcut (Alt+T)
-      document.addEventListener('keydown', (e) => {
-        if (e.altKey && e.key === 't') {
-          e.preventDefault();
-          this.toggleTheme();
-        }
-      });
-    }
-
-    /**
-     * Handle theme toggle click
-     */
-    handleToggle(event) {
-      // Create ripple effect
-      this.createRipple(event);
-      
-      // Toggle theme
-      this.toggleTheme();
-    }
-
-    /**
-     * Create ripple effect on button
-     */
-    createRipple(event) {
-      const button = this.themeToggle;
-      const rect = button.getBoundingClientRect();
-      const size = Math.max(rect.width, rect.height);
-      const x = event.clientX - rect.left - size / 2;
-      const y = event.clientY - rect.top - size / 2;
-      
-      const ripple = document.createElement('span');
-      ripple.style.cssText = `
-        position: absolute;
-        width: ${size}px;
-        height: ${size}px;
-        left: ${x}px;
-        top: ${y}px;
-        background: rgba(201, 206, 214, 0.3);
-        border-radius: 50%;
-        transform: scale(0);
-        animation: ripple 0.6s ease-out;
-        pointer-events: none;
-      `;
-      
-      button.appendChild(ripple);
-      
-      setTimeout(() => ripple.remove(), 600);
-    }
-
-    /**
-     * Toggle between light and dark themes
-     */
-    toggleTheme() {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-      
-      this.applyTheme(newTheme);
-      this.savePreference(newTheme);
-      
-      // Show toast notification
-      this.showThemeToast(newTheme);
-      
-      // Dispatch custom event
-      window.dispatchEvent(new CustomEvent('themechange', { 
-        detail: { theme: newTheme } 
-      }));
-    }
-
-    /**
-     * Apply theme to document
-     */
-    applyTheme(theme) {
-      if (theme === 'light') {
-        document.documentElement.setAttribute('data-theme', 'light');
-      } else {
-        document.documentElement.removeAttribute('data-theme');
-      }
-    }
-
-    /**
-     * Initialize theme on page load
-     */
-    initializeTheme() {
-      const savedPreference = this.getSavedPreference();
-      
-      if (savedPreference) {
-        // Use saved preference
-        this.applyTheme(savedPreference);
+      if (savedTheme) {
+        this.setTheme(savedTheme, false);
       } else {
         // Check system preference
-        const prefersLight = this.mediaQuery.matches;
-        this.applyTheme(prefersLight ? 'light' : 'dark');
-        
-        // Save system preference for reference
-        localStorage.setItem(this.SYSTEM_PREFERS_KEY, prefersLight ? 'light' : 'dark');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        this.setTheme(prefersDark ? 'dark' : 'light', false);
       }
-    }
-
+    },
+    
     /**
-     * Handle system theme preference change
+     * Set theme
      */
-    handleSystemChange(event) {
-      // Only apply system change if user hasn't set a manual preference
-      const savedPreference = this.getSavedPreference();
+    setTheme(theme, animate = true) {
+      if (theme === this.currentTheme && !animate) return;
       
-      if (!savedPreference) {
-        const newTheme = event.matches ? 'light' : 'dark';
-        this.applyTheme(newTheme);
-      }
-    }
-
-    /**
-     * Get saved theme preference
-     */
-    getSavedPreference() {
-      try {
-        return localStorage.getItem(this.STORAGE_KEY);
-      } catch (e) {
-        console.warn('LocalStorage not available for theme preference');
-        return null;
-      }
-    }
-
-    /**
-     * Save theme preference
-     */
-    savePreference(theme) {
-      try {
-        localStorage.setItem(this.STORAGE_KEY, theme);
-      } catch (e) {
-        console.warn('Could not save theme preference');
-      }
-    }
-
-    /**
-     * Show theme change toast notification
-     */
-    showThemeToast(theme) {
-      if (typeof Toast !== 'undefined') {
-        const message = theme === 'light' 
-          ? '☀️ Light mode activated' 
-          : '🌙 Dark mode activated';
-        
-        Toast.info(message, {
-          duration: 3000,
-          position: 'bottom-left'
+      const oldTheme = this.currentTheme;
+      this.currentTheme = theme;
+      
+      if (animate) {
+        this.animateTransition(() => {
+          document.documentElement.setAttribute('data-theme', theme);
+          this.updateToggleIcon(theme);
         });
+      } else {
+        document.documentElement.setAttribute('data-theme', theme);
+        this.updateToggleIcon(theme);
       }
-    }
-
+      
+      localStorage.setItem(this.storageKey, theme);
+      
+      // Dispatch custom event
+      window.dispatchEvent(new CustomEvent('themeChanged', {
+        detail: { theme, oldTheme }
+      }));
+      
+      // Play sound effect if enabled
+      if (animate) {
+        this.playToggleSound();
+      }
+    },
+    
+    /**
+     * Toggle theme
+     */
+    toggle() {
+      const newTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
+      this.setTheme(newTheme, true);
+    },
+    
+    /**
+     * Animate theme transition
+     */
+    animateTransition(callback) {
+      // Create transition overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'theme-transition-overlay';
+      document.body.appendChild(overlay);
+      
+      // Force reflow
+      overlay.offsetHeight;
+      
+      // Fade in
+      overlay.classList.add('active');
+      
+      setTimeout(() => {
+        callback();
+        
+        // Fade out
+        overlay.classList.remove('active');
+        
+        setTimeout(() => {
+          overlay.remove();
+        }, 300);
+      }, 300);
+    },
+    
+    /**
+     * Create theme toggle button
+     */
+    createToggle() {
+      const toggle = document.createElement('button');
+      toggle.className = 'theme-toggle';
+      toggle.setAttribute('aria-label', 'Toggle theme');
+      toggle.setAttribute('title', 'Toggle theme (press T)');
+      toggle.innerHTML = `
+        <svg class="sun-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="moon-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      `;
+      
+      toggle.addEventListener('click', () => this.toggle());
+      
+      document.body.appendChild(toggle);
+      this.updateToggleIcon(this.currentTheme);
+    },
+    
+    /**
+     * Update toggle icon
+     */
+    updateToggleIcon(theme) {
+      // Icons are handled via CSS based on data-theme attribute
+    },
+    
+    /**
+     * Setup event listeners
+     */
+    setupListeners() {
+      // Keyboard shortcut
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 't' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+          // Don't trigger if typing in an input
+          if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+            return;
+          }
+          e.preventDefault();
+          this.toggle();
+        }
+      });
+    },
+    
+    /**
+     * Setup system preference detection
+     */
+    setupSystemPreference() {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      
+      mediaQuery.addEventListener('change', (e) => {
+        // Only auto-switch if user hasn't manually set a preference
+        if (!localStorage.getItem(this.storageKey)) {
+          this.setTheme(e.matches ? 'dark' : 'light', true);
+        }
+      });
+    },
+    
+    /**
+     * Play toggle sound effect
+     */
+    playToggleSound() {
+      try {
+        if (!this.audioContext) {
+          this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        const oscillator = this.audioContext.createOscillator();
+        const gainNode = this.audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(this.audioContext.destination);
+        
+        if (this.currentTheme === 'dark') {
+          // Lower pitch for dark mode
+          oscillator.frequency.setValueAtTime(440, this.audioContext.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(220, this.audioContext.currentTime + 0.1);
+        } else {
+          // Higher pitch for light mode
+          oscillator.frequency.setValueAtTime(220, this.audioContext.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(440, this.audioContext.currentTime + 0.1);
+        }
+        
+        gainNode.gain.setValueAtTime(0.1, this.audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.1);
+        
+        oscillator.start(this.audioContext.currentTime);
+        oscillator.stop(this.audioContext.currentTime + 0.1);
+      } catch (e) {
+        // Audio not supported or blocked
+      }
+    },
+    
     /**
      * Get current theme
      */
-    getCurrentTheme() {
-      return document.documentElement.getAttribute('data-theme') || 'dark';
-    }
-
+    getTheme() {
+      return this.currentTheme;
+    },
+    
     /**
-     * Reset to system preference
+     * Check if dark mode
      */
-    resetToSystem() {
-      localStorage.removeItem(this.STORAGE_KEY);
-      const prefersLight = this.mediaQuery.matches;
-      this.applyTheme(prefersLight ? 'light' : 'dark');
-      
-      if (typeof Toast !== 'undefined') {
-        Toast.info('🔄 Theme set to system preference', { duration: 3000 });
-      }
+    isDark() {
+      return this.currentTheme === 'dark';
+    },
+    
+    /**
+     * Reset to auto (system preference)
+     */
+    reset() {
+      localStorage.removeItem(this.storageKey);
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      this.setTheme(prefersDark ? 'dark' : 'light', true);
     }
-  }
-
-  // Add ripple animation keyframes
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes ripple {
-      to {
-        transform: scale(2);
-        opacity: 0;
-      }
-    }
-  `;
-  document.head.appendChild(style);
-
-  // Initialize on DOM ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new ThemeManager());
-  } else {
-    new ThemeManager();
-  }
-
-  // Expose to global scope for debugging/manual control
+  };
+  
+  // Expose to global scope
   window.ThemeManager = ThemeManager;
+  
+  // Auto-initialize
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => ThemeManager.init());
+  } else {
+    ThemeManager.init();
+  }
 })();
