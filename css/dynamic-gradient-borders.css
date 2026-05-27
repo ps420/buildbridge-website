@@ -1,0 +1,397 @@
+/* ========================================
+   Dynamic Gradient Border Cards - v33.0
+   Fortune 500 Animated Border Effects
+======================================== */
+
+/* Base gradient border card */
+.gradient-border-card {
+  position: relative;
+  background: #0F0F10;
+  border-radius: 12px;
+  padding: 2px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gradient-border-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(
+    var(--gradient-angle, 0deg),
+    #C9CED6 0%,
+    #525862 25%,
+    #F5F7FA 50%,
+    #525862 75%,
+    #C9CED6 100%
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: gradient-rotate 4s linear infinite;
+}
+
+.gradient-border-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.gradient-border-card:hover::before {
+  animation-duration: 2s;
+}
+
+@keyframes gradient-rotate {
+  to {
+    --gradient-angle: 360deg;
+  }
+}
+
+/* Property registration for custom property animation */
+@property --gradient-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Card inner content */
+.gradient-border-inner {
+  position: relative;
+  background: linear-gradient(145deg, #17191d, #131416);
+  border-radius: 10px;
+  padding: 32px;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Variant: Fast rotation */
+.gradient-border-card--fast::before {
+  animation-duration: 2s;
+}
+
+.gradient-border-card--fast:hover::before {
+  animation-duration: 1s;
+}
+
+/* Variant: Slow elegant rotation */
+.gradient-border-card--slow::before {
+  animation-duration: 8s;
+}
+
+.gradient-border-card--slow:hover::before {
+  animation-duration: 4s;
+}
+
+/* Variant: Rainbow gradient */
+.gradient-border-card--rainbow::before {
+  background: linear-gradient(
+    var(--gradient-angle, 0deg),
+    #ff0080 0%,
+    #ff8c00 20%,
+    #40e0d0 40%,
+    #8a2be2 60%,
+    #ff0080 80%,
+    #ff8c00 100%
+  );
+}
+
+/* Variant: Gold/Champagne gradient (brand aligned) */
+.gradient-border-card--gold::before {
+  background: linear-gradient(
+    var(--gradient-angle, 0deg),
+    #C9CED6 0%,
+    #F5F7FA 25%,
+    #E6E8EC 50%,
+    #C9CED6 75%,
+    #F5F7FA 100%
+  );
+}
+
+/* Variant: Subtle mono gradient */
+.gradient-border-card--subtle::before {
+  background: linear-gradient(
+    var(--gradient-angle, 0deg),
+    rgba(201, 206, 214, 0.3) 0%,
+    rgba(201, 206, 214, 0.8) 50%,
+    rgba(201, 206, 214, 0.3) 100%
+  );
+}
+
+/* Glow effect variant */
+.gradient-border-card--glow {
+  box-shadow: 0 0 0 1px rgba(201, 206, 214, 0.1);
+}
+
+.gradient-border-card--glow::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(
+    var(--gradient-angle, 0deg),
+    rgba(201, 206, 214, 0.2) 0%,
+    transparent 50%,
+    rgba(201, 206, 214, 0.2) 100%
+  );
+  filter: blur(20px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.gradient-border-card--glow:hover::after {
+  opacity: 1;
+}
+
+/* Interactive mouse-following gradient */
+.gradient-border-card--interactive {
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+}
+
+.gradient-border-card--interactive::before {
+  background: radial-gradient(
+    circle at var(--mouse-x) var(--mouse-y),
+    #F5F7FA 0%,
+    #C9CED6 30%,
+    #525862 60%,
+    transparent 100%
+  );
+  animation: none;
+}
+
+/* Conic gradient variant */
+.gradient-border-card--conic::before {
+  background: conic-gradient(
+    from var(--gradient-angle, 0deg),
+    #C9CED6 0%,
+    #525862 25%,
+    #F5F7FA 50%,
+    #525862 75%,
+    #C9CED6 100%
+  );
+  animation: gradient-rotate 6s linear infinite;
+}
+
+/* Pulse variant */
+.gradient-border-card--pulse::before {
+  animation: gradient-pulse 3s ease-in-out infinite;
+}
+
+@keyframes gradient-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+/* Striped animation variant */
+.gradient-border-card--striped::before {
+  background: repeating-linear-gradient(
+    var(--gradient-angle, 0deg),
+    #C9CED6 0px,
+    #C9CED6 10px,
+    transparent 10px,
+    transparent 20px,
+    #F5F7FA 20px,
+    #F5F7FA 30px
+  );
+  animation: gradient-rotate 10s linear infinite;
+}
+
+/* Mesh gradient variant */
+.gradient-border-card--mesh::before {
+  background: 
+    radial-gradient(at 0% 0%, #C9CED6 0px, transparent 50%),
+    radial-gradient(at 100% 0%, #F5F7FA 0px, transparent 50%),
+    radial-gradient(at 100% 100%, #525862 0px, transparent 50%),
+    radial-gradient(at 0% 100%, #E6E8EC 0px, transparent 50%);
+  animation: mesh-shift 8s ease-in-out infinite;
+}
+
+@keyframes mesh-shift {
+  0%, 100% {
+    background-position: 0% 0%, 100% 0%, 100% 100%, 0% 100%;
+  }
+  50% {
+    background-position: 100% 100%, 0% 100%, 0% 0%, 100% 0%;
+  }
+}
+
+/* Card content styles */
+.gradient-card-icon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.1), rgba(201, 206, 214, 0.05));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.gradient-border-card:hover .gradient-card-icon {
+  transform: scale(1.1);
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.2), rgba(201, 206, 214, 0.1));
+}
+
+.gradient-card-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin-bottom: 12px;
+}
+
+.gradient-card-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: rgba(201, 206, 214, 0.7);
+  line-height: 1.6;
+}
+
+.gradient-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #C9CED6;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 20px;
+  transition: gap 0.3s ease, color 0.3s ease;
+}
+
+.gradient-border-card:hover .gradient-card-link {
+  gap: 12px;
+  color: #F5F7FA;
+}
+
+/* Shine effect overlay */
+.gradient-border-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.gradient-border-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  transform: rotate(30deg) translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.gradient-border-card:hover .gradient-border-shine::after {
+  transform: rotate(30deg) translateX(100%);
+}
+
+/* Grid layout for cards */
+.gradient-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px;
+}
+
+/* Feature highlight card */
+.gradient-border-card--featured {
+  transform: scale(1.05);
+}
+
+.gradient-border-card--featured::before {
+  animation-duration: 3s;
+  background: linear-gradient(
+    var(--gradient-angle, 0deg),
+    #F5F7FA 0%,
+    #C9CED6 25%,
+    #FFFFFF 50%,
+    #C9CED6 75%,
+    #F5F7FA 100%
+  );
+}
+
+.gradient-border-card--featured:hover {
+  transform: scale(1.08) translateY(-6px);
+}
+
+/* Border thickness variants */
+.gradient-border-card--thick {
+  padding: 3px;
+}
+
+.gradient-border-card--thick .gradient-border-inner {
+  border-radius: 9px;
+}
+
+.gradient-border-card--thin {
+  padding: 1px;
+}
+
+.gradient-border-card--thin .gradient-border-inner {
+  border-radius: 11px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .gradient-border-card::before {
+    animation: none;
+  }
+  
+  .gradient-border-card:hover {
+    transform: none;
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .gradient-border-inner {
+    padding: 24px;
+  }
+  
+  .gradient-card-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+  
+  .gradient-card-title {
+    font-size: 18px;
+  }
+  
+  .gradient-cards-grid {
+    padding: 20px;
+    gap: 16px;
+  }
+  
+  .gradient-border-card--featured {
+    transform: none;
+  }
+  
+  .gradient-border-card--featured:hover {
+    transform: translateY(-4px);
+  }
+}
