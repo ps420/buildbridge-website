@@ -110,6 +110,7 @@
   
   <!-- v26.0 Fortune 500 Professional Enhancements -->
   <link rel="stylesheet" href="css/masonry-portfolio.css">
+  <link rel="stylesheet" href="css/activity-feed.css">
 
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
   <link rel="manifest" href="manifest.json">
@@ -1219,6 +1220,41 @@
     <div id="projectComparison"></div>
   </section>
 
+  <!-- v26.1: Real-Time Activity Feed -->
+  <section class="activity-feed-section" id="activity-feed" data-section="Activity" data-nav-label="Live">
+    <div class="activity-feed-container">
+      <div class="activity-feed-column">
+        <div class="activity-feed-header">
+          <span class="eyebrow">🔴 Live Updates</span>
+          <h2>Real-Time <span>Activity</span></h2>
+          <p>See what's happening across South Africa right now</p>
+          <div class="live-indicator">
+            <span class="live-dot"></span>
+            <span>Live Updates</span>
+          </div>
+        </div>
+        <div class="activity-feed">
+          <!-- Activity cards injected by JS -->
+        </div>
+      </div>
+      <div class="activity-stats">
+        <div class="stat-card">
+          <div class="stat-card-value">0</div>
+          <div class="stat-card-label">Projects Delivered</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-value">0%</div>
+          <div class="stat-card-label">Client Satisfaction</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-value">0</div>
+          <div class="stat-card-label">Contractor Partners</div>
+          <div class="mini-chart"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Testimonials -->
   <section id="testimonials" class="section testimonials" data-section="Testimonials" data-nav-label="Reviews">
     <div class="section-header reveal-section">
@@ -1532,6 +1568,9 @@
   
   <!-- v26.0 Fortune 500 Professional Enhancements -->
   <script src="js/masonry-portfolio.js"></script>
+  
+  <!-- v26.1 Real-Time Activity Feed -->
+  <script src="js/activity-feed.js"></script>
   
   <script>
     // Log v25.0 features loaded
