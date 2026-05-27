@@ -1,0 +1,279 @@
+/* ========================================
+   v30.0: Rolling Counter Animation
+   Fortune 500 Animated Statistics
+======================================== */
+
+/* Base counter style */
+.rolling-counter,
+[data-counter],
+.counter-animate {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+  display: inline-block;
+}
+
+/* Slot machine counter style */
+.slot-machine-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+}
+
+.counter-prefix,
+.counter-suffix {
+  font-weight: 700;
+  color: inherit;
+}
+
+/* Reel container */
+.counter-reel {
+  position: relative;
+  width: 0.6em;
+  height: 1em;
+  overflow: hidden;
+  background: rgba(201, 206, 214, 0.05);
+  border-radius: 4px;
+}
+
+/* Reel strip containing all digits */
+.reel-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.1s linear;
+}
+
+/* Individual digit */
+.reel-digit {
+  height: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+}
+
+/* Gold counter variant */
+.counter-gold {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Chrome counter variant */
+.counter-chrome {
+  background: linear-gradient(135deg, #F5F7FA 0%, #C9CED6 50%, #A0A8B0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Large display counter */
+.counter-large {
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 1;
+}
+
+/* Medium display counter */
+.counter-medium {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.1;
+}
+
+/* Small display counter */
+.counter-small {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.2;
+}
+
+/* Counter with label */
+.counter-with-label {
+  text-align: center;
+}
+
+.counter-with-label .counter-value {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #F5F7FA, #C9CED6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.counter-with-label .counter-label {
+  display: block;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: rgba(201, 206, 214, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Stats grid with counters */
+.stats-counter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  padding: 60px 0;
+}
+
+@media (max-width: 1024px) {
+  .stats-counter-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+}
+
+@media (max-width: 640px) {
+  .stats-counter-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+/* Counter card */
+.counter-card {
+  text-align: center;
+  padding: 30px;
+  background: rgba(201, 206, 214, 0.03);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 16px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.counter-card:hover {
+  background: rgba(201, 206, 214, 0.06);
+  border-color: rgba(201, 206, 214, 0.2);
+  transform: translateY(-4px);
+}
+
+.counter-card-number {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #F5F7FA, #C9CED6, #A0A8B0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.counter-card-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: rgba(201, 206, 214, 0.6);
+}
+
+/* Animated counter bar */
+.counter-bar {
+  height: 4px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 16px;
+}
+
+.counter-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #C9CED6, #F5F7FA);
+  border-radius: 2px;
+  width: 0;
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Counter in hero */
+.hero-counter {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 30px;
+  background: rgba(15, 15, 18, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 16px;
+}
+
+.hero-counter-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-counter-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: rgba(201, 206, 214, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+}
+
+/* Pulse animation for live counters */
+@keyframes counter-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.counter-live .counter-value {
+  animation: counter-pulse 2s ease-in-out infinite;
+}
+
+/* Counter update indicator */
+.counter-update-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #48BB78;
+  border-radius: 50%;
+  margin-left: 8px;
+  animation: indicator-blink 1s ease-in-out infinite;
+}
+
+@keyframes indicator-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Stagger animation for multiple counters */
+[data-stagger] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+[data-stagger].animated {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reel-strip {
+    transition: none;
+  }
+  
+  .counter-live .counter-value {
+    animation: none;
+  }
+  
+  [data-stagger] {
+    opacity: 1;
+    transform: none;
+  }
+}

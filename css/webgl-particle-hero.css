@@ -1,0 +1,245 @@
+/* ========================================
+   v30.0: WebGL Interactive Particle Hero
+   Fortune 500 Immersive Background System
+======================================== */
+
+.webgl-particle-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.webgl-particle-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Fallback gradient when WebGL not supported */
+.webgl-particle-container.no-webgl {
+  background: 
+    radial-gradient(ellipse at 20% 80%, rgba(201, 206, 214, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(201, 206, 214, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(201, 206, 214, 0.03) 0%, transparent 70%),
+    linear-gradient(135deg, #0f0f12 0%, #1a1a22 100%);
+}
+
+/* Particle Controls UI */
+.particle-controls {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  gap: 12px;
+  z-index: 100;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.particle-controls.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.particle-control-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  color: #C9CED6;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.particle-control-btn:hover {
+  background: rgba(201, 206, 214, 0.2);
+  border-color: rgba(201, 206, 214, 0.4);
+  transform: scale(1.1);
+}
+
+.particle-control-btn.active {
+  background: rgba(201, 206, 214, 0.3);
+  border-color: #C9CED6;
+}
+
+/* Particle Stats Overlay */
+.particle-stats {
+  position: fixed;
+  top: 100px;
+  right: 30px;
+  padding: 16px 20px;
+  background: rgba(15, 15, 18, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  color: rgba(201, 206, 214, 0.6);
+  z-index: 100;
+  opacity: 0;
+  transform: translateX(30px);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.particle-stats.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.particle-stats-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 8px;
+}
+
+.particle-stats-row:last-child {
+  margin-bottom: 0;
+  padding-top: 8px;
+  border-top: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.particle-stats-value {
+  color: #F5F7FA;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Connection Line Animation */
+@keyframes pulse-connection {
+  0%, 100% { stroke-opacity: 0.2; }
+  50% { stroke-opacity: 0.5; }
+}
+
+/* Particle Burst Effect */
+.particle-burst {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, #C9CED6 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: burst-expand 1s ease-out forwards;
+}
+
+@keyframes burst-expand {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(50);
+    opacity: 0;
+  }
+}
+
+/* Hero content positioning over particles */
+.hero-particle-overlay {
+  position: relative;
+  z-index: 2;
+}
+
+/* Glassmorphism card over particles */
+.particle-glass-card {
+  background: rgba(15, 15, 18, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 20px;
+  padding: 40px;
+}
+
+/* Mouse Glow Effect */
+.mouse-glow {
+  position: fixed;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(201, 206, 214, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .webgl-particle-container {
+    display: none;
+  }
+  
+  .particle-controls,
+  .particle-stats {
+    display: none;
+  }
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+  .particle-controls {
+    bottom: 20px;
+    right: 20px;
+    gap: 8px;
+  }
+  
+  .particle-control-btn {
+    width: 38px;
+    height: 38px;
+    font-size: 16px;
+  }
+  
+  .particle-stats {
+    display: none;
+  }
+}
+
+/* Performance Mode - Simplified particles */
+.performance-mode .webgl-particle-container canvas {
+  opacity: 0.5;
+}
+
+/* Hero Section with Particles Adjustments */
+.hero-with-particles {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.hero-particle-content {
+  position: relative;
+  z-index: 10;
+}
+
+/* Particle Vignette Overlay */
+.particle-vignette {
+  position: fixed;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse at center, transparent 0%, rgba(15, 15, 18, 0.4) 100%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Floating Elements Over Particles */
+.floating-over-particles {
+  position: relative;
+  z-index: 10;
+  animation: float-particle-item 6s ease-in-out infinite;
+}
+
+@keyframes float-particle-item {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
