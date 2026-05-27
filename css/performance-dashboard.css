@@ -1,0 +1,571 @@
+/* ============================================
+   BuildBridge Performance Dashboard v14.1
+   Real-time Core Web Vitals Monitoring
+   ============================================ */
+
+/* ----------------------------------------
+   Performance Toggle Button
+   ---------------------------------------- */
+.perf-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #635BFF 0%, #4f47e0 100%);
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(99, 91, 255, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.perf-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px rgba(99, 91, 255, 0.5);
+}
+
+.perf-toggle.active {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.perf-toggle .pulse-indicator {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 14px;
+  height: 14px;
+  background: #10b981;
+  border-radius: 50%;
+  border: 2px solid #0f0f10;
+  animation: perf-pulse 2s ease-in-out infinite;
+}
+
+.perf-toggle.warning .pulse-indicator {
+  background: #f59e0b;
+}
+
+.perf-toggle.error .pulse-indicator {
+  background: #ef4444;
+  animation: perf-pulse 0.5s ease-in-out infinite;
+}
+
+@keyframes perf-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+}
+
+/* ----------------------------------------
+   Performance Dashboard Panel
+   ---------------------------------------- */
+.perf-dashboard {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 380px;
+  max-width: calc(100vw - 40px);
+  max-height: calc(100vh - 120px);
+  background: rgba(15, 15, 16, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  z-index: 9997;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.95);
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow-y: auto;
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.perf-dashboard.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+/* ----------------------------------------
+   Dashboard Header
+   ---------------------------------------- */
+.perf-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.perf-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.perf-header h3::before {
+  content: '⚡';
+  font-size: 18px;
+}
+
+.perf-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.perf-close:hover {
+  color: white;
+}
+
+.perf-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(16, 185, 129, 0.2);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #10b981;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.perf-live-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: #10b981;
+  border-radius: 50%;
+  animation: live-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ----------------------------------------
+   Overall Score
+   ---------------------------------------- */
+.perf-score-section {
+  text-align: center;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+}
+
+.perf-score-ring {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 12px;
+}
+
+.perf-score-ring svg {
+  transform: rotate(-90deg);
+}
+
+.perf-score-circle-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 8;
+}
+
+.perf-score-circle {
+  fill: none;
+  stroke: #10b981;
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 283;
+  stroke-dashoffset: 283;
+  transition: stroke-dashoffset 0.8s ease, stroke 0.3s ease;
+}
+
+.perf-score-circle.warning {
+  stroke: #f59e0b;
+}
+
+.perf-score-circle.error {
+  stroke: #ef4444;
+}
+
+.perf-score-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+}
+
+.perf-score-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* ----------------------------------------
+   Core Web Vitals Grid
+   ---------------------------------------- */
+.perf-vitals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.perf-vital-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  padding: 16px 12px;
+  text-align: center;
+  border: 1px solid transparent;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.perf-vital-card.good {
+  border-color: rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.perf-vital-card.warning {
+  border-color: rgba(245, 158, 11, 0.3);
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.perf-vital-card.error {
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.perf-vital-icon {
+  width: 32px;
+  height: 32px;
+  margin: 0 auto 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.perf-vital-card.good .perf-vital-icon {
+  background: rgba(16, 185, 129, 0.2);
+}
+
+.perf-vital-card.warning .perf-vital-icon {
+  background: rgba(245, 158, 11, 0.2);
+}
+
+.perf-vital-card.error .perf-vital-icon {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.perf-vital-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.perf-vital-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 2px;
+}
+
+.perf-vital-value.loading {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.perf-vital-target {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ----------------------------------------
+   Metrics Section
+   ---------------------------------------- */
+.perf-section {
+  margin-bottom: 20px;
+}
+
+.perf-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+/* ----------------------------------------
+   Resource Timing
+   ---------------------------------------- */
+.perf-resource-bar {
+  display: flex;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.perf-resource-segment {
+  height: 100%;
+  transition: width 0.5s ease;
+  position: relative;
+}
+
+.perf-resource-segment.dns { background: #635BFF; }
+.perf-resource-segment.tcp { background: #00D9C0; }
+.perf-resource-segment.ttfb { background: #f59e0b; }
+.perf-resource-segment.download { background: #10b981; }
+.perf-resource-segment.processing { background: #ec4899; }
+
+.perf-resource-legend {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  font-size: 11px;
+}
+
+.perf-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.perf-legend-color {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+/* ----------------------------------------
+   Timeline Graph
+   ---------------------------------------- */
+.perf-timeline {
+  height: 60px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  padding: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.perf-timeline-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* ----------------------------------------
+   Detailed Metrics List
+   ---------------------------------------- */
+.perf-metrics-list {
+  space-y: 8px;
+}
+
+.perf-metric-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.perf-metric-name {
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.perf-metric-value {
+  font-weight: 600;
+  color: white;
+  font-family: 'SF Mono', Monaco, monospace;
+}
+
+.perf-metric-value.good { color: #10b981; }
+.perf-metric-value.warning { color: #f59e0b; }
+.perf-metric-value.error { color: #ef4444; }
+
+/* ----------------------------------------
+   Recommendations
+   ---------------------------------------- */
+.perf-recommendations {
+  margin-top: 16px;
+}
+
+.perf-rec-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+.perf-rec-item:last-child {
+  margin-bottom: 0;
+}
+
+.perf-rec-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+.perf-rec-item.warning .perf-rec-icon {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+.perf-rec-item.error .perf-rec-icon {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.perf-rec-item.info .perf-rec-icon {
+  background: rgba(99, 91, 255, 0.2);
+  color: #635BFF;
+}
+
+.perf-rec-text {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+}
+
+/* ----------------------------------------
+   Mini Chart
+   ---------------------------------------- */
+.perf-mini-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 30px;
+  padding: 4px 0;
+}
+
+.perf-mini-bar {
+  flex: 1;
+  background: rgba(99, 91, 255, 0.5);
+  border-radius: 2px;
+  transition: height 0.3s ease, background 0.3s ease;
+  min-height: 4px;
+}
+
+.perf-mini-bar.good { background: #10b981; }
+.perf-mini-bar.warning { background: #f59e0b; }
+.perf-mini-bar.error { background: #ef4444; }
+
+/* ----------------------------------------
+   Memory Usage
+   ---------------------------------------- */
+.perf-memory-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.perf-memory-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+/* ----------------------------------------
+   FPS Counter
+   ---------------------------------------- */
+.perf-fps-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'SF Mono', Monaco, monospace;
+}
+
+.perf-fps-value {
+  padding: 2px 8px;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.perf-fps-value.good { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+.perf-fps-value.warning { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+.perf-fps-value.error { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+
+/* ----------------------------------------
+   Responsive
+   ---------------------------------------- */
+@media (max-width: 480px) {
+  .perf-dashboard {
+    width: calc(100vw - 32px);
+    right: 16px;
+    left: 16px;
+    bottom: 70px;
+    padding: 16px;
+  }
+  
+  .perf-vitals-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .perf-vital-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+  }
+  
+  .perf-vital-icon {
+    margin: 0;
+  }
+}
+
+/* ----------------------------------------
+   Print Styles
+   ---------------------------------------- */
+@media print {
+  .perf-toggle,
+  .perf-dashboard {
+    display: none !important;
+  }
+}
