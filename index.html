@@ -100,6 +100,13 @@
   <link rel="stylesheet" href="css/physics-cursor-system.css">
   <link rel="stylesheet" href="css/scroll-triggered-animations.css">
   <link rel="stylesheet" href="css/draw-svg-paths.css">
+  
+  <!-- v25.0 Fortune 500 Next-Gen Professional Features -->
+  <link rel="stylesheet" href="css/scroll-card-stack.css">
+  <link rel="stylesheet" href="css/atmospheric-fog.css">
+  <link rel="stylesheet" href="css/cinematic-video-section.css">
+  <link rel="stylesheet" href="css/magnetic-image-reveal.css">
+  <link rel="stylesheet" href="css/animated-timeline-svg.css">
 
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
   <link rel="manifest" href="manifest.json">
@@ -849,6 +856,273 @@
     </div>
   </section>
 
+  <!-- v25.0: Scroll-Driven 3D Card Stack Section -->
+  <section class="card-stack-section" id="card-stack" data-section="CardStack" data-nav-label="Insights">
+    <!-- Atmospheric Fog Effect -->
+    <div class="atmospheric-fog" data-density="medium" data-speed="slow"></div>
+    
+    <div class="card-stack-container">
+      <div class="card-stack-progress"></div>
+      
+      <div class="card-stack-wrapper">
+        <!-- Card 1 -->
+        <div class="card-stack-item" data-index="0">
+          <div class="card-stack-content">
+            <span class="card-stack-number">01 — Residential Excellence</span>
+            <h3 class="card-stack-title">Luxury Living <span>Redefined</span></h3>
+            <p class="card-stack-description">Transform your vision of the perfect home into reality with our bespoke residential construction management services.</p>
+            <ul class="card-stack-features">
+              <li>Custom home design & build</li>
+              <li>Luxury renovations & extensions</li>
+              <li>Heritage property restoration</li>
+              <li>Smart home integration</li>
+            </ul>
+          </div>
+          <div class="card-stack-visual">
+            <img src="assets/02_Website_Heroes/Hero_1.png" alt="Luxury Residential">
+            <div class="magnetic-glow"></div>
+            <div class="card-stack-stat">
+              <div class="card-stack-stat-value">R12M</div>
+              <div class="card-stack-stat-label">Avg. Project Value</div>
+            </div>
+          </div>
+          <div class="magnetic-line"></div>
+        </div>
+        
+        <!-- Card 2 -->
+        <div class="card-stack-item" data-index="1">
+          <div class="card-stack-content">
+            <span class="card-stack-number">02 — Commercial Power</span>
+            <h3 class="card-stack-title">Commercial <span>Spaces</span></h3>
+            <p class="card-stack-description">From office buildings to retail centers, we deliver commercial projects that drive business success and create lasting impressions.</p>
+            <ul class="card-stack-features">
+              <li>Office buildings & complexes</li>
+              <li>Retail & shopping centers</li>
+              <li>Hospitality & entertainment</li>
+              <li>Medical & healthcare facilities</li>
+            </ul>
+          </div>
+          <div class="card-stack-visual">
+            <img src="assets/02_Website_Heroes/Hero_2.png" alt="Commercial Development">
+            <div class="magnetic-glow"></div>
+            <div class="card-stack-stat">
+              <div class="card-stack-stat-value">R45M</div>
+              <div class="card-stack-stat-label">Avg. Project Value</div>
+            </div>
+          </div>
+          <div class="magnetic-line"></div>
+        </div>
+        
+        <!-- Card 3 -->
+        <div class="card-stack-item" data-index="2">
+          <div class="card-stack-content">
+            <span class="card-stack-number">03 — Industrial Scale</span>
+            <h3 class="card-stack-title">Industrial <span>Projects</span></h3>
+            <p class="card-stack-description">Large-scale industrial facilities built to exact specifications with emphasis on efficiency, safety, and future growth.</p>
+            <ul class="card-stack-features">
+              <li>Manufacturing plants</li>
+              <li>Warehouse & distribution centers</li>
+              <li>Logistics hubs</li>
+              <li>Renewable energy facilities</li>
+            </ul>
+          </div>
+          <div class="card-stack-visual">
+            <img src="assets/03_Social_Campaign/Campaign_4.png" alt="Industrial Facility">
+            <div class="magnetic-glow"></div>
+            <div class="card-stack-stat">
+              <div class="card-stack-stat-value">R65M</div>
+              <div class="card-stack-stat-label">Avg. Project Value</div>
+            </div>
+          </div>
+          <div class="magnetic-line"></div>
+        </div>
+        
+        <!-- Card 4 -->
+        <div class="card-stack-item" data-index="3">
+          <div class="card-stack-content">
+            <span class="card-stack-number">04 — Mixed-Use Innovation</span>
+            <h3 class="card-stack-title">Mixed-Use <span>Developments</span></h3>
+            <p class="card-stack-description">Creating vibrant communities where people live, work, and play through integrated mixed-use development projects.</p>
+            <ul class="card-stack-features">
+              <li>Mixed residential & commercial</li>
+              <li>Urban regeneration projects</li>
+              <li>Sustainable green buildings</li>
+              <li>Transit-oriented development</li>
+            </ul>
+          </div>
+          <div class="card-stack-visual">
+            <img src="assets/03_Social_Campaign/Campaign_5.png" alt="Mixed-Use Development">
+            <div class="magnetic-glow"></div>
+            <div class="card-stack-stat">
+              <div class="card-stack-stat-value">R85M</div>
+              <div class="card-stack-stat-label">Avg. Project Value</div>
+            </div>
+          </div>
+          <div class="magnetic-line"></div>
+        </div>
+      </div>
+      
+      <div class="card-stack-hint">
+        <span>Scroll to explore</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 5v14M19 12l-7 7-7-7"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- v25.0: Animated SVG Timeline Section -->
+  <section class="animated-timeline-section" id="project-timeline" data-section="Timeline" data-nav-label="Process">
+    <div class="section-header reveal-section">
+      <p class="eyebrow">Project Journey</p>
+      <h2 class="scramble-text kinetic-text">Your Construction Timeline</h2>
+      <p>From initial concept to final handover, here's how we guide your project to successful completion.</p>
+    </div>
+    
+    <div class="animated-timeline">
+      <!-- SVG Path Container -->
+      <div class="timeline-svg-container">
+        <svg class="timeline-svg" viewBox="0 0 4 800" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="timeline-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#C9CED6;stop-opacity:1" />
+              <stop offset="50%" style="stop-color:#F5F7FA;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#C9CED6;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <path class="timeline-path" d="M2 0 L2 800" />
+          <path class="timeline-path-active" d="M2 0 L2 800" />
+        </svg>
+      </div>
+      
+      <!-- Timeline Items -->
+      <div class="timeline-items">
+        <!-- Phase 1 -->
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <span class="timeline-date">Week 1 — 2</span>
+            <h3 class="timeline-title">Discovery & <span>Planning</span></h3>
+            <p class="timeline-description">We begin with a comprehensive consultation to understand your vision, requirements, and budget constraints.</p>
+            <ul class="timeline-milestones">
+              <li>Initial consultation</li>
+              <li>Site assessment</li>
+              <li>Feasibility study</li>
+              <li>Budget planning</li>
+            </ul>
+          </div>
+          <div class="timeline-node">
+            <div class="timeline-node-circle">01</div>
+            <div class="timeline-node-ring"></div>
+          </div>
+          <div class="timeline-visual">
+            <img src="assets/02_Website_Heroes/Hero_1.png" alt="Discovery Phase">
+            <div class="timeline-visual-overlay"></div>
+            <span class="timeline-visual-badge">Foundation Phase</span>
+          </div>
+        </div>
+        
+        <!-- Phase 2 -->
+        <div class="timeline-item">
+          <div class="timeline-visual">
+            <img src="assets/02_Website_Heroes/Hero_2.png" alt="Design Phase">
+            <div class="timeline-visual-overlay"></div>
+            <span class="timeline-visual-badge">Design Phase</span>
+          </div>
+          <div class="timeline-node">
+            <div class="timeline-node-circle">02</div>
+            <div class="timeline-node-ring"></div>
+          </div>
+          <div class="timeline-content">
+            <span class="timeline-date">Week 3 — 6</span>
+            <h3 class="timeline-title">Design & <span>Development</span></h3>
+            <p class="timeline-description">Our architects and engineers translate your vision into detailed plans ready for construction.</p>
+            <ul class="timeline-milestones">
+              <li>Architectural drawings</li>
+              <li>Engineering plans</li>
+              <li>Material selection</li>
+              <li>Regulatory approvals</li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Phase 3 -->
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <span class="timeline-date">Week 7 — 8</span>
+            <h3 class="timeline-title">Contractor <span>Selection</span></h3>
+            <p class="timeline-description">We match your project with vetted contractors from our trusted network who specialize in your build type.</p>
+            <ul class="timeline-milestones">
+              <li>Tender process</li>
+              <li>Contractor vetting</li>
+              <li>Quote comparison</li>
+              <li>Contract negotiation</li>
+            </ul>
+          </div>
+          <div class="timeline-node">
+            <div class="timeline-node-circle">03</div>
+            <div class="timeline-node-ring"></div>
+          </div>
+          <div class="timeline-visual">
+            <img src="assets/03_Social_Campaign/Campaign_4.png" alt="Contractor Phase">
+            <div class="timeline-visual-overlay"></div>
+            <span class="timeline-visual-badge">Team Phase</span>
+          </div>
+        </div>
+        
+        <!-- Phase 4 -->
+        <div class="timeline-item">
+          <div class="timeline-visual">
+            <img src="assets/03_Social_Campaign/Campaign_5.png" alt="Construction Phase">
+            <div class="timeline-visual-overlay"></div>
+            <span class="timeline-visual-badge">Build Phase</span>
+          </div>
+          <div class="timeline-node">
+            <div class="timeline-node-circle">04</div>
+            <div class="timeline-node-ring"></div>
+          </div>
+          <div class="timeline-content">
+            <span class="timeline-date">Week 9 — Project End</span>
+            <h3 class="timeline-title">Construction & <span>Management</span></h3>
+            <p class="timeline-description">Full project oversight ensuring quality, timeline adherence, and budget management throughout construction.</p>
+            <ul class="timeline-milestones">
+              <li>Weekly progress reports</li>
+              <li>Quality inspections</li>
+              <li>Milestone tracking</li>
+              <li>Issue resolution</li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Phase 5 -->
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <span class="timeline-date">Final Week</span>
+            <h3 class="timeline-title">Handover & <span>Support</span></h3>
+            <p class="timeline-description">Rigorous final inspections and a comprehensive handover with ongoing support for your peace of mind.</p>
+            <ul class="timeline-milestones">
+              <li>Final inspections</li>
+              <li>Defect resolution</li>
+              <li>Documentation handover</li>
+              <li>Warranty activation</li>
+            </ul>
+          </div>
+          <div class="timeline-node">
+            <div class="timeline-node-circle">05</div>
+            <div class="timeline-node-ring"></div>
+          </div>
+          <div class="timeline-visual">
+            <img src="assets/02_Website_Heroes/Hero_3.png" alt="Completion Phase">
+            <div class="timeline-visual-overlay"></div>
+            <span class="timeline-visual-badge">Completion Phase</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Vertical Progress Indicator -->
+      <div class="timeline-progress-vertical"></div>
+    </div>
+  </section>
+
   <!-- Interactive Project Map Section -->
   <section id="project-map" class="project-map-section" data-section="ProjectMap" data-nav-label="Locations">
     <div class="section-header reveal-section">
@@ -1172,6 +1446,18 @@
   <script src="js/physics-cursor-system.js"></script>
   <script src="js/scroll-triggered-animations.js"></script>
   <script src="js/draw-svg-paths.js"></script>
+  
+  <!-- v25.0 Fortune 500 Next-Gen Professional Features -->
+  <script src="js/scroll-card-stack.js"></script>
+  <script src="js/atmospheric-fog.js"></script>
+  <script src="js/cinematic-video.js"></script>
+  <script src="js/magnetic-image-reveal.js"></script>
+  <script src="js/animated-timeline-svg.js"></script>
+  
+  <script>
+    // Log v25.0 features loaded
+    console.log('🎯 BuildBridge Fortune 500 v25.0 loaded: Scroll-Driven 3D Card Stack, Atmospheric Fog Particles, Cinematic Video Sections, Magnetic Image Reveals, Animated SVG Timelines');
+  </script>
   
   <!-- Print Button -->
   <button class="print-button" onclick="window.print()" title="Print this page" aria-label="Print page">

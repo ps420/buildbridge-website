@@ -1,0 +1,366 @@
+/* ========================================
+   MAGNETIC IMAGE REVEAL SYSTEM
+   v25.0 Fortune 500 Professional Feature
+   Magnetic pull effects on project images
+======================================== */
+
+.magnetic-image-container {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.magnetic-image-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
+}
+
+.magnetic-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
+}
+
+/* Magnetic reveal overlay */
+.magnetic-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 50%,
+    rgba(15, 15, 16, 0.8) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 2;
+}
+
+.magnetic-image-container:hover .magnetic-image-overlay {
+  opacity: 1;
+}
+
+/* Magnetic cursor follower */
+.magnetic-cursor {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border: 2px solid rgba(201, 206, 214, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+}
+
+.magnetic-image-container:hover .magnetic-cursor {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+.magnetic-cursor-text {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--white);
+  font-weight: 600;
+}
+
+/* Magnetic glow effect */
+.magnetic-glow {
+  position: absolute;
+  inset: -2px;
+  border-radius: 10px;
+  background: linear-gradient(
+    135deg,
+    rgba(201, 206, 214, 0.3) 0%,
+    transparent 50%,
+    rgba(201, 206, 214, 0.2) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+}
+
+.magnetic-image-container:hover .magnetic-glow {
+  opacity: 1;
+}
+
+/* Magnetic content overlay */
+.magnetic-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 30px;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 3;
+}
+
+.magnetic-image-container:hover .magnetic-content {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.magnetic-content-title {
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 8px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.magnetic-content-subtitle {
+  font-size: 14px;
+  color: var(--chrome);
+  opacity: 0.8;
+}
+
+/* Magnetic badge */
+.magnetic-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 8px 16px;
+  background: rgba(201, 206, 214, 0.15);
+  border: 1px solid rgba(201, 206, 214, 0.3);
+  border-radius: 20px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--white);
+  backdrop-filter: blur(10px);
+  transform: translateY(-10px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 3;
+}
+
+.magnetic-image-container:hover .magnetic-badge {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Magnetic ripple effect */
+.magnetic-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201, 206, 214, 0.3) 0%, transparent 70%);
+  pointer-events: none;
+  transform: scale(0);
+  opacity: 0;
+}
+
+.magnetic-ripple.active {
+  animation: magneticRipple 0.6s ease-out forwards;
+}
+
+@keyframes magneticRipple {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Magnetic grid layout */
+.magnetic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+  padding: 40px 0;
+}
+
+.magnetic-grid-item {
+  aspect-ratio: 4/3;
+}
+
+/* Magnetic reveal variations */
+.magnetic-image-container[data-reveal="zoom"] .magnetic-image {
+  transform: scale(1);
+}
+
+.magnetic-image-container[data-reveal="zoom"]:hover .magnetic-image {
+  transform: scale(1.1);
+}
+
+.magnetic-image-container[data-reveal="slide"] .magnetic-image {
+  transform: translateX(0);
+}
+
+.magnetic-image-container[data-reveal="slide"]:hover .magnetic-image {
+  transform: translateX(-5%);
+}
+
+.magnetic-image-container[data-reveal="tilt"] {
+  transform-style: preserve-3d;
+}
+
+/* Magnetic parallax layers */
+.magnetic-parallax-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.magnetic-parallax-layer--1 { z-index: 1; }
+.magnetic-parallax-layer--2 { z-index: 2; }
+.magnetic-parallax-layer--3 { z-index: 3; }
+
+/* Fortune 500 magazine style */
+.magnetic-magazine {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.magnetic-magazine:nth-child(even) .magnetic-magazine-image {
+  order: 2;
+}
+
+.magnetic-magazine-content {
+  padding: 40px;
+}
+
+.magnetic-magazine-eyebrow {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--chrome);
+  margin-bottom: 20px;
+}
+
+.magnetic-magazine-title {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+}
+
+.magnetic-magazine-text {
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--chrome);
+  margin-bottom: 30px;
+}
+
+.magnetic-magazine-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 600;
+  transition: gap 0.3s ease;
+}
+
+.magnetic-magazine-link:hover {
+  gap: 15px;
+}
+
+.magnetic-magazine-link svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Hover line effect */
+.magnetic-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--chrome), transparent);
+  transition: width 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.magnetic-image-container:hover .magnetic-line {
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .magnetic-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .magnetic-grid-item {
+    aspect-ratio: 16/9;
+  }
+  
+  .magnetic-magazine {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .magnetic-magazine:nth-child(even) .magnetic-magazine-image {
+    order: 0;
+  }
+  
+  .magnetic-magazine-content {
+    padding: 20px;
+  }
+  
+  .magnetic-magazine-title {
+    font-size: 24px;
+  }
+  
+  .magnetic-content-title {
+    font-size: 18px;
+  }
+  
+  .magnetic-content {
+    padding: 20px;
+  }
+  
+  .magnetic-cursor {
+    display: none;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .magnetic-image,
+  .magnetic-image-wrapper,
+  .magnetic-content,
+  .magnetic-badge,
+  .magnetic-cursor,
+  .magnetic-line {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+  
+  .magnetic-ripple {
+    display: none;
+  }
+}
