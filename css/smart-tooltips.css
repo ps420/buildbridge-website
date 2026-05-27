@@ -1,0 +1,348 @@
+/* ========================================
+   BUILD BRIDGE v15.0 - SMART TOOLTIPS
+   Fortune 500 Contextual Help System
+======================================== */
+
+.smart-tooltip {
+  position: absolute;
+  z-index: 99999;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(8px) scale(0.96);
+  transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  max-width: 320px;
+}
+
+.smart-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.smart-tooltip-content {
+  background: linear-gradient(145deg, #1a1c21, #0f0f12);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 8px;
+  padding: 12px 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  position: relative;
+  backdrop-filter: blur(20px);
+}
+
+.smart-tooltip-arrow {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #1a1c21;
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  transform: rotate(45deg);
+}
+
+.smart-tooltip[data-placement="top"] .smart-tooltip-arrow {
+  bottom: -6px;
+  left: 50%;
+  margin-left: -6px;
+  border-top: none;
+  border-left: none;
+}
+
+.smart-tooltip[data-placement="bottom"] .smart-tooltip-arrow {
+  top: -6px;
+  left: 50%;
+  margin-left: -6px;
+  border-bottom: none;
+  border-right: none;
+}
+
+.smart-tooltip[data-placement="left"] .smart-tooltip-arrow {
+  right: -6px;
+  top: 50%;
+  margin-top: -6px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.smart-tooltip[data-placement="right"] .smart-tooltip-arrow {
+  left: -6px;
+  top: 50%;
+  margin-top: -6px;
+  border-right: none;
+  border-top: none;
+}
+
+/* Tooltip Header */
+.smart-tooltip-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.smart-tooltip-icon {
+  width: 32px;
+  height: 32px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.smart-tooltip-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--white);
+  margin: 0;
+}
+
+/* Tooltip Body */
+.smart-tooltip-body {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--chrome);
+}
+
+.smart-tooltip-body strong {
+  color: var(--white);
+  font-weight: 600;
+}
+
+/* Tooltip Footer */
+.smart-tooltip-footer {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(201, 206, 214, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.smart-tooltip-shortcut {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--slate);
+}
+
+.smart-tooltip-shortcut kbd {
+  padding: 2px 6px;
+  background: rgba(201, 206, 214, 0.1);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 3px;
+  font-family: 'Monaco', monospace;
+  font-size: 10px;
+  color: var(--chrome);
+}
+
+.smart-tooltip-action {
+  font-size: 11px;
+  color: var(--white);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.3s ease;
+}
+
+.smart-tooltip-action:hover {
+  color: var(--chrome);
+}
+
+/* Rich Tooltip - Image Preview */
+.smart-tooltip.rich .smart-tooltip-content {
+  padding: 0;
+  overflow: hidden;
+}
+
+.smart-tooltip-preview {
+  width: 100%;
+  height: 140px;
+  overflow: hidden;
+}
+
+.smart-tooltip-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.smart-tooltip:hover .smart-tooltip-preview img {
+  transform: scale(1.05);
+}
+
+.smart-tooltip.rich .smart-tooltip-body {
+  padding: 16px;
+}
+
+/* Stat Tooltip */
+.smart-tooltip.stat .smart-tooltip-content {
+  text-align: center;
+  padding: 20px;
+}
+
+.smart-tooltip.stat .stat-number {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--white), var(--chrome));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+
+.smart-tooltip.stat .stat-label {
+  font-size: 12px;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 8px;
+}
+
+/* Feature Tooltip */
+.smart-tooltip.feature .smart-tooltip-icon {
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.15), rgba(201, 206, 214, 0.05));
+  border: 1px solid rgba(201, 206, 214, 0.2);
+}
+
+/* Warning Tooltip */
+.smart-tooltip.warning .smart-tooltip-content {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.smart-tooltip.warning .smart-tooltip-icon {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+/* Error Tooltip */
+.smart-tooltip.error .smart-tooltip-content {
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.smart-tooltip.error .smart-tooltip-icon {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+/* Success Tooltip */
+.smart-tooltip.success .smart-tooltip-content {
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.smart-tooltip.success .smart-tooltip-icon {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+/* Info Tooltip */
+.smart-tooltip.info .smart-tooltip-content {
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.smart-tooltip.info .smart-tooltip-icon {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+}
+
+/* Animated Entrance */
+@keyframes tooltip-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  70% {
+    transform: translateY(-4px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.smart-tooltip.visible {
+  animation: tooltip-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Progress Tooltip */
+.smart-tooltip.progress .smart-tooltip-body {
+  position: relative;
+}
+
+.smart-tooltip-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 2px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+
+.smart-tooltip-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--chrome), var(--white));
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+/* Loading Tooltip */
+.smart-tooltip.loading .smart-tooltip-icon::after {
+  content: '';
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(201, 206, 214, 0.2);
+  border-top-color: var(--chrome);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Mobile Tooltip */
+@media (max-width: 768px) {
+  .smart-tooltip {
+    position: fixed;
+    max-width: 90vw;
+    left: 50% !important;
+    top: auto !important;
+    bottom: 20px !important;
+    transform: translateX(-50%) translateY(20px) !important;
+  }
+  
+  .smart-tooltip.visible {
+    transform: translateX(-50%) translateY(0) !important;
+  }
+  
+  .smart-tooltip-arrow {
+    display: none;
+  }
+}
+
+/* Tooltip Trigger Animation */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+[data-tooltip]:hover::after {
+  border-color: rgba(201, 206, 214, 0.1);
+  background: rgba(201, 206, 214, 0.02);
+}

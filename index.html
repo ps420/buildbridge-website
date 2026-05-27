@@ -41,6 +41,17 @@
   <link rel="stylesheet" href="css/print-styles.css" media="print">
   <link rel="stylesheet" href="css/form-validation.css">
   <link rel="stylesheet" href="css/smart-loading.css">
+  
+  <!-- v14.0 Professional Features -->
+  <link rel="stylesheet" href="css/micro-interactions.css">
+  <link rel="stylesheet" href="css/performance-dashboard.css">
+  <link rel="stylesheet" href="css/reduced-motion.css">
+  
+  <!-- v15.0 Fortune 500 Next-Gen Features -->
+  <link rel="stylesheet" href="css/predictive-preloader.css">
+  <link rel="stylesheet" href="css/announcement-bar.css">
+  <link rel="stylesheet" href="css/keyboard-shortcuts.css">
+  <link rel="stylesheet" href="css/smart-tooltips.css">
 
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
   <link rel="manifest" href="manifest.json">
@@ -983,6 +994,11 @@
   <script src="js/form-validation.js"></script>
   <script src="js/smart-loading.js"></script>
   
+  <!-- v14.0 Professional Features -->
+  <script src="js/micro-interactions.js"></script>
+  <script src="js/performance-dashboard.js"></script>
+  <script src="js/motion-preference.js"></script>
+  
   <!-- Print Button -->
   <button class="print-button" onclick="window.print()" title="Print this page" aria-label="Print page">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1220,6 +1236,61 @@
     
     console.log('🚀 BuildBridge Professional Features v6.0 activated');
   })();
+  </script>
+  
+  <!-- v15.0 Fortune 500 Next-Gen Professional Features -->
+  <script src="js/predictive-preloader.js"></script>
+  <script src="js/announcement-bar.js"></script>
+  <script src="js/keyboard-shortcuts.js"></script>
+  <script src="js/smart-tooltips.js"></script>
+  
+  <script>
+    // Log v15.0 features loaded
+    console.log('🏢 BuildBridge Fortune 500 v15.0 loaded: Predictive Preloading, Smart Announcements, Keyboard Shortcuts, Professional Tooltips');
+    
+    // Add smart tooltips to key elements
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add tooltips to navigation links
+      document.querySelectorAll('.nav-links a').forEach(link => {
+        const page = link.textContent;
+        link.setAttribute('data-tooltip', `Navigate to ${page}`);
+        link.setAttribute('data-tooltip-title', page);
+        link.setAttribute('data-tooltip-shortcut', 'G+' + page.charAt(0));
+      });
+      
+      // Add tooltips to service cards
+      document.querySelectorAll('.service-card').forEach((card, index) => {
+        const title = card.querySelector('h3')?.textContent || 'Service';
+        card.setAttribute('data-tooltip', `Click to learn more about our ${title} service`);
+        card.setAttribute('data-tooltip-title', title);
+        card.setAttribute('data-tooltip-type', 'feature');
+        card.setAttribute('data-tooltip-icon', card.querySelector('.service-icon')?.textContent || '🔨');
+      });
+      
+      // Add tooltips to floating stats
+      document.querySelectorAll('.floating-stats').forEach(stat => {
+        const number = stat.querySelector('.number')?.textContent || '';
+        const label = stat.querySelector('.label')?.textContent || '';
+        stat.setAttribute('data-tooltip', `BuildBridge achievement: ${number} ${label}`);
+        stat.setAttribute('data-tooltip-title', label);
+        stat.setAttribute('data-tooltip-type', 'success');
+        stat.setAttribute('data-tooltip-icon', '🏆');
+      });
+      
+      // Add tooltips to CTA buttons
+      document.querySelectorAll('.btn').forEach(btn => {
+        if (!btn.hasAttribute('data-tooltip')) {
+          btn.setAttribute('data-tooltip', 'Click to ' + (btn.textContent.trim().toLowerCase()));
+          btn.setAttribute('data-tooltip-type', 'info');
+        }
+      });
+      
+      // Add tooltips to footer links
+      document.querySelectorAll('.footer-links a').forEach(link => {
+        link.setAttribute('data-tooltip', `Visit ${link.textContent} page`);
+        link.setAttribute('data-tooltip-placement', 'top');
+      });
+    });
   </script>
 </body>
 </html>

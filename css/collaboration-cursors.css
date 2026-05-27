@@ -1,0 +1,551 @@
+/* ============================================
+   BuildBridge Collaboration Cursors v14.4
+   Real-time Presence Indicators
+   ============================================ */
+
+/* ----------------------------------------
+   Cursor Container
+   ---------------------------------------- */
+.collaboration-cursors {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9995;
+  overflow: hidden;
+}
+
+/* ----------------------------------------
+   Remote Cursor
+   ---------------------------------------- */
+.remote-cursor {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9996;
+  transition: transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
+}
+
+.remote-cursor.smooth {
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ----------------------------------------
+   Cursor SVG
+   ---------------------------------------- */
+.cursor-svg {
+  width: 24px;
+  height: 24px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.cursor-svg path {
+  fill: var(--cursor-color, #635BFF);
+}
+
+/* ----------------------------------------
+   Cursor Label
+   ---------------------------------------- */
+.cursor-label {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  padding: 4px 10px;
+  background: var(--cursor-color, #635BFF);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 1;
+  transform: scale(1);
+  transform-origin: left top;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cursor-label.hidden {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+/* Label arrow */
+.cursor-label::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: 8px;
+  width: 0;
+  height: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-right: 4px solid var(--cursor-color, #635BFF);
+}
+
+/* ----------------------------------------
+   Cursor Idle State
+   ---------------------------------------- */
+.remote-cursor.idle {
+  opacity: 0.5;
+}
+
+.remote-cursor.idle .cursor-label {
+  opacity: 0;
+}
+
+/* ----------------------------------------
+   Cursor Click Animation
+   ---------------------------------------- */
+.remote-cursor.clicking .cursor-svg {
+  animation: cursor-click 0.3s ease;
+}
+
+@keyframes cursor-click {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.8); }
+  100% { transform: scale(1); }
+}
+
+/* ----------------------------------------
+   Presence Avatars
+   ---------------------------------------- */
+.presence-bar {
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: -8px;
+  z-index: 9994;
+  background: rgba(15, 15, 16, 0.9);
+  backdrop-filter: blur(10px);
+  padding: 8px 12px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.presence-avatars {
+  display: flex;
+  align-items: center;
+}
+
+.presence-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--avatar-color, #635BFF);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #0f0f10;
+  margin-left: -8px;
+  transition: transform 0.3s ease, margin 0.3s ease;
+  position: relative;
+}
+
+.presence-avatar:first-child {
+  margin-left: 0;
+}
+
+.presence-avatar:hover {
+  transform: scale(1.1);
+  margin-right: 4px;
+  z-index: 1;
+}
+
+.presence-avatar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  background: #10b981;
+  border: 2px solid #0f0f10;
+  border-radius: 50%;
+}
+
+.presence-avatar.away::after {
+  background: #f59e0b;
+}
+
+.presence-avatar.offline::after {
+  background: #6b7280;
+}
+
+/* ----------------------------------------
+   Presence Count
+   ---------------------------------------- */
+.presence-count {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-left: 8px;
+  font-weight: 500;
+}
+
+/* ----------------------------------------
+   Viewing Activity
+   ---------------------------------------- */
+.viewing-indicator {
+  position: fixed;
+  bottom: 100px;
+  left: 20px;
+  background: rgba(15, 15, 16, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 12px 16px;
+  z-index: 9994;
+  max-width: 280px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.viewing-indicator.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.viewing-indicator-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.viewing-indicator-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.viewing-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--avatar-color, #635BFF);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.viewing-text {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.4;
+}
+
+.viewing-text strong {
+  color: white;
+  font-weight: 600;
+}
+
+/* ----------------------------------------
+   Live Edit Highlights
+   ---------------------------------------- */
+.live-edit-highlight {
+  position: absolute;
+  border: 2px solid var(--user-color, #635BFF);
+  border-radius: 4px;
+  pointer-events: none;
+  animation: live-edit-pulse 2s ease-in-out infinite;
+  z-index: 9993;
+}
+
+@keyframes live-edit-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 rgba(99, 91, 255, 0.4);
+  }
+  50% { 
+    box-shadow: 0 0 0 8px rgba(99, 91, 255, 0);
+  }
+}
+
+.live-edit-label {
+  position: absolute;
+  top: -24px;
+  left: 0;
+  padding: 4px 8px;
+  background: var(--user-color, #635BFF);
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 4px 4px 4px 0;
+  white-space: nowrap;
+}
+
+/* ----------------------------------------
+   Activity Feed
+   ---------------------------------------- */
+.activity-feed {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 9994;
+  max-width: 300px;
+}
+
+.activity-item {
+  background: rgba(15, 15, 16, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: activity-in 0.4s ease forwards;
+  max-width: 100%;
+}
+
+@keyframes activity-in {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.activity-item.removing {
+  animation: activity-out 0.3s ease forwards;
+}
+
+@keyframes activity-out {
+  to {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+}
+
+.activity-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--avatar-color, #635BFF);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.activity-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.activity-text strong {
+  color: white;
+  font-weight: 600;
+}
+
+.activity-time {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+}
+
+/* ----------------------------------------
+   Cursor Trail (Optional)
+   ---------------------------------------- */
+.cursor-trail {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cursor-color, #635BFF);
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 9995;
+  transition: opacity 0.5s ease;
+}
+
+.cursor-trail.fade {
+  opacity: 0;
+}
+
+/* ----------------------------------------
+   Simulated Users Toggle
+   ---------------------------------------- */
+.collab-toggle {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 15, 16, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 9999;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.collab-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.collab-toggle.active {
+  background: rgba(99, 91, 255, 0.2);
+  border-color: rgba(99, 91, 255, 0.5);
+}
+
+.collab-toggle-icon {
+  font-size: 18px;
+}
+
+.collab-toggle-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: white;
+}
+
+/* ----------------------------------------
+   Demo Mode Badge
+   ---------------------------------------- */
+.demo-badge {
+  position: fixed;
+  top: 90px;
+  left: 20px;
+  background: rgba(99, 91, 255, 0.2);
+  border: 1px solid rgba(99, 91, 255, 0.4);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  z-index: 9994;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.demo-badge::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: #635BFF;
+  border-radius: 50%;
+  animation: demo-pulse 2s ease-in-out infinite;
+}
+
+@keyframes demo-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ----------------------------------------
+   Cursor Colors Presets
+   ---------------------------------------- */
+.cursor-red { --cursor-color: #ef4444; --avatar-color: #ef4444; }
+.cursor-blue { --cursor-color: #3b82f6; --avatar-color: #3b82f6; }
+.cursor-green { --cursor-color: #10b981; --avatar-color: #10b981; }
+.cursor-purple { --cursor-color: #8b5cf6; --avatar-color: #8b5cf6; }
+.cursor-orange { --cursor-color: #f97316; --avatar-color: #f97316; }
+.cursor-pink { --cursor-color: #ec4899; --avatar-color: #ec4899; }
+.cursor-cyan { --cursor-color: #06b6d4; --avatar-color: #06b6d4; }
+.cursor-yellow { --cursor-color: #eab308; --avatar-color: #eab308; }
+
+/* ----------------------------------------
+   Responsive Adjustments
+   ---------------------------------------- */
+@media (max-width: 768px) {
+  .presence-bar {
+    top: auto;
+    bottom: 80px;
+    right: 16px;
+    padding: 6px 10px;
+  }
+  
+  .presence-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 10px;
+  }
+  
+  .viewing-indicator {
+    bottom: 80px;
+    left: 16px;
+    right: 16px;
+    max-width: none;
+  }
+  
+  .activity-feed {
+    bottom: 80px;
+    left: 16px;
+    right: 16px;
+    max-width: none;
+  }
+  
+  .collab-toggle {
+    bottom: 80px;
+  }
+  
+  .demo-badge {
+    display: none;
+  }
+}
+
+/* ----------------------------------------
+   Reduced Motion Support
+   ---------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .remote-cursor {
+    transition: none !important;
+  }
+  
+  .cursor-label,
+  .viewing-indicator,
+  .activity-item {
+    transition: opacity 0.1s ease !important;
+  }
+  
+  .remote-cursor.clicking .cursor-svg {
+    animation: none !important;
+  }
+  
+  .live-edit-highlight {
+    animation: none !important;
+  }
+  
+  .presence-avatar:hover {
+    transform: none !important;
+  }
+}
+
+/* ----------------------------------------
+   Print Styles
+   ---------------------------------------- */
+@media print {
+  .collaboration-cursors,
+  .presence-bar,
+  .viewing-indicator,
+  .activity-feed,
+  .live-edit-highlight,
+  .collab-toggle,
+  .demo-badge {
+    display: none !important;
+  }
+}
