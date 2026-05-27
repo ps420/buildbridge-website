@@ -124,6 +124,12 @@
   <link rel="stylesheet" href="css/theme-toggle.css">
   <link rel="stylesheet" href="css/skeleton-loading-system.css">
   <link rel="stylesheet" href="css/advanced-toast-system.css">
+  
+  <!-- v29.0 Next-Gen Fortune 500 Enhancements -->
+  <link rel="stylesheet" href="css/cost-estimator.css">
+  <link rel="stylesheet" href="css/video-hero-parallax.css">
+  <link rel="stylesheet" href="css/smart-header.css">
+  <link rel="stylesheet" href="css/advanced-spotlight.css">
 
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
   <link rel="manifest" href="manifest.json">
@@ -1522,12 +1528,57 @@
     </div>
   </section>
 
-  <!-- Cost Calculator Section -->
+  <!-- v29.0: Interactive Cost Estimator Widget (Fortune 500 Professional) -->
+  <section id="cost-estimator" class="section cost-estimator-section" data-section="CostEstimator" data-nav-label="Get Quote">
+    <div class="section-header reveal-section">
+      <p class="eyebrow">Instant Quote</p>
+      <h2 class="scramble-text kinetic-text">Project Cost Estimator</h2>
+      <p>Get an accurate project estimate in seconds. Adjust parameters and see real-time pricing updates.</p>
+    </div>
+    <div class="cost-estimator-container"></div>
+  </section>
+
+  <!-- v29.0: Video Background Section with Parallax -->
+  <section id="video-hero" class="video-hero-section" data-section="VideoHero" data-nav-label="Experience">
+    <div class="video-hero-container">
+      <div class="video-background">
+        <video autoplay muted loop playsinline poster="assets/02_Website_Heroes/Hero_1.png">
+          <source src="assets/videos/construction-timelapse.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+      </div>
+      <div class="video-hero-content">
+        <span class="video-eyebrow">Experience Excellence</span>
+        <h2 class="video-title">Building Tomorrow's<br><span class="scramble-text">Landmarks Today</span></h2>
+        <p class="video-description">Watch how we transform visions into reality through precision engineering and dedicated craftsmanship.</p>
+        <div class="video-stats">
+          <div class="video-stat">
+            <span class="video-stat-number">500+</span>
+            <span class="video-stat-label">Projects Delivered</span>
+          </div>
+          <div class="video-stat">
+            <span class="video-stat-number">R2.5B+</span>
+            <span class="video-stat-label">Value Managed</span>
+          </div>
+          <div class="video-stat">
+            <span class="video-stat-number">98%</span>
+            <span class="video-stat-label">Client Satisfaction</span>
+          </div>
+        </div>
+      </div>
+      <div class="video-scroll-indicator">
+        <span>Scroll to continue</span>
+        <div class="scroll-arrow"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cost Calculator Section (Legacy) -->
   <link rel="stylesheet" href="css/cost-calculator.css">
   <section id="calculator" class="section" data-section="Calculator" data-nav-label="Estimate">
     <div class="section-header reveal-section">
       <p class="eyebrow">Quick Estimate</p>
-      <h2 class="scramble-text">Project Cost Calculator</h2>
+      <h2 class="scramble-text">Simple Project Calculator</h2>
       <p>Get an instant estimate for your construction project in just 4 simple steps.</p>
     </div>
     <div class="container" style="max-width: 800px; margin: 0 auto;">
@@ -1670,6 +1721,274 @@
       </form>
     </div>
   </section>
+
+  <!-- v29.0: Cost Calculator Pro Section -->
+  <link rel="stylesheet" href="css/cost-calculator-pro.css">
+  <section class="cost-calculator-section" id="cost-calculator" data-section="Calculator" data-nav-label="Cost Estimator">
+    <div class="section-header reveal-section" style="text-align: center; margin-bottom: 60px;">
+      <p class="eyebrow">Project Planning</p>
+      <h2 class="scramble-text kinetic-text">Cost Estimator</h2>
+      <p>Get an instant estimate for your construction project. Adjust the parameters below to see real-time cost calculations tailored to South African market rates.</p>
+    </div>
+    
+    <div class="cost-calculator-container">
+      <!-- Calculator Form -->
+      <div class="calculator-form">
+        <div class="calculator-form-header">
+          <h3>Project Details</h3>
+          <p>Select your project specifications to receive an accurate cost estimate.</p>
+        </div>
+        
+        <!-- Project Type -->
+        <div class="calculator-form-group">
+          <label class="calculator-label">
+            Project Type
+            <span class="calculator-info-icon" data-tooltip="Different project types have varying base costs per square meter">?</span>
+          </label>
+          <div class="calculator-type-grid">
+            <button type="button" class="calculator-type-btn active" data-type="residential">
+              <span class="type-icon">🏠</span>
+              <span class="type-label">Residential</span>
+              <span class="type-multiplier">R8,500/m²</span>
+            </button>
+            <button type="button" class="calculator-type-btn" data-type="commercial">
+              <span class="type-icon">🏢</span>
+              <span class="type-label">Commercial</span>
+              <span class="type-multiplier">R12,000/m²</span>
+            </button>
+            <button type="button" class="calculator-type-btn" data-type="industrial">
+              <span class="type-icon">🏭</span>
+              <span class="type-label">Industrial</span>
+              <span class="type-multiplier">R9,500/m²</span>
+            </button>
+            <button type="button" class="calculator-type-btn" data-type="renovation">
+              <span class="type-icon">🔨</span>
+              <span class="type-label">Renovation</span>
+              <span class="type-multiplier">R6,500/m²</span>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Square Meters -->
+        <div class="calculator-form-group">
+          <label class="calculator-label">
+            <span>Size <span class="calculator-info-icon" data-tooltip="Total built-up area in square meters">?</span></span>
+            <span class="calculator-value calc-square-meters-value">150 m²</span>
+          </label>
+          <div class="calculator-slider-container">
+            <div class="calculator-slider-fill" id="sqm-fill" style="width: 23%;"></div>
+            <input type="range" class="calculator-slider" id="calc-square-meters" min="50" max="1000" value="150" step="10" data-fill-target="sqm-fill">
+          </div>
+          <div class="calculator-slider-markers">
+            <span>50m²</span>
+            <span>500m²</span>
+            <span>1000m²</span>
+          </div>
+        </div>
+        
+        <!-- Quality Level -->
+        <div class="calculator-form-group">
+          <label class="calculator-label">
+            Quality Level
+            <span class="calculator-info-icon" data-tooltip="Higher quality levels include premium materials and finishes">?</span>
+          </label>
+          <div class="calculator-quality-options">
+            <button type="button" class="calculator-quality-btn active" data-quality="standard">
+              <span class="quality-name">Standard</span>
+              <span class="quality-multiplier">1.0x</span>
+            </button>
+            <button type="button" class="calculator-quality-btn" data-quality="premium">
+              <span class="quality-name">Premium</span>
+              <span class="quality-multiplier">1.35x</span>
+            </button>
+            <button type="button" class="calculator-quality-btn" data-quality="luxury">
+              <span class="quality-name">Luxury</span>
+              <span class="quality-multiplier">1.85x</span>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Location -->
+        <div class="calculator-form-group">
+          <label class="calculator-label">
+            Location
+            <span class="calculator-info-icon" data-tooltip="Costs vary by region due to labor and material availability">?</span>
+          </label>
+          <select class="calculator-location-select" id="calc-location">
+            <option value="western-cape">Western Cape</option>
+            <option value="gauteng">Gauteng (+15%)</option>
+            <option value="kwazulu-natal">KwaZulu-Natal (-5%)</option>
+            <option value="eastern-cape">Eastern Cape (-15%)</option>
+            <option value="other">Other Regions (-10%)</option>
+          </select>
+        </div>
+        
+        <!-- Complexity -->
+        <div class="calculator-form-group">
+          <label class="calculator-label">
+            <span>Complexity <span class="calculator-info-icon" data-tooltip="Design complexity affects labor and timeline">?</span></span>
+            <span class="calculator-value calc-complexity-value">Moderate</span>
+          </label>
+          <div class="calculator-slider-container">
+            <div class="calculator-slider-fill" id="complexity-fill" style="width: 25%;"></div>
+            <input type="range" class="calculator-slider" id="calc-complexity" min="1" max="5" value="2" step="1" data-fill-target="complexity-fill">
+          </div>
+          <div class="calculator-slider-markers">
+            <span>Simple</span>
+            <span>Complex</span>
+            <span>Extreme</span>
+          </div>
+        </div>
+        
+        <!-- Stories -->
+        <div class="calculator-form-group">
+          <label class="calculator-label">
+            <span>Stories <span class="calculator-info-icon" data-tooltip="Additional stories increase structural and labor costs">?</span></span>
+            <span class="calculator-value calc-stories-value">Single</span>
+          </label>
+          <div class="calculator-slider-container">
+            <div class="calculator-slider-fill" id="stories-fill" style="width: 0%;"></div>
+            <input type="range" class="calculator-slider" id="calc-stories" min="1" max="5" value="1" step="1" data-fill-target="stories-fill">
+          </div>
+          <div class="calculator-slider-markers">
+            <span>1</span>
+            <span>3</span>
+            <span>5</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Results Panel -->
+      <div class="calculator-results">
+        <div class="calculator-results-card">
+          <div class="calculator-results-header">
+            <h4>Estimated Cost</h4>
+            <div class="calculator-total">R 1,275,000</div>
+            <div class="calculator-total-label">Total Construction Cost</div>
+            <div class="calculator-savings-badge">💰 Save up to 15% with BuildBridge</div>
+          </div>
+          
+          <!-- Cost Bars -->
+          <div class="calculator-cost-bars">
+            <div class="calculator-cost-bar">
+              <div class="calculator-cost-bar-header">
+                <span class="calculator-cost-bar-label">Materials</span>
+                <span class="calculator-cost-bar-value">42%</span>
+              </div>
+              <div class="calculator-cost-bar-track">
+                <div class="calculator-cost-bar-fill" style="width: 100%;"></div>
+              </div>
+            </div>
+            <div class="calculator-cost-bar">
+              <div class="calculator-cost-bar-header">
+                <span class="calculator-cost-bar-label">Labor</span>
+                <span class="calculator-cost-bar-value">28%</span>
+              </div>
+              <div class="calculator-cost-bar-track">
+                <div class="calculator-cost-bar-fill" style="width: 66%;"></div>
+              </div>
+            </div>
+            <div class="calculator-cost-bar">
+              <div class="calculator-cost-bar-header">
+                <span class="calculator-cost-bar-label">Overhead</span>
+                <span class="calculator-cost-bar-value">18%</span>
+              </div>
+              <div class="calculator-cost-bar-track">
+                <div class="calculator-cost-bar-fill" style="width: 43%;"></div>
+              </div>
+            </div>
+            <div class="calculator-cost-bar">
+              <div class="calculator-cost-bar-header">
+                <span class="calculator-cost-bar-label">Permits</span>
+                <span class="calculator-cost-bar-value">7%</span>
+              </div>
+              <div class="calculator-cost-bar-track">
+                <div class="calculator-cost-bar-fill" style="width: 17%;"></div>
+              </div>
+            </div>
+            <div class="calculator-cost-bar">
+              <div class="calculator-cost-bar-header">
+                <span class="calculator-cost-bar-label">Contingency</span>
+                <span class="calculator-cost-bar-value">5%</span>
+              </div>
+              <div class="calculator-cost-bar-track">
+                <div class="calculator-cost-bar-fill" style="width: 12%;"></div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Cost Breakdown -->
+          <div class="calculator-breakdown">
+            <div class="calculator-breakdown-item">
+              <span class="calculator-breakdown-label">
+                <span class="calculator-breakdown-icon">🧱</span>
+                Materials
+              </span>
+              <span class="calculator-breakdown-value calc-breakdown-value">R 535,500</span>
+            </div>
+            <div class="calculator-breakdown-item">
+              <span class="calculator-breakdown-label">
+                <span class="calculator-breakdown-icon">👷</span>
+                Labor
+              </span>
+              <span class="calculator-breakdown-value calc-breakdown-value">R 357,000</span>
+            </div>
+            <div class="calculator-breakdown-item">
+              <span class="calculator-breakdown-label">
+                <span class="calculator-breakdown-icon">🏢</span>
+                Overhead
+              </span>
+              <span class="calculator-breakdown-value calc-breakdown-value">R 229,500</span>
+            </div>
+            <div class="calculator-breakdown-item">
+              <span class="calculator-breakdown-label">
+                <span class="calculator-breakdown-icon">📋</span>
+                Permits
+              </span>
+              <span class="calculator-breakdown-value calc-breakdown-value">R 89,250</span>
+            </div>
+            <div class="calculator-breakdown-item">
+              <span class="calculator-breakdown-label">
+                <span class="calculator-breakdown-icon">⚠️</span>
+                Contingency
+              </span>
+              <span class="calculator-breakdown-value calc-breakdown-value">R 63,750</span>
+            </div>
+          </div>
+          
+          <!-- Time Estimate -->
+          <div class="calculator-time-estimate">
+            <div class="calculator-time-icon">⏱️</div>
+            <div class="calculator-time-value">6-8 Months</div>
+            <div class="calculator-time-label">Estimated Timeline</div>
+          </div>
+          
+          <!-- CTA Buttons -->
+          <div class="calculator-cta">
+            <a href="contact.html" class="calculator-cta-btn primary">Get Detailed Quote →</a>
+            <button type="button" class="calculator-cta-btn secondary" onclick="CostCalculator.exportEstimate();alert('Estimate details copied to clipboard!');">📋 Copy Estimate Details</button>
+          </div>
+          
+          <!-- Features -->
+          <div class="calculator-features">
+            <div class="calculator-feature">
+              <div class="calculator-feature-icon">✓</div>
+              <div class="calculator-feature-label">No Hidden Costs</div>
+            </div>
+            <div class="calculator-feature">
+              <div class="calculator-feature-icon">🔒</div>
+              <div class="calculator-feature-label">Fixed Price Option</div>
+            </div>
+            <div class="calculator-feature">
+              <div class="calculator-feature-icon">💬</div>
+              <div class="calculator-feature-label">Free Consultation</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script src="js/cost-calculator-pro.js"></script>
 
   <!-- CTA Section -->
   <section id="contact" class="cta" data-section="Contact" data-nav-label="Contact">
@@ -2130,6 +2449,14 @@
   <script src="js/skeleton-loading-system.js"></script>
   <script src="js/advanced-toast-system.js"></script>
   
+  <!-- v29.0: Next-Gen Fortune 500 Enhancement Scripts -->
+  <script src="js/webgl-particle-network.js" type="module"></script>
+  <script src="js/cost-estimator-widget.js" type="module"></script>
+  
+  <script src="js/video-hero-parallax.js"></script>
+  <script src="js/smart-header-scroll.js"></script>
+  <script src="js/advanced-hover-spotlight.js"></script>
+  
   <script>
     // Log v16.0 features loaded
     console.log('🏢 BuildBridge Fortune 500 v16.0 loaded: Business Hours Widget, Image Mask Reveals, Animated Counters, Text Reveal Effects, Predictive Preloading, Smart Announcements, Keyboard Shortcuts, Professional Tooltips');
@@ -2139,6 +2466,9 @@
     
     // Log v28.0 features loaded
     console.log('🎨 BuildBridge Fortune 500 v28.0 loaded: Dark/Light Theme Toggle, WebGL Fluid Hero Animation, Skeleton Loading System, Advanced Toast Notifications, Premium Experience Enhancements');
+    
+    // Log v29.0 features loaded
+    console.log('🚀 BuildBridge Fortune 500 v29.0 loaded: WebGL Particle Network, Interactive Cost Estimator Widget, Video Hero Parallax, Smart Header Scroll, Advanced Hover Spotlights');
     
     // Add smart tooltips to key elements
     document.addEventListener('DOMContentLoaded', function() {

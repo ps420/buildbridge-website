@@ -1,0 +1,424 @@
+/* ========================================
+   v29.0: PARALLAX GALLERY SYSTEM
+   Fortune 500 Premium Scroll Experience
+======================================== */
+
+/* Parallax Gallery Container */
+.parallax-gallery-section {
+  position: relative;
+  padding: 120px 0;
+  overflow: hidden;
+}
+
+.parallax-gallery-container {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 5%;
+}
+
+/* Parallax Gallery Items */
+.parallax-item {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.parallax-item.small {
+  grid-column: span 3;
+  aspect-ratio: 3/4;
+}
+
+.parallax-item.medium {
+  grid-column: span 4;
+  aspect-ratio: 4/3;
+}
+
+.parallax-item.large {
+  grid-column: span 6;
+  aspect-ratio: 16/9;
+}
+
+.parallax-item.tall {
+  grid-column: span 3;
+  grid-row: span 2;
+  aspect-ratio: auto;
+}
+
+.parallax-item.wide {
+  grid-column: span 8;
+  aspect-ratio: 21/9;
+}
+
+/* Parallax Image */
+.parallax-image-wrapper {
+  position: absolute;
+  inset: -20%;
+  will-change: transform;
+}
+
+.parallax-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.2);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.parallax-item:hover .parallax-image-wrapper img {
+  transform: scale(1.25);
+}
+
+/* Parallax Overlay */
+.parallax-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  display: flex;
+  align-items: flex-end;
+  padding: 24px;
+}
+
+.parallax-item:hover .parallax-overlay {
+  opacity: 1;
+}
+
+.parallax-content {
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.parallax-item:hover .parallax-content {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.parallax-content h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 8px;
+}
+
+.parallax-content p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.parallax-content .tag {
+  display: inline-block;
+  padding: 4px 12px;
+  background: var(--accent-gold);
+  color: var(--text-inverse);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+/* Depth Layers */
+.parallax-depth-1 { z-index: 1; }
+.parallax-depth-2 { z-index: 2; }
+.parallax-depth-3 { z-index: 3; }
+
+/* Scroll-based Reveal */
+.parallax-item {
+  opacity: 0;
+  transform: translateY(60px) scale(0.95);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.parallax-item.revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Staggered Reveal Delays */
+.parallax-item[data-delay="1"] { transition-delay: 0.1s; }
+.parallax-item[data-delay="2"] { transition-delay: 0.2s; }
+.parallax-item[data-delay="3"] { transition-delay: 0.3s; }
+.parallax-item[data-delay="4"] { transition-delay: 0.4s; }
+.parallax-item[data-delay="5"] { transition-delay: 0.5s; }
+
+/* Horizontal Parallax Track */
+.parallax-track {
+  display: flex;
+  gap: 24px;
+  padding: 40px 5%;
+  transition: transform 0.1s ease-out;
+  will-change: transform;
+}
+
+.parallax-track-item {
+  flex-shrink: 0;
+  width: 400px;
+  height: 500px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.parallax-track-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 3D Perspective Gallery */
+.perspective-gallery {
+  perspective: 1000px;
+  perspective-origin: center;
+  padding: 80px 5%;
+}
+
+.perspective-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+  transform-style: preserve-3d;
+}
+
+.perspective-card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.perspective-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+.perspective-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translateZ(0);
+}
+
+/* Depth-based transforms */
+.perspective-card[data-depth="1"] {
+  transform: translateZ(0) rotateY(-5deg);
+}
+
+.perspective-card[data-depth="2"] {
+  transform: translateZ(50px) scale(1.05);
+}
+
+.perspective-card[data-depth="3"] {
+  transform: translateZ(0) rotateY(5deg);
+}
+
+.perspective-gallery:hover .perspective-card {
+  transform: translateZ(0) rotateY(0) scale(1);
+}
+
+/* Scroll Velocity Skew Effect */
+.velocity-skew-container {
+  transition: transform 0.1s ease-out;
+  will-change: transform;
+}
+
+.velocity-skew-up {
+  transform: skewY(-2deg);
+}
+
+.velocity-skew-down {
+  transform: skewY(2deg);
+}
+
+/* Floating Elements */
+.floating-element {
+  position: absolute;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  will-change: transform;
+}
+
+.floating-element img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Scroll Pin Section */
+.scroll-pin-section {
+  position: relative;
+  height: 300vh;
+}
+
+.scroll-pin-container {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.scroll-pin-content {
+  position: relative;
+  width: 80%;
+  max-width: 1200px;
+  height: 70vh;
+}
+
+.scroll-pin-item {
+  position: absolute;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-pin-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Image Comparison with Parallax */
+.parallax-comparison {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.parallax-comparison img {
+  width: 100%;
+  display: block;
+}
+
+.parallax-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--accent-gold);
+  cursor: ew-resize;
+  z-index: 10;
+}
+
+.parallax-handle::after {
+  content: '‹ ›';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  background: var(--accent-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--text-inverse);
+  font-weight: bold;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .parallax-item.small { grid-column: span 4; }
+  .parallax-item.medium { grid-column: span 6; }
+  .parallax-item.large { grid-column: span 12; }
+  .parallax-item.tall { grid-column: span 6; }
+}
+
+@media (max-width: 768px) {
+  .parallax-gallery-container {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .parallax-item.small,
+  .parallax-item.medium,
+  .parallax-item.large,
+  .parallax-item.tall,
+  .parallax-item.wide {
+    grid-column: span 1;
+    aspect-ratio: 4/3;
+  }
+  
+  .parallax-track-item {
+    width: 280px;
+    height: 350px;
+  }
+  
+  .perspective-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .perspective-card {
+    transform: none !important;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .parallax-image-wrapper,
+  .parallax-item,
+  .parallax-track,
+  .perspective-card,
+  .floating-element {
+    transform: none !important;
+    transition: none !important;
+  }
+  
+  .parallax-item {
+    opacity: 1;
+  }
+}
+
+/* Light Theme Adjustments */
+[data-theme="light"] .parallax-overlay {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+}
+
+[data-theme="light"] .parallax-handle {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}

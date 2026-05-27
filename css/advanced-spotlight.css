@@ -1,0 +1,215 @@
+/**
+ * BuildBridge Advanced Hover Spotlight Styles v29.0
+ * Fortune 500 interactive card effects with spotlight, glow, and magnetic interactions
+ */
+
+/* Base spotlight styles */
+.hover-spotlight {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  background: radial-gradient(
+    800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(201, 206, 214, 0.15),
+    transparent 40%
+  );
+  z-index: 1;
+  mix-blend-mode: overlay;
+}
+
+/* Card base styles for spotlight effect */
+.advanced-card,
+.service-card,
+.project-card,
+.faq-item,
+.stat-card,
+.testimonial-carousel-card,
+.feature-card {
+  position: relative;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  transition: 
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.3s ease;
+}
+
+/* Hover states */
+.advanced-card:hover,
+.service-card:hover,
+.project-card:hover,
+.faq-item:hover,
+.stat-card:hover,
+.testimonial-carousel-card:hover,
+.feature-card:hover {
+  transform: translateY(-4px);
+}
+
+.advanced-card:hover .hover-spotlight,
+.service-card:hover .hover-spotlight,
+.project-card:hover .hover-spotlight,
+.faq-item:hover .hover-spotlight,
+.stat-card:hover .hover-spotlight,
+.testimonial-carousel-card:hover .hover-spotlight,
+.feature-card:hover .hover-spotlight {
+  opacity: 1;
+}
+
+/* Magnetic button effect */
+.magnetic-initialized {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-initialized:active {
+  transform: scale(0.95) !important;
+}
+
+/* Ripple effect */
+.ripple-initialized::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at center, rgba(201, 206, 214, 0.2), transparent 70%);
+  opacity: 0;
+  transform: scale(0);
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.ripple-initialized:active::after {
+  opacity: 1;
+  transform: scale(2);
+  transition: 0s;
+}
+
+/* Glowing border effect on hover */
+.advanced-card:hover,
+.service-card:hover,
+.stat-card:hover {
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(201, 206, 214, 0.1),
+    0 0 40px rgba(201, 206, 214, 0.05);
+}
+
+/* Enhanced text glow on heading hover */
+h1, h2, h3 {
+  transition: text-shadow 0.3s ease;
+}
+
+h1:hover, h2:hover, h3:hover {
+  text-shadow: 0 0 40px rgba(201, 206, 214, 0.2);
+}
+
+/* Cost Estimator section spotlight */
+.cost-estimator-section {
+  position: relative;
+}
+
+.cost-estimator-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(201, 206, 214, 0.03) 0%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Animation for entering cards */
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.spotlight-initialized {
+  animation: card-enter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Stagger children */
+.spotlight-initialized:nth-child(1) { animation-delay: 0ms; }
+.spotlight-initialized:nth-child(2) { animation-delay: 100ms; }
+.spotlight-initialized:nth-child(3) { animation-delay: 200ms; }
+.spotlight-initialized:nth-child(4) { animation-delay: 300ms; }
+.spotlight-initialized:nth-child(5) { animation-delay: 400ms; }
+.spotlight-initialized:nth-child(6) { animation-delay: 500ms; }
+
+/* Premium hover state for buttons */
+.btn,
+button {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before,
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.btn:hover::before,
+button:hover::before {
+  left: 100%;
+}
+
+/* Touch device optimizations */
+@media (hover: none) {
+  .hover-spotlight {
+    display: none;
+  }
+  
+  .advanced-card:hover,
+  .service-card:hover,
+  .project-card:hover {
+    transform: none;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .hover-spotlight,
+  .advanced-card,
+  .service-card,
+  .project-card,
+  .faq-item,
+  .stat-card,
+  .testimonial-carousel-card,
+  .feature-card,
+  .magnetic-initialized,
+  h1, h2, h3 {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .advanced-card:hover,
+  .service-card:hover,
+  .project-card:hover {
+    transform: none;
+  }
+}
