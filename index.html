@@ -107,6 +107,9 @@
   <link rel="stylesheet" href="css/cinematic-video-section.css">
   <link rel="stylesheet" href="css/magnetic-image-reveal.css">
   <link rel="stylesheet" href="css/animated-timeline-svg.css">
+  
+  <!-- v26.0 Fortune 500 Professional Enhancements -->
+  <link rel="stylesheet" href="css/masonry-portfolio.css">
 
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
   <link rel="manifest" href="manifest.json">
@@ -551,6 +554,79 @@
       <a href="projects.html" class="btn ghost">View All Projects →</a>
     </div>
   </section>
+
+  <!-- v26.0: Masonry Portfolio Section -->
+  <section class="masonry-portfolio-section" id="masonry-portfolio" data-section="Portfolio" data-nav-label="Portfolio">
+    <div class="portfolio-header">
+      <p class="eyebrow">Our Portfolio</p>
+      <h2 class="scramble-text kinetic-text">Project <span>Gallery</span></h2>
+      <p>Explore our complete portfolio of residential, commercial, and industrial construction projects.</p>
+    </div>
+    
+    <!-- Search -->
+    <div class="portfolio-search-container">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="portfolio-search" placeholder="Search projects by location, type, or value...">
+    </div>
+    
+    <!-- Filters -->
+    <div class="portfolio-filters">
+      <button class="filter-btn active" data-filter="all"><span>All Projects</span><span class="count">9</span></button>
+      <button class="filter-btn" data-filter="residential"><span>Residential</span><span class="count">3</span></button>
+      <button class="filter-btn" data-filter="commercial"><span>Commercial</span><span class="count">2</span></button>
+      <button class="filter-btn" data-filter="industrial"><span>Industrial</span><span class="count">2</span></button>
+      <button class="filter-btn" data-filter="mixed-use"><span>Mixed-Use</span><span class="count">2</span></button>
+    </div>
+    
+    <!-- Masonry Grid -->
+    <div class="masonry-grid"></div>
+    
+    <!-- No Results -->
+    <div class="no-results" style="display: none;">
+      <div class="no-results-icon">🔍</div>
+      <h3>No projects found</h3>
+      <p>Try adjusting your search or filter criteria</p>
+    </div>
+  </section>
+
+  <!-- Portfolio Lightbox -->
+  <div class="portfolio-lightbox" id="portfolio-lightbox">
+    <button class="lightbox-close">✕</button>
+    <div class="lightbox-content">
+      <div class="lightbox-image-section">
+        <img src="" alt="" class="lightbox-image">
+        <button class="lightbox-nav prev">‹</button>
+        <button class="lightbox-nav next">›</button>
+      </div>
+      <div class="lightbox-details">
+        <span class="lightbox-category">Category</span>
+        <h2 class="lightbox-title">Project Title</h2>
+        <p class="lightbox-description">Project description goes here.</p>
+        <div class="lightbox-meta">
+          <div class="lightbox-meta-item">
+            <div class="lightbox-meta-label">Project Value</div>
+            <div class="lightbox-meta-value">--</div>
+          </div>
+          <div class="lightbox-meta-item">
+            <div class="lightbox-meta-label">Duration</div>
+            <div class="lightbox-meta-value">--</div>
+          </div>
+          <div class="lightbox-meta-item">
+            <div class="lightbox-meta-label">Location</div>
+            <div class="lightbox-meta-value">--</div>
+          </div>
+          <div class="lightbox-meta-item">
+            <div class="lightbox-meta-label">Status</div>
+            <div class="lightbox-meta-value">Completed</div>
+          </div>
+        </div>
+        <div class="lightbox-actions">
+          <a href="contact.html" class="btn">Enquire About This Type</a>
+          <a href="projects.html" class="btn ghost">View All Projects</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Before/After Showcase Section -->
   <section id="showcase" class="section" data-section="Showcase" data-nav-label="Showcase">
@@ -1453,6 +1529,9 @@
   <script src="js/cinematic-video.js"></script>
   <script src="js/magnetic-image-reveal.js"></script>
   <script src="js/animated-timeline-svg.js"></script>
+  
+  <!-- v26.0 Fortune 500 Professional Enhancements -->
+  <script src="js/masonry-portfolio.js"></script>
   
   <script>
     // Log v25.0 features loaded
