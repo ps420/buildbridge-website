@@ -1,0 +1,275 @@
+/* ========================================
+   Velocity-Based Scroll Reveal - v33.0
+   Fortune 500 Dynamic Scroll Animations
+======================================== */
+
+/* Base velocity reveal styles */
+.velocity-reveal {
+  opacity: 0;
+  transform: translateY(60px);
+  will-change: opacity, transform;
+}
+
+.velocity-reveal.velocity-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Direction-based reveals */
+.velocity-reveal--up {
+  transform: translateY(60px);
+}
+
+.velocity-reveal--down {
+  transform: translateY(-60px);
+}
+
+.velocity-reveal--left {
+  transform: translateX(60px);
+}
+
+.velocity-reveal--right {
+  transform: translateX(-60px);
+}
+
+.velocity-reveal--scale {
+  transform: scale(0.85);
+}
+
+.velocity-reveal--rotate {
+  transform: rotateX(15deg) translateY(40px);
+  transform-origin: center bottom;
+}
+
+.velocity-reveal--blur {
+  filter: blur(10px);
+  transform: translateY(30px);
+}
+
+/* Visibility states */
+.velocity-reveal.velocity-visible.velocity-reveal--up,
+.velocity-reveal.velocity-visible.velocity-reveal--down,
+.velocity-reveal.velocity-visible.velocity-reveal--left,
+.velocity-reveal.velocity-visible.velocity-reveal--right {
+  transform: translate(0);
+}
+
+.velocity-reveal.velocity-visible.velocity-reveal--scale {
+  transform: scale(1);
+}
+
+.velocity-reveal.velocity-visible.velocity-reveal--rotate {
+  transform: rotateX(0) translateY(0);
+}
+
+.velocity-reveal.velocity-visible.velocity-reveal--blur {
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+/* Velocity-based timing - Fast scroll = faster animations */
+.velocity-fast {
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              filter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.velocity-medium {
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              filter 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.velocity-slow {
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              filter 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.velocity-dramatic {
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Skew effect based on velocity */
+.velocity-skew-container {
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+}
+
+.velocity-skew-up {
+  transform: skewY(-2deg);
+}
+
+.velocity-skew-down {
+  transform: skewY(2deg);
+}
+
+/* Parallax layers with velocity */
+.velocity-parallax-slow {
+  will-change: transform;
+  transition: transform 0.15s ease-out;
+}
+
+.velocity-parallax-fast {
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+}
+
+/* Stagger animations with velocity */
+.velocity-stagger .velocity-reveal:nth-child(1) { transition-delay: 0ms; }
+.velocity-stagger .velocity-reveal:nth-child(2) { transition-delay: 50ms; }
+.velocity-stagger .velocity-stagger .velocity-reveal:nth-child(3) { transition-delay: 100ms; }
+.velocity-stagger .velocity-reveal:nth-child(4) { transition-delay: 150ms; }
+.velocity-stagger .velocity-reveal:nth-child(5) { transition-delay: 200ms; }
+.velocity-stagger .velocity-reveal:nth-child(6) { transition-delay: 250ms; }
+
+/* Velocity-dependent delays */
+.velocity-fast.velocity-stagger .velocity-reveal:nth-child(1) { transition-delay: 0ms; }
+.velocity-fast.velocity-stagger .velocity-reveal:nth-child(2) { transition-delay: 30ms; }
+.velocity-fast.velocity-stagger .velocity-reveal:nth-child(3) { transition-delay: 60ms; }
+
+/* Reveal from edges */
+.velocity-reveal--from-left {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.6s cubic-bezier(0.77, 0, 0.175, 1),
+              opacity 0.4s ease;
+}
+
+.velocity-reveal--from-right {
+  clip-path: inset(0 0 0 100%);
+  transition: clip-path 0.6s cubic-bezier(0.77, 0, 0.175, 1),
+              opacity 0.4s ease;
+}
+
+.velocity-reveal--from-top {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 0.6s cubic-bezier(0.77, 0, 0.175, 1),
+              opacity 0.4s ease;
+}
+
+.velocity-reveal--from-bottom {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 0.6s cubic-bezier(0.77, 0, 0.175, 1),
+              opacity 0.4s ease;
+}
+
+.velocity-reveal--from-left.velocity-visible,
+.velocity-reveal--from-right.velocity-visible,
+.velocity-reveal--from-top.velocity-visible,
+.velocity-reveal--from-bottom.velocity-visible {
+  clip-path: inset(0);
+}
+
+/* Text character animations */
+.velocity-text-reveal .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.velocity-text-reveal.velocity-visible .char {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Word animations */
+.velocity-text-reveal--words .word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.velocity-text-reveal--words.velocity-visible .word {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Line animations */
+.velocity-text-reveal--lines .line {
+  display: block;
+  overflow: hidden;
+}
+
+.velocity-text-reveal--lines .line-inner {
+  display: block;
+  transform: translateY(100%);
+  transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.velocity-text-reveal--lines.velocity-visible .line-inner {
+  transform: translateY(0);
+}
+
+/* Cascade effect */
+.velocity-cascade {
+  overflow: hidden;
+}
+
+.velocity-cascade > * {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.velocity-cascade.velocity-visible > *:nth-child(1) { transition-delay: 0ms; opacity: 1; transform: translateY(0); }
+.velocity-cascade.velocity-visible > *:nth-child(2) { transition-delay: 80ms; opacity: 1; transform: translateY(0); }
+.velocity-cascade.velocity-visible > *:nth-child(3) { transition-delay: 160ms; opacity: 1; transform: translateY(0); }
+.velocity-cascade.velocity-visible > *:nth-child(4) { transition-delay: 240ms; opacity: 1; transform: translateY(0); }
+.velocity-cascade.velocity-visible > *:nth-child(5) { transition-delay: 320ms; opacity: 1; transform: translateY(0); }
+.velocity-cascade.velocity-visible > *:nth-child(6) { transition-delay: 400ms; opacity: 1; transform: translateY(0); }
+
+/* Velocity indicator (for debugging) */
+.velocity-indicator {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(15, 15, 16, 0.9);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-family: 'Montserrat', monospace;
+  font-size: 12px;
+  color: #C9CED6;
+  z-index: 9999;
+  backdrop-filter: blur(10px);
+}
+
+.velocity-indicator.hidden {
+  display: none;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .velocity-reveal,
+  .velocity-cascade > *,
+  .velocity-text-reveal .char,
+  .velocity-text-reveal--words .word,
+  .velocity-text-reveal--lines .line-inner {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    clip-path: none;
+    transition: none;
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .velocity-reveal {
+    transform: translateY(30px);
+  }
+  
+  .velocity-reveal--left,
+  .velocity-reveal--right {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  
+  .velocity-cascade > * {
+    transition-delay: 0ms !important;
+  }
+}
