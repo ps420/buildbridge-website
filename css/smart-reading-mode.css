@@ -1,0 +1,259 @@
+/* ========================================
+   Smart Reading Mode - v33.0
+   Fortune 500 Focused Reading Experience
+======================================== */
+
+.reading-mode-toggle {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #2A2D34, #1a1c21);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.reading-mode-toggle:hover {
+  transform: scale(1.1);
+  border-color: rgba(201, 206, 214, 0.4);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+}
+
+.reading-mode-toggle svg {
+  width: 24px;
+  height: 24px;
+  color: #C9CED6;
+  transition: all 0.3s ease;
+}
+
+.reading-mode-toggle:hover svg {
+  color: #F5F7FA;
+}
+
+.reading-mode-toggle.active {
+  background: linear-gradient(135deg, #C9CED6, #F5F7FA);
+  border-color: #F5F7FA;
+}
+
+.reading-mode-toggle.active svg {
+  color: #0F0F10;
+}
+
+/* Reading Mode Active States */
+body.reading-mode {
+  --reading-bg: #0a0a0b;
+  --reading-text: #e8eaed;
+  --reading-muted: #9ca3af;
+}
+
+body.reading-mode .nav,
+body.reading-mode footer,
+body.reading-mode .trust,
+body.reading-mode .marquee-section,
+body.reading-mode .cookie-consent,
+body.reading-mode .quick-contact-widget,
+body.reading-mode .floating-whatsapp,
+body.reading-mode .back-to-top {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-100%);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.reading-mode .nav {
+  transform: translateY(-100%);
+}
+
+body.reading-mode footer {
+  transform: translateY(100%);
+}
+
+body.reading-mode .hero {
+  background: var(--reading-bg);
+  padding-top: 60px;
+}
+
+body.reading-mode .hero-copy h1 {
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 1.1;
+}
+
+body.reading-mode .hero-copy p {
+  font-size: 18px;
+  max-width: 600px;
+  color: var(--reading-muted);
+}
+
+body.reading-mode .section {
+  background: var(--reading-bg);
+}
+
+body.reading-mode .section-header h2 {
+  font-size: clamp(32px, 4vw, 44px);
+}
+
+body.reading-mode .section-header p {
+  font-size: 18px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  color: var(--reading-muted);
+}
+
+body.reading-mode .service-card,
+body.reading-mode .project-card,
+body.reading-mode .testimonial-card,
+body.reading-mode .team-card {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(201, 206, 214, 0.08);
+}
+
+body.reading-mode .service-card p,
+body.reading-mode .testimonial-card p {
+  color: var(--reading-muted);
+}
+
+/* Focus Mode Indicator */
+.reading-mode-indicator {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-60px);
+  background: rgba(201, 206, 214, 0.95);
+  color: #0F0F10;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  z-index: 10000;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+body.reading-mode .reading-mode-indicator {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.reading-mode-indicator span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Reading Progress in Focus Mode */
+body.reading-mode .reading-progress {
+  height: 4px;
+  background: linear-gradient(90deg, #C9CED6, #F5F7FA);
+}
+
+/* Typography Enhancements in Reading Mode */
+body.reading-mode h1,
+body.reading-mode h2,
+body.reading-mode h3 {
+  letter-spacing: -0.02em;
+}
+
+body.reading-mode p {
+  line-height: 1.8;
+}
+
+/* Hide decorative elements in reading mode */
+body.reading-mode .orb,
+body.reading-mode .aurora-background,
+body.reading-mode .atmospheric-fog,
+body.reading-mode .particle-network-canvas,
+body.reading-mode .webgl-particle-canvas {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+/* Smooth transitions for all elements */
+body.reading-mode * {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Mobile Reading Mode Adjustments */
+@media (max-width: 768px) {
+  .reading-mode-toggle {
+    bottom: 80px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+  }
+  
+  .reading-mode-toggle svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  body.reading-mode .hero-copy h1 {
+    font-size: 32px;
+  }
+  
+  body.reading-mode .hero-copy p {
+    font-size: 16px;
+  }
+  
+  .reading-mode-indicator {
+    padding: 10px 18px;
+    font-size: 12px;
+  }
+}
+
+/* Reading Mode Tooltip */
+.reading-mode-toggle::after {
+  content: 'Focus Mode';
+  position: absolute;
+  right: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%) translateX(10px);
+  background: #2A2D34;
+  color: #F5F7FA;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.reading-mode-toggle:hover::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+body.reading-mode .reading-mode-toggle::after {
+  content: 'Exit Focus';
+}
+
+/* Print styles respect reading mode */
+@media print {
+  body.reading-mode .nav,
+  body.reading-mode footer,
+  body.reading-mode .reading-mode-toggle,
+  body.reading-mode .reading-mode-indicator {
+    display: none !important;
+  }
+  
+  body.reading-mode .hero,
+  body.reading-mode .section {
+    background: white !important;
+    color: black !important;
+  }
+}
