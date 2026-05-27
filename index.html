@@ -111,6 +111,14 @@
   <!-- v26.0 Fortune 500 Professional Enhancements -->
   <link rel="stylesheet" href="css/masonry-portfolio.css">
   <link rel="stylesheet" href="css/activity-feed.css">
+  <link rel="stylesheet" href="css/video-testimonials.css">
+  
+  <!-- v27.0 Fortune 500 Next-Gen Professional Features -->
+  <link rel="stylesheet" href="css/page-transitions-advanced.css">
+  <link rel="stylesheet" href="css/smooth-scroll-nav.css">
+  <link rel="stylesheet" href="css/sticky-section-progress.css">
+  <link rel="stylesheet" href="css/floating-label-forms.css">
+  <link rel="stylesheet" href="css/advanced-card-effects.css">
 
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
   <link rel="manifest" href="manifest.json">
@@ -789,6 +797,135 @@
 
   <!-- 3D Scroll Showcase Section -->
   <link rel="stylesheet" href="css/scroll-3d-showcase.css">
+  
+  <!-- v27.0: Advanced Effects Demo Styles -->
+  <style>
+    /* Demo Section for Advanced Cards */
+    .advanced-cards-demo {
+      padding: 120px 0;
+      position: relative;
+    }
+    
+    .advanced-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+    
+    @media (max-width: 1024px) {
+      .advanced-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .advanced-cards-grid {
+        grid-template-columns: 1fr;
+        padding: 0 20px;
+      }
+    }
+    
+    .demo-card {
+      padding: 40px;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    .demo-card-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, rgba(201, 206, 214, 0.1), rgba(201, 206, 214, 0.05));
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 24px;
+    }
+    
+    .demo-card h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: #F5F7FA;
+      margin-bottom: 12px;
+    }
+    
+    .demo-card p {
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      color: rgba(201, 206, 214, 0.7);
+      line-height: 1.6;
+    }
+    
+    .demo-card-footer {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(201, 206, 214, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .demo-card-link {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #C9CED6;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .demo-card-link:hover {
+      color: #F5F7FA;
+      gap: 12px;
+    }
+    
+    /* Contact Form Demo Section */
+    .contact-form-demo {
+      padding: 120px 0;
+      background: linear-gradient(180deg, transparent, rgba(201, 206, 214, 0.02), transparent);
+    }
+    
+    .contact-form-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+    
+    .form-demo-title {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    
+    .form-demo-title h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: #F5F7FA;
+      margin-bottom: 16px;
+    }
+    
+    .form-demo-title p {
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      color: rgba(201, 206, 214, 0.7);
+    }
+    
+    @media (max-width: 768px) {
+      .form-demo-title h2 {
+        font-size: 28px;
+      }
+    }
+  </style>
   <section class="showcase-3d" id="showcase-3d" data-section="Showcase3D" data-nav-label="Featured">
     <div class="section-header" style="position: absolute; top: 80px; left: 0; right: 0; z-index: 10;">
       <p class="eyebrow">Featured Work</p>
@@ -1394,6 +1531,141 @@
   </section>
   <script src="js/cost-calculator.js"></script>
 
+  <!-- v27.0: Advanced Cards Demo Section -->
+  <section class="advanced-cards-demo" id="features" data-section="Features" data-nav-label="Features">
+    <div class="section-header fade-in-up reveal-section">
+      <p class="eyebrow">Why Choose Us</p>
+      <h2 class="scramble-text kinetic-text">Next-Level Features</h2>
+      <p>Experience Fortune 500 quality interactions with our advanced card designs featuring 3D tilt, spotlight effects, and smooth animations.</p>
+    </div>
+    
+    <div class="advanced-cards-grid stagger-enter">
+      <!-- Card 1: 3D Tilt -->
+      <article class="advanced-card card-3d-tilt card-spotlight demo-card">
+        <div class="demo-card-icon">🎯</div>
+        <div>
+          <h3>3D Tilt Effect</h3>
+          <p>Cards that respond to your mouse movement with realistic 3D perspective transformations, creating an immersive interactive experience.</p>
+        </div>
+        <div class="demo-card-footer">
+          <a href="#" class="demo-card-link">Learn More →</a>
+          <span style="color: rgba(201,206,214,0.4); font-size: 12px;">v27.0</span>
+        </div>
+      </article>
+      
+      <!-- Card 2: Spotlight -->
+      <article class="advanced-card card-spotlight card-shine demo-card">
+        <div class="demo-card-icon">✨</div>
+        <div>
+          <h3>Spotlight Glow</h3>
+          <p>Dynamic radial gradients follow your cursor across card surfaces, highlighting content and creating a premium visual effect.</p>
+        </div>
+        <div class="demo-card-footer">
+          <a href="#" class="demo-card-link">Explore →</a>
+          <span style="color: rgba(201,206,214,0.4); font-size: 12px;">v27.0</span>
+        </div>
+      </article>
+      
+      <!-- Card 3: Magnetic -->
+      <article class="advanced-card card-magnetic card-lift card-spotlight demo-card">
+        <div class="demo-card-icon">🧲</div>
+        <div>
+          <h3>Magnetic Hover</h3>
+          <p>Buttons and elements within cards exhibit magnetic attraction to your cursor, creating playful and engaging micro-interactions.</p>
+        </div>
+        <div class="demo-card-footer">
+          <a href="#" class="demo-card-link">Discover →</a>
+          <span style="color: rgba(201,206,214,0.4); font-size: 12px;">v27.0</span>
+        </div>
+      </article>
+      
+      <!-- Card 4: Border Glow -->
+      <article class="advanced-card card-border-glow card-spotlight demo-card">
+        <div class="demo-card-icon">🌟</div>
+        <div>
+          <h3>Animated Border</h3>
+          <p>Subtle gradient borders animate around card edges on hover, drawing attention and signaling interactivity to users.</p>
+        </div>
+        <div class="demo-card-footer">
+          <a href="#" class="demo-card-link">See Demo →</a>
+          <span style="color: rgba(201,206,214,0.4); font-size: 12px;">v27.0</span>
+        </div>
+      </article>
+      
+      <!-- Card 5: Glassmorphism -->
+      <article class="advanced-card card-glass card-spotlight card-shine demo-card">
+        <div class="demo-card-icon">🔮</div>
+        <div>
+          <h3>Glassmorphism</h3>
+          <p>Translucent frosted glass effects combined with backdrop blur create depth and modern aesthetics that feel premium.</p>
+        </div>
+        <div class="demo-card-footer">
+          <a href="#" class="demo-card-link">View →</a>
+          <span style="color: rgba(201,206,214,0.4); font-size: 12px;">v27.0</span>
+        </div>
+      </article>
+      
+      <!-- Card 6: Lift Effect -->
+      <article class="advanced-card card-lift card-3d-tilt card-spotlight demo-card">
+        <div class="demo-card-icon">🚀</div>
+        <div>
+          <h3>Lift & Shadow</h3>
+          <p>Cards physically lift off the page on hover with dynamic shadow casting, simulating real-world depth and elevation.</p>
+        </div>
+        <div class="demo-card-footer">
+          <a href="#" class="demo-card-link">Try It →</a>
+          <span style="color: rgba(201,206,214,0.4); font-size: 12px;">v27.0</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- v27.0: Floating Label Form Demo -->
+  <section class="contact-form-demo" id="quick-contact" data-section="QuickContact" data-nav-label="Quick Contact">
+    <div class="contact-form-container">
+      <div class="form-demo-title">
+        <p class="eyebrow">Get In Touch</p>
+        <h2>Send Us a Message</h2>
+        <p>Try our new floating label form design with real-time validation and smooth interactions.</p>
+      </div>
+      
+      <form class="floating-form" onsubmit="return false;">
+        <div class="form-grid">
+          <div class="form-group">
+            <input type="text" class="floating-input" id="name" placeholder=" " required>
+            <label for="name" class="floating-label">Your Name</label>
+          </div>
+          
+          <div class="form-group">
+            <input type="email" class="floating-input" id="email" placeholder=" " required>
+            <label for="email" class="floating-label">Email Address</label>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <input type="text" class="floating-input" id="subject" placeholder=" ">
+          <label for="subject" class="floating-label">Subject</label>
+        </div>
+        
+        <div class="form-group textarea">
+          <textarea class="floating-input" id="message" rows="5" placeholder=" " maxlength="500" required></textarea>
+          <label for="message" class="floating-label">Your Message</label>
+          <span class="char-counter">0/500</span>
+        </div>
+        
+        <div class="form-check" style="margin-bottom: 24px;">
+          <input type="checkbox" class="form-check-input" id="newsletter">
+          <label for="newsletter" class="form-check-label">Subscribe to our newsletter for construction tips and updates</label>
+        </div>
+        
+        <button type="submit" class="form-submit" style="width: 100%;">
+          <span>Send Message</span>
+          <span class="form-submit-spinner"></span>
+        </button>
+      </form>
+    </div>
+  </section>
+
   <!-- CTA Section -->
   <section id="contact" class="cta" data-section="Contact" data-nav-label="Contact">
     <p class="eyebrow" style="justify-content:center;">Start Your Project</p>
@@ -1839,6 +2111,13 @@
   <script src="js/network-status-indicator.js"></script>
   <script src="js/smart-clipboard.js"></script>
   <script src="js/circular-scroll-progress.js"></script>
+  
+  <!-- v27.0 Fortune 500 Next-Gen Professional Features -->
+  <script src="js/page-transitions-advanced.js"></script>
+  <script src="js/smooth-scroll-nav.js"></script>
+  <script src="js/sticky-section-progress.js"></script>
+  <script src="js/floating-label-forms.js"></script>
+  <script src="js/advanced-card-effects.js"></script>
   
   <script>
     // Log v16.0 features loaded

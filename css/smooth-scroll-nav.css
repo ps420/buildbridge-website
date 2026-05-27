@@ -1,0 +1,325 @@
+/* ========================================
+   v27.0: SMOOTH SCROLL NAVIGATION SYSTEM
+   Fortune 500 Quality Anchor Scrolling
+======================================== */
+
+/* Smooth Scroll Base */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Scroll Snap for Sections */
+.scroll-snap-container {
+  scroll-snap-type: y proximity;
+  overflow-y: scroll;
+  height: 100vh;
+}
+
+.scroll-snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+}
+
+/* Scroll Progress Indicator (Top Bar) */
+.scroll-progress-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #C9CED6, #F5F7FA);
+  transform-origin: left;
+  transform: scaleX(0);
+  z-index: 99999;
+  pointer-events: none;
+}
+
+/* Enhanced Section Anchors */
+.section-anchor {
+  position: relative;
+  scroll-margin-top: 100px;
+}
+
+.section-anchor::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #C9CED6, transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.section-anchor:target::before {
+  opacity: 1;
+}
+
+/* Scroll Spy Navigation */
+.scroll-spy-nav {
+  position: fixed;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.scroll-spy-dot {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.2);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.scroll-spy-dot::before {
+  content: attr(data-label);
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%) translateX(10px);
+  padding: 6px 12px;
+  background: rgba(15, 15, 16, 0.9);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 4px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: #C9CED6;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(10px);
+}
+
+.scroll-spy-dot:hover::before,
+.scroll-spy-dot.active::before {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.scroll-spy-dot:hover,
+.scroll-spy-dot.active {
+  background: #C9CED6;
+  border-color: rgba(201, 206, 214, 0.5);
+  transform: scale(1.3);
+}
+
+.scroll-spy-dot.active {
+  box-shadow: 0 0 20px rgba(201, 206, 214, 0.3);
+}
+
+/* Anchor Link Enhancement */
+.anchor-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #C9CED6;
+  text-decoration: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.anchor-link::before {
+  content: '#';
+  opacity: 0.5;
+  font-weight: 400;
+}
+
+.anchor-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: #C9CED6;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.anchor-link:hover {
+  color: #F5F7FA;
+}
+
+.anchor-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Scroll Indicator Arrow */
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #C9CED6;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.7;
+  animation: scroll-bounce 2s ease-in-out infinite;
+  cursor: pointer;
+}
+
+.scroll-indicator svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+}
+
+@keyframes scroll-bounce {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(10px);
+  }
+}
+
+.scroll-indicator:hover {
+  opacity: 1;
+}
+
+/* Section Highlight Effect */
+.section-highlight {
+  position: relative;
+}
+
+.section-highlight::after {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(ellipse at center, rgba(201, 206, 214, 0.03) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.section-highlight.active::after {
+  opacity: 1;
+}
+
+/* Parallax Scroll Elements */
+.parallax-slow {
+  will-change: transform;
+}
+
+.parallax-fast {
+  will-change: transform;
+}
+
+/* Return to Section Button */
+.return-to-section {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: rgba(15, 15, 16, 0.9);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(20px) scale(0.8);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 999;
+  backdrop-filter: blur(10px);
+}
+
+.return-to-section.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.return-to-section:hover {
+  background: rgba(201, 206, 214, 0.1);
+  transform: scale(1.1);
+}
+
+.return-to-section svg {
+  width: 20px;
+  height: 20px;
+  stroke: #C9CED6;
+}
+
+/* Scroll Momentum Indicator */
+.scroll-momentum {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: rgba(201, 206, 214, 0.05);
+  z-index: 9998;
+}
+
+.scroll-momentum-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(180deg, #C9CED6, rgba(201, 206, 214, 0.3));
+  border-radius: 2px;
+  transition: height 0.1s linear;
+}
+
+/* Mobile Scroll Spy Adjustments */
+@media (max-width: 768px) {
+  .scroll-spy-nav {
+    right: 15px;
+    gap: 12px;
+  }
+  
+  .scroll-spy-dot {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .scroll-spy-dot::before {
+    display: none;
+  }
+  
+  .section-anchor {
+    scroll-margin-top: 80px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  .scroll-indicator {
+    animation: none;
+  }
+  
+  .scroll-spy-dot,
+  .return-to-section {
+    transition: none;
+  }
+}
