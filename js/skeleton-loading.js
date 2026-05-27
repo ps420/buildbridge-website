@@ -1,207 +1,226 @@
 /**
- * Skeleton Loading States
- * Progressive content loading with skeleton placeholders
+ * Skeleton Loading States v20.0
+ * Professional perceived loading experience
  */
 
-(function() {
-  'use strict';
-
-  class SkeletonLoader {
-    constructor() {
-      this.observers = new Map();
+class SkeletonLoader {
+  constructor(options = {}) {
+    this.config = {
+      delay: options.delay || 300,
+      fadeDuration: options.fadeDuration || 400,
+      minDisplayTime: options.minDisplayTime || 800,
+      autoInit: options.autoInit !== false,
+      ...options
+    };
+    
+    this.startTime = Date.now();
+    this.elements = new Map();
+    
+    if (this.config.autoInit) {
       this.init();
     }
-
-    init() {
-      this.initLazyImages();
-      this.initContentLoading();
-      this.initPageLoader();
+  }
+  
+  init() {
+    // Show skeletons immediately
+    this.showSkeletons();
+    
+    // Hide after content loads
+    if (document.readyState === 'complete') {
+      this.hideSkeletons();
+    } else {
+      window.addEventListener('load', () => this.hideSkeletons());
     }
-
-    // Progressive image loading
-    initLazyImages() {
-      const images = document.querySelectorAll('img[data-src]');
-      
-      const imageObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            this.loadImage(entry.target);
-            imageObserver.unobserve(entry.target);
-          }
-        });
-      }, { rootMargin: '50px' });
-
-      images.forEach(img => {
-        // Wrap in progressive container if not already
-        if (!img.parentElement.classList.contains('progressive-image')) {
-          const wrapper = document.createElement('div');
-          wrapper.className = 'progressive-image';
-          
-          const skeleton = document.createElement('div');
-          skeleton.className = 'skeleton';
-          
-          img.parentElement.insertBefore(wrapper, img);
-          wrapper.appendChild(img);
-          wrapper.appendChild(skeleton);
-        }
-        
-        imageObserver.observe(img);
-      });
-    }
-
-    loadImage(img) {
-      const src = img.dataset.src;
-      if (!src) return;
-
-      const tempImage = new Image();
-      tempImage.onload = () => {
-        img.src = src;
-        img.classList.add('loaded');
-        img.removeAttribute('data-src');
-      };
-      tempImage.src = src;
-    }
-
-    // Content section loading
-    initContentLoading() {
-      const sections = document.querySelectorAll('[data-loading]');
-      
-      sections.forEach(section => {
-        const delay = parseInt(section.dataset.loading) || 0;
-        
-        setTimeout(() => {
-          section.classList.add('loaded');
-        }, delay);
-      });
-    }
-
-    // Page loader
-    initPageLoader() {
-      const loader = document.querySelector('.page-loader');
-      if (!loader) return;
-
-      // Hide loader when page is ready
-      window.addEventListener('load', () => {
-        setTimeout(() => {
-          loader.classList.add('hidden');
-        }, 500);
-      });
-
-      // Fallback: hide after max 3 seconds
-      setTimeout(() => {
-        loader.classList.add('hidden');
-      }, 3000);
-    }
-
-    // Create skeleton for dynamic content
-    static createSkeleton(type, count = 1) {
-      const templates = {
-        card: `
+  }
+  
+  showSkeletons() {
+    // Add loading class to containers
+    document.querySelectorAll('[data-skeleton]').forEach(container => {
+      container.classList.add('content-loading');
+      this.createSkeletonContent(container);
+    });
+    
+    // Create skeletons for specific types
+    document.querySelectorAll('[data-skeleton-type]').forEach(el => {
+      this.createSkeletonForElement(el);
+    });
+  }
+  
+  createSkeletonContent(container) {
+    const type = container.dataset.skeleton;
+    const skeletonEl = document.createElement('div');
+    skeletonEl.className = 'skeleton-content';
+    
+    switch(type) {
+      case 'card':
+        skeletonEl.innerHTML = `
           <div class="skeleton-card">
-            <div class="skeleton skeleton-image" style="margin-bottom: 20px;"></div>
-            <div class="skeleton skeleton-title" style="width: 80%;"></div>
-            <div class="skeleton skeleton-text"></div>
-            <div class="skeleton skeleton-text short"></div>
-          </div>
-        `,
-        service: `
-          <div class="skeleton skeleton-service-card">
-            <div style="padding: 30px;">
-              <div class="skeleton skeleton-avatar" style="margin-bottom: 20px;"></div>
-              <div class="skeleton skeleton-title" style="width: 70%;"></div>
-              <div class="skeleton skeleton-text medium"></div>
-              <div class="skeleton skeleton-text short"></div>
+            <div class="skeleton-card-header">
+              <div class="skeleton skeleton-avatar"></div>
+              <div style="flex: 1;">
+                <div class="skeleton skeleton-text skeleton-text--medium"></div>
+                <div class="skeleton skeleton-text skeleton-text--short"></div>
+              </div>
+            </div>
+            <div class="skeleton-card-body">
+              <div class="skeleton skeleton-text"></div>
+              <div class="skeleton skeleton-text"></div>
+              <div class="skeleton skeleton-text skeleton-text--medium"></div>
             </div>
           </div>
-        `,
-        project: `
-          <div class="skeleton skeleton-project-card">
-            <div class="skeleton" style="height: 60%;"></div>
-            <div style="padding: 20px;">
-              <div class="skeleton skeleton-title" style="width: 60%;"></div>
-              <div class="skeleton skeleton-text short"></div>
-            </div>
-          </div>
-        `,
-        stat: `
-          <div class="skeleton skeleton-stat-card" style="display: flex; align-items: center; gap: 15px; padding: 30px;">
-            <div class="skeleton skeleton-avatar large"></div>
-            <div style="flex: 1;">
+        `;
+        break;
+        
+      case 'hero':
+        skeletonEl.innerHTML = `
+          <div class="skeleton-hero">
+            <div class="skeleton-hero-content">
               <div class="skeleton skeleton-title"></div>
-              <div class="skeleton skeleton-text short"></div>
+              <div class="skeleton skeleton-text"></div>
+              <div class="skeleton skeleton-text"></div>
+              <div class="skeleton skeleton-text skeleton-text--medium"></div>
+              <div style="margin-top: 30px;">
+                <div class="skeleton skeleton-button" style="display: inline-block; margin-right: 16px;"></div>
+                <div class="skeleton skeleton-button" style="display: inline-block;"></div>
+              </div>
             </div>
           </div>
-        `,
-        text: `
-          <div>
-            <div class="skeleton skeleton-text"></div>
-            <div class="skeleton skeleton-text medium"></div>
-            <div class="skeleton skeleton-text short"></div>
+        `;
+        break;
+        
+      case 'stats':
+        skeletonEl.innerHTML = `
+          <div class="skeleton-stats-grid">
+            ${Array(4).fill(0).map(() => `
+              <div class="skeleton-stat-item">
+                <div class="skeleton skeleton-stat-number"></div>
+                <div class="skeleton skeleton-text skeleton-text--medium" style="margin: 0 auto; width: 80px;"></div>
+              </div>
+            `).join('')}
           </div>
-        `
-      };
-
-      const template = templates[type] || templates.text;
-      return template.repeat(count);
+        `;
+        break;
+        
+      case 'image':
+        skeletonEl.innerHTML = `
+          <div class="skeleton skeleton-image"></div>
+        `;
+        break;
+        
+      default:
+        skeletonEl.innerHTML = `
+          <div class="skeleton-card">
+            <div class="skeleton-card-body">
+              <div class="skeleton skeleton-text"></div>
+              <div class="skeleton skeleton-text"></div>
+              <div class="skeleton skeleton-text skeleton-text--medium"></div>
+            </div>
+          </div>
+        `;
     }
-
-    // Replace skeleton with content
-    static replaceSkeleton(container, content) {
-      const skeleton = container.querySelector('.skeleton-container');
-      if (skeleton) {
-        skeleton.style.opacity = '0';
-        setTimeout(() => skeleton.remove(), 400);
-      }
+    
+    container.appendChild(skeletonEl);
+    this.elements.set(container, skeletonEl);
+  }
+  
+  createSkeletonForElement(el) {
+    const type = el.dataset.skeletonType;
+    el.classList.add('skeleton');
+    
+    switch(type) {
+      case 'text':
+        el.classList.add('skeleton-text');
+        break;
+      case 'title':
+        el.classList.add('skeleton-title');
+        break;
+      case 'image':
+        el.classList.add('skeleton-image');
+        break;
+      case 'avatar':
+        el.classList.add('skeleton-avatar');
+        break;
+      case 'button':
+        el.classList.add('skeleton-button');
+        break;
+    }
+  }
+  
+  hideSkeletons() {
+    const elapsed = Date.now() - this.startTime;
+    const remaining = Math.max(0, this.config.minDisplayTime - elapsed);
+    
+    setTimeout(() => {
+      document.querySelectorAll('[data-skeleton]').forEach(container => {
+        container.classList.remove('content-loading');
+        container.classList.add('content-loaded');
+        
+        // Remove skeleton elements
+        const skeleton = this.elements.get(container);
+        if (skeleton) {
+          skeleton.style.opacity = '0';
+          setTimeout(() => skeleton.remove(), this.config.fadeDuration);
+        }
+      });
       
-      const contentEl = container.querySelector('.content');
-      if (contentEl) {
-        contentEl.innerHTML = content;
-        contentEl.style.opacity = '1';
-      }
-    }
-
-    // Show loading state for AJAX requests
-    static showLoading(element, type = 'spinner') {
-      const loaders = {
-        spinner: '<div class="spinner"></div>',
-        dots: `
-          <div class="loading-pulse">
-            <div class="loading-pulse-dot"></div>
-            <div class="loading-pulse-dot"></div>
-            <div class="loading-pulse-dot"></div>
-          </div>
-        `,
-        text: '<span class="loading-text">Loading...</span>'
-      };
-
-      element.dataset.originalContent = element.innerHTML;
-      element.innerHTML = loaders[type] || loaders.spinner;
-      element.disabled = true;
-    }
-
-    // Hide loading state
-    static hideLoading(element) {
-      if (element.dataset.originalContent) {
-        element.innerHTML = element.dataset.originalContent;
-        delete element.dataset.originalContent;
-      }
-      element.disabled = false;
+      // Remove skeleton classes from typed elements
+      document.querySelectorAll('[data-skeleton-type]').forEach(el => {
+        el.classList.remove('skeleton', 'skeleton-text', 'skeleton-title', 'skeleton-image', 'skeleton-avatar', 'skeleton-button');
+        el.removeAttribute('data-skeleton-type');
+      });
+    }, remaining);
+  }
+  
+  // Show full page overlay loader
+  showPageLoader() {
+    this.pageLoader = document.createElement('div');
+    this.pageLoader.className = 'skeleton-page-overlay';
+    this.pageLoader.innerHTML = `
+      <div class="skeleton-page-logo"></div>
+      <div class="skeleton-page-progress">
+        <div class="skeleton-page-progress-bar"></div>
+      </div>
+    `;
+    document.body.appendChild(this.pageLoader);
+    document.body.style.overflow = 'hidden';
+  }
+  
+  hidePageLoader() {
+    if (this.pageLoader) {
+      this.pageLoader.classList.add('fade-out');
+      setTimeout(() => {
+        this.pageLoader.remove();
+        document.body.style.overflow = '';
+      }, 500);
     }
   }
-
-  // Expose to global scope
-  window.SkeletonLoader = SkeletonLoader;
-
-  // Initialize on DOM ready
-  function init() {
-    new SkeletonLoader();
-    console.log('💀 Skeleton Loading initialized');
+  
+  // Manual control for async content
+  show(element) {
+    element.classList.add('content-loading');
+    element.classList.remove('content-loaded');
+    if (!this.elements.has(element)) {
+      this.createSkeletonContent(element);
+    }
   }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
+  
+  hide(element) {
+    element.classList.remove('content-loading');
+    element.classList.add('content-loaded');
+    const skeleton = this.elements.get(element);
+    if (skeleton) {
+      skeleton.style.opacity = '0';
+      setTimeout(() => skeleton.remove(), this.config.fadeDuration);
+      this.elements.delete(element);
+    }
   }
+}
 
-})();
+// Initialize
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    window.skeletonLoader = new SkeletonLoader();
+  });
+} else {
+  window.skeletonLoader = new SkeletonLoader();
+}

@@ -1,0 +1,250 @@
+/* ========================================
+   SMART AUTO-HIDING HEADER v20.0
+   Context-aware navigation behavior
+   Fortune 500 Quality Navigation
+======================================== */
+
+.nav {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+/* Header states */
+.nav--hidden {
+  transform: translateY(-100%);
+}
+
+.nav--visible {
+  transform: translateY(0);
+}
+
+.nav--scrolled {
+  background: rgba(15, 15, 16, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.nav--transparent {
+  background: transparent;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+/* Scroll progress indicator in nav */
+.nav-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--chrome), var(--white));
+  width: 0;
+  transition: width 0.1s ease;
+}
+
+/* Back to top button - integrated with header */
+.nav-back-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: var(--gun);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 999;
+}
+
+.nav-back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav-back-to-top:hover {
+  background: var(--white);
+  color: var(--black);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(201, 206, 214, 0.2);
+}
+
+/* Scroll direction indicator */
+.scroll-direction-indicator {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 998;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.scroll-direction-indicator.visible {
+  opacity: 1;
+}
+
+.scroll-direction-arrow {
+  width: 40px;
+  height: 40px;
+  background: rgba(15, 15, 16, 0.8);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--chrome);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.scroll-direction-arrow:hover {
+  background: var(--white);
+  color: var(--black);
+  border-color: var(--white);
+}
+
+.scroll-direction-arrow.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Header reveal on scroll up trigger */
+.nav-reveal-trigger {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  z-index: 999;
+  pointer-events: none;
+}
+
+/* Mobile smart header behavior */
+@media (max-width: 768px) {
+  .nav {
+    transition: transform 0.3s ease;
+  }
+  
+  .nav--hidden {
+    transform: translateY(-100%);
+  }
+  
+  .nav-back-to-top {
+    bottom: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+  
+  .scroll-direction-indicator {
+    display: none;
+  }
+}
+
+/* Parallax header effect */
+.nav--parallax {
+  transition: transform 0.1s ease-out;
+}
+
+/* Sticky sections with offset */
+.section-sticky {
+  position: sticky;
+  top: 82px; /* Height of nav */
+}
+
+@media (max-width: 768px) {
+  .section-sticky {
+    top: 65px;
+  }
+}
+
+/* Search overlay from header */
+.nav-search-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 15, 16, 0.98);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease;
+  z-index: 1001;
+}
+
+.nav-search-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.nav-search-input {
+  width: 90%;
+  max-width: 600px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(201, 206, 214, 0.3);
+  padding: 20px 0;
+  font-size: 32px;
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.nav-search-input:focus {
+  border-color: var(--chrome);
+}
+
+.nav-search-input::placeholder {
+  color: var(--slate);
+}
+
+.nav-search-close {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: transparent;
+  border: 1px solid rgba(201, 206, 214, 0.3);
+  border-radius: 50%;
+  color: var(--chrome);
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-search-close:hover {
+  background: var(--white);
+  color: var(--black);
+  border-color: var(--white);
+}
+
+/* Header with blur effect on scroll */
+.nav--blur-on-scroll {
+  background: transparent;
+}
+
+.nav--blur-on-scroll.nav--scrolled {
+  background: rgba(15, 15, 16, 0.8);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+}

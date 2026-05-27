@@ -72,6 +72,19 @@
   <link rel="stylesheet" href="css/network-status-indicator.css">
   <link rel="stylesheet" href="css/smart-clipboard.css">
   <link rel="stylesheet" href="css/circular-scroll-progress.css">
+  
+  <!-- v19.0 Next-Gen Professional Features -->
+  <link rel="stylesheet" href="css/interactive-project-map.css">
+  <link rel="stylesheet" href="css/smart-page-loader.css">
+  <link rel="stylesheet" href="css/project-comparison-tool.css">
+  
+  <!-- v20.0 Fortune 500 Next-Gen Features -->
+  <link rel="stylesheet" href="css/aurora-background.css">
+  <link rel="stylesheet" href="css/spotlight-cards.css">
+  <link rel="stylesheet" href="css/scroll-snap-sections.css">
+  <link rel="stylesheet" href="css/mouse-trail.css">
+  <link rel="stylesheet" href="css/skeleton-loading.css">
+  <link rel="stylesheet" href="css/smart-header.css">
 
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
   <link rel="manifest" href="manifest.json">
@@ -276,6 +289,9 @@
 
   <!-- Clean background -->
   <div class="bg-gradient"></div>
+  
+  <!-- Aurora Background Effect v20.0 -->
+  <div class="aurora-background"></div>
 
   <!-- Preloader - DISABLED -->
   <!--
@@ -737,6 +753,25 @@
     </div>
   </section>
 
+  <!-- Interactive Project Map Section -->
+  <section id="project-map" class="project-map-section" data-section="ProjectMap" data-nav-label="Locations">
+    <div class="section-header reveal-section">
+      <p class="eyebrow">National Coverage</p>
+      <h2 class="scramble-text">Project Locations</h2>
+      <p>Explore our portfolio of completed and ongoing projects across South Africa. Click on any project to learn more.</p>
+    </div>
+    <div id="projectMap"></div>
+  </section>
+
+  <!-- Project Comparison Tool Section -->
+  <section id="project-comparison" class="comparison-section" data-section="Comparison" data-nav-label="Compare">
+    <div class="comparison-header">
+      <p class="eyebrow">Smart Decision Making</p>
+      <h2 class="scramble-text kinetic-text">Compare Projects</h2>
+      <p class="comparison-subtitle">Select up to 3 projects to compare side-by-side. Analyze specifications, timelines, and features to make informed decisions for your next construction project.</p>
+    </div>
+    <div id="projectComparison"></div>
+  </section>
 
   <!-- Testimonials -->
   <section id="testimonials" class="section testimonials" data-section="Testimonials" data-nav-label="Reviews">
@@ -1018,6 +1053,14 @@
   <script src="js/micro-interactions.js"></script>
   <script src="js/performance-dashboard.js"></script>
   <script src="js/motion-preference.js"></script>
+  
+  <!-- v20.0 Fortune 500 Next-Gen Features -->
+  <script src="js/aurora-background.js"></script>
+  <script src="js/spotlight-cards.js"></script>
+  <script src="js/scroll-snap-sections.js"></script>
+  <script src="js/mouse-trail.js"></script>
+  <script src="js/skeleton-loading.js"></script>
+  <script src="js/smart-header.js"></script>
   
   <!-- Print Button -->
   <button class="print-button" onclick="window.print()" title="Print this page" aria-label="Print page">

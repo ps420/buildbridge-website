@@ -1,0 +1,213 @@
+/* ========================================
+   SCROLL SNAP SECTIONS v20.0
+   Smooth section-based scrolling
+   Fortune 500 Quality Navigation
+======================================== */
+
+.scroll-snap-container {
+  scroll-snap-type: y proximity;
+  overflow-y: auto;
+  height: 100vh;
+  scroll-behavior: smooth;
+}
+
+.snap-section {
+  scroll-snap-align: start;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.snap-section--small {
+  min-height: 60vh;
+}
+
+.snap-section--large {
+  min-height: 120vh;
+}
+
+/* Section snap indicator */
+.snap-indicator {
+  position: fixed;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 100;
+}
+
+.snap-indicator-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.2);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.snap-indicator-dot::before {
+  content: attr(data-label);
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%) translateX(10px);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--chrome);
+  white-space: nowrap;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.snap-indicator-dot:hover::before,
+.snap-indicator-dot.active::before {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.snap-indicator-dot:hover,
+.snap-indicator-dot.active {
+  background: var(--chrome);
+  border-color: var(--white);
+  box-shadow: 0 0 20px rgba(201, 206, 214, 0.5);
+  transform: scale(1.3);
+}
+
+/* Progress line in indicator */
+.snap-indicator-progress {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 100%;
+  background: rgba(201, 206, 214, 0.1);
+  z-index: -1;
+}
+
+.snap-indicator-progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background: linear-gradient(to bottom, var(--chrome), var(--white));
+  transition: height 0.3s ease;
+}
+
+/* Section transition effects */
+.snap-section-content {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.snap-section.in-view .snap-section-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Parallax effect within sections */
+.snap-parallax {
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+}
+
+/* Momentum scrolling for native feel */
+@supports (scroll-behavior: smooth) {
+  .scroll-snap-container {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Scroll snap for horizontal sections */
+.horizontal-snap-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.horizontal-snap-section {
+  flex: 0 0 100vw;
+  scroll-snap-align: start;
+  min-height: 100vh;
+}
+
+/* Momentum indicators */
+.momentum-hint {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--chrome);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  opacity: 0.6;
+  animation: momentum-pulse 2s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.momentum-hint svg {
+  width: 24px;
+  height: 24px;
+  animation: momentum-bounce 2s ease-in-out infinite;
+}
+
+@keyframes momentum-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes momentum-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .scroll-snap-container {
+    scroll-snap-type: none;
+  }
+  
+  .snap-section {
+    min-height: auto;
+    padding: 80px 0;
+  }
+  
+  .snap-indicator {
+    display: none;
+  }
+  
+  .momentum-hint {
+    display: none;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-snap-container {
+    scroll-behavior: auto;
+    scroll-snap-type: none;
+  }
+  
+  .snap-section-content {
+    opacity: 1;
+    transform: none;
+  }
+}
