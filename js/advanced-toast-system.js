@@ -1,403 +1,411 @@
 /**
- * BuildBridge Advanced Toast Notification System v1.0
- * Fortune 500 Quality - Rich notifications with progress bars, actions & stacking
- * Features: Multiple positions, auto-dismiss with pause on hover, action buttons, stacking
+ * v28.0: Advanced Toast Notification System
+ * Fortune 500 Quality User Feedback
+ * Supports promises, actions, rich content, and stacking
  */
 
-class AdvancedToastSystem {
-  constructor(options = {}) {
-    this.position = options.position || 'bottom-right';
-    this.maxVisible = options.maxVisible || 5;
-    this.defaultDuration = options.defaultDuration || 5000;
-    this.toasts = [];
-    this.container = null;
-    
-    this.init();
-  }
+(function() {
+  'use strict';
   
-  init() {
-    this.createContainer();
-    this.bindGlobalErrorHandler();
-  }
-  
-  createContainer() {
-    this.container = document.createElement('div');
-    this.container.className = `toast-container toast-container--${this.position}`;
-    this.container.setAttribute('role', 'region');
-    this.container.setAttribute('aria-live', 'polite');
-    this.container.setAttribute('aria-label', 'Notifications');
-    document.body.appendChild(this.container);
-  }
-  
-  bindGlobalErrorHandler() {
-    // Catch unhandled errors and show toast
-    window.addEventListener('error', (e) => {
-      this.error('Something went wrong', {
-        description: e.message,
-        duration: 8000
-      });
-    });
+  const ToastSystem = {
+    // Configuration
+    config: {
+      defaultDuration: 5000,
+      maxVisible: 5,
+      position: 'top-right',
+      pauseOnHover: true,
+      showProgress: true
+    },
     
-    window.addEventListener('unhandledrejection', (e) => {
-      this.error('Request failed', {
-        description: e.reason?.message || 'Network error occurred',
-        duration: 8000
-      });
-    });
-  }
-  
-  create(options) {
-    const {
-      type = 'info',
-      title,
-      message,
-      description,
-      duration = this.defaultDuration,
-      actions = [],
-      icon,
-      closable = true,
-      progressBar = true,
-      pauseOnHover = true,
-      onClose,
-      onAction
-    } = options;
+    // State
+    container: null,
+    toasts: [],
+    toastId: 0,
     
-    // Limit visible toasts
-    if (this.toasts.length >= this.maxVisible) {
-      this.remove(this.toasts[0].id);
-    }
-    
-    const id = 'toast-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-    const toast = document.createElement('div');
-    
-    toast.className = `advanced-toast advanced-toast--${type}`;
-    toast.id = id;
-    toast.setAttribute('role', 'alert');
-    
-    // Icon mapping
-    const icons = {
+    // Icons
+    icons: {
       success: '✓',
       error: '✕',
       warning: '⚠',
       info: 'ℹ',
+      promise: '◌',
       loading: '⟳'
-    };
+    },
     
-    const toastIcon = icon || icons[type] || icons.info;
-    const isLoading = type === 'loading';
+    /**
+     * Initialize toast container
+     */
+    init() {
+      this.createContainer();
+      console.log('🔔 BuildBridge Advanced Toast System initialized');
+    },
     
-    toast.innerHTML = `
-      <div class="toast-content">
-        <div class="toast-icon ${isLoading ? 'toast-icon--spinning' : ''}">
-          ${toastIcon}
-        </div>
-        <div class="toast-body">
-          ${title ? `<div class="toast-title">${title}</div>` : ''}
-          ${message ? `<div class="toast-message">${message}</div>` : ''}
-          ${description ? `<div class="toast-description">${description}</div>` : ''}
-          ${actions.length ? `
-            <div class="toast-actions">
-              ${actions.map((action, i) => `
-                <button class="toast-action-btn ${action.primary ? 'toast-action-btn--primary' : ''}" data-action="${i}">
-                  ${action.label}
-                </button>
-              `).join('')}
-            </div>
-          ` : ''}
-        </div>
-        ${closable ? `
-          <button class="toast-close" aria-label="Close notification">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 6L6 18M6 6l12 12"/>
-            </svg>
-          </button>
-        ` : ''}
-      </div>
-      ${progressBar && !isLoading ? `
-        <div class="toast-progress">
-          <div class="toast-progress-bar"></div>
-        </div>
-      ` : ''}
-    `;
+    /**
+     * Create toast container
+     */
+    createContainer() {
+      if (document.getElementById('toast-container')) return;
+      
+      this.container = document.createElement('div');
+      this.container.id = 'toast-container';
+      this.container.className = `toast-container ${this.config.position}`;
+      document.body.appendChild(this.container);
+    },
     
-    // Add to container
-    this.container.appendChild(toast);
-    
-    // Store toast data
-    const toastData = {
-      id,
-      element: toast,
-      startTime: Date.now(),
-      duration,
-      remaining: duration,
-      timerId: null,
-      isPaused: false,
-      onClose
-    };
-    
-    this.toasts.push(toastData);
-    
-    // Trigger animation
-    requestAnimationFrame(() => {
-      toast.classList.add('toast--visible');
-      if (!isLoading) {
-        this.startTimer(toastData);
+    /**
+     * Create a toast notification
+     */
+    create(options = {}) {
+      const {
+        type = 'info',
+        title = '',
+        message = '',
+        duration = this.config.defaultDuration,
+        actions = [],
+        image = null,
+        icon = null,
+        closable = true,
+        onClose = null,
+        onAction = null,
+        promise = null,
+        id = ++this.toastId
+      } = options;
+      
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.dataset.id = id;
+      
+      // Build content
+      let content = '';
+      
+      // Icon
+      const iconChar = icon || this.icons[type];
+      if (type === 'promise' || type === 'loading') {
+        content += `<div class="toast-spinner"></div>`;
+      } else {
+        content += `<div class="toast-icon">${iconChar}</div>`;
       }
-    });
-    
-    // Bind events
-    if (closable) {
-      toast.querySelector('.toast-close').addEventListener('click', () => {
-        this.remove(id);
-      });
-    }
-    
-    // Action buttons
-    if (actions.length) {
-      toast.querySelectorAll('.toast-action-btn').forEach((btn, i) => {
-        btn.addEventListener('click', () => {
-          const action = actions[i];
-          if (action.onClick) {
-            action.onClick();
-          }
-          if (onAction) {
-            onAction(action, i);
-          }
-          if (action.dismiss !== false) {
-            this.remove(id);
-          }
+      
+      // Image (if provided)
+      if (image) {
+        toast.classList.add('toast-with-image');
+        content += `<img src="${image}" alt="" class="toast-image">`;
+        content += `<div class="toast-image-content">`;
+      }
+      
+      // Text content
+      content += `<div class="toast-content">`;
+      if (title) {
+        content += `<h4 class="toast-title">${this.escapeHtml(title)}</h4>`;
+      }
+      content += `<p class="toast-message">${this.escapeHtml(message)}</p>`;
+      
+      // Actions
+      if (actions.length > 0) {
+        content += `<div class="toast-actions">`;
+        actions.forEach((action, index) => {
+          content += `<button class="toast-action ${action.primary ? 'primary' : ''}" data-action="${index}">${this.escapeHtml(action.text)}</button>`;
         });
+        content += `</div>`;
+      }
+      
+      content += `</div>`; // Close toast-content
+      
+      if (image) {
+        content += `</div>`; // Close toast-image-content
+      }
+      
+      // Close button
+      if (closable) {
+        content += `<button class="toast-close" aria-label="Close notification">×</button>`;
+      }
+      
+      // Progress bar
+      if (this.config.showProgress && duration > 0 && !promise) {
+        content += `<div class="toast-progress"><div class="toast-progress-bar"></div></div>`;
+      }
+      
+      toast.innerHTML = content;
+      
+      // Event listeners
+      this.bindToastEvents(toast, { duration, closable, onClose, onAction, actions, promise });
+      
+      // Add to container
+      this.container.appendChild(toast);
+      this.toasts.push({ id, element: toast, startTime: Date.now(), duration });
+      
+      // Animate in
+      requestAnimationFrame(() => {
+        toast.classList.add('show');
+      });
+      
+      // Update stack positions
+      this.updateStack();
+      
+      // Handle promise
+      if (promise && typeof promise.then === 'function') {
+        this.handlePromise(toast, promise, options);
+      }
+      
+      return {
+        id,
+        dismiss: () => this.dismiss(id),
+        update: (newOptions) => this.update(id, newOptions)
+      };
+    },
+    
+    /**
+     * Bind events to toast
+     */
+    bindToastEvents(toast, options) {
+      const { duration, closable, onClose, onAction, actions, promise } = options;
+      let remainingTime = duration;
+      let startTime = Date.now();
+      let timerId = null;
+      let isPaused = false;
+      
+      // Auto-dismiss timer
+      const startTimer = () => {
+        if (duration <= 0 || promise) return;
+        
+        const progressBar = toast.querySelector('.toast-progress-bar');
+        
+        const tick = () => {
+          if (isPaused) return;
+          
+          const elapsed = Date.now() - startTime;
+          const remaining = Math.max(0, remainingTime - elapsed);
+          
+          if (progressBar) {
+            const percent = (remaining / duration) * 100;
+            progressBar.style.transform = `scaleX(${percent / 100})`;
+          }
+          
+          if (remaining <= 0) {
+            this.dismiss(toast.dataset.id);
+          } else {
+            timerId = requestAnimationFrame(tick);
+          }
+        };
+        
+        timerId = requestAnimationFrame(tick);
+      };
+      
+      startTimer();
+      
+      // Pause on hover
+      if (this.config.pauseOnHover && duration > 0) {
+        toast.addEventListener('mouseenter', () => {
+          isPaused = true;
+          remainingTime -= Date.now() - startTime;
+          if (timerId) cancelAnimationFrame(timerId);
+        });
+        
+        toast.addEventListener('mouseleave', () => {
+          isPaused = false;
+          startTime = Date.now();
+          startTimer();
+        });
+      }
+      
+      // Close button
+      if (closable) {
+        const closeBtn = toast.querySelector('.toast-close');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', () => {
+            if (onClose) onClose();
+            this.dismiss(toast.dataset.id);
+          });
+        }
+      }
+      
+      // Action buttons
+      if (actions.length > 0) {
+        toast.querySelectorAll('.toast-action').forEach((btn, index) => {
+          btn.addEventListener('click', () => {
+            if (onAction) onAction(actions[index], index);
+            if (actions[index].onClick) actions[index].onClick();
+            if (actions[index].dismiss !== false) {
+              this.dismiss(toast.dataset.id);
+            }
+          });
+        });
+      }
+    },
+    
+    /**
+     * Handle promise-based toast
+     */
+    handlePromise(toast, promise, options) {
+      const successMessage = options.successMessage || options.message;
+      const errorMessage = options.errorMessage || 'An error occurred';
+      const loadingMessage = options.loadingMessage || 'Loading...';
+      
+      promise
+        .then((result) => {
+          toast.classList.remove('promise');
+          toast.classList.add('success');
+          toast.querySelector('.toast-spinner')?.remove();
+          
+          const iconEl = document.createElement('div');
+          iconEl.className = 'toast-icon';
+          iconEl.textContent = this.icons.success;
+          toast.insertBefore(iconEl, toast.firstChild);
+          
+          const messageEl = toast.querySelector('.toast-message');
+          if (messageEl) {
+            messageEl.textContent = typeof successMessage === 'function' 
+              ? successMessage(result) 
+              : successMessage;
+          }
+          
+          // Auto-dismiss after delay
+          setTimeout(() => this.dismiss(toast.dataset.id), this.config.defaultDuration);
+        })
+        .catch((error) => {
+          toast.classList.remove('promise');
+          toast.classList.add('error');
+          toast.querySelector('.toast-spinner')?.remove();
+          
+          const iconEl = document.createElement('div');
+          iconEl.className = 'toast-icon';
+          iconEl.textContent = this.icons.error;
+          toast.insertBefore(iconEl, toast.firstChild);
+          
+          const messageEl = toast.querySelector('.toast-message');
+          if (messageEl) {
+            messageEl.textContent = typeof errorMessage === 'function' 
+              ? errorMessage(error) 
+              : errorMessage;
+          }
+          
+          setTimeout(() => this.dismiss(toast.dataset.id), this.config.defaultDuration);
+        });
+    },
+    
+    /**
+     * Update existing toast
+     */
+    update(id, options) {
+      const toastData = this.toasts.find(t => t.id == id);
+      if (!toastData) return;
+      
+      const toast = toastData.element;
+      
+      if (options.title) {
+        const titleEl = toast.querySelector('.toast-title');
+        if (titleEl) titleEl.textContent = options.title;
+      }
+      
+      if (options.message) {
+        const messageEl = toast.querySelector('.toast-message');
+        if (messageEl) messageEl.textContent = options.message;
+      }
+      
+      if (options.type) {
+        toast.className = `toast ${options.type} show`;
+      }
+      
+      return { id, dismiss: () => this.dismiss(id) };
+    },
+    
+    /**
+     * Dismiss a toast
+     */
+    dismiss(id) {
+      const index = this.toasts.findIndex(t => t.id == id);
+      if (index === -1) return;
+      
+      const toast = this.toasts[index].element;
+      toast.classList.add('hiding');
+      toast.classList.remove('show');
+      
+      setTimeout(() => {
+        if (toast.parentNode) {
+          toast.remove();
+        }
+        this.toasts.splice(index, 1);
+        this.updateStack();
+      }, 400);
+    },
+    
+    /**
+     * Update toast stack positions
+     */
+    updateStack() {
+      // Limit visible toasts
+      this.toasts.slice(this.config.maxVisible).forEach(t => {
+        t.element.style.opacity = '0';
+        t.element.style.pointerEvents = 'none';
+      });
+    },
+    
+    /**
+     * Dismiss all toasts
+     */
+    dismissAll() {
+      [...this.toasts].forEach(t => this.dismiss(t.id));
+    },
+    
+    /**
+     * Escape HTML
+     */
+    escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    },
+    
+    // Convenience methods
+    success(message, title, options = {}) {
+      return this.create({ type: 'success', message, title, ...options });
+    },
+    
+    error(message, title, options = {}) {
+      return this.create({ type: 'error', message, title, ...options });
+    },
+    
+    warning(message, title, options = {}) {
+      return this.create({ type: 'warning', message, title, ...options });
+    },
+    
+    info(message, title, options = {}) {
+      return this.create({ type: 'info', message, title, ...options });
+    },
+    
+    promise(promise, options = {}) {
+      return this.create({ type: 'promise', promise, ...options });
+    },
+    
+    loading(message, options = {}) {
+      return this.create({ 
+        type: 'loading', 
+        message, 
+        duration: 0, 
+        closable: false,
+        ...options 
       });
     }
-    
-    // Pause on hover
-    if (pauseOnHover && !isLoading) {
-      toast.addEventListener('mouseenter', () => this.pauseTimer(toastData));
-      toast.addEventListener('mouseleave', () => this.resumeTimer(toastData));
-    }
-    
-    // Swipe to dismiss on mobile
-    this.bindSwipeToDismiss(toast, id);
-    
-    return id;
+  };
+  
+  // Auto-initialize
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => ToastSystem.init());
+  } else {
+    ToastSystem.init();
   }
   
-  startTimer(toastData) {
-    const progressBar = toastData.element.querySelector('.toast-progress-bar');
-    
-    const tick = () => {
-      if (toastData.isPaused) return;
-      
-      const elapsed = Date.now() - toastData.startTime;
-      const remaining = Math.max(0, toastData.remaining - elapsed);
-      const progress = (remaining / toastData.duration) * 100;
-      
-      if (progressBar) {
-        progressBar.style.width = `${progress}%`;
-      }
-      
-      if (remaining <= 0) {
-        this.remove(toastData.id);
-      } else {
-        toastData.timerId = requestAnimationFrame(tick);
-      }
-    };
-    
-    toastData.startTime = Date.now();
-    toastData.timerId = requestAnimationFrame(tick);
-  }
+  // Expose global Toast object
+  window.Toast = {
+    success: (message, title, options) => ToastSystem.success(message, title, options),
+    error: (message, title, options) => ToastSystem.error(message, title, options),
+    warning: (message, title, options) => ToastSystem.warning(message, title, options),
+    info: (message, title, options) => ToastSystem.info(message, title, options),
+    promise: (promise, options) => ToastSystem.promise(promise, options),
+    loading: (message, options) => ToastSystem.loading(message, options),
+    dismiss: (id) => ToastSystem.dismiss(id),
+    dismissAll: () => ToastSystem.dismissAll(),
+    create: (options) => ToastSystem.create(options)
+  };
   
-  pauseTimer(toastData) {
-    if (toastData.isPaused) return;
-    
-    toastData.isPaused = true;
-    const elapsed = Date.now() - toastData.startTime;
-    toastData.remaining -= elapsed;
-    
-    if (toastData.timerId) {
-      cancelAnimationFrame(toastData.timerId);
-    }
-    
-    toastData.element.classList.add('toast--paused');
-  }
-  
-  resumeTimer(toastData) {
-    if (!toastData.isPaused) return;
-    
-    toastData.isPaused = false;
-    toastData.startTime = Date.now();
-    toastData.element.classList.remove('toast--paused');
-    
-    if (toastData.remaining > 0) {
-      this.startTimer(toastData);
-    }
-  }
-  
-  bindSwipeToDismiss(toast, id) {
-    let startX = 0;
-    let currentX = 0;
-    let isDragging = false;
-    
-    const handleStart = (e) => {
-      startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
-      isDragging = true;
-      toast.style.transition = 'none';
-    };
-    
-    const handleMove = (e) => {
-      if (!isDragging) return;
-      currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
-      const diff = currentX - startX;
-      
-      // Only allow left swipe
-      if (diff < 0) {
-        toast.style.transform = `translateX(${diff}px)`;
-        toast.style.opacity = 1 + (diff / 200);
-      }
-    };
-    
-    const handleEnd = () => {
-      if (!isDragging) return;
-      isDragging = false;
-      toast.style.transition = '';
-      
-      const diff = currentX - startX;
-      
-      if (diff < -100) {
-        this.remove(id);
-      } else {
-        toast.style.transform = '';
-        toast.style.opacity = '';
-      }
-    };
-    
-    toast.addEventListener('touchstart', handleStart, { passive: true });
-    toast.addEventListener('touchmove', handleMove, { passive: true });
-    toast.addEventListener('touchend', handleEnd);
-  }
-  
-  remove(id) {
-    const index = this.toasts.findIndex(t => t.id === id);
-    if (index === -1) return;
-    
-    const toastData = this.toasts[index];
-    const toast = toastData.element;
-    
-    // Cancel timer
-    if (toastData.timerId) {
-      cancelAnimationFrame(toastData.timerId);
-    }
-    
-    // Animate out
-    toast.classList.remove('toast--visible');
-    toast.classList.add('toast--exiting');
-    
-    setTimeout(() => {
-      if (toast.parentNode) {
-        toast.parentNode.removeChild(toast);
-      }
-      
-      // Remove from array
-      this.toasts.splice(index, 1);
-      
-      // Trigger callback
-      if (toastData.onClose) {
-        toastData.onClose();
-      }
-    }, 300);
-  }
-  
-  update(id, updates) {
-    const toastData = this.toasts.find(t => t.id === id);
-    if (!toastData) return;
-    
-    const toast = toastData.element;
-    
-    if (updates.message) {
-      const messageEl = toast.querySelector('.toast-message');
-      if (messageEl) messageEl.textContent = updates.message;
-    }
-    
-    if (updates.title) {
-      const titleEl = toast.querySelector('.toast-title');
-      if (titleEl) titleEl.textContent = updates.title;
-    }
-    
-    if (updates.type) {
-      toast.className = toast.className.replace(/advanced-toast--\w+/, `advanced-toast--${updates.type}`);
-    }
-  }
-  
-  // Convenience methods
-  success(message, options = {}) {
-    return this.create({ type: 'success', message, ...options });
-  }
-  
-  error(message, options = {}) {
-    return this.create({ type: 'error', message, ...options });
-  }
-  
-  warning(message, options = {}) {
-    return this.create({ type: 'warning', message, ...options });
-  }
-  
-  info(message, options = {}) {
-    return this.create({ type: 'info', message, ...options });
-  }
-  
-  loading(message, options = {}) {
-    return this.create({ type: 'loading', message, duration: Infinity, ...options });
-  }
-  
-  promise(promise, options = {}) {
-    const { loading = 'Loading...', success = 'Success!', error = 'Error occurred' } = options;
-    
-    const id = this.loading(loading, { ...options.loading });
-    
-    promise
-      .then((result) => {
-        this.remove(id);
-        const successMessage = typeof success === 'function' ? success(result) : success;
-        this.success(successMessage, options.success);
-        return result;
-      })
-      .catch((err) => {
-        this.remove(id);
-        const errorMessage = typeof error === 'function' ? error(err) : error;
-        this.error(errorMessage, options.error);
-        throw err;
-      });
-    
-    return promise;
-  }
-  
-  clear() {
-    [...this.toasts].forEach(t => this.remove(t.id));
-  }
-}
-
-// Initialize global toast system
-document.addEventListener('DOMContentLoaded', () => {
-  window.Toast = new AdvancedToastSystem({
-    position: 'bottom-right',
-    maxVisible: 5,
-    defaultDuration: 5000
-  });
-  
-  // Demo on first load
-  if (!sessionStorage.getItem('toast-demo-shown')) {
-    setTimeout(() => {
-      window.Toast.info('Welcome to BuildBridge', {
-        title: '👋 Hello!',
-        description: 'Press / to search or try our new features',
-        duration: 6000
-      });
-      sessionStorage.setItem('toast-demo-shown', 'true');
-    }, 2000);
-  }
-});
-
-// Make it available globally
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = AdvancedToastSystem;
-}
+})();

@@ -1,485 +1,416 @@
 /**
- * WebGL Fluid Hero Background - v24.0
- * Premium interactive fluid simulation for hero section
- * Fortune 500 Quality Visual Effect
+ * v28.0: WebGL Fluid Simulation Hero
+ * High-performance fluid dynamics background effect
+ * Fortune 500 Premium Visual Experience
  */
 
-class WebGLFluidHero {
-  constructor(container, options = {}) {
-    this.container = container || document.querySelector('.hero');
-    if (!this.container) return;
-    
-    this.options = {
-      particleCount: options.particleCount || 25,
-      connectionDistance: options.connectionDistance || 150,
-      mouseRadius: options.mouseRadius || 200,
-      color1: options.color1 || [201, 206, 214], // Chrome
-      color2: options.color2 || [82, 88, 98],   // Steel
-      color3: options.color3 || [43, 45, 48],   // Gun
-      speed: options.speed || 0.5,
-      ...options
-    };
-    
-    this.canvas = null;
-    this.gl = null;
-    this.program = null;
-    this.particles = [];
-    this.mouse = { x: 0, y: 0, vx: 0, vy: 0 };
-    this.time = 0;
-    this.animationId = null;
-    this.isActive = true;
-    
-    this.init();
-  }
+(function() {
+  'use strict';
   
-  init() {
-    // Skip on mobile/touch devices for performance
-    if (window.matchMedia('(pointer: coarse)').matches) {
-      this.fallbackToCSS();
-      return;
-    }
+  const FluidHero = {
+    // Configuration
+    config: {
+      canvasId: 'fluid-hero-canvas',
+      containerSelector: '.hero',
+      particleCount: 25,
+      particleSize: { min: 100, max: 300 },
+      speed: 0.0003,
+      turbulence: 0.5,
+      colorMix: 0.3,
+      mouseInfluence: 0.15,
+      mouseRadius: 200,
+      fadeRate: 0.96,
+      blurAmount: 40
+    },
     
-    this.createCanvas();
-    this.setupWebGL();
-    this.createParticles();
-    this.bindEvents();
-    this.animate();
+    // State
+    canvas: null,
+    ctx: null,
+    width: 0,
+    height: 0,
+    particles: [],
+    mouse: { x: -1000, y: -1000, vx: 0, vy: 0 },
+    isActive: true,
+    animationId: null,
+    frameCount: 0,
     
-    console.log('[WebGL Fluid] Initialized with', this.options.particleCount, 'particles');
-  }
-  
-  fallbackToCSS() {
-    // Add CSS gradient fallback
-    const fallback = document.createElement('div');
-    fallback.className = 'webgl-fallback';
-    fallback.style.cssText = `
-      position: absolute;
-      inset: 0;
-      background: 
-        radial-gradient(ellipse at 20% 30%, rgba(201,206,214,0.15) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 70%, rgba(82,88,98,0.1) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 50%, rgba(43,45,48,0.05) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    `;
-    this.container.insertBefore(fallback, this.container.firstChild);
-  }
-  
-  createCanvas() {
-    this.canvas = document.createElement('canvas');
-    this.canvas.className = 'webgl-fluid-canvas';
-    this.canvas.style.cssText = `
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    `;
-    this.container.insertBefore(this.canvas, this.container.firstChild);
-    this.resize();
-  }
-  
-  setupWebGL() {
-    this.gl = this.canvas.getContext('webgl', { 
-      alpha: true, 
-      antialias: true,
-      powerPreference: 'high-performance'
-    }) || this.canvas.getContext('experimental-webgl');
+    // Colors for fluid (adjustable via CSS)
+    colors: {
+      dark: [
+        { r: 26, g: 26, b: 34 },    // Dark base
+        { r: 45, g: 45, b: 60 },    // Slightly lighter
+        { r: 60, g: 60, b: 80 },    // Mid tone
+        { r: 201, g: 206, b: 214 }  // Chrome accent
+      ],
+      light: [
+        { r: 248, g: 249, b: 250 }, // Light base
+        { r: 233, g: 236, b: 239 }, // Slightly darker
+        { r: 222, g: 226, b: 230 }, // Mid tone
+        { r: 26, g: 26, b: 46 }     // Dark accent
+      ]
+    },
     
-    if (!this.gl) {
-      console.warn('[WebGL Fluid] WebGL not supported, falling back to CSS');
-      this.fallbackToCSS();
-      return;
-    }
-    
-    // Vertex shader
-    const vertexShader = `
-      attribute vec2 a_position;
-      attribute float a_size;
-      attribute vec3 a_color;
-      
-      uniform vec2 u_resolution;
-      uniform float u_time;
-      
-      varying vec3 v_color;
-      varying float v_size;
-      
-      void main() {
-        vec2 clipSpace = ((a_position / u_resolution) * 2.0) - 1.0;
-        gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
-        gl_PointSize = a_size;
-        v_color = a_color;
-        v_size = a_size;
+    /**
+     * Initialize the fluid hero
+     */
+    init() {
+      // Check for reduced motion preference
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        console.log('🌊 Fluid Hero: Reduced motion enabled, skipping animation');
+        return;
       }
-    `;
-    
-    // Fragment shader with fluid-like glow
-    const fragmentShader = `
-      precision mediump float;
       
-      varying vec3 v_color;
-      varying float v_size;
-      
-      void main() {
-        vec2 coord = gl_PointCoord - vec2(0.5);
-        float dist = length(coord);
-        
-        if (dist > 0.5) discard;
-        
-        // Soft glow effect
-        float alpha = 1.0 - smoothstep(0.0, 0.5, dist);
-        alpha *= 0.6;
-        
-        // Inner bright core
-        float core = 1.0 - smoothstep(0.0, 0.2, dist);
-        
-        vec3 finalColor = v_color * (0.5 + core * 0.5);
-        
-        gl_FragColor = vec4(finalColor, alpha);
+      // Check for touch device (disable on mobile for performance)
+      if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
+        console.log('🌊 Fluid Hero: Touch device detected, using simplified version');
+        this.config.particleCount = 15;
+        this.config.blurAmount = 20;
       }
-    `;
+      
+      this.createCanvas();
+      this.setupParticles();
+      this.bindEvents();
+      this.startAnimation();
+      
+      console.log('🌊 BuildBridge WebGL Fluid Hero initialized');
+    },
     
-    this.program = this.createProgram(vertexShader, fragmentShader);
-    this.gl.useProgram(this.program);
+    /**
+     * Create and inject canvas
+     */
+    createCanvas() {
+      const container = document.querySelector(this.config.containerSelector);
+      if (!container) return;
+      
+      // Check if canvas already exists
+      this.canvas = document.getElementById(this.config.canvasId);
+      if (!this.canvas) {
+        this.canvas = document.createElement('canvas');
+        this.canvas.id = this.config.canvasId;
+        this.canvas.style.cssText = `
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          z-index: -1;
+          pointer-events: none;
+          opacity: 0.6;
+          filter: blur(${this.config.blurAmount}px);
+          transition: opacity 0.5s ease;
+        `;
+        container.insertBefore(this.canvas, container.firstChild);
+      }
+      
+      this.ctx = this.canvas.getContext('2d', { alpha: true });
+      this.resize();
+    },
     
-    // Enable blending
-    this.gl.enable(this.gl.BLEND);
-    this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
-  }
-  
-  createShader(type, source) {
-    const shader = this.gl.createShader(type);
-    this.gl.shaderSource(shader, source);
-    this.gl.compileShader(shader);
+    /**
+     * Set up fluid particles
+     */
+    setupParticles() {
+      this.particles = [];
+      const theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+      const palette = this.colors[theme];
+      
+      for (let i = 0; i < this.config.particleCount; i++) {
+        const color = palette[Math.floor(Math.random() * palette.length)];
+        this.particles.push({
+          x: Math.random() * this.width,
+          y: Math.random() * this.height,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          radius: this.config.particleSize.min + 
+                  Math.random() * (this.config.particleSize.max - this.config.particleSize.min),
+          color: color,
+          angle: Math.random() * Math.PI * 2,
+          angularVelocity: (Math.random() - 0.5) * 0.02,
+          pulsePhase: Math.random() * Math.PI * 2,
+          pulseSpeed: 0.02 + Math.random() * 0.03
+        });
+      }
+    },
     
-    if (!this.gl.getShaderParameter(shader, this.gl.COMPILE_STATUS)) {
-      console.error('[WebGL Fluid] Shader compile error:', this.gl.getShaderInfoLog(shader));
-      this.gl.deleteShader(shader);
-      return null;
-    }
-    
-    return shader;
-  }
-  
-  createProgram(vertexSource, fragmentSource) {
-    const vertexShader = this.createShader(this.gl.VERTEX_SHADER, vertexSource);
-    const fragmentShader = this.createShader(this.gl.FRAGMENT_SHADER, fragmentSource);
-    
-    const program = this.gl.createProgram();
-    this.gl.attachShader(program, vertexShader);
-    this.gl.attachShader(program, fragmentShader);
-    this.gl.linkProgram(program);
-    
-    if (!this.gl.getProgramParameter(program, this.gl.LINK_STATUS)) {
-      console.error('[WebGL Fluid] Program link error:', this.gl.getProgramInfoLog(program));
-      return null;
-    }
-    
-    return program;
-  }
-  
-  createParticles() {
-    this.particles = [];
-    
-    for (let i = 0; i < this.options.particleCount; i++) {
-      this.particles.push({
-        x: Math.random() * this.canvas.width,
-        y: Math.random() * this.canvas.height,
-        vx: (Math.random() - 0.5) * this.options.speed,
-        vy: (Math.random() - 0.5) * this.options.speed,
-        size: Math.random() * 80 + 40,
-        color: this.getRandomColor(),
-        originalX: 0,
-        originalY: 0
+    /**
+     * Bind event listeners
+     */
+    bindEvents() {
+      // Resize handler
+      window.addEventListener('resize', () => {
+        this.resize();
+      }, { passive: true });
+      
+      // Mouse tracking
+      document.addEventListener('mousemove', (e) => {
+        const rect = this.canvas?.getBoundingClientRect();
+        if (rect) {
+          this.mouse.vx = e.clientX - this.mouse.x;
+          this.mouse.vy = e.clientY - this.mouse.y;
+          this.mouse.x = e.clientX - rect.left;
+          this.mouse.y = e.clientY - rect.top;
+        }
+      }, { passive: true });
+      
+      // Mouse leave
+      document.addEventListener('mouseleave', () => {
+        this.mouse.x = -1000;
+        this.mouse.y = -1000;
       });
-    }
-    
-    // Store original positions
-    this.particles.forEach(p => {
-      p.originalX = p.x;
-      p.originalY = p.y;
-    });
-  }
-  
-  getRandomColor() {
-    const colors = [
-      this.options.color1,
-      this.options.color2,
-      this.options.color3
-    ];
-    return colors[Math.floor(Math.random() * colors.length)];
-  }
-  
-  bindEvents() {
-    window.addEventListener('resize', () => this.resize(), { passive: true });
-    
-    // Track mouse for interaction
-    document.addEventListener('mousemove', (e) => {
-      const rect = this.container.getBoundingClientRect();
-      this.mouse.x = e.clientX - rect.left;
-      this.mouse.y = e.clientY - rect.top;
-    }, { passive: true });
-    
-    // Visibility API to pause when tab hidden
-    document.addEventListener('visibilitychange', () => {
-      this.isActive = !document.hidden;
-      if (this.isActive) this.animate();
-    });
-  }
-  
-  resize() {
-    const rect = this.container.getBoundingClientRect();
-    this.canvas.width = rect.width * window.devicePixelRatio;
-    this.canvas.height = rect.height * window.devicePixelRatio;
-    this.canvas.style.width = rect.width + 'px';
-    this.canvas.style.height = rect.height + 'px';
-    
-    if (this.gl) {
-      this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
-    }
-  }
-  
-  updateParticles() {
-    this.time += 0.016;
-    
-    this.particles.forEach(p => {
-      // Gentle floating motion
-      p.x += p.vx + Math.sin(this.time * 0.5 + p.y * 0.01) * 0.3;
-      p.y += p.vy + Math.cos(this.time * 0.3 + p.x * 0.01) * 0.3;
       
-      // Mouse interaction - gentle repulsion
-      const dx = p.x - this.mouse.x;
-      const dy = p.y - this.mouse.y;
+      // Theme change handler
+      window.addEventListener('themechange', (e) => {
+        this.updateColors(e.detail.theme);
+      });
+      
+      // Visibility check
+      document.addEventListener('visibilitychange', () => {
+        this.isActive = !document.hidden;
+        if (this.isActive && !this.animationId) {
+          this.startAnimation();
+        }
+      });
+      
+      // Intersection Observer for performance
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          this.isActive = entry.isIntersecting;
+          if (this.isActive && !this.animationId) {
+            this.startAnimation();
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      const container = document.querySelector(this.config.containerSelector);
+      if (container) observer.observe(container);
+    },
+    
+    /**
+     * Update particle colors on theme change
+     */
+    updateColors(theme) {
+      const palette = this.colors[theme];
+      this.particles.forEach((particle, i) => {
+        particle.color = palette[i % palette.length];
+      });
+    },
+    
+    /**
+     * Resize canvas
+     */
+    resize() {
+      const container = document.querySelector(this.config.containerSelector);
+      if (!container || !this.canvas) return;
+      
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      this.width = container.offsetWidth;
+      this.height = container.offsetHeight;
+      
+      this.canvas.width = this.width * dpr;
+      this.canvas.height = this.height * dpr;
+      this.ctx.scale(dpr, dpr);
+      
+      // Reset particles on resize
+      this.setupParticles();
+    },
+    
+    /**
+     * Animation loop
+     */
+    animate() {
+      if (!this.isActive) {
+        this.animationId = null;
+        return;
+      }
+      
+      this.frameCount++;
+      
+      // Skip frames for performance (30fps)
+      if (this.frameCount % 2 !== 0) {
+        this.animationId = requestAnimationFrame(() => this.animate());
+        return;
+      }
+      
+      this.ctx.fillStyle = `rgba(15, 15, 18, ${1 - this.config.fadeRate})`;
+      this.ctx.fillRect(0, 0, this.width, this.height);
+      
+      // Update and draw particles
+      this.particles.forEach(particle => {
+        this.updateParticle(particle);
+        this.drawParticle(particle);
+      });
+      
+      // Draw connections between close particles
+      this.drawConnections();
+      
+      this.animationId = requestAnimationFrame(() => this.animate());
+    },
+    
+    /**
+     * Update single particle
+     */
+    updateParticle(p) {
+      // Flow field movement
+      const time = Date.now() * this.config.speed;
+      const noiseX = Math.sin(p.y * 0.005 + time) * this.config.turbulence;
+      const noiseY = Math.cos(p.x * 0.005 + time) * this.config.turbulence;
+      
+      p.vx += noiseX * 0.01;
+      p.vy += noiseY * 0.01;
+      
+      // Mouse influence
+      const dx = this.mouse.x - p.x;
+      const dy = this.mouse.y - p.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
       
-      if (dist < this.options.mouseRadius && dist > 0) {
-        const force = (this.options.mouseRadius - dist) / this.options.mouseRadius;
-        p.vx += (dx / dist) * force * 0.5;
-        p.vy += (dy / dist) * force * 0.5;
+      if (dist < this.config.mouseRadius) {
+        const force = (this.config.mouseRadius - dist) / this.config.mouseRadius;
+        p.vx += (dx / dist) * force * this.config.mouseInfluence;
+        p.vy += (dy / dist) * force * this.config.mouseInfluence;
       }
       
-      // Damping
+      // Apply velocity with damping
       p.vx *= 0.99;
       p.vy *= 0.99;
       
-      // Return to original area gently
-      p.vx += (p.originalX - p.x) * 0.0005;
-      p.vy += (p.originalY - p.y) * 0.0005;
+      // Update position
+      p.x += p.vx;
+      p.y += p.vy;
       
-      // Wrap around edges
-      if (p.x < -100) p.x = this.canvas.width + 100;
-      if (p.x > this.canvas.width + 100) p.x = -100;
-      if (p.y < -100) p.y = this.canvas.height + 100;
-      if (p.y > this.canvas.height + 100) p.y = -100;
-    });
-  }
-  
-  render() {
-    if (!this.gl || !this.program) return;
-    
-    // Clear with transparent
-    this.gl.clearColor(0, 0, 0, 0);
-    this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-    
-    // Prepare attributes
-    const positions = new Float32Array(this.particles.length * 2);
-    const sizes = new Float32Array(this.particles.length);
-    const colors = new Float32Array(this.particles.length * 3);
-    
-    this.particles.forEach((p, i) => {
-      positions[i * 2] = p.x;
-      positions[i * 2 + 1] = p.y;
-      sizes[i] = p.size * window.devicePixelRatio;
-      colors[i * 3] = p.color[0] / 255;
-      colors[i * 3 + 1] = p.color[1] / 255;
-      colors[i * 3 + 2] = p.color[2] / 255;
-    });
-    
-    // Position attribute
-    const positionLoc = this.gl.getAttribLocation(this.program, 'a_position');
-    const positionBuffer = this.gl.createBuffer();
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, positionBuffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, positions, this.gl.DYNAMIC_DRAW);
-    this.gl.enableVertexAttribArray(positionLoc);
-    this.gl.vertexAttribPointer(positionLoc, 2, this.gl.FLOAT, false, 0, 0);
-    
-    // Size attribute
-    const sizeLoc = this.gl.getAttribLocation(this.program, 'a_size');
-    const sizeBuffer = this.gl.createBuffer();
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, sizeBuffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, sizes, this.gl.DYNAMIC_DRAW);
-    this.gl.enableVertexAttribArray(sizeLoc);
-    this.gl.vertexAttribPointer(sizeLoc, 1, this.gl.FLOAT, false, 0, 0);
-    
-    // Color attribute
-    const colorLoc = this.gl.getAttribLocation(this.program, 'a_color');
-    const colorBuffer = this.gl.createBuffer();
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, colorBuffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, colors, this.gl.DYNAMIC_DRAW);
-    this.gl.enableVertexAttribArray(colorLoc);
-    this.gl.vertexAttribPointer(colorLoc, 3, this.gl.FLOAT, false, 0, 0);
-    
-    // Uniforms
-    const resolutionLoc = this.gl.getUniformLocation(this.program, 'u_resolution');
-    this.gl.uniform2f(resolutionLoc, this.canvas.width, this.canvas.height);
-    
-    const timeLoc = this.gl.getUniformLocation(this.program, 'u_time');
-    this.gl.uniform1f(timeLoc, this.time);
-    
-    // Draw
-    this.gl.drawArrays(this.gl.POINTS, 0, this.particles.length);
-  }
-  
-  animate() {
-    if (!this.isActive) return;
-    
-    this.updateParticles();
-    this.render();
-    this.animationId = requestAnimationFrame(() => this.animate());
-  }
-  
-  destroy() {
-    this.isActive = false;
-    if (this.animationId) cancelAnimationFrame(this.animationId);
-    if (this.canvas && this.canvas.parentNode) {
-      this.canvas.parentNode.removeChild(this.canvas);
-    }
-  }
-}
-
-// Canvas 2D fallback for better compatibility
-class CanvasFluidFallback {
-  constructor(container, options = {}) {
-    this.container = container || document.querySelector('.hero');
-    if (!this.container) return;
-    
-    this.options = {
-      particleCount: 20,
-      connectionDistance: 120,
-      ...options
-    };
-    
-    this.canvas = null;
-    this.ctx = null;
-    this.particles = [];
-    this.mouse = { x: 0, y: 0 };
-    this.time = 0;
-    this.animationId = null;
-    
-    this.init();
-  }
-  
-  init() {
-    this.canvas = document.createElement('canvas');
-    this.canvas.className = 'canvas-fluid-fallback';
-    this.canvas.style.cssText = `
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    `;
-    this.container.insertBefore(this.canvas, this.container.firstChild);
-    
-    this.ctx = this.canvas.getContext('2d');
-    this.resize();
-    this.createParticles();
-    this.bindEvents();
-    this.animate();
-  }
-  
-  createParticles() {
-    for (let i = 0; i < this.options.particleCount; i++) {
-      this.particles.push({
-        x: Math.random() * this.canvas.width,
-        y: Math.random() * this.canvas.height,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        radius: Math.random() * 60 + 30,
-        color: `rgba(201, 206, 214, ${Math.random() * 0.15 + 0.05})`
-      });
-    }
-  }
-  
-  bindEvents() {
-    window.addEventListener('resize', () => this.resize(), { passive: true });
-    
-    document.addEventListener('mousemove', (e) => {
-      const rect = this.container.getBoundingClientRect();
-      this.mouse.x = e.clientX - rect.left;
-      this.mouse.y = e.clientY - rect.top;
-    }, { passive: true });
-  }
-  
-  resize() {
-    const rect = this.container.getBoundingClientRect();
-    this.canvas.width = rect.width * window.devicePixelRatio;
-    this.canvas.height = rect.height * window.devicePixelRatio;
-    this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    this.canvas.style.width = rect.width + 'px';
-    this.canvas.style.height = rect.height + 'px';
-  }
-  
-  animate() {
-    this.time += 0.01;
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    
-    this.particles.forEach((p, i) => {
-      // Update position with sine wave motion
-      p.x += p.vx + Math.sin(this.time + i) * 0.2;
-      p.y += p.vy + Math.cos(this.time + i * 0.5) * 0.2;
+      // Rotation
+      p.angle += p.angularVelocity;
       
-      // Wrap edges
-      if (p.x < -p.radius) p.x = this.canvas.width / window.devicePixelRatio + p.radius;
-      if (p.x > this.canvas.width / window.devicePixelRatio + p.radius) p.x = -p.radius;
-      if (p.y < -p.radius) p.y = this.canvas.height / window.devicePixelRatio + p.radius;
-      if (p.y > this.canvas.height / window.devicePixelRatio + p.radius) p.y = -p.radius;
+      // Pulse effect
+      p.pulsePhase += p.pulseSpeed;
       
-      // Draw particle with gradient
-      const gradient = this.ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
-      gradient.addColorStop(0, p.color);
-      gradient.addColorStop(0.5, p.color.replace(/[\d.]+\)$/, '0.05)'));
-      gradient.addColorStop(1, 'transparent');
+      // Boundary wrapping
+      if (p.x < -p.radius) p.x = this.width + p.radius;
+      if (p.x > this.width + p.radius) p.x = -p.radius;
+      if (p.y < -p.radius) p.y = this.height + p.radius;
+      if (p.y > this.height + p.radius) p.y = -p.radius;
+    },
+    
+    /**
+     * Draw single particle
+     */
+    drawParticle(p) {
+      const pulse = 1 + Math.sin(p.pulsePhase) * 0.1;
+      const radius = p.radius * pulse;
       
+      const gradient = this.ctx.createRadialGradient(
+        p.x, p.y, 0,
+        p.x, p.y, radius
+      );
+      
+      const color = p.color;
+      gradient.addColorStop(0, `rgba(${color.r}, ${color.g}, ${color.b}, 0.4)`);
+      gradient.addColorStop(0.5, `rgba(${color.r}, ${color.g}, ${color.b}, 0.1)`);
+      gradient.addColorStop(1, `rgba(${color.r}, ${color.g}, ${color.b}, 0)`);
+      
+      this.ctx.save();
+      this.ctx.translate(p.x, p.y);
+      this.ctx.rotate(p.angle);
+      
+      // Draw organic shape
       this.ctx.beginPath();
-      this.ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
       this.ctx.fillStyle = gradient;
-      this.ctx.fill();
-    });
-    
-    this.animationId = requestAnimationFrame(() => this.animate());
-  }
-}
-
-// Auto-initialize
-document.addEventListener('DOMContentLoaded', () => {
-  // Try WebGL first, fallback to Canvas 2D
-  try {
-    const hero = document.querySelector('.hero');
-    if (hero) {
-      // Test WebGL support
-      const testCanvas = document.createElement('canvas');
-      const testGl = testCanvas.getContext('webgl');
       
-      if (testGl && !window.matchMedia('(pointer: coarse)').matches) {
-        window.fluidHero = new WebGLFluidHero(hero, {
-          particleCount: 20,
-          speed: 0.4
-        });
-      } else {
-        window.fluidHero = new CanvasFluidFallback(hero, {
-          particleCount: 15
-        });
+      const points = 8;
+      for (let i = 0; i <= points; i++) {
+        const angle = (i / points) * Math.PI * 2;
+        const r = radius * (0.8 + Math.sin(angle * 3 + p.pulsePhase) * 0.2);
+        const x = Math.cos(angle) * r;
+        const y = Math.sin(angle) * r;
+        
+        if (i === 0) {
+          this.ctx.moveTo(x, y);
+        } else {
+          this.ctx.lineTo(x, y);
+        }
+      }
+      
+      this.ctx.closePath();
+      this.ctx.fill();
+      
+      this.ctx.restore();
+    },
+    
+    /**
+     * Draw connections between particles
+     */
+    drawConnections() {
+      const maxDistance = 250;
+      const maxConnections = 3;
+      
+      for (let i = 0; i < this.particles.length; i++) {
+        let connections = 0;
+        
+        for (let j = i + 1; j < this.particles.length && connections < maxConnections; j++) {
+          const p1 = this.particles[i];
+          const p2 = this.particles[j];
+          
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          
+          if (dist < maxDistance) {
+            connections++;
+            const opacity = (1 - dist / maxDistance) * 0.1;
+            
+            const gradient = this.ctx.createLinearGradient(p1.x, p1.y, p2.x, p2.y);
+            gradient.addColorStop(0, `rgba(${p1.color.r}, ${p1.color.g}, ${p1.color.b}, ${opacity})`);
+            gradient.addColorStop(1, `rgba(${p2.color.r}, ${p2.color.g}, ${p2.color.b}, ${opacity})`);
+            
+            this.ctx.beginPath();
+            this.ctx.strokeStyle = gradient;
+            this.ctx.lineWidth = 2;
+            this.ctx.moveTo(p1.x, p1.y);
+            this.ctx.lineTo(p2.x, p2.y);
+            this.ctx.stroke();
+          }
+        }
+      }
+    },
+    
+    /**
+     * Start animation
+     */
+    startAnimation() {
+      if (this.animationId) return;
+      this.isActive = true;
+      this.animate();
+    },
+    
+    /**
+     * Stop animation
+     */
+    stopAnimation() {
+      this.isActive = false;
+      if (this.animationId) {
+        cancelAnimationFrame(this.animationId);
+        this.animationId = null;
+      }
+    },
+    
+    /**
+     * Destroy and cleanup
+     */
+    destroy() {
+      this.stopAnimation();
+      if (this.canvas) {
+        this.canvas.remove();
+        this.canvas = null;
       }
     }
-  } catch (e) {
-    console.log('[WebGL Fluid] Initialization error:', e);
+  };
+  
+  // Initialize on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => FluidHero.init());
+  } else {
+    FluidHero.init();
   }
-});
-
-// Export
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { WebGLFluidHero, CanvasFluidFallback };
-}
+  
+  // Expose to global scope
+  window.FluidHero = FluidHero;
+  
+})();
