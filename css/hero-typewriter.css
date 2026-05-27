@@ -1,0 +1,77 @@
+/**
+ * Hero Typewriter Effect Styles - v22.0 Professional Enhancement
+ */
+
+.hero-typewriter {
+  display: inline;
+  position: relative;
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  color: var(--chrome);
+  font-weight: 300;
+  margin-left: 2px;
+  animation: typewriter-blink 1s step-end infinite;
+}
+
+@keyframes typewriter-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Staggered cursor colors for multi-element setups */
+.hero-typewriter:nth-child(2) .typewriter-cursor {
+  color: var(--white);
+}
+
+.hero-typewriter:nth-child(3) .typewriter-cursor {
+  animation-duration: 0.8s;
+}
+
+/* Typing animation for reveal */
+.typing-complete .typewriter-cursor {
+  animation: gentle-pulse 2s ease-in-out infinite;
+}
+
+@keyframes gentle-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* Multi-line typewriter support */
+.typewriter-lines {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.typewriter-lines li {
+  margin-bottom: 0.2em;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.typewriter-lines li.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Glow effect for typing text */
+.typewriter-glow {
+  text-shadow: 0 0 20px rgba(201, 206, 214, 0.3);
+  transition: text-shadow 0.3s ease;
+}
+
+.typewriter-glow.typing {
+  text-shadow: 0 0 30px rgba(201, 206, 214, 0.5),
+               0 0 60px rgba(201, 206, 214, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .typewriter-cursor {
+    font-size: 0.8em;
+  }
+}
