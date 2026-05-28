@@ -1,0 +1,460 @@
+/* ========================================
+   v36.0: MAGNETIC GRID LAYOUT SYSTEM
+   Fortune 500 Interactive Grid Architecture
+   Cards that magnetically attract/repel to cursor
+======================================== */
+
+.magnetic-grid-section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.magnetic-grid-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.magnetic-grid-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.magnetic-grid-header h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 800;
+  color: #F5F7FA;
+  margin-bottom: 16px;
+}
+
+.magnetic-grid-header p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  color: rgba(201, 206, 214, 0.7);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* The Magnetic Grid */
+.magnetic-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  position: relative;
+  padding: 40px;
+  margin: -40px;
+}
+
+@media (max-width: 1024px) {
+  .magnetic-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .magnetic-grid {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    margin: -20px;
+  }
+}
+
+/* Magnetic Grid Item */
+.magnetic-grid-item {
+  position: relative;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.05), rgba(201, 206, 214, 0.02));
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 24px;
+  padding: 40px;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  will-change: transform;
+  transition: box-shadow 0.4s ease, border-color 0.4s ease;
+  overflow: hidden;
+}
+
+.magnetic-grid-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(201, 206, 214, 0.1) 0%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.magnetic-grid-item:hover::before {
+  opacity: 1;
+}
+
+.magnetic-grid-item:hover {
+  border-color: rgba(201, 206, 214, 0.2);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(201, 206, 214, 0.1);
+}
+
+/* Magnetic Attraction States */
+.magnetic-grid-item[data-attraction="attracting"] {
+  z-index: 10;
+}
+
+.magnetic-grid-item[data-attraction="neighboring"] {
+  opacity: 0.8;
+}
+
+/* Grid Item Inner */
+.magnetic-grid-item-inner {
+  position: relative;
+  z-index: 1;
+  transform: translate(
+    calc(var(--magnetic-x, 0) * 1px),
+    calc(var(--magnetic-y, 0) * 1px)
+  );
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Icon Container */
+.magnetic-grid-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.1), rgba(201, 206, 214, 0.05));
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: 24px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-grid-item:hover .magnetic-grid-icon {
+  transform: scale(1.1) rotate(5deg);
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.15), rgba(201, 206, 214, 0.08));
+}
+
+/* Content */
+.magnetic-grid-content h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin-bottom: 12px;
+  transition: transform 0.3s ease;
+}
+
+.magnetic-grid-content p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: rgba(201, 206, 214, 0.7);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* Magnetic Link */
+.magnetic-grid-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #C9CED6;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-grid-link::after {
+  content: '→';
+  transition: transform 0.3s ease;
+}
+
+.magnetic-grid-item:hover .magnetic-grid-link {
+  color: #F5F7FA;
+  gap: 12px;
+}
+
+.magnetic-grid-item:hover .magnetic-grid-link::after {
+  transform: translateX(4px);
+}
+
+/* Magnetic Field Visualization */
+.magnetic-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.magnetic-grid-item:hover .magnetic-field {
+  opacity: 1;
+}
+
+.magnetic-field-ring {
+  position: absolute;
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: field-pulse 2s ease infinite;
+}
+
+.magnetic-field-ring:nth-child(1) {
+  width: 100%;
+  height: 100%;
+}
+
+.magnetic-field-ring:nth-child(2) {
+  width: 150%;
+  height: 150%;
+  animation-delay: 0.3s;
+}
+
+.magnetic-field-ring:nth-child(3) {
+  width: 200%;
+  height: 200%;
+  animation-delay: 0.6s;
+}
+
+@keyframes field-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Connection Lines */
+.magnetic-grid-connections {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.magnetic-grid-connections line {
+  stroke: rgba(201, 206, 214, 0.05);
+  stroke-width: 1;
+  transition: stroke 0.4s ease;
+}
+
+.magnetic-grid-connections line.active {
+  stroke: rgba(201, 206, 214, 0.15);
+}
+
+/* Particle Effect */
+.magnetic-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.magnetic-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(201, 206, 214, 0.3);
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.6s ease;
+}
+
+.magnetic-grid-item:hover .magnetic-particle {
+  opacity: 1;
+  animation: particle-float 3s ease-in-out infinite;
+}
+
+@keyframes particle-float {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(10px, -10px);
+  }
+  50% {
+    transform: translate(-5px, 10px);
+  }
+  75% {
+    transform: translate(10px, 5px);
+  }
+}
+
+/* Different Card Variants */
+.magnetic-grid-item.featured {
+  grid-column: span 2;
+  grid-row: span 1;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.08), rgba(201, 206, 214, 0.03));
+}
+
+@media (max-width: 640px) {
+  .magnetic-grid-item.featured {
+    grid-column: span 1;
+  }
+}
+
+.magnetic-grid-item.large {
+  grid-row: span 2;
+  min-height: 664px;
+}
+
+@media (max-width: 640px) {
+  .magnetic-grid-item.large {
+    grid-row: span 1;
+    min-height: 320px;
+  }
+}
+
+/* Stats Variant */
+.magnetic-grid-item.stat {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.magnetic-grid-stat-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 64px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #C9CED6, #F5F7FA);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.magnetic-grid-stat-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: rgba(201, 206, 214, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Image Variant */
+.magnetic-grid-item.image {
+  padding: 0;
+  overflow: hidden;
+}
+
+.magnetic-grid-item.image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-grid-item.image:hover img {
+  transform: scale(1.1);
+}
+
+.magnetic-grid-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(15, 15, 16, 0.9) 0%, transparent 60%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 30px;
+}
+
+.magnetic-grid-image-overlay h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin-bottom: 8px;
+}
+
+.magnetic-grid-image-overlay p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: rgba(201, 206, 214, 0.7);
+}
+
+/* Position Indicators */
+.magnetic-grid-position {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(201, 206, 214, 0.3);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.magnetic-grid-item:hover .magnetic-grid-position {
+  opacity: 1;
+}
+
+/* Focus State */
+.magnetic-grid-item:focus-visible {
+  outline: 2px solid rgba(201, 206, 214, 0.3);
+  outline-offset: 4px;
+}
+
+/* Entrance Animation */
+.magnetic-grid-item {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.magnetic-grid-item.revealed {
+  opacity: 1;
+  transform: translateY(0);
+  transition: 
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .magnetic-grid-item {
+    transform: none !important;
+    transition: none !important;
+  }
+  
+  .magnetic-grid-item-inner {
+    transform: none !important;
+  }
+  
+  .magnetic-field {
+    display: none;
+  }
+  
+  .magnetic-grid-connections {
+    display: none;
+  }
+}
+
+/* Touch Device Optimization */
+@media (pointer: coarse) {
+  .magnetic-grid-item {
+    transform: none !important;
+  }
+  
+  .magnetic-grid-item-inner {
+    transform: none !important;
+  }
+  
+  .magnetic-field {
+    display: none;
+  }
+}

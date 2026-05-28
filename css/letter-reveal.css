@@ -1,0 +1,344 @@
+/* =============================================
+   LETTER-BY-LETTER TEXT REVEAL - BuildBridge
+   v36.0 Fortune 500 Typography Animation
+   ============================================= */
+
+/* Container Setup */
+.letter-reveal {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.letter-reveal-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.letter-reveal-char {
+  display: inline-block;
+  transform: translateY(100%) rotateX(-90deg);
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.6s ease;
+  transform-origin: center bottom;
+}
+
+.letter-reveal.revealed .letter-reveal-char {
+  transform: translateY(0) rotateX(0);
+  opacity: 1;
+}
+
+/* Character Animation Delays */
+.letter-reveal.revealed .letter-reveal-char:nth-child(1) { transition-delay: 0.00s; }
+.letter-reveal.revealed .letter-reveal-char:nth-child(2) { transition-delay: 0.03s; }
+.letter-reveal.revealed .letter-reveal-char:nth-child(3) { transition-delay: 0.06s; }
+.letter-reveal.revealed .letter-reveal-char:nth-child(4) { transition-delay: 0.09s; }
+.letter-reveal.revealed .letter-reveal-char:nth-child(5) { transition-delay: 0.12s; }
+.letter-reveal.revealed .letter-reveal-char:nth-child(6) { transition-delay: 0.15s; }
+.letter-reveal.revealed .letter-reveal-char:nth-child(7) { transition-delay: 0.18s; }
+.letter-reveal.revealed .letter-reveal-char:nth-child(8) { transition-delay: 0.21s; }
+.letter-reveal.revealed .letter-reveal-char:nth-child(9) { transition-delay: 0.24s; }
+.letter-reveal.revealed .letter-reveal-char:nth-child(10) { transition-delay: 0.27s; }
+.letter-reveal.revealed .letter-reveal-char:nth-child(11) { transition-delay: 0.30s; }
+.letter-reveal.revealed .letter-reveal-char:nth-child(12) { transition-delay: 0.33s; }
+.letter-reveal.revealed .letter-reveal-char:nth-child(13) { transition-delay: 0.36s; }
+.letter-reveal.revealed .letter-reveal-char:nth-child(14) { transition-delay: 0.39s; }
+.letter-reveal.revealed .letter-reveal-char:nth-child(15) { transition-delay: 0.42s; }
+.letter-reveal.revealed .letter-reveal-char:nth-child(16) { transition-delay: 0.45s; }
+.letter-reveal.revealed .letter-reveal-char:nth-child(17) { transition-delay: 0.48s; }
+.letter-reveal.revealed .letter-reveal-char:nth-child(18) { transition-delay: 0.51s; }
+.letter-reveal.revealed .letter-reveal-char:nth-child(19) { transition-delay: 0.54s; }
+.letter-reveal.revealed .letter-reveal-char:nth-child(20) { transition-delay: 0.57s; }
+
+/* Word-based animation with space delays */
+.letter-reveal-word:nth-child(1) .letter-reveal-char { transition-delay: calc(var(--char-index, 0) * 0.03s); }
+.letter-reveal-word:nth-child(2) .letter-reveal-char { transition-delay: calc(0.15s + var(--char-index, 0) * 0.03s); }
+.letter-reveal-word:nth-child(3) .letter-reveal-char { transition-delay: calc(0.30s + var(--char-index, 0) * 0.03s); }
+.letter-reveal-word:nth-child(4) .letter-reveal-char { transition-delay: calc(0.45s + var(--char-index, 0) * 0.03s); }
+.letter-reveal-word:nth-child(5) .letter-reveal-char { transition-delay: calc(0.60s + var(--char-index, 0) * 0.03s); }
+
+/* Animation Variants */
+
+/* Slide Up (Default) */
+.letter-reveal--slide .letter-reveal-char {
+  transform: translateY(100%);
+}
+
+/* Slide From Left */
+.letter-reveal--left .letter-reveal-char {
+  transform: translateX(-100%) rotateY(-45deg);
+  transform-origin: left center;
+}
+
+.letter-reveal--left.revealed .letter-reveal-char {
+  transform: translateX(0) rotateY(0);
+}
+
+/* Slide From Right */
+.letter-reveal--right .letter-reveal-char {
+  transform: translateX(100%) rotateY(45deg);
+  transform-origin: right center;
+}
+
+.letter-reveal--right.revealed .letter-reveal-char {
+  transform: translateX(0) rotateY(0);
+}
+
+/* Scale Up */
+.letter-reveal--scale .letter-reveal-char {
+  transform: scale(0) rotateZ(-10deg);
+}
+
+.letter-reveal--scale.revealed .letter-reveal-char {
+  transform: scale(1) rotateZ(0);
+}
+
+/* Blur In */
+.letter-reveal--blur .letter-reveal-char {
+  filter: blur(10px);
+  transform: scale(1.2);
+}
+
+.letter-reveal--blur.revealed .letter-reveal-char {
+  filter: blur(0);
+  transform: scale(1);
+}
+
+/* Elastic Bounce */
+.letter-reveal--elastic .letter-reveal-char {
+  transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Fade Up with Stagger */
+.letter-reveal--fade-up .letter-reveal-char {
+  transform: translateY(30px);
+  opacity: 0;
+  transition-duration: 0.4s;
+}
+
+.letter-reveal--fade-up.revealed .letter-reveal-char {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Typewriter Effect */
+.letter-reveal--typewriter .letter-reveal-char {
+  opacity: 0;
+  transform: none;
+  transition: opacity 0.05s steps(1);
+}
+
+.letter-reveal--typewriter.revealed .letter-reveal-char {
+  opacity: 1;
+}
+
+/* Cursor for Typewriter */
+.letter-reveal--typewriter::after {
+  content: '|';
+  display: inline-block;
+  margin-left: 2px;
+  color: #C9CED6;
+  animation: typewriter-cursor 0.8s step-end infinite;
+  vertical-align: baseline;
+}
+
+@keyframes typewriter-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Premium Reveal with Glow */
+.letter-reveal--glow .letter-reveal-char {
+  text-shadow: 0 0 20px rgba(201, 206, 214, 0);
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.6s ease,
+              text-shadow 0.6s ease;
+}
+
+.letter-reveal--glow.revealed .letter-reveal-char {
+  text-shadow: 0 0 20px rgba(201, 206, 214, 0.5);
+}
+
+/* Wave Animation */
+.letter-reveal--wave.revealed .letter-reveal-char {
+  animation: letter-wave 0.6s ease forwards;
+}
+
+@keyframes letter-wave {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(-20%);
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Cascade Animation */
+.letter-reveal--cascade .letter-reveal-char {
+  transform: translateY(-100%);
+}
+
+.letter-reveal--cascade.revealed .letter-reveal-char {
+  animation: letter-cascade 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes letter-cascade {
+  0% {
+    transform: translateY(-100%) rotateX(45deg);
+    opacity: 0;
+  }
+  40% {
+    transform: translateY(10%) rotateX(-10deg);
+  }
+  100% {
+    transform: translateY(0) rotateX(0);
+    opacity: 1;
+  }
+}
+
+/* Flip Animation */
+.letter-reveal--flip .letter-reveal-char {
+  transform: perspective(400px) rotateX(-90deg);
+  transform-origin: center bottom;
+}
+
+.letter-reveal--flip.revealed .letter-reveal-char {
+  animation: letter-flip 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes letter-flip {
+  0% {
+    transform: perspective(400px) rotateX(-90deg);
+    opacity: 0;
+  }
+  100% {
+    transform: perspective(400px) rotateX(0);
+    opacity: 1;
+  }
+}
+
+/* Hero Text Special Styling */
+.hero-title-reveal {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(36px, 6vw, 72px);
+  font-weight: 700;
+  line-height: 1.1;
+  color: #F5F7FA;
+}
+
+.hero-title-reveal .letter-reveal-char {
+  display: inline-block;
+  font-weight: 700;
+}
+
+/* Section Headings */
+.section-title-reveal {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 600;
+  line-height: 1.2;
+  color: #F5F7FA;
+}
+
+/* Highlight Words */
+.letter-reveal-highlight {
+  color: #C9CED6;
+  position: relative;
+}
+
+.letter-reveal-highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 30%;
+  background: rgba(201, 206, 214, 0.2);
+  z-index: -1;
+  transition: width 0.6s ease;
+}
+
+.letter-reveal.revealed .letter-reveal-highlight::after {
+  width: 100%;
+}
+
+/* Line-by-Line Reveal */
+.line-reveal {
+  overflow: hidden;
+}
+
+.line-reveal-line {
+  display: block;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.6s ease;
+}
+
+.line-reveal.revealed .line-reveal-line {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.line-reveal.revealed .line-reveal-line:nth-child(1) { transition-delay: 0s; }
+.line-reveal.revealed .line-reveal-line:nth-child(2) { transition-delay: 0.15s; }
+.line-reveal.revealed .line-reveal-line:nth-child(3) { transition-delay: 0.3s; }
+.line-reveal.revealed .line-reveal-line:nth-child(4) { transition-delay: 0.45s; }
+.line-reveal.revealed .line-reveal-line:nth-child(5) { transition-delay: 0.6s; }
+
+/* Word Split Reveal */
+.word-reveal-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.word-reveal-inner {
+  display: inline-block;
+  transform: translateY(100%);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.word-reveal.revealed .word-reveal-inner {
+  transform: translateY(0);
+}
+
+/* Character hover effect */
+.letter-reveal.revealed .letter-reveal-char:hover {
+  transform: translateY(-5px) scale(1.1);
+  color: #C9CED6;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .letter-reveal-char,
+  .line-reveal-line,
+  .word-reveal-inner {
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .letter-reveal--typewriter::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .letter-reveal-char,
+  .line-reveal-line,
+  .word-reveal-inner {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
