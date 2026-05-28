@@ -1,328 +1,310 @@
-/* ========================================
-   PROGRESSIVE BLUR IMAGE LOADING v55.0
-   Modern Image Loading Pattern
-======================================== */
+/* v59.0: Smart Progressive Image Loading System - Fortune 500 Quality */
 
-/* Progressive Image Container */
-.progressive-image {
+/* Container for progressive images */
+.progressive-image-container {
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, rgba(201, 206, 214, 0.05), rgba(201, 206, 214, 0.02));
+  border-radius: inherit;
 }
 
-.progressive-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-/* Placeholder/Blur State */
-.progressive-image .img-placeholder {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  filter: blur(20px);
-  transform: scale(1.1);
-  transition: opacity 0.5s ease;
-}
-
-.progressive-image.loaded .img-placeholder {
-  opacity: 0;
-}
-
-.progressive-image.loaded img {
-  opacity: 1;
-}
-
-/* Shimmer Loading Effect */
-.progressive-image.loading::before {
+.progressive-image-container::before {
   content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(201, 206, 214, 0.05) 50%,
+    rgba(201, 206, 214, 0.03) 50%,
     transparent 100%
   );
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: shimmer 2s infinite;
   z-index: 1;
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
-/* Skeleton Loading State */
-.skeleton-image {
+/* Low-quality placeholder (LQIP) */
+.progressive-image-placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(20px);
+  transform: scale(1.1);
+  transition: opacity 0.5s ease, filter 0.5s ease;
+  z-index: 1;
+}
+
+.progressive-image-placeholder.loaded {
+  opacity: 0;
+  filter: blur(0);
+}
+
+/* Main high-quality image */
+.progressive-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.05);
+  transition: 
+    opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 0.8s ease;
+  z-index: 2;
+}
+
+.progressive-image.loaded {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Lazy loading states */
+.progressive-image[data-loading="true"] {
+  filter: blur(10px);
+}
+
+.progressive-image[data-loading="false"] {
+  filter: blur(0);
+}
+
+/* Skeleton loading animation for containers */
+.progressive-skeleton {
+  position: absolute;
+  inset: 0;
   background: linear-gradient(
     90deg,
-    rgba(201, 206, 214, 0.05) 25%,
-    rgba(201, 206, 214, 0.1) 50%,
-    rgba(201, 206, 214, 0.05) 75%
+    rgba(201, 206, 214, 0.03) 0%,
+    rgba(201, 206, 214, 0.08) 50%,
+    rgba(201, 206, 214, 0.03) 100%
   );
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s ease-in-out infinite;
+  z-index: 0;
 }
 
 @keyframes skeleton-loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
-/* Low Quality Image Placeholder (LQIP) */
-.lqip-container {
-  position: relative;
-  overflow: hidden;
+/* Image reveal animations */
+.progressive-reveal-up {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.lqip-blur {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  filter: blur(30px) saturate(1.2);
-  transform: scale(1.05);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+.progressive-reveal-up.loaded {
+  clip-path: inset(0 0 0 0);
 }
 
-.lqip-main {
-  position: relative;
-  opacity: 0;
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+.progressive-reveal-left {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.lqip-container.loaded .lqip-blur {
-  opacity: 0;
+.progressive-reveal-left.loaded {
+  clip-path: inset(0 0 0 0);
 }
 
-.lqip-container.loaded .lqip-main {
-  opacity: 1;
+.progressive-reveal-circle {
+  clip-path: circle(0% at 50% 50%);
+  transition: clip-path 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Reveal Animation Types */
-.reveal-blur-up .lqip-blur {
-  transform: scale(1.05) translateY(0);
+.progressive-reveal-circle.loaded {
+  clip-path: circle(100% at 50% 50%);
 }
 
-.reveal-blur-up.loaded .lqip-blur {
-  transform: scale(1.05) translateY(-100%);
+/* Ken Burns effect for hero images */
+.progressive-ken-burns {
+  animation: kenBurns 20s ease-in-out infinite alternate;
 }
 
-.reveal-fade .lqip-blur {
-  opacity: 1;
-}
-
-.reveal-fade.loaded .lqip-blur {
-  opacity: 0;
-}
-
-.reveal-scale .lqip-blur {
-  transform: scale(1.2);
-  opacity: 1;
-}
-
-.reveal-scale.loaded .lqip-blur {
-  transform: scale(1);
-  opacity: 0;
-}
-
-/* Zoom on Load Effect */
-.zoom-on-load img {
-  transform: scale(1.1);
-  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
-}
-
-.zoom-on-load.loaded img {
-  transform: scale(1);
-}
-
-/* Ken Burns Effect */
-.ken-burns img {
-  animation: ken-burns 20s ease-in-out infinite alternate;
-}
-
-@keyframes ken-burns {
+@keyframes kenBurns {
   0% {
     transform: scale(1) translate(0, 0);
   }
   100% {
-    transform: scale(1.1) translate(-2%, -2%);
+    transform: scale(1.1) translate(-2%, -1%);
   }
 }
 
-/* Image Reveal Mask */
-.image-reveal-mask {
-  position: relative;
+/* Zoom on hover for gallery images */
+.progressive-zoom-container {
   overflow: hidden;
 }
 
-.image-reveal-mask::after {
-  content: '';
+.progressive-zoom-container .progressive-image {
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+}
+
+.progressive-zoom-container:hover .progressive-image.loaded {
+  transform: scale(1.08);
+}
+
+/* Loading spinner overlay */
+.progressive-loader {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #0f0f12, #1a1a22);
-  transform: translateX(0);
-  transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
-}
-
-.image-reveal-mask.revealed::after {
-  transform: translateX(100%);
-}
-
-.image-reveal-mask.revealed-from-left::after {
-  transform: translateX(-100%);
-}
-
-.image-reveal-mask.revealed-from-top::after {
-  transform: translateY(-100%);
-}
-
-.image-reveal-mask.revealed-from-bottom::after {
-  transform: translateY(100%);
-}
-
-/* Clip Path Reveals */
-.clip-reveal-circle {
-  clip-path: circle(0% at 50% 50%);
-  transition: clip-path 1s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.clip-reveal-circle.loaded {
-  clip-path: circle(150% at 50% 50%);
-}
-
-.clip-reveal-inset {
-  clip-path: inset(50%);
-  transition: clip-path 1s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.clip-reveal-inset.loaded {
-  clip-path: inset(0%);
-}
-
-.clip-reveal-polygon {
-  clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
-  transition: clip-path 1s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.clip-reveal-polygon.loaded {
-  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
-}
-
-/* Lazy Load Blur Transition */
-.lazy-blur {
-  filter: blur(15px);
-  transition: filter 0.5s ease;
-}
-
-.lazy-blur.loaded {
-  filter: blur(0);
-}
-
-/* Color Thumbnail Preview */
-.color-preview {
-  position: absolute;
-  inset: 0;
-  transition: opacity 0.5s ease;
-}
-
-.color-preview::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--dominant-color, rgba(201, 206, 214, 0.1));
-  filter: saturate(1.5) blur(20px);
-  transform: scale(1.1);
-}
-
-/* Intersection Observer Loading States */
-[data-lazy-src] {
-  opacity: 0;
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-[data-lazy-src].loaded {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
   opacity: 1;
+  transition: opacity 0.3s ease;
 }
 
-[data-lazy-src].loading {
-  animation: image-pulse 2s ease-in-out infinite;
+.progressive-loader.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
-@keyframes image-pulse {
-  0%, 100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 0.6;
-  }
+.progressive-loader::after {
+  content: '';
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(201, 206, 214, 0.1);
+  border-top-color: #C9CED6;
+  border-radius: 50%;
+  animation: progressive-spin 0.8s linear infinite;
 }
 
-/* Responsive Aspect Ratios */
-.aspect-16-9 {
+@keyframes progressive-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Aspect ratio containers */
+.progressive-aspect-16-9 {
   aspect-ratio: 16 / 9;
 }
 
-.aspect-4-3 {
+.progressive-aspect-4-3 {
   aspect-ratio: 4 / 3;
 }
 
-.aspect-3-2 {
-  aspect-ratio: 3 / 2;
-}
-
-.aspect-1-1 {
+.progressive-aspect-1-1 {
   aspect-ratio: 1 / 1;
 }
 
-.aspect-21-9 {
-  aspect-ratio: 21 / 9;
+.progressive-aspect-3-4 {
+  aspect-ratio: 3 / 4;
 }
 
-/* Performance Optimizations */
-.will-change-transform {
-  will-change: transform;
-}
-
-.will-change-opacity {
-  will-change: opacity;
-}
-
-.content-visibility-auto {
+/* Responsive sizing with lazy loading priority */
+.progressive-priority-high {
   content-visibility: auto;
   contain-intrinsic-size: 0 500px;
 }
 
-/* Reduced Motion */
+.progressive-priority-low {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 300px;
+}
+
+/* Hover lift effect for cards with progressive images */
+.progressive-card {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+}
+
+.progressive-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Error state for failed loads */
+.progressive-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(201, 206, 214, 0.05);
+  z-index: 4;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.progressive-error.show {
+  opacity: 1;
+}
+
+.progressive-error-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.progressive-error-text {
+  font-size: 12px;
+  color: rgba(201, 206, 214, 0.6);
+}
+
+/* Fade in from different directions */
+.progressive-fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.progressive-fade-up.loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.progressive-fade-scale {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.progressive-fade-scale.loaded {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Parallax container for progressive images */
+.progressive-parallax {
+  will-change: transform;
+}
+
+/* Color placeholder based on dominant color */
+.progressive-color-placeholder {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #1a1a1f 0%, #0f0f10 100%);
+  z-index: 0;
+}
+
+/* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
-  .progressive-image img,
-  .lqip-main,
-  .lqip-blur,
-  [data-lazy-src] {
-    transition: none !important;
-    animation: none !important;
+  .progressive-image,
+  .progressive-image-placeholder,
+  .progressive-reveal-up,
+  .progressive-reveal-left,
+  .progressive-reveal-circle {
+    transition: opacity 0.2s ease;
+    transform: none;
+    clip-path: none;
   }
   
-  .progressive-image .img-placeholder,
-  .lqip-blur {
-    display: none !important;
+  .progressive-ken-burns {
+    animation: none;
   }
   
-  .progressive-image img,
-  .lqip-main {
-    opacity: 1 !important;
+  .progressive-skeleton::before {
+    animation: none;
+  }
+}
+
+/* Dark mode optimization - already optimized for dark theme */
+@media (prefers-color-scheme: dark) {
+  .progressive-image-container {
+    background: linear-gradient(135deg, rgba(201, 206, 214, 0.03), rgba(201, 206, 214, 0.01));
   }
 }

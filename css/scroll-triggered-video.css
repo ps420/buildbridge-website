@@ -1,0 +1,377 @@
+/* v60.0: Scroll-Triggered Video Player - Fortune 500 Quality */
+
+.scroll-video-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #0f0f10;
+}
+
+.scroll-video-wrapper {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scroll-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.scroll-video.loaded {
+  opacity: 1;
+}
+
+.scroll-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 15, 16, 0.3) 0%,
+    rgba(15, 15, 16, 0.1) 30%,
+    rgba(15, 15, 16, 0.1) 70%,
+    rgba(15, 15, 16, 0.5) 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.scroll-video-content {
+  position: absolute;
+  bottom: 80px;
+  left: 40px;
+  right: 40px;
+  z-index: 3;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-video-content.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-video-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(32px, 6vw, 72px);
+  font-weight: 700;
+  color: #F5F7FA;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.scroll-video-title span {
+  background: linear-gradient(135deg, #C9CED6 0%, #F5F7FA 50%, #C9CED6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.scroll-video-description {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  color: rgba(245, 247, 250, 0.8);
+  max-width: 600px;
+  line-height: 1.7;
+  margin-bottom: 30px;
+}
+
+.scroll-video-controls {
+  position: absolute;
+  bottom: 30px;
+  right: 40px;
+  z-index: 4;
+  display: flex;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.scroll-video-controls.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-video-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #F5F7FA;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.scroll-video-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.scroll-video-btn:active {
+  transform: scale(0.95);
+}
+
+.scroll-progress-indicator {
+  position: absolute;
+  bottom: 30px;
+  left: 40px;
+  right: 110px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  z-index: 4;
+}
+
+.scroll-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #C9CED6, #F5F7FA);
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+.scroll-video-spacer {
+  height: 300vh; /* Creates scroll distance for video playback */
+}
+
+.scroll-video-section {
+  position: relative;
+  width: 100%;
+}
+
+/* Video loading state */
+.scroll-video-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.scroll-video-loading.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.scroll-video-loading::after {
+  content: '';
+  width: 60px;
+  height: 60px;
+  border: 3px solid rgba(201, 206, 214, 0.1);
+  border-top-color: #C9CED6;
+  border-radius: 50%;
+  animation: scroll-video-spin 0.8s linear infinite;
+}
+
+@keyframes scroll-video-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Cinematic aspect ratio container */
+.scroll-video-cinematic {
+  aspect-ratio: 21 / 9;
+}
+
+.scroll-video-widescreen {
+  aspect-ratio: 16 / 9;
+}
+
+/* Pinned section with video */
+.pinned-video-section {
+  height: 400vh;
+  position: relative;
+}
+
+/* Text animations synced with video */
+.scroll-text-reveal {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-text-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-text-highlight {
+  position: relative;
+  display: inline-block;
+}
+
+.scroll-text-highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 4px;
+  background: linear-gradient(90deg, #C9CED6, #F5F7FA);
+  transition: width 0.8s ease;
+}
+
+.scroll-text-highlight.visible::after {
+  width: 100%;
+}
+
+/* Stats overlay during video */
+.scroll-video-stats {
+  position: absolute;
+  top: 50%;
+  right: 40px;
+  transform: translateY(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.scroll-video-stat {
+  text-align: right;
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.scroll-video-stat.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-video-stat-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  color: #F5F7FA;
+  line-height: 1;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.scroll-video-stat-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: rgba(245, 247, 250, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 5px;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .scroll-video-content {
+    left: 20px;
+    right: 20px;
+    bottom: 100px;
+  }
+  
+  .scroll-video-title {
+    font-size: 28px;
+  }
+  
+  .scroll-video-description {
+    font-size: 14px;
+  }
+  
+  .scroll-video-controls {
+    right: 20px;
+    bottom: 20px;
+  }
+  
+  .scroll-progress-indicator {
+    left: 20px;
+    right: 90px;
+  }
+  
+  .scroll-video-stats {
+    position: static;
+    transform: none;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .scroll-video-stat {
+    text-align: center;
+    transform: translateY(20px);
+  }
+  
+  .scroll-video-stat.visible {
+    transform: translateY(0);
+  }
+  
+  .scroll-video-stat-value {
+    font-size: 32px;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-video-spacer {
+    height: auto;
+  }
+  
+  .scroll-video-wrapper {
+    position: relative;
+    height: auto;
+    min-height: 60vh;
+  }
+  
+  .scroll-video {
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: none;
+    min-width: 100%;
+    min-height: 100%;
+  }
+  
+  .scroll-text-reveal,
+  .scroll-video-stat,
+  .scroll-video-content,
+  .scroll-video-controls {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Fallback for browsers without video support */
+.scroll-video-fallback {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+}
+
+.scroll-video-fallback img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

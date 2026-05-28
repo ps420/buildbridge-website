@@ -1,252 +1,487 @@
 /**
- * BuildBridge v27.0 - Advanced Page Transition System
- * Fortune 500 Quality Navigation Experience
+ * v62.0: Advanced Page Transition System
+ * Fortune 500 Quality Smooth Navigation with Multiple Effects
+ * Features: Wave, circle, split, panel transitions with prefetching
  */
 
-class AdvancedPageTransitions {
+class PageTransitionSystem {
   constructor(options = {}) {
     this.options = {
-      duration: 600,
-      easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
-      effect: 'curtain', // curtain, radial, split
+      type: 'wave', // wave, circle, split, panels, fade
+      duration: 800,
+      prefetch: true,
+      showLoader: true,
+      showBrand: true,
       ...options
     };
     
-    this.isTransitioning = false;
     this.overlay = null;
+    this.isTransitioning = false;
+    this.prefetchedPages = new Set();
+    this.currentPage = window.location.pathname;
+    
     this.init();
   }
   
   init() {
     this.createOverlay();
-    this.bindLinks();
-    this.handleInitialLoad();
+    this.bindLinkClicks();
+    this.setupPrefetch();
+    this.setupProgressBar();
+    
+    // Handle browser back/forward
+    window.addEventListener('popstate', (e) => {
+      if (e.state && e.state.url) {
+        this.handleNavigation(e.state.url, false);
+      }
+    });
+    
+    console.log('🔄 Page Transition System initialized');
   }
   
   createOverlay() {
-    // Check if overlay already exists
-    if (document.querySelector('.page-transition-overlay')) return;
-    
     this.overlay = document.createElement('div');
-    this.overlay.className = `page-transition-overlay ${this.options.effect}`;
+    this.overlay.className = 'page-transition-overlay';
+    this.overlay.setAttribute('aria-hidden', 'true');
     
-    // Add appropriate content based on effect
-    if (this.options.effect === 'split') {
-      this.overlay.innerHTML = `
-        <div class="split-panel"></div>
-        <div class="split-panel"></div>
-      `;
+    // Create transition element based on type
+    switch (this.options.type) {
+      case 'wave':
+        this.overlay.innerHTML = '<div class="page-transition-wave"></div>';
+        break;
+      case 'circle':
+        this.overlay.innerHTML = '<div class="page-transition-circle"></div>';
+        break;
+      case 'split':
+        this.overlay.innerHTML = `
+          <div class="page-transition-split">
+            <div class="page-transition-split-panel"></div>
+            <div class="page-transition-split-panel"></div>
+          </div>
+        `;
+        break;
+      case 'panels':
+        this.overlay.innerHTML = `
+          <div class="page-transition-panels">
+            ${Array(5).fill('<div class="page-transition-panel"></div>').join('')}
+          </div>
+        `;
+        break;
     }
     
-    // Add logo
-    const logo = document.createElement('div');
-    logo.className = 'page-transition-logo';
-    logo.innerHTML = `
-      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="10" y="30" width="30" height="50" fill="#C9CED6"/>
-        <rect x="45" y="20" width="30" height="60" fill="#F5F7FA"/>
-        <line x1="25" y1="55" x2="60" y2="50" stroke="#0f0f10" stroke-width="3"/>
-      </svg>
-    `;
-    this.overlay.appendChild(logo);
+    // Add loader
+    if (this.options.showLoader) {
+      const loader = document.createElement('div');
+      loader.className = 'page-transition-loader';
+      loader.innerHTML = '<div class="page-transition-spinner"></div>';
+      this.overlay.appendChild(loader);
+    }
     
-    // Add progress bar
-    const progress = document.createElement('div');
-    progress.className = 'page-transition-progress';
-    this.overlay.appendChild(progress);
+    // Add brand
+    if (this.options.showBrand) {
+      const brand = document.createElement('div');
+      brand.className = 'page-transition-brand';
+      brand.innerHTML = `
+        <img src="assets/BuildBridge_Icon_Mark.svg" alt="BuildBridge" style="width:36px;height:36px;">
+        <span>BuildBridge</span>
+      `;
+      this.overlay.appendChild(brand);
+    }
     
     document.body.appendChild(this.overlay);
   }
   
-  bindLinks() {
-    // Intercept all internal link clicks
+  bindLinkClicks() {
+    // Delegate click events for internal links
     document.addEventListener('click', (e) => {
-      const link = e.target.closest('a[href]');
+      const link = e.target.closest('a');
       if (!link) return;
       
+      // Only handle internal links
       const href = link.getAttribute('href');
-      
-      // Skip external links, anchors, and special links
-      if (
-        href.startsWith('#') ||
-        href.startsWith('mailto:') ||
-        href.startsWith('tel:') ||
-        href.startsWith('https://wa.me') ||
-        link.target === '_blank' ||
-        link.hasAttribute('download') ||
-        e.ctrlKey ||
-        e.metaKey
-      ) {
+      if (!href || href.startsWith('#') || href.startsWith('mailto:') || 
+          href.startsWith('tel:') || href.startsWith('http')) {
         return;
       }
       
-      // Only handle same-origin links
-      if (href.startsWith('http') && !href.includes(window.location.origin)) {
-        return;
-      }
+      // Don't handle if modifiers are pressed
+      if (e.metaKey || e.ctrlKey || e.shiftKey) return;
       
       e.preventDefault();
-      this.navigate(href);
+      this.navigateTo(href);
     });
   }
   
-  async navigate(url) {
-    if (this.isTransitioning) return;
+  async navigateTo(url) {
+    if (this.isTransitioning || url === this.currentPage) return;
+    
     this.isTransitioning = true;
+    this.currentPage = url;
     
-    // Add loading class to html
-    document.documentElement.classList.add('is-transitioning');
+    // Update progress bar
+    this.showProgressBar();
     
-    // Start exit animation
-    this.overlay.classList.add('active');
+    // Start exit transition
+    await this.startExitTransition();
     
-    // Animate content out
-    document.body.classList.add('content-exit');
-    
-    // Wait for exit animation
-    await this.delay(this.options.duration * 0.5);
-    
+    // Fetch new page content
     try {
-      // Prefetch or navigate
-      if (window.fetch && url.startsWith(window.location.origin)) {
-        // Try to prefetch the page
-        const response = await fetch(url);
-        const html = await response.text();
-        
-        // Parse the new page
-        const parser = new DOMParser();
-        const newDoc = parser.parseFromString(html, 'text/html');
-        
-        // Wait for remaining animation
-        await this.delay(this.options.duration * 0.5);
-        
-        // Update the page content
-        this.updatePageContent(newDoc);
-        
-        // Update URL
-        window.history.pushState({}, '', url);
-        
-        // Scroll to top
-        window.scrollTo(0, 0);
-        
-      } else {
-        // Fallback to full page load
-        await this.delay(this.options.duration * 0.5);
-        window.location.href = url;
-        return;
-      }
+      const content = await this.fetchPage(url);
+      this.updateProgressBar(80);
+      
+      // Update URL and history
+      window.history.pushState({ url }, '', url);
+      
+      // Replace content
+      await this.replaceContent(content);
+      this.updateProgressBar(100);
+      
+      // Start enter transition
+      await this.startEnterTransition();
+      
+      // Reset state
+      this.hideProgressBar();
+      this.isTransitioning = false;
       
     } catch (error) {
       console.error('Page transition failed:', error);
-      window.location.href = url;
-      return;
+      window.location.href = url; // Fallback
     }
-    
-    // Start enter animation
-    this.overlay.classList.remove('active');
-    this.overlay.classList.add('exiting');
-    
-    // Remove exit class and add enter class
-    document.body.classList.remove('content-exit');
-    document.body.classList.add('content-enter');
-    
-    // Initialize stagger animations
-    this.initStaggerAnimations();
-    
-    // Re-bind events for new content
-    this.bindLinks();
-    
-    // Cleanup after animation
-    await this.delay(this.options.duration);
-    
-    this.overlay.classList.remove('exiting');
-    document.body.classList.remove('content-enter');
-    document.documentElement.classList.remove('is-transitioning');
-    
-    this.isTransitioning = false;
   }
   
-  updatePageContent(newDoc) {
-    // Update title
-    document.title = newDoc.title;
+  async handleNavigation(url, addToHistory = true) {
+    if (this.isTransitioning) return;
     
-    // Update main content
-    const currentMain = document.querySelector('main') || document.body;
-    const newMain = newDoc.querySelector('main') || newDoc.body;
+    this.isTransitioning = true;
     
-    if (currentMain && newMain) {
-      currentMain.innerHTML = newMain.innerHTML;
+    this.showProgressBar();
+    await this.startExitTransition();
+    
+    try {
+      const content = await this.fetchPage(url);
+      
+      if (addToHistory) {
+        window.history.pushState({ url }, '', url);
+      }
+      
+      await this.replaceContent(content);
+      await this.startEnterTransition();
+      
+      this.hideProgressBar();
+      this.isTransitioning = false;
+      
+    } catch (error) {
+      window.location.href = url;
+    }
+  }
+  
+  startExitTransition() {
+    return new Promise((resolve) => {
+      document.documentElement.classList.add('page-transitioning');
+      
+      // Add type-specific class
+      this.overlay.classList.add(`${this.options.type}-active`);
+      this.overlay.classList.add('active');
+      
+      // Fade out current content
+      document.querySelectorAll('.page-content, main').forEach(el => {
+        el.classList.add('page-exit');
+      });
+      
+      setTimeout(resolve, this.options.duration * 0.5);
+    });
+  }
+  
+  startEnterTransition() {
+    return new Promise((resolve) => {
+      // Fade in new content
+      document.querySelectorAll('.page-content, main').forEach(el => {
+        el.classList.remove('page-exit');
+        el.classList.add('page-enter');
+      });
+      
+      // Remove overlay
+      this.overlay.classList.remove('active');
+      this.overlay.classList.remove(`${this.options.type}-active`);
+      
+      setTimeout(() => {
+        document.documentElement.classList.remove('page-transitioning');
+        document.querySelectorAll('.page-content, main').forEach(el => {
+          el.classList.remove('page-enter');
+        });
+        resolve();
+      }, this.options.duration * 0.5);
+    });
+  }
+  
+  async fetchPage(url) {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Page not found');
+    return response.text();
+  }
+  
+  replaceContent(html) {
+    return new Promise((resolve) => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      
+      // Update title
+      document.title = doc.title;
+      
+      // Update meta tags
+      doc.querySelectorAll('meta').forEach(meta => {
+        const name = meta.getAttribute('name') || meta.getAttribute('property');
+        if (name) {
+          const existing = document.querySelector(`meta[name="${name}"], meta[property="${name}"]`);
+          if (existing) {
+            existing.content = meta.content;
+          }
+        }
+      });
+      
+      // Replace main content
+      const newMain = doc.querySelector('main') || doc.body;
+      const currentMain = document.querySelector('main') || document.body;
+      
+      if (newMain && currentMain) {
+        // Preserve elements that shouldn't change
+        const persistentElements = document.querySelectorAll('[data-persist]');
+        
+        // Replace content
+        if (document.querySelector('main')) {
+          document.querySelector('main').innerHTML = newMain.innerHTML;
+        }
+        
+        // Re-attach persistent elements
+        persistentElements.forEach(el => {
+          document.body.appendChild(el);
+        });
+      }
+      
+      // Re-initialize scripts
+      this.reevaluateScripts();
+      
+      // Scroll to top
+      window.scrollTo(0, 0);
+      
+      resolve();
+    });
+  }
+  
+  reevaluateScripts() {
+    // Find and execute new scripts
+    document.querySelectorAll('script').forEach(oldScript => {
+      if (oldScript.dataset.evaluated) return;
+      
+      const newScript = document.createElement('script');
+      Array.from(oldScript.attributes).forEach(attr => {
+        newScript.setAttribute(attr.name, attr.value);
+      });
+      newScript.textContent = oldScript.textContent;
+      newScript.dataset.evaluated = 'true';
+      
+      oldScript.parentNode.replaceChild(newScript, oldScript);
+    });
+  }
+  
+  // Prefetching
+  setupPrefetch() {
+    if (!this.options.prefetch) return;
+    
+    // Prefetch on link hover
+    document.addEventListener('mouseover', (e) => {
+      const link = e.target.closest('a');
+      if (!link) return;
+      
+      const href = link.getAttribute('href');
+      if (!href || this.prefetchedPages.has(href)) return;
+      if (href.startsWith('#') || href.startsWith('mailto:') || 
+          href.startsWith('tel:') || href.startsWith('http')) return;
+      
+      this.prefetchPage(href);
+    }, { passive: true });
+  }
+  
+  prefetchPage(url) {
+    if (this.prefetchedPages.has(url)) return;
+    
+    const link = document.createElement('link');
+    link.rel = 'prefetch';
+    link.href = url;
+    document.head.appendChild(link);
+    
+    this.prefetchedPages.add(url);
+    this.showPrefetchIndicator(`Prefetched: ${url}`);
+  }
+  
+  showPrefetchIndicator(text) {
+    let indicator = document.querySelector('.page-prefetch-indicator');
+    if (!indicator) {
+      indicator = document.createElement('div');
+      indicator.className = 'page-prefetch-indicator';
+      document.body.appendChild(indicator);
     }
     
-    // Update meta tags
-    const metaSelectors = [
-      'meta[name="description"]',
-      'meta[property^="og:"]',
-      'meta[name^="twitter:"]',
-      'link[rel="canonical"]'
-    ];
+    indicator.textContent = text;
+    indicator.classList.add('visible');
     
-    metaSelectors.forEach(selector => {
-      const newMeta = newDoc.querySelector(selector);
-      const currentMeta = document.querySelector(selector);
-      if (newMeta && currentMeta) {
-        currentMeta.content = newMeta.content;
+    setTimeout(() => {
+      indicator.classList.remove('visible');
+    }, 2000);
+  }
+  
+  // Progress bar
+  setupProgressBar() {
+    this.progressBar = document.createElement('div');
+    this.progressBar.className = 'page-load-progress';
+    document.body.appendChild(this.progressBar);
+  }
+  
+  showProgressBar() {
+    this.progressBar.classList.add('loading');
+  }
+  
+  updateProgressBar(percent) {
+    this.progressBar.style.width = `${percent}%`;
+  }
+  
+  hideProgressBar() {
+    this.progressBar.classList.add('complete');
+    setTimeout(() => {
+      this.progressBar.classList.remove('loading', 'complete');
+      this.progressBar.style.width = '0%';
+    }, 300);
+  }
+  
+  // Public API: Change transition type
+  setTransitionType(type) {
+    this.options.type = type;
+    this.overlay.remove();
+    this.createOverlay();
+  }
+  
+  // Public API: Disable transitions
+  disable() {
+    this.options.type = 'none';
+  }
+  
+  // Public API: Enable transitions
+  enable(type = 'wave') {
+    this.options.type = type;
+  }
+}
+
+// Link Preview on Hover
+class LinkPreview {
+  constructor() {
+    this.preview = null;
+    this.cache = new Map();
+    this.init();
+  }
+  
+  init() {
+    this.createPreview();
+    this.bindEvents();
+  }
+  
+  createPreview() {
+    this.preview = document.createElement('div');
+    this.preview.className = 'page-link-preview';
+    this.preview.innerHTML = `
+      <img class="page-link-preview-image" src="" alt="">
+      <div class="page-link-preview-title"></div>
+    `;
+    document.body.appendChild(this.preview);
+  }
+  
+  bindEvents() {
+    document.addEventListener('mouseover', (e) => {
+      const link = e.target.closest('a');
+      if (!link) {
+        this.hide();
+        return;
+      }
+      
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('#') || href.startsWith('mailto:') || 
+          href.startsWith('tel:')) {
+        this.hide();
+        return;
+      }
+      
+      this.show(link, href, e.clientX, e.clientY);
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+      if (this.preview.classList.contains('visible')) {
+        this.position(e.clientX, e.clientY);
       }
     });
   }
   
-  initStaggerAnimations() {
-    const staggerContainers = document.querySelectorAll('.stagger-enter');
+  async show(link, href, x, y) {
+    // Check cache
+    if (!this.cache.has(href)) {
+      try {
+        const response = await fetch(href);
+        const html = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        const title = doc.title;
+        const image = doc.querySelector('meta[property="og:image"]')?.content || 
+                     doc.querySelector('img')?.src || 
+                     'assets/02_Website_Heroes/Hero_1.png';
+        
+        this.cache.set(href, { title, image });
+      } catch {
+        return;
+      }
+    }
     
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
+    const data = this.cache.get(href);
+    this.preview.querySelector('.page-link-preview-image').src = data.image;
+    this.preview.querySelector('.page-link-preview-title').textContent = data.title;
     
-    staggerContainers.forEach(container => {
-      observer.observe(container);
-    });
+    this.position(x, y);
+    this.preview.classList.add('visible');
   }
   
-  handleInitialLoad() {
-    // Add enter animation on initial load
-    document.body.classList.add('content-enter');
+  position(x, y) {
+    const offset = 20;
+    let left = x + offset;
+    let top = y + offset;
     
-    setTimeout(() => {
-      document.body.classList.remove('content-enter');
-      this.initStaggerAnimations();
-    }, 500);
+    // Keep in viewport
+    const rect = this.preview.getBoundingClientRect();
+    if (left + rect.width > window.innerWidth) {
+      left = x - rect.width - offset;
+    }
+    if (top + rect.height > window.innerHeight) {
+      top = y - rect.height - offset;
+    }
+    
+    this.preview.style.left = `${left}px`;
+    this.preview.style.top = `${top}px`;
   }
   
-  delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  hide() {
+    this.preview.classList.remove('visible');
   }
 }
 
-// Expose a global prefetch function
-window.prefetchPage = function(url) {
-  if (!window.fetch || !url.startsWith(window.location.origin)) return;
-  
-  const link = document.createElement('link');
-  link.rel = 'prefetch';
-  link.href = url;
-  document.head.appendChild(link);
-};
-
-// Initialize on DOM ready
+// Auto-initialize
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
-    window.pageTransitions = new AdvancedPageTransitions();
+    window.pageTransition = new PageTransitionSystem();
+    window.linkPreview = new LinkPreview();
   });
 } else {
-  window.pageTransitions = new AdvancedPageTransitions();
+  window.pageTransition = new PageTransitionSystem();
+  window.linkPreview = new LinkPreview();
 }
 
-// Handle browser back/forward buttons
-window.addEventListener('popstate', () => {
-  window.location.reload();
-});
+// Export
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { PageTransitionSystem, LinkPreview };
+}
