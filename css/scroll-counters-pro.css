@@ -1,0 +1,381 @@
+/* ========================================
+   v60.0: SCROLL COUNTERS PRO
+   Fortune 500 - Advanced Scroll-Triggered Counter Animations
+======================================== */
+
+/* Counter Base */
+.scroll-counter {
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+}
+
+/* Animated Counter Rings */
+.counter-ring-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.counter-ring {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+
+.counter-ring-bg {
+  fill: none;
+  stroke: rgba(201, 206, 214, 0.1);
+  stroke-width: 8;
+}
+
+.counter-ring-progress {
+  fill: none;
+  stroke: url(#counterGradient);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 565.48;
+  stroke-dashoffset: 565.48;
+  transition: stroke-dashoffset 2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.counter-ring-content {
+  text-align: center;
+  z-index: 1;
+}
+
+.counter-ring-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 42px;
+  font-weight: 800;
+  color: #F5F7FA;
+  line-height: 1;
+}
+
+.counter-ring-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #525862;
+  margin-top: 8px;
+}
+
+/* Counter with Icon */
+.counter-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.counter-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.1), rgba(201, 206, 214, 0.05));
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+}
+
+.counter-icon-content {
+  flex: 1;
+}
+
+.counter-number {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 48px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #F5F7FA, #C9CED6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+
+.counter-suffix {
+  font-size: 24px;
+  color: #C9CED6;
+  margin-left: 4px;
+}
+
+.counter-text {
+  font-size: 14px;
+  color: #525862;
+  margin-top: 8px;
+}
+
+/* Stats Grid v60 */
+.stats-grid-pro {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  padding: 80px 40px;
+}
+
+.stats-item-pro {
+  text-align: center;
+  padding: 40px;
+  background: linear-gradient(145deg, rgba(23, 25, 29, 0.5), rgba(15, 15, 16, 0.8));
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 20px;
+  transition: all 0.4s ease;
+}
+
+.stats-item-pro:hover {
+  transform: translateY(-10px);
+  border-color: rgba(201, 206, 214, 0.2);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+}
+
+.stats-item-pro .stat-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 24px;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.1), rgba(201, 206, 214, 0.05));
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+
+.stats-item-pro .stat-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 56px;
+  font-weight: 800;
+  color: #F5F7FA;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.stats-item-pro .stat-suffix {
+  font-size: 28px;
+  color: #C9CED6;
+}
+
+.stats-item-pro .stat-label {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #525862;
+}
+
+/* Rolling Counter */
+.rolling-counter {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  overflow: hidden;
+  height: 80px;
+}
+
+.rolling-digit {
+  position: relative;
+  width: 50px;
+  height: 80px;
+  overflow: hidden;
+}
+
+.rolling-digit-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.rolling-digit-number {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 64px;
+  font-weight: 800;
+  color: #F5F7FA;
+}
+
+/* Split Number Animation */
+.split-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.split-number-digit {
+  position: relative;
+  width: 60px;
+  height: 80px;
+  background: linear-gradient(145deg, rgba(23, 25, 29, 0.8), rgba(15, 15, 16, 0.9));
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 48px;
+  font-weight: 800;
+  color: #F5F7FA;
+  overflow: hidden;
+}
+
+.split-number-digit::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent);
+  pointer-events: none;
+}
+
+.split-number-digit.animate {
+  animation: digit-flip 0.6s ease;
+}
+
+@keyframes digit-flip {
+  0% { transform: rotateX(90deg); opacity: 0; }
+  100% { transform: rotateX(0); opacity: 1; }
+}
+
+/* Counter Bar */
+.counter-bar-container {
+  width: 100%;
+  max-width: 600px;
+}
+
+.counter-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.counter-bar-title {
+  font-size: 14px;
+  color: #C9CED6;
+}
+
+.counter-bar-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #F5F7FA;
+}
+
+.counter-bar {
+  height: 8px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.counter-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #C9CED6, #F5F7FA);
+  border-radius: 4px;
+  width: 0;
+  transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Achievement Counter */
+.achievement-counter {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 30px;
+  background: linear-gradient(145deg, rgba(23, 25, 29, 0.5), rgba(15, 15, 16, 0.8));
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 16px;
+}
+
+.achievement-badge {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.15), rgba(201, 206, 214, 0.05));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  position: relative;
+}
+
+.achievement-badge::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border: 2px solid rgba(201, 206, 214, 0.1);
+  border-radius: 50%;
+  animation: badge-pulse 2s ease infinite;
+}
+
+@keyframes badge-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.5; }
+}
+
+.achievement-content h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: #F5F7FA;
+  margin-bottom: 4px;
+}
+
+.achievement-content p {
+  font-size: 14px;
+  color: #525862;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .stats-grid-pro {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-grid-pro {
+    grid-template-columns: 1fr;
+    padding: 40px 20px;
+    gap: 20px;
+  }
+  
+  .stats-item-pro {
+    padding: 30px 20px;
+  }
+  
+  .stats-item-pro .stat-value {
+    font-size: 40px;
+  }
+  
+  .counter-with-icon {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .counter-ring-container {
+    width: 160px;
+    height: 160px;
+  }
+  
+  .counter-ring-value {
+    font-size: 32px;
+  }
+  
+  .rolling-counter {
+    height: 60px;
+  }
+  
+  .rolling-digit {
+    width: 40px;
+    height: 60px;
+  }
+  
+  .rolling-digit-number {
+    height: 60px;
+    font-size: 48px;
+  }
+}

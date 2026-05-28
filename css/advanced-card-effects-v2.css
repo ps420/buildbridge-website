@@ -1,0 +1,643 @@
+/* ========================================
+   v57.0: ADVANCED CARD EFFECTS v2
+   Fortune 500 - Premium 3D Card Interactions
+======================================== */
+
+/* Base Card Styles */
+.advanced-card {
+  position: relative;
+  background: linear-gradient(145deg, rgba(23, 25, 29, 0.9), rgba(26, 28, 33, 0.95));
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.advanced-card:hover {
+  border-color: rgba(201, 206, 214, 0.2);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(201, 206, 214, 0.1);
+}
+
+/* 3D Tilt Effect */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease-out;
+}
+
+.tilt-card .card-content {
+  transform: translateZ(30px);
+}
+
+.tilt-card .card-icon {
+  transform: translateZ(50px);
+}
+
+.tilt-card .card-title {
+  transform: translateZ(40px);
+}
+
+/* Spotlight/Glow Effect */
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.spotlight-card::before {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(201, 206, 214, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+
+/* Gradient Border Animation */
+.gradient-border-card {
+  position: relative;
+  background: #0f0f10;
+}
+
+.gradient-border-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, 
+    rgba(201, 206, 214, 0.3), 
+    rgba(201, 206, 214, 0.1),
+    rgba(201, 206, 214, 0.3)
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.gradient-border-card:hover::before {
+  opacity: 1;
+  animation: gradient-rotate 3s linear infinite;
+}
+
+@keyframes gradient-rotate {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Glass Morphism Effect */
+.glass-card {
+  background: rgba(23, 25, 29, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.05) 0%, 
+    transparent 50%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* Holographic Effect */
+.holographic-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.holographic-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(201, 206, 214, 0.1) 45%,
+    rgba(201, 206, 214, 0.2) 50%,
+    rgba(201, 206, 214, 0.1) 55%,
+    transparent 60%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.holographic-card:hover::after {
+  transform: translateX(100%);
+}
+
+/* Lift and Glow Effect */
+.lift-glow-card {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lift-glow-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 
+    0 30px 60px -15px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(201, 206, 214, 0.1);
+}
+
+/* Magnetic Hover Effect */
+.magnetic-card {
+  transition: transform 0.3s ease;
+}
+
+/* Ripple Effect on Click */
+.ripple-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-card .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.3);
+  transform: scale(0);
+  animation: ripple-effect 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple-effect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Image Zoom on Hover */
+.card-image-zoom {
+  overflow: hidden;
+}
+
+.card-image-zoom img {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-image-zoom:hover img {
+  transform: scale(1.1);
+}
+
+/* Content Reveal from Bottom */
+.card-reveal-content {
+  position: relative;
+}
+
+.card-reveal-content .card-hidden-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  background: linear-gradient(transparent, rgba(15, 15, 16, 0.98));
+  transform: translateY(100%);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-reveal-content:hover .card-hidden-content {
+  transform: translateY(0);
+}
+
+/* Flip Card Effect */
+.flip-card-container {
+  perspective: 1000px;
+}
+
+.flip-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.flip-card.flipped,
+.flip-card-container:hover .flip-card {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(145deg, #17191d, #1a1c21);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  text-align: center;
+}
+
+/* Stacked Cards Effect */
+.stacked-cards {
+  position: relative;
+}
+
+.stacked-cards .advanced-card {
+  position: absolute;
+  width: 100%;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stacked-cards:hover .advanced-card:nth-child(1) {
+  transform: translateY(-10px) rotate(-2deg);
+}
+
+.stacked-cards:hover .advanced-card:nth-child(2) {
+  transform: translateY(-5px) rotate(1deg);
+}
+
+/* Expandable Card */
+.expandable-card {
+  max-height: 300px;
+  overflow: hidden;
+  transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.expandable-card:hover {
+  max-height: 500px;
+}
+
+.expandable-card .expand-indicator {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.expandable-card:hover .expand-indicator {
+  transform: translateX(-50%) rotate(180deg);
+  background: rgba(201, 206, 214, 0.2);
+}
+
+/* Card with Animated Border */
+.animated-border-card {
+  position: relative;
+  background: #0f0f10;
+}
+
+.animated-border-card::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(90deg, 
+    #C9CED6, 
+    #525862, 
+    #C9CED6, 
+    #525862,
+    #C9CED6
+  );
+  background-size: 300% 100%;
+  border-radius: 18px;
+  z-index: -1;
+  animation: border-flow 3s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.animated-border-card:hover::before {
+  opacity: 1;
+}
+
+@keyframes border-flow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+/* Neon Glow Card */
+.neon-card {
+  position: relative;
+  border: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.neon-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 17px;
+  padding: 1px;
+  background: linear-gradient(135deg, 
+    rgba(201, 206, 214, 0.5), 
+    transparent,
+    rgba(201, 206, 214, 0.3)
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+
+.neon-card:hover::before {
+  opacity: 1;
+  box-shadow: 
+    0 0 20px rgba(201, 206, 214, 0.2),
+    0 0 40px rgba(201, 206, 214, 0.1);
+}
+
+/* Parallax Depth Card */
+.parallax-depth-card {
+  transform-style: preserve-3d;
+}
+
+.parallax-depth-card .card-layer {
+  transition: transform 0.3s ease-out;
+}
+
+.parallax-depth-card:hover .card-layer-back {
+  transform: translateZ(-30px);
+}
+
+.parallax-depth-card:hover .card-layer-mid {
+  transform: translateZ(0);
+}
+
+.parallax-depth-card:hover .card-layer-front {
+  transform: translateZ(30px);
+}
+
+/* Card Shine Effect */
+.shine-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 100%
+  );
+  transform: rotate(30deg) translateX(-100%);
+  transition: transform 0.8s ease;
+  pointer-events: none;
+}
+
+.shine-card:hover::after {
+  transform: rotate(30deg) translateX(100%);
+}
+
+/* Card Counter Animation */
+.card-counter {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 48px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #F5F7FA, #C9CED6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Stats Card with Animated Bars */
+.stats-card {
+  padding: 30px;
+}
+
+.stats-card-bar {
+  height: 6px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.stats-card-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #C9CED6, #F5F7FA);
+  border-radius: 3px;
+  width: 0;
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stats-card:hover .stats-card-fill {
+  width: var(--fill-percentage, 75%);
+}
+
+/* Service Cards Grid Enhancement */
+.services-grid-enhanced {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  padding: 0 40px;
+}
+
+.service-card-enhanced {
+  min-height: 320px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.service-card-enhanced .card-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.1), rgba(201, 206, 214, 0.05));
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  margin-bottom: 24px;
+  transition: all 0.4s ease;
+}
+
+.service-card-enhanced:hover .card-icon {
+  transform: scale(1.1) rotate(5deg);
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.15), rgba(201, 206, 214, 0.1));
+  box-shadow: 0 10px 30px rgba(201, 206, 214, 0.1);
+}
+
+.service-card-enhanced .card-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin-bottom: 12px;
+}
+
+.service-card-enhanced .card-description {
+  color: #525862;
+  line-height: 1.7;
+  flex-grow: 1;
+}
+
+.service-card-enhanced .card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #C9CED6;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.service-card-enhanced:hover .card-link {
+  color: #F5F7FA;
+  gap: 12px;
+}
+
+/* Project Cards Enhanced */
+.project-card-enhanced {
+  position: relative;
+  height: 420px;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.project-card-enhanced img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-card-enhanced:hover img {
+  transform: scale(1.1);
+}
+
+.project-card-enhanced .project-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 30%, rgba(15, 15, 16, 0.98) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 30px;
+  transition: all 0.4s ease;
+}
+
+.project-card-enhanced:hover .project-overlay {
+  background: linear-gradient(180deg, rgba(15, 15, 16, 0.3), rgba(15, 15, 16, 0.98));
+}
+
+.project-card-enhanced .project-category {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #C9CED6;
+  margin-bottom: 8px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.4s ease 0.1s;
+}
+
+.project-card-enhanced:hover .project-category {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.project-card-enhanced .project-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin-bottom: 8px;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.4s ease 0.15s;
+}
+
+.project-card-enhanced:hover .project-title {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.project-card-enhanced .project-location {
+  font-size: 14px;
+  color: #525862;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.4s ease 0.2s;
+}
+
+.project-card-enhanced:hover .project-location {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .services-grid-enhanced {
+    padding: 0 20px;
+    grid-template-columns: 1fr;
+  }
+  
+  .service-card-enhanced {
+    min-height: 280px;
+    padding: 30px;
+  }
+  
+  .advanced-card {
+    border-radius: 12px;
+  }
+  
+  .flip-card-container:hover .flip-card {
+    transform: none;
+  }
+  
+  .flip-card-container.flipped .flip-card {
+    transform: rotateY(180deg);
+  }
+}

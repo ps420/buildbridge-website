@@ -1,0 +1,452 @@
+/* ========================================
+   SPOTLIGHT HOVER EFFECTS v55.0
+   Advanced Mouse-Following Spotlight System
+======================================== */
+
+/* Base Spotlight Card */
+.spotlight-card {
+  position: relative;
+  background: linear-gradient(145deg, rgba(30, 30, 35, 0.8), rgba(20, 20, 25, 0.9));
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 20px;
+  padding: 40px;
+  overflow: hidden;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.spotlight-card::before {
+  content: '';
+  position: absolute;
+  top: var(--mouse-y, 50%);
+  left: var(--mouse-x, 50%);
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(
+    circle,
+    rgba(201, 206, 214, 0.15) 0%,
+    rgba(201, 206, 214, 0.05) 40%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+
+.spotlight-card:hover {
+  border-color: rgba(201, 206, 214, 0.2);
+  transform: translateY(-4px);
+}
+
+/* Spotlight Border Effect */
+.spotlight-border {
+  position: relative;
+  background: linear-gradient(145deg, rgba(30, 30, 35, 0.9), rgba(20, 20, 25, 0.95));
+  border-radius: 20px;
+  padding: 2px;
+  overflow: hidden;
+}
+
+.spotlight-border::before {
+  content: '';
+  position: absolute;
+  top: var(--mouse-y, 50%);
+  left: var(--mouse-x, 50%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(
+    circle,
+    rgba(201, 206, 214, 0.8) 0%,
+    rgba(201, 206, 214, 0.4) 30%,
+    transparent 60%
+  );
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.spotlight-border:hover::before {
+  opacity: 1;
+}
+
+.spotlight-border-inner {
+  background: linear-gradient(145deg, rgba(30, 30, 35, 1), rgba(20, 20, 25, 1));
+  border-radius: 18px;
+  padding: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Multi-Layer Spotlight */
+.spotlight-layered {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(145deg, rgba(30, 30, 35, 0.8), rgba(20, 20, 25, 0.9));
+  border: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.spotlight-layered::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(201, 206, 214, 0.1) 0%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.spotlight-layered::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: radial-gradient(
+    300px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(201, 206, 214, 0.4),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  border-radius: 20px;
+  z-index: 0;
+}
+
+.spotlight-layered:hover::before,
+  .spotlight-layered:hover::after {
+  opacity: 1;
+}
+
+.spotlight-layered-content {
+  position: relative;
+  z-index: 2;
+  padding: 40px;
+}
+
+/* Glass Spotlight Card */
+.glass-spotlight {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 40px;
+  overflow: hidden;
+}
+
+.glass-spotlight::before {
+  content: '';
+  position: absolute;
+  top: var(--mouse-y, 50%);
+  left: var(--mouse-x, 50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.05) 40%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.glass-spotlight:hover::before {
+  opacity: 1;
+}
+
+/* Mesh Gradient Spotlight */
+.mesh-spotlight {
+  position: relative;
+  background: linear-gradient(145deg, rgba(30, 30, 35, 0.9), rgba(20, 20, 25, 0.95));
+  border-radius: 20px;
+  padding: 40px;
+  overflow: hidden;
+}
+
+.mesh-spotlight::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 0% 0%, rgba(201, 206, 214, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 100% 0%, rgba(201, 206, 214, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(201, 206, 214, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 0% 100%, rgba(201, 206, 214, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.mesh-spotlight::after {
+  content: '';
+  position: absolute;
+  top: var(--mouse-y, 50%);
+  left: var(--mouse-x, 50%);
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(
+    circle,
+    rgba(201, 206, 214, 0.15) 0%,
+    transparent 60%
+  );
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+.mesh-spotlight:hover::after {
+  opacity: 1;
+}
+
+/* Animated Border Spotlight */
+.spotlight-border-animated {
+  position: relative;
+  background: linear-gradient(145deg, rgba(30, 30, 35, 0.95), rgba(20, 20, 25, 1));
+  border-radius: 20px;
+  padding: 40px;
+  overflow: hidden;
+}
+
+.spotlight-border-animated::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 1px;
+  background: linear-gradient(
+    var(--border-angle, 0deg),
+    rgba(201, 206, 214, 0) 0%,
+    rgba(201, 206, 214, 0.3) 50%,
+    rgba(201, 206, 214, 0) 100%
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: rotate-border 3s linear infinite;
+}
+
+.spotlight-border-animated:hover::before {
+  opacity: 1;
+}
+
+@keyframes rotate-border {
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+@property --border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Corner Glow Spotlight */
+.corner-spotlight {
+  position: relative;
+  background: linear-gradient(145deg, rgba(30, 30, 35, 0.9), rgba(20, 20, 25, 0.95));
+  border-radius: 20px;
+  padding: 40px;
+  overflow: hidden;
+  border: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.corner-spotlight::before {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(
+    circle,
+    rgba(201, 206, 214, 0.3) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.corner-spotlight:hover::before {
+  opacity: 1;
+}
+
+.corner-spotlight[data-corner="top-left"]::before {
+  top: -20px;
+  left: -20px;
+}
+
+.corner-spotlight[data-corner="top-right"]::before {
+  top: -20px;
+  right: -20px;
+}
+
+.corner-spotlight[data-corner="bottom-left"]::before {
+  bottom: -20px;
+  left: -20px;
+}
+
+.corner-spotlight[data-corner="bottom-right"]::before {
+  bottom: -20px;
+  right: -20px;
+}
+
+/* Text Spotlight Effect */
+.text-spotlight {
+  position: relative;
+  display: inline-block;
+}
+
+.text-spotlight::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(201, 206, 214, 0) 0%,
+    rgba(201, 206, 214, 1) var(--spotlight-pos, 50%),
+    rgba(201, 206, 214, 0) 100%
+  );
+  background-size: 200% 100%;
+  background-position: var(--spotlight-pos, 50%) 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.text-spotlight:hover::after {
+  opacity: 1;
+}
+
+/* Image Spotlight Reveal */
+.image-spotlight {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.image-spotlight img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.7);
+  transition: filter 0.4s ease;
+}
+
+.image-spotlight::before {
+  content: '';
+  position: absolute;
+  top: var(--mouse-y, 50%);
+  left: var(--mouse-x, 50%);
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(
+    circle,
+    transparent 0%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: multiply;
+}
+
+.image-spotlight:hover img {
+  filter: brightness(1);
+}
+
+/* Grid Spotlight Effect */
+.grid-spotlight {
+  display: grid;
+  gap: 20px;
+}
+
+.grid-spotlight-item {
+  position: relative;
+  background: rgba(30, 30, 35, 0.8);
+  border-radius: 16px;
+  padding: 30px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.grid-spotlight:has(.grid-spotlight-item:hover) .grid-spotlight-item:not(:hover) {
+  opacity: 0.5;
+  filter: blur(2px);
+}
+
+.grid-spotlight-item:hover {
+  transform: scale(1.02);
+  z-index: 1;
+}
+
+/* Mobile Optimizations */
+@media (pointer: coarse) {
+  .spotlight-card::before,
+  .spotlight-border::before,
+  .spotlight-layered::before,
+  .spotlight-layered::after,
+  .glass-spotlight::before,
+  .mesh-spotlight::after,
+  .corner-spotlight::before,
+  .text-spotlight::after,
+  .image-spotlight::before {
+    display: none;
+  }
+  
+  .spotlight-card:hover,
+  .spotlight-layered:hover,
+  .corner-spotlight:hover {
+    transform: none;
+    border-color: rgba(201, 206, 214, 0.15);
+  }
+}
+
+/* Reduce Motion */
+@media (prefers-reduced-motion: reduce) {
+  .spotlight-card,
+  .spotlight-border,
+  .spotlight-layered,
+  .glass-spotlight,
+  .mesh-spotlight,
+  .corner-spotlight,
+  .image-spotlight,
+  .grid-spotlight-item {
+    transition: none;
+  }
+  
+  .spotlight-border-animated::before {
+    animation: none;
+  }
+}

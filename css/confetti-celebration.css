@@ -1,0 +1,387 @@
+/* ========================================
+   CONFETTI CELEBRATION SYSTEM v55.0
+   Delightful Micro-interactions
+======================================== */
+
+.confetti-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999999;
+  overflow: hidden;
+}
+
+.confetti-particle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+}
+
+.confetti-particle.square {
+  border-radius: 2px;
+}
+
+.confetti-particle.circle {
+  border-radius: 50%;
+}
+
+.confetti-particle.triangle {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 10px solid currentColor;
+  background: transparent !important;
+}
+
+.confetti-particle.ribbon {
+  width: 8px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.confetti-particle.star {
+  width: 12px;
+  height: 12px;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+/* Celebration Burst Animation */
+@keyframes confetti-fall {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100vh) rotate(720deg) scale(0.5);
+  }
+}
+
+@keyframes confetti-rise {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100vh) rotate(-720deg) scale(0.5);
+  }
+}
+
+@keyframes confetti-explode {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(0);
+  }
+  10% {
+    transform: translate(var(--tx), var(--ty)) rotate(180deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--tx) * 2), calc(var(--ty) * 2 + 300px)) rotate(720deg) scale(0.3);
+  }
+}
+
+@keyframes confetti-shimmer {
+  0%, 100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.3);
+  }
+}
+
+/* Success Animation Styles */
+.celebration-success {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  z-index: 999999;
+  text-align: center;
+  pointer-events: none;
+}
+
+.celebration-success.active {
+  animation: celebration-pop 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes celebration-pop {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+.celebration-success-icon {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+  margin: 0 auto 20px;
+  box-shadow: 
+    0 20px 60px rgba(34, 197, 94, 0.4),
+    0 0 0 4px rgba(34, 197, 94, 0.2);
+  animation: celebration-icon-pulse 2s ease infinite;
+}
+
+@keyframes celebration-icon-pulse {
+  0%, 100% {
+    box-shadow: 
+      0 20px 60px rgba(34, 197, 94, 0.4),
+      0 0 0 4px rgba(34, 197, 94, 0.2);
+  }
+  50% {
+    box-shadow: 
+      0 30px 80px rgba(34, 197, 94, 0.5),
+      0 0 0 8px rgba(34, 197, 94, 0.1);
+  }
+}
+
+.celebration-success-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin-bottom: 10px;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.celebration-success-message {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  color: rgba(201, 206, 214, 0.8);
+}
+
+/* Button Celebration Effect */
+.btn-celebration {
+  position: relative;
+  overflow: visible;
+}
+
+.btn-celebration::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, #C9CED6, #8A9199, #C9CED6);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  filter: blur(15px);
+  transition: opacity 0.3s ease;
+}
+
+.btn-celebration:hover::after {
+  opacity: 0.5;
+}
+
+.btn-celebration:active {
+  transform: scale(0.98);
+}
+
+/* Sparkle Animation */
+.sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #C9CED6;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: sparkle-animation 0.8s ease-out forwards;
+}
+
+@keyframes sparkle-animation {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(var(--tx), var(--ty)) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--tx) * 1.5), calc(var(--ty) * 1.5)) scale(0);
+  }
+}
+
+/* Form Success State */
+.form-success-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 15, 16, 0.9);
+  backdrop-filter: blur(10px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease;
+}
+
+.form-success-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.form-success-content {
+  text-align: center;
+  padding: 60px;
+  transform: scale(0.9);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+}
+
+.form-success-overlay.active .form-success-content {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.form-success-checkmark {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 30px;
+  position: relative;
+}
+
+.form-success-checkmark svg {
+  width: 100%;
+  height: 100%;
+}
+
+.form-success-checkmark circle {
+  stroke: #22c55e;
+  stroke-width: 3;
+  fill: none;
+  stroke-dasharray: 340;
+  stroke-dashoffset: 340;
+  animation: checkmark-circle 0.6s ease forwards;
+}
+
+.form-success-checkmark path {
+  stroke: #22c55e;
+  stroke-width: 3;
+  fill: none;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: checkmark-path 0.4s ease 0.4s forwards;
+}
+
+@keyframes checkmark-circle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes checkmark-path {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.form-success-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin-bottom: 16px;
+}
+
+.form-success-message {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  color: rgba(201, 206, 214, 0.7);
+  margin-bottom: 30px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.form-success-close {
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.15), rgba(201, 206, 214, 0.08));
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #F5F7FA;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-success-close:hover {
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.25), rgba(201, 206, 214, 0.12));
+  transform: translateY(-2px);
+}
+
+/* Mini Celebration for Buttons */
+.mini-celebration {
+  position: absolute;
+  pointer-events: none;
+}
+
+.mini-celebration-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Celebration Ring Effect */
+.celebration-ring {
+  position: absolute;
+  border: 2px solid #C9CED6;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  animation: celebration-ring-expand 0.8s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes celebration-ring-expand {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+  }
+}
+
+/* Type-specific celebrations */
+.celebration-subscribe {
+  --confetti-colors: #C9CED6, #8A9199, #F5F7FA, #5eead4, #22c55e;
+}
+
+.celebration-contact {
+  --confetti-colors: #3b82f6, #22c55e, #C9CED6, #8b5cf6, #f59e0b;
+}
+
+.celebration-booking {
+  --confetti-colors: #f59e0b, #ef4444, #C9CED6, #8A9199, #ec4899;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .confetti-container,
+  .celebration-success,
+  .form-success-overlay {
+    display: none !important;
+  }
+}
