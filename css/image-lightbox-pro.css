@@ -1,0 +1,521 @@
+/* ============================================
+   v47.0: IMAGE LIGHTBOX PRO - Fortune 500 Professional
+   Advanced image gallery with zoom, pan, and keyboard navigation
+   ============================================ */
+
+/* Lightbox Overlay */
+.lightbox-pro-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(20px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              visibility 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lightbox-pro-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Lightbox Container */
+.lightbox-pro-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Toolbar */
+.lightbox-pro-toolbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 30px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+  z-index: 10;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+}
+
+.lightbox-pro-overlay.active .lightbox-pro-toolbar {
+  transform: translateY(0);
+}
+
+.lightbox-pro-toolbar-info {
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+}
+
+.lightbox-pro-toolbar-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.lightbox-pro-toolbar-counter {
+  opacity: 0.7;
+  font-size: 12px;
+}
+
+.lightbox-pro-toolbar-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.lightbox-pro-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lightbox-pro-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.lightbox-pro-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Main Image Area */
+.lightbox-pro-stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  cursor: grab;
+}
+
+.lightbox-pro-stage:active {
+  cursor: grabbing;
+}
+
+.lightbox-pro-stage.zoomed {
+  cursor: grab;
+}
+
+/* Image Wrapper */
+.lightbox-pro-image-wrapper {
+  position: relative;
+  max-width: 90%;
+  max-height: 85vh;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lightbox-pro-image {
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Loading State */
+.lightbox-pro-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: #fff;
+}
+
+.lightbox-pro-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #C9CED6;
+  border-radius: 50%;
+  animation: lightbox-spin 1s linear infinite;
+}
+
+@keyframes lightbox-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Navigation Arrows */
+.lightbox-pro-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  opacity: 0;
+  z-index: 5;
+}
+
+.lightbox-pro-overlay.active .lightbox-pro-nav {
+  opacity: 1;
+}
+
+.lightbox-pro-nav:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-50%) scale(1.15);
+}
+
+.lightbox-pro-nav.prev {
+  left: 30px;
+}
+
+.lightbox-pro-nav.next {
+  right: 30px;
+}
+
+.lightbox-pro-nav svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* Captions */
+.lightbox-pro-caption {
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: #fff;
+  max-width: 600px;
+  padding: 0 20px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.lightbox-pro-overlay.active .lightbox-pro-caption {
+  opacity: 1;
+}
+
+.lightbox-pro-caption h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.lightbox-pro-caption p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+/* Thumbnails Strip */
+.lightbox-pro-thumbnails {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 30px 30px;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.lightbox-pro-thumbnails::-webkit-scrollbar {
+  display: none;
+}
+
+.lightbox-pro-overlay.active .lightbox-pro-thumbnails {
+  transform: translateY(0);
+}
+
+.lightbox-pro-thumb {
+  width: 80px;
+  height: 60px;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+.lightbox-pro-thumb:hover {
+  opacity: 1;
+  transform: translateY(-4px);
+}
+
+.lightbox-pro-thumb.active {
+  border-color: #C9CED6;
+  opacity: 1;
+}
+
+.lightbox-pro-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Zoom Controls */
+.lightbox-pro-zoom-controls {
+  position: absolute;
+  bottom: 120px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.lightbox-pro-overlay.active .lightbox-pro-zoom-controls {
+  opacity: 1;
+}
+
+.lightbox-pro-zoom-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.lightbox-pro-zoom-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Progress Indicator */
+.lightbox-pro-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lightbox-pro-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #C9CED6, #d1d5db);
+  transition: width 0.3s ease;
+}
+
+/* Zoom Level Indicator */
+.lightbox-pro-zoom-level {
+  position: absolute;
+  bottom: 120px;
+  left: 30px;
+  padding: 8px 16px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 20px;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.lightbox-pro-overlay.active .lightbox-pro-zoom-level {
+  opacity: 1;
+}
+
+/* Keyboard Shortcuts Hint */
+.lightbox-pro-shortcuts {
+  position: absolute;
+  bottom: 20px;
+  left: 30px;
+  display: flex;
+  gap: 20px;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.lightbox-pro-overlay.active .lightbox-pro-shortcuts {
+  opacity: 1;
+}
+
+.lightbox-pro-shortcut {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lightbox-pro-shortcut kbd {
+  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+}
+
+/* Animations */
+.lightbox-pro-image-wrapper {
+  animation: lightbox-entrance 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes lightbox-entrance {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Image transitions */
+.lightbox-pro-image-wrapper.switching-prev {
+  animation: lightbox-slide-prev 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lightbox-pro-image-wrapper.switching-next {
+  animation: lightbox-slide-next 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes lightbox-slide-prev {
+  0% { transform: translateX(0); opacity: 1; }
+  50% { transform: translateX(50px); opacity: 0; }
+  51% { transform: translateX(-50px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes lightbox-slide-next {
+  0% { transform: translateX(0); opacity: 1; }
+  50% { transform: translateX(-50px); opacity: 0; }
+  51% { transform: translateX(50px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+/* Gallery Grid Trigger Styles */
+.gallery-trigger {
+  position: relative;
+  cursor: zoom-in;
+  overflow: hidden;
+}
+
+.gallery-trigger img {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-trigger:hover img {
+  transform: scale(1.05);
+}
+
+.gallery-trigger::after {
+  content: '🔍';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 50px;
+  height: 50px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.gallery-trigger:hover::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .lightbox-pro-nav {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .lightbox-pro-nav.prev {
+    left: 15px;
+  }
+  
+  .lightbox-pro-nav.next {
+    right: 15px;
+  }
+  
+  .lightbox-pro-thumb {
+    width: 60px;
+    height: 45px;
+  }
+  
+  .lightbox-pro-toolbar {
+    padding: 15px 20px;
+  }
+  
+  .lightbox-pro-zoom-controls {
+    bottom: 100px;
+    right: 15px;
+  }
+  
+  .lightbox-pro-shortcuts {
+    display: none;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .lightbox-pro-overlay,
+  .lightbox-pro-image-wrapper,
+  .lightbox-pro-nav,
+  .lightbox-pro-toolbar,
+  .lightbox-pro-thumbnails,
+  .lightbox-pro-caption {
+    transition: none !important;
+    animation: none !important;
+  }
+}
