@@ -1,231 +1,92 @@
 /* ========================================
-   CURSOR SPOTLIGHT EFFECT
-   Subtle torch/spotlight following cursor
+   v65.0: CURSOR SPOTLIGHT EFFECT
+   Subtle illuminated gradient following cursor
+   Fortune 500 Quality - Subtle & Professional
 ======================================== */
-
-.cursor-spotlight-container {
-  position: relative;
-}
 
 .cursor-spotlight {
   position: fixed;
   width: 400px;
   height: 400px;
+  background: radial-gradient(
+    circle at center,
+    rgba(201, 206, 214, 0.08) 0%,
+    rgba(201, 206, 214, 0.03) 30%,
+    transparent 70%
+  );
   border-radius: 50%;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
   transform: translate(-50%, -50%);
   opacity: 0;
   transition: opacity 0.4s ease;
-  background: radial-gradient(
-    circle at center,
-    rgba(248, 199, 77, 0.08) 0%,
-    rgba(248, 199, 77, 0.03) 30%,
-    transparent 70%
-  );
+  will-change: transform, opacity;
   mix-blend-mode: screen;
-  filter: blur(40px);
 }
 
 .cursor-spotlight.active {
   opacity: 1;
 }
 
-.cursor-spotlight-enhanced {
-  position: fixed;
-  width: 600px;
-  height: 600px;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  transition: opacity 0.6s ease;
-  background: radial-gradient(
-    circle at center,
-    rgba(248, 199, 77, 0.04) 0%,
-    rgba(201, 206, 214, 0.02) 40%,
-    transparent 70%
-  );
-  mix-blend-mode: soft-light;
-  filter: blur(60px);
-}
-
-.cursor-spotlight-enhanced.active {
-  opacity: 1;
-}
-
-/* Inner bright core */
-.cursor-spotlight-core {
-  position: fixed;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 1;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  background: radial-gradient(
-    circle at center,
-    rgba(248, 199, 77, 0.15) 0%,
-    transparent 60%
-  );
-  filter: blur(10px);
-}
-
-.cursor-spotlight-core.active {
-  opacity: 1;
-}
-
-/* Sections that use spotlight effect */
-.section-spotlight {
+/* Enhanced spotlight for cards */
+.spotlight-card {
   position: relative;
   overflow: hidden;
 }
 
-.section-spotlight::before {
+.spotlight-card::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    ellipse at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(248, 199, 77, 0.03) 0%,
-    transparent 50%
-  );
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  z-index: 0;
-}
-
-.section-spotlight:hover::before {
-  opacity: 1;
-}
-
-/* Card spotlight effect */
-.card-spotlight {
-  position: relative;
-  overflow: hidden;
-}
-
-.card-spotlight::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(248, 199, 77, 0.06),
-    transparent 40%
-  );
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.card-spotlight:hover::after {
-  opacity: 1;
-}
-
-/* Button glow effect */
-.btn-glow {
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-glow::before {
-  content: '';
-  position: absolute;
-  top: var(--y, 50%);
-  left: var(--x, 50%);
-  width: 0;
-  height: 0;
-  background: radial-gradient(
-    circle,
-    rgba(248, 199, 77, 0.4) 0%,
-    transparent 60%
-  );
-  transform: translate(-50%, -50%);
-  transition: width 0.4s ease, height 0.4s ease;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.btn-glow:hover::before {
+  top: var(--mouse-y, 50%);
+  left: var(--mouse-x, 50%);
   width: 300px;
   height: 300px;
-}
-
-/* Text spotlight reveal */
-.text-spotlight {
-  background: linear-gradient(
-    90deg,
-    rgba(201, 206, 214, 0.4) 0%,
-    rgba(201, 206, 214, 0.4) 100%
+  background: radial-gradient(
+    circle at center,
+    rgba(201, 206, 214, 0.1) 0%,
+    transparent 60%
   );
-  background-size: 200% 100%;
-  background-position: 100% 0;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  transition: background-position 0.8s ease;
-}
-
-.text-spotlight.revealed {
-  background-position: 0 0;
-}
-
-/* Grid line spotlight */
-.grid-spotlight {
-  position: relative;
-}
-
-.grid-spotlight-lines {
-  position: absolute;
-  inset: 0;
-  background-image: 
-    linear-gradient(rgba(248, 199, 77, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(248, 199, 77, 0.03) 1px, transparent 1px);
-  background-size: 50px 50px;
-  pointer-events: none;
+  transform: translate(-50%, -50%);
   opacity: 0;
-  transition: opacity 0.5s ease;
-  mask-image: radial-gradient(
-    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    black 0%,
-    transparent 200px
-  );
-  -webkit-mask-image: radial-gradient(
-    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    black 0%,
-    transparent 200px
-  );
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
 }
 
-.grid-spotlight:hover .grid-spotlight-lines {
+.spotlight-card:hover::before {
   opacity: 1;
 }
 
-/* Reduced motion support */
+/* Interactive elements get enhanced glow */
+.cursor-spotlight--interactive {
+  background: radial-gradient(
+    circle at center,
+    rgba(201, 206, 214, 0.12) 0%,
+    rgba(201, 206, 214, 0.05) 40%,
+    transparent 70%
+  );
+}
+
+/* CTA area gets brighter spotlight */
+.cta-spotlight {
+  background: radial-gradient(
+    circle at center,
+    rgba(201, 206, 214, 0.15) 0%,
+    rgba(201, 206, 214, 0.05) 35%,
+    transparent 65%
+  );
+}
+
+/* Reduce motion preference */
 @media (prefers-reduced-motion: reduce) {
-  .cursor-spotlight,
-  .cursor-spotlight-enhanced,
-  .cursor-spotlight-core {
+  .cursor-spotlight {
     display: none;
   }
 }
 
-/* Touch device optimization */
+/* Mobile - disable spotlight */
 @media (pointer: coarse) {
-  .cursor-spotlight,
-  .cursor-spotlight-enhanced,
-  .cursor-spotlight-core {
-    display: none;
-  }
-  
-  .card-spotlight::after,
-  .section-spotlight::before {
+  .cursor-spotlight {
     display: none;
   }
 }

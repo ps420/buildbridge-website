@@ -1,167 +1,159 @@
 /**
- * Cursor Spotlight Effect
- * Subtle torch/spotlight following cursor for premium feel
+ * v65.0: Cursor Spotlight Effect
+ * Subtle illuminated gradient following cursor
+ * Fortune 500 Quality - Professional & Subtle
  */
 
-(function() {
-  'use strict';
-
-  // Check for touch device
-  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if (isTouchDevice || prefersReducedMotion) return;
-
-  // Create spotlight elements
-  const spotlight = document.createElement('div');
-  spotlight.className = 'cursor-spotlight';
-  document.body.appendChild(spotlight);
-
-  const spotlightEnhanced = document.createElement('div');
-  spotlightEnhanced.className = 'cursor-spotlight-enhanced';
-  document.body.appendChild(spotlightEnhanced);
-
-  const spotlightCore = document.createElement('div');
-  spotlightCore.className = 'cursor-spotlight-core';
-  document.body.appendChild(spotlightCore);
-
-  // State
-  let mouseX = 0;
-  let mouseY = 0;
-  let currentX = 0;
-  let currentY = 0;
-  let enhancedX = 0;
-  let enhancedY = 0;
-  let isActive = false;
-  let rafId = null;
-  let inactivityTimeout = null;
-
-  // Mouse move handler with RAF throttling
-  function handleMouseMove(e) {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-
-    if (!isActive) {
-      isActive = true;
-      spotlight.classList.add('active');
-      spotlightEnhanced.classList.add('active');
-      spotlightCore.classList.add('active');
-      startAnimation();
-    }
-
-    // Update CSS variables for CSS-based effects
-    document.querySelectorAll('.card-spotlight, .section-spotlight, .grid-spotlight').forEach(el => {
-      const rect = el.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      el.style.setProperty('--mouse-x', `${x}%`);
-      el.style.setProperty('--mouse-y', `${y}%`);
-    });
-
-    // Reset inactivity timeout
-    clearTimeout(inactivityTimeout);
-    inactivityTimeout = setTimeout(() => {
-      // Keep active, just optional fade logic here if needed
-    }, 100);
-  }
-
-  // Animation loop for smooth following
-  function startAnimation() {
-    if (rafId) return;
-
-    function animate() {
-      // Smooth follow with different easing for each layer
-      currentX += (mouseX - currentX) * 0.15;
-      currentY += (mouseY - currentY) * 0.15;
-      enhancedX += (mouseX - enhancedX) * 0.08;
-      enhancedY += (mouseY - enhancedY) * 0.08;
-
-      // Apply transforms
-      spotlight.style.left = `${currentX}px`;
-      spotlight.style.top = `${currentY}px`;
-      
-      spotlightEnhanced.style.left = `${enhancedX}px`;
-      spotlightEnhanced.style.top = `${enhancedY}px`;
-
-      spotlightCore.style.left = `${mouseX}px`;
-      spotlightCore.style.top = `${mouseY}px`;
-
-      rafId = requestAnimationFrame(animate);
-    }
-
-    animate();
-  }
-
-  // Mouse leave handler
-  function handleMouseLeave() {
-    spotlight.classList.remove('active');
-    spotlightEnhanced.classList.remove('active');
-    spotlightCore.classList.remove('active');
-    isActive = false;
+class CursorSpotlight {
+  constructor(options = {}) {
+    this.options = {
+      size: options.size || 400,
+      intensity: options.intensity || 0.08,
+      smoothing: options.smoothing || 0.1,
+      color: options.color || '201, 206, 214',
+      ...options
+    };
     
-    if (rafId) {
-      cancelAnimationFrame(rafId);
-      rafId = null;
-    }
-  }
-
-  // Button glow effect
-  function initButtonGlow() {
-    document.querySelectorAll('.btn, .btn.ghost').forEach(btn => {
-      btn.classList.add('btn-glow');
-      
-      btn.addEventListener('mousemove', (e) => {
-        const rect = btn.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        btn.style.setProperty('--x', `${x}px`);
-        btn.style.setProperty('--y', `${y}px`);
-      });
-    });
-  }
-
-  // Initialize card spotlight effects
-  function initCardSpotlights() {
-    const cards = document.querySelectorAll('.service-card, .project-card, .stat-item, .timeline-item');
-    cards.forEach(card => {
-      card.classList.add('card-spotlight');
-    });
-  }
-
-  // Text spotlight reveal on scroll
-  function initTextSpotlights() {
-    const textElements = document.querySelectorAll('h1, h2, .section-header p');
+    this.spotlight = null;
+    this.mouseX = 0;
+    this.mouseY = 0;
+    this.spotlightX = 0;
+    this.spotlightY = 0;
+    this.isActive = false;
+    this.rafId = null;
+    this.lastMouseMove = 0;
+    this.mouseTimeout = null;
     
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('text-spotlight');
-          setTimeout(() => entry.target.classList.add('revealed'), 100);
-          observer.unobserve(entry.target);
+    // Check if touch device
+    this.isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+    
+    this.init();
+  }
+  
+  init() {
+    if (this.isTouchDevice) return;
+    
+    this.createSpotlight();
+    this.bindEvents();
+  }
+  
+  createSpotlight() {
+    this.spotlight = document.createElement('div');
+    this.spotlight.className = 'cursor-spotlight';
+    this.spotlight.style.cssText = `
+      position: fixed;
+      width: ${this.options.size}px;
+      height: ${this.options.size}px;
+      background: radial-gradient(
+        circle at center,
+        rgba(${this.options.color}, ${this.options.intensity}) 0%,
+        rgba(${this.options.color}, ${this.options.intensity * 0.4}) 30%,
+        transparent 70%
+      );
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      will-change: transform;
+      mix-blend-mode: screen;
+    `;
+    
+    document.body.prepend(this.spotlight);
+  }
+  
+  bindEvents() {
+    document.addEventListener('mousemove', (e) => {
+      this.mouseX = e.clientX;
+      this.mouseY = e.clientY;
+      this.lastMouseMove = Date.now();
+      
+      if (!this.isActive) {
+        this.isActive = true;
+        this.spotlight.classList.add('active');
+        this.animate();
+      }
+      
+      // Reset inactive timeout
+      clearTimeout(this.mouseTimeout);
+      this.mouseTimeout = setTimeout(() => {
+        this.spotlight.classList.remove('active');
+        this.isActive = false;
+        if (this.rafId) {
+          cancelAnimationFrame(this.rafId);
+          this.rafId = null;
         }
-      });
-    }, { threshold: 0.5 });
-
-    textElements.forEach(el => observer.observe(el));
-  }
-
-  // Initialize
-  function init() {
-    document.addEventListener('mousemove', handleMouseMove, { passive: true });
-    document.addEventListener('mouseleave', handleMouseLeave);
+      }, 100);
+    }, { passive: true });
     
-    initButtonGlow();
-    initCardSpotlights();
-    initTextSpotlights();
-
-    console.log('🔦 Cursor Spotlight Effect initialized');
+    // Handle mouse leaving window
+    document.addEventListener('mouseleave', () => {
+      this.spotlight.classList.remove('active');
+      this.isActive = false;
+    });
+    
+    // Add enhanced glow on interactive elements
+    this.addInteractiveGlow();
   }
-
-  // Wait for DOM ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
+  
+  animate() {
+    if (!this.isActive) return;
+    
+    // Smooth interpolation
+    this.spotlightX += (this.mouseX - this.spotlightX) * this.options.smoothing;
+    this.spotlightY += (this.mouseY - this.spotlightY) * this.options.smoothing;
+    
+    this.spotlight.style.left = `${this.spotlightX}px`;
+    this.spotlight.style.top = `${this.spotlightY}px`;
+    
+    this.rafId = requestAnimationFrame(() => this.animate());
   }
+  
+  addInteractiveGlow() {
+    const interactiveElements = document.querySelectorAll(
+      'a, button, .btn, .magnetic, .service-card, .project-card, .testimonial-card'
+    );
+    
+    interactiveElements.forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        this.spotlight.style.transform = 'translate(-50%, -50%) scale(1.3)';
+        this.spotlight.style.opacity = '0.15';
+      });
+      
+      el.addEventListener('mouseleave', () => {
+        this.spotlight.style.transform = 'translate(-50%, -50%) scale(1)';
+        this.spotlight.style.opacity = '';
+      });
+    });
+  }
+  
+  destroy() {
+    if (this.spotlight) {
+      this.spotlight.remove();
+    }
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+    }
+    clearTimeout(this.mouseTimeout);
+  }
+}
 
-})();
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  // Respect reduced motion preference
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  
+  if (!prefersReducedMotion) {
+    window.cursorSpotlight = new CursorSpotlight({
+      size: 500,
+      intensity: 0.06,
+      smoothing: 0.12
+    });
+  }
+});
+
+// Export for module usage
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = CursorSpotlight;
+}

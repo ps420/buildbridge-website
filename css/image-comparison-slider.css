@@ -1,225 +1,430 @@
 /* ========================================
-   v31.0 - Image Comparison Slider
-   Before/After Project Showcase
+   v65.4: IMAGE COMPARISON SLIDER
+   Interactive before/after comparison slider
+   Fortune 500 Quality - Engaging Visual Tool
 ======================================== */
-
-.comparison-slider-section {
-  padding: 120px 0;
-  position: relative;
-}
-
-.comparison-slider-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 40px;
-}
-
-.comparison-slider-wrapper {
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
-  background: #0f0f12;
-}
 
 .comparison-slider {
   position: relative;
   width: 100%;
-  height: 500px;
+  max-width: 1000px;
+  margin: 0 auto;
+  border-radius: 12px;
   overflow: hidden;
   cursor: col-resize;
+  user-select: none;
+  -webkit-user-select: none;
+  background: rgba(201, 206, 214, 0.05);
 }
 
-@media (max-width: 768px) {
-  .comparison-slider {
-    height: 350px;
-  }
+.comparison-slider-image {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  overflow: hidden;
 }
 
-.comparison-image {
+.comparison-slider-image img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  user-select: none;
-  pointer-events: none;
+  display: block;
 }
 
-.comparison-image.before {
-  z-index: 1;
+/* Before Image (Background - Visible everywhere) */
+.comparison-slider-before {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
 }
 
-.comparison-image.after {
-  z-index: 2;
-  clip-path: inset(0 50% 0 0);
+.comparison-slider-before::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  padding: 8px 16px;
+  background: rgba(15, 15, 16, 0.8);
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #F5F7FA;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
 }
 
+.comparison-slider:hover .comparison-slider-before::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* After Image (Foreground - Revealed by slider) */
+.comparison-slider-after {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  width: 50%; /* Default position - controlled by JS */
+}
+
+.comparison-slider-after::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  padding: 8px 16px;
+  background: rgba(15, 15, 16, 0.8);
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #F5F7FA;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+.comparison-slider:hover .comparison-slider-after::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Slider Handle */
 .comparison-slider-handle {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 50%;
-  width: 4px;
-  background: #fff;
-  z-index: 3;
+  left: 50%; /* Default position - controlled by JS */
+  width: 40px;
   transform: translateX(-50%);
   cursor: col-resize;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
 }
 
-.comparison-slider-button {
+/* Handle Line */
+.comparison-slider-handle::before {
+  content: '';
   position: absolute;
-  top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
-  background: #fff;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #C9CED6 20%,
+    #C9CED6 80%,
+    transparent 100%
+  );
+  transform: translateX(-50%);
+  box-shadow: 0 0 20px rgba(201, 206, 214, 0.5);
+}
+
+/* Handle Button */
+.comparison-slider-button {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  background: #C9CED6;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 
+    0 0 0 4px rgba(15, 15, 16, 0.5),
+    0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.comparison-slider:hover .comparison-slider-button {
-  transform: translate(-50%, -50%) scale(1.1);
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+.comparison-slider-button:hover {
+  transform: scale(1.1);
+  box-shadow: 
+    0 0 0 4px rgba(15, 15, 16, 0.5),
+    0 15px 40px rgba(0, 0, 0, 0.4);
 }
 
-.comparison-slider-button svg {
-  width: 24px;
-  height: 24px;
-  stroke: #0f0f12;
-  stroke-width: 2;
+.comparison-slider-handle:active .comparison-slider-button {
+  transform: scale(0.95);
 }
 
-.comparison-label {
+/* Handle Arrows */
+.comparison-slider-button::before,
+.comparison-slider-button::after {
+  content: '';
   position: absolute;
-  top: 20px;
-  padding: 10px 20px;
-  background: rgba(15, 15, 18, 0.8);
-  backdrop-filter: blur(10px);
-  border-radius: 30px;
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  transition: transform 0.3s ease;
+}
+
+.comparison-slider-button::before {
+  border-right: 8px solid #0f0f10;
+  left: 12px;
+}
+
+.comparison-slider-button::after {
+  border-left: 8px solid #0f0f10;
+  right: 12px;
+}
+
+.comparison-slider-button:hover::before {
+  transform: translateX(-2px);
+}
+
+.comparison-slider-button:hover::after {
+  transform: translateX(2px);
+}
+
+/* Loading State */
+.comparison-slider.loading .comparison-slider-image {
+  filter: blur(10px);
+}
+
+.comparison-slider.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(201, 206, 214, 0.2);
+  border-top-color: #C9CED6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Range Input for Accessibility */
+.comparison-slider-input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 20;
+}
+
+/* Focus State */
+.comparison-slider:focus-within .comparison-slider-handle {
+  outline: 2px solid #C9CED6;
+  outline-offset: 4px;
+}
+
+/* Animations */
+.comparison-slider.animating .comparison-slider-after {
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.comparison-slider.animating .comparison-slider-handle {
+  transition: left 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Touch Device Adjustments */
+@media (pointer: coarse) {
+  .comparison-slider-button {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .comparison-slider-handle {
+    width: 50px;
+  }
+}
+
+/* Alternative Layout - Vertical */
+.comparison-slider-vertical {
+  cursor: row-resize;
+}
+
+.comparison-slider-vertical .comparison-slider-after {
+  width: 100%;
+  height: 50%;
+}
+
+.comparison-slider-vertical .comparison-slider-handle {
+  left: 0;
+  right: 0;
+  top: 50%;
+  bottom: auto;
+  width: auto;
+  height: 40px;
+  transform: translateY(-50%);
+  cursor: row-resize;
+}
+
+.comparison-slider-vertical .comparison-slider-handle::before {
+  left: 0;
+  right: 0;
+  top: 50%;
+  bottom: auto;
+  width: auto;
+  height: 2px;
+  transform: translateY(-50%);
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    #C9CED6 20%,
+    #C9CED6 80%,
+    transparent 100%
+  );
+}
+
+/* Showcase Container */
+.comparison-showcase {
+  position: relative;
+  padding: 60px 0;
+}
+
+.comparison-showcase-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.comparison-showcase-header h2 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  z-index: 4;
-  transition: opacity 0.3s ease;
-}
-
-.comparison-label.before {
-  left: 20px;
-}
-
-.comparison-label.after {
-  right: 20px;
-}
-
-.comparison-slider-info {
-  padding: 30px 40px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 100%);
-}
-
-.comparison-slider-title {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1.5rem;
+  font-size: 36px;
   font-weight: 700;
-  color: #fff;
-  margin-bottom: 8px;
+  color: #F5F7FA;
+  margin-bottom: 12px;
 }
 
-.comparison-slider-description {
+.comparison-showcase-header p {
   font-family: 'Poppins', sans-serif;
-  font-size: 1rem;
-  color: rgba(201, 206, 214, 0.7);
-  line-height: 1.6;
+  font-size: 16px;
+  color: rgba(201, 206, 214, 0.6);
 }
 
-.comparison-slider-stats {
-  display: flex;
-  gap: 40px;
-  margin-top: 20px;
-  padding-top: 20px;
+/* Caption */
+.comparison-caption {
+  text-align: center;
+  padding: 30px 20px;
+  background: rgba(201, 206, 214, 0.03);
+  border-radius: 0 0 12px 12px;
   border-top: 1px solid rgba(201, 206, 214, 0.1);
 }
 
-.comparison-stat {
+.comparison-caption h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin-bottom: 8px;
+}
+
+.comparison-caption p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: rgba(201, 206, 214, 0.5);
+}
+
+/* Gallery of Comparisons */
+.comparison-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 30px;
+  padding: 40px 0;
+}
+
+.comparison-gallery-item {
+  position: relative;
+}
+
+.comparison-gallery-item .comparison-slider {
+  border-radius: 8px;
+}
+
+/* Stats overlay */
+.comparison-stats {
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  flex-direction: column;
+  gap: 40px;
+  padding: 20px 30px;
+  background: rgba(15, 15, 16, 0.9);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 5;
+}
+
+.comparison-slider:hover .comparison-stats {
+  opacity: 1;
+}
+
+.comparison-stat {
+  text-align: center;
 }
 
 .comparison-stat-value {
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  color: #F5F7FA;
 }
 
 .comparison-stat-label {
   font-family: 'Poppins', sans-serif;
-  font-size: 0.75rem;
-  color: rgba(201, 206, 214, 0.6);
+  font-size: 11px;
+  color: rgba(201, 206, 214, 0.5);
   text-transform: uppercase;
   letter-spacing: 0.1em;
+  margin-top: 4px;
 }
 
-/* Grid for multiple comparisons */
-.comparison-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
-}
-
-@media (max-width: 1024px) {
-  .comparison-grid {
+/* Responsive */
+@media (max-width: 768px) {
+  .comparison-showcase-header h2 {
+    font-size: 28px;
+  }
+  
+  .comparison-gallery {
     grid-template-columns: 1fr;
   }
-}
-
-.comparison-grid .comparison-slider {
-  height: 350px;
-}
-
-/* Section header */
-.comparison-section-header {
-  text-align: center;
-  margin-bottom: 60px;
-}
-
-.comparison-section-header h2 {
-  font-family: 'Montserrat', sans-serif;
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
-  color: #fff;
-  margin-bottom: 16px;
-}
-
-.comparison-section-header p {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.125rem;
-  color: rgba(201, 206, 214, 0.7);
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-/* Touch device optimizations */
-@media (pointer: coarse) {
-  .comparison-slider {
-    cursor: grab;
+  
+  .comparison-slider-before::after,
+  .comparison-slider-after::after {
+    font-size: 10px;
+    padding: 6px 12px;
   }
   
-  .comparison-slider:active {
-    cursor: grabbing;
+  .comparison-stats {
+    gap: 20px;
+    padding: 15px 20px;
   }
   
-  .comparison-slider-button {
-    width: 50px;
-    height: 50px;
+  .comparison-stat-value {
+    font-size: 18px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .comparison-slider.animating .comparison-slider-after,
+  .comparison-slider.animating .comparison-slider-handle {
+    transition: none;
   }
 }

@@ -1,452 +1,380 @@
 /**
- * v55.0: Smart Form Validation System
- * Fortune 500 - Real-time validation with visual feedback
+ * v65.2: Smart Form Validation
+ * Real-time validation with visual feedback
+ * Fortune 500 Quality - Polished & Accessible
  */
 
 class SmartFormValidation {
-  constructor(formSelector, options = {}) {
-    this.form = typeof formSelector === 'string' 
-      ? document.querySelector(formSelector) 
-      : formSelector;
-    
-    if (!this.form) {
-      console.warn('SmartFormValidation: Form not found');
-      return;
-    }
-    
+  constructor(form, options = {}) {
+    this.form = typeof form === 'string' ? document.querySelector(form) : form;
     this.options = {
-      validateOnBlur: true,
-      validateOnInput: false,
-      showSuccessState: true,
-      shakeOnError: true,
-      scrollToFirstError: true,
-      customValidators: {},
-      messages: {
-        required: 'This field is required',
-        email: 'Please enter a valid email address',
-        phone: 'Please enter a valid phone number',
-        minLength: 'Must be at least {min} characters',
-        maxLength: 'Must be no more than {max} characters',
-        pattern: 'Please match the requested format',
-        match: 'Fields do not match',
-      },
+      validateOnInput: options.validateOnInput !== false,
+      validateOnBlur: options.validateOnBlur !== false,
+      validateOnSubmit: options.validateOnSubmit !== false,
+      showSuccess: options.showSuccess !== false,
+      showRequirements: options.showRequirements !== false,
       ...options
     };
     
     this.fields = [];
-    this.isValid = false;
+    this.isSubmitting = false;
     
-    this.init();
+    if (this.form) {
+      this.init();
+    }
   }
   
   init() {
     this.findFields();
     this.bindEvents();
-    this.addStyles();
+    this.createSuccessMessage();
   }
   
   findFields() {
     const inputs = this.form.querySelectorAll('input, textarea, select');
     
-    this.fields = Array.from(inputs).map(input => {
+    inputs.forEach(input => {
+      if (input.type === 'submit' || input.type === 'button') return;
+      
       const field = {
         element: input,
-        name: input.name,
+        container: input.closest('.form-field') || this.createFieldContainer(input),
         type: input.type || input.tagName.toLowerCase(),
-        rules: this.parseRules(input),
-        errorElement: null,
-        isValid: true,
-        touched: false
+        validations: this.getValidations(input),
+        requirementsList: null
       };
       
-      // Create error message element
-      field.errorElement = this.createErrorElement(input);
-      
-      return field;
+      this.setupField(field);
+      this.fields.push(field);
     });
   }
   
-  parseRules(input) {
-    const rules = [];
+  createFieldContainer(input) {
+    const container = document.createElement('div');
+    container.className = 'form-field';
+    input.parentNode.insertBefore(container, input);
+    container.appendChild(input);
+    return container;
+  }
+  
+  getValidations(input) {
+    const validations = [];
     
     if (input.required) {
-      rules.push({ type: 'required' });
+      validations.push({
+        type: 'required',
+        message: 'This field is required',
+        test: value => value.trim().length > 0
+      });
     }
     
     if (input.type === 'email') {
-      rules.push({ type: 'email' });
+      validations.push({
+        type: 'email',
+        message: 'Please enter a valid email address',
+        test: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+      });
     }
     
     if (input.type === 'tel') {
-      rules.push({ type: 'phone' });
+      validations.push({
+        type: 'phone',
+        message: 'Please enter a valid phone number',
+        test: value => /^[\d\s\-\+\(\)]+$/.test(value) && value.replace(/\D/g, '').length >= 10
+      });
     }
     
-    if (input.minLength > 0) {
-      rules.push({ type: 'minLength', value: input.minLength });
+    if (input.minLength) {
+      validations.push({
+        type: 'minLength',
+        message: `Minimum ${input.minLength} characters required`,
+        test: value => value.length >= parseInt(input.minLength)
+      });
     }
     
-    if (input.maxLength > 0) {
-      rules.push({ type: 'maxLength', value: input.maxLength });
+    if (input.maxLength) {
+      validations.push({
+        type: 'maxLength',
+        message: `Maximum ${input.maxLength} characters allowed`,
+        test: value => value.length <= parseInt(input.maxLength)
+      });
     }
     
     if (input.pattern) {
-      rules.push({ type: 'pattern', value: input.pattern });
+      const pattern = new RegExp(input.pattern);
+      validations.push({
+        type: 'pattern',
+        message: input.dataset.patternMessage || 'Please match the requested format',
+        test: value => pattern.test(value)
+      });
     }
     
-    // Check for match attribute
-    if (input.dataset.match) {
-      rules.push({ type: 'match', target: input.dataset.match });
+    // Custom validations from data attributes
+    if (input.dataset.validateMatch) {
+      const matchField = document.querySelector(input.dataset.validateMatch);
+      validations.push({
+        type: 'match',
+        message: 'Passwords do not match',
+        test: value => matchField && value === matchField.value
+      });
     }
     
-    // Custom validation from data attributes
-    if (input.dataset.validate) {
-      rules.push({ type: 'custom', validator: input.dataset.validate });
-    }
-    
-    return rules;
+    return validations;
   }
   
-  createErrorElement(input) {
-    const errorEl = document.createElement('span');
-    errorEl.className = 'form-error-message';
-    errorEl.setAttribute('aria-live', 'polite');
-    errorEl.style.cssText = `
-      display: none;
-      color: #ef4444;
-      font-size: 12px;
-      margin-top: 4px;
-      transition: all 0.3s ease;
-    `;
+  setupField(field) {
+    const { element, container } = field;
     
-    // Insert after input wrapper or input
-    const wrapper = input.closest('.form-field') || input.parentElement;
-    if (wrapper) {
-      wrapper.appendChild(errorEl);
-    } else {
-      input.parentNode.insertBefore(errorEl, input.nextSibling);
+    // Add styling classes
+    element.classList.add('form-input');
+    
+    // Create floating label if not exists
+    if (!container.querySelector('.form-label') && element.placeholder) {
+      const label = document.createElement('label');
+      label.className = 'form-label';
+      label.textContent = element.placeholder;
+      element.removeAttribute('placeholder');
+      element.setAttribute('placeholder', ' '); // For CSS :placeholder-shown
+      container.appendChild(label);
     }
     
-    return errorEl;
+    // Create validation icon
+    const icon = document.createElement('div');
+    icon.className = 'form-validation-icon';
+    icon.innerHTML = `
+      <span class="valid-icon">✓</span>
+      <span class="invalid-icon">✕</span>
+    `;
+    container.appendChild(icon);
+    
+    // Create validation message
+    const message = document.createElement('div');
+    message.className = 'form-validation-message';
+    container.appendChild(message);
+    
+    // Create character counter if maxLength
+    if (element.maxLength) {
+      const counter = document.createElement('div');
+      counter.className = 'form-char-counter';
+      counter.textContent = `0/${element.maxLength}`;
+      container.appendChild(counter);
+      field.charCounter = counter;
+    }
+    
+    // Create requirements list if specified
+    if (this.options.showRequirements && element.dataset.requirements) {
+      this.createRequirementsList(field);
+    }
+  }
+  
+  createRequirementsList(field) {
+    const requirements = field.element.dataset.requirements.split(',');
+    const list = document.createElement('ul');
+    list.className = 'form-requirements';
+    
+    const requirementMap = {
+      'uppercase': { text: 'One uppercase letter', test: v => /[A-Z]/.test(v) },
+      'lowercase': { text: 'One lowercase letter', test: v => /[a-z]/.test(v) },
+      'number': { text: 'One number', test: v => /\d/.test(v) },
+      'special': { text: 'One special character', test: v => /[!@#$%^&*]/.test(v) },
+      'min8': { text: 'At least 8 characters', test: v => v.length >= 8 }
+    };
+    
+    requirements.forEach(req => {
+      if (requirementMap[req]) {
+        const li = document.createElement('li');
+        li.dataset.req = req;
+        li.textContent = requirementMap[req].text;
+        list.appendChild(li);
+      }
+    });
+    
+    field.container.appendChild(list);
+    field.requirementsList = list;
+    field.requirementTests = requirements.map(r => requirementMap[r]).filter(Boolean);
   }
   
   bindEvents() {
     this.fields.forEach(field => {
-      const input = field.element;
+      const { element } = field;
       
-      // Validate on blur
-      if (this.options.validateOnBlur) {
-        input.addEventListener('blur', () => {
-          field.touched = true;
-          this.validateField(field);
-        });
-      }
-      
-      // Validate on input (with debounce)
       if (this.options.validateOnInput) {
-        let debounceTimer;
-        input.addEventListener('input', () => {
-          clearTimeout(debounceTimer);
-          debounceTimer = setTimeout(() => {
-            if (field.touched) {
-              this.validateField(field);
-            }
-          }, 300);
-        });
+        element.addEventListener('input', () => this.handleInput(field));
       }
       
-      // Clear error on focus
-      input.addEventListener('focus', () => {
-        this.clearError(field);
-      });
+      if (this.options.validateOnBlur) {
+        element.addEventListener('blur', () => this.handleBlur(field));
+      }
+      
+      element.addEventListener('focus', () => this.handleFocus(field));
     });
     
-    // Form submit
-    this.form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      if (this.validate()) {
-        this.onSubmitSuccess();
+    if (this.options.validateOnSubmit) {
+      this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+    }
+  }
+  
+  handleInput(field) {
+    const { element, charCounter, requirementTests } = field;
+    const value = element.value;
+    
+    // Update character counter
+    if (charCounter && element.maxLength) {
+      const count = value.length;
+      charCounter.textContent = `${count}/${element.maxLength}`;
+      
+      if (count > element.maxLength * 0.9) {
+        charCounter.classList.add('warning');
       } else {
-        this.onSubmitError();
+        charCounter.classList.remove('warning');
       }
-    });
-  }
-  
-  validateField(field) {
-    const value = field.element.value.trim();
-    let error = null;
-    
-    for (const rule of field.rules) {
-      error = this.checkRule(rule, value, field);
-      if (error) break;
+      
+      if (count >= element.maxLength) {
+        charCounter.classList.add('error');
+      } else {
+        charCounter.classList.remove('error');
+      }
     }
     
-    if (error) {
-      this.showError(field, error);
-      field.isValid = false;
+    // Update requirements list
+    if (requirementTests && field.requirementsList) {
+      requirementTests.forEach((req, index) => {
+        const li = field.requirementsList.children[index];
+        if (li) {
+          li.classList.toggle('valid', req.test(value));
+        }
+      });
+    }
+    
+    // Real-time validation (but don't show errors until blur)
+    if (field.container.classList.contains('touched')) {
+      this.validateField(field, false);
+    }
+  }
+  
+  handleBlur(field) {
+    field.container.classList.add('touched');
+    this.validateField(field, true);
+  }
+  
+  handleFocus(field) {
+    field.container.classList.add('focused');
+  }
+  
+  validateField(field, showError = false) {
+    const { element, validations, container } = field;
+    const value = element.value;
+    
+    let isValid = true;
+    let errorMessage = '';
+    
+    for (const validation of validations) {
+      if (!validation.test(value)) {
+        isValid = false;
+        errorMessage = validation.message;
+        break;
+      }
+    }
+    
+    // Update UI
+    container.classList.remove('valid', 'invalid');
+    
+    if (value.length > 0 || showError) {
+      if (isValid && this.options.showSuccess) {
+        container.classList.add('valid');
+      } else if (!isValid && showError) {
+        container.classList.add('invalid');
+        const messageEl = container.querySelector('.form-validation-message');
+        if (messageEl) {
+          messageEl.textContent = errorMessage;
+        }
+      }
+    }
+    
+    return isValid;
+  }
+  
+  handleSubmit(e) {
+    e.preventDefault();
+    
+    if (this.isSubmitting) return;
+    
+    // Validate all fields
+    let isFormValid = true;
+    this.fields.forEach(field => {
+      field.container.classList.add('touched');
+      if (!this.validateField(field, true)) {
+        isFormValid = false;
+      }
+    });
+    
+    if (isFormValid) {
+      this.submitForm();
     } else {
-      this.showSuccess(field);
-      field.isValid = true;
-    }
-    
-    // Update field state class
-    const wrapper = field.element.closest('.form-field') || field.element.parentElement;
-    if (wrapper) {
-      wrapper.classList.remove('valid', 'invalid');
-      wrapper.classList.add(field.isValid ? 'valid' : 'invalid');
-    }
-    
-    return field.isValid;
-  }
-  
-  checkRule(rule, value, field) {
-    switch (rule.type) {
-      case 'required':
-        if (!value) return this.options.messages.required;
-        break;
-        
-      case 'email':
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (value && !emailRegex.test(value)) return this.options.messages.email;
-        break;
-        
-      case 'phone':
-        const phoneRegex = /^[\+]?[\d\s\-\(\)]{10,}$/;
-        if (value && !phoneRegex.test(value)) return this.options.messages.phone;
-        break;
-        
-      case 'minLength':
-        if (value.length < rule.value) {
-          return this.options.messages.minLength.replace('{min}', rule.value);
-        }
-        break;
-        
-      case 'maxLength':
-        if (value.length > rule.value) {
-          return this.options.messages.maxLength.replace('{max}', rule.value);
-        }
-        break;
-        
-      case 'pattern':
-        const pattern = new RegExp(rule.value);
-        if (value && !pattern.test(value)) return this.options.messages.pattern;
-        break;
-        
-      case 'match':
-        const targetField = this.fields.find(f => f.name === rule.target);
-        if (targetField && value !== targetField.element.value) {
-          return this.options.messages.match;
-        }
-        break;
-        
-      case 'custom':
-        if (this.options.customValidators[rule.validator]) {
-          const result = this.options.customValidators[rule.validator](value, field);
-          if (result !== true) return result;
-        }
-        break;
-    }
-    
-    return null;
-  }
-  
-  showError(field, message) {
-    field.errorElement.textContent = message;
-    field.errorElement.style.display = 'block';
-    
-    // Update input styling
-    field.element.classList.add('error');
-    field.element.classList.remove('success');
-    field.element.setAttribute('aria-invalid', 'true');
-    
-    // Shake animation
-    if (this.options.shakeOnError) {
-      const wrapper = field.element.closest('.form-field') || field.element.parentElement;
-      if (wrapper) {
-        wrapper.classList.add('shake-invalid');
-        setTimeout(() => wrapper.classList.remove('shake-invalid'), 500);
+      // Focus first invalid field
+      const firstInvalid = this.fields.find(f => f.container.classList.contains('invalid'));
+      if (firstInvalid) {
+        firstInvalid.element.focus();
       }
     }
   }
   
-  showSuccess(field) {
-    field.errorElement.style.display = 'none';
-    field.errorElement.textContent = '';
+  submitForm() {
+    this.isSubmitting = true;
     
-    if (this.options.showSuccessState) {
-      field.element.classList.add('success');
-    }
-    field.element.classList.remove('error');
-    field.element.setAttribute('aria-invalid', 'false');
-  }
-  
-  clearError(field) {
-    field.errorElement.style.display = 'none';
-    field.element.classList.remove('error');
-  }
-  
-  validate() {
-    let allValid = true;
-    let firstError = null;
-    
-    this.fields.forEach(field => {
-      field.touched = true;
-      if (!this.validateField(field)) {
-        allValid = false;
-        if (!firstError) firstError = field;
-      }
-    });
-    
-    this.isValid = allValid;
-    
-    if (!allValid && firstError && this.options.scrollToFirstError) {
-      firstError.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      firstError.element.focus();
+    const submitBtn = this.form.querySelector('.form-submit, button[type="submit"]');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.classList.add('loading');
     }
     
-    return allValid;
+    // Simulate API call
+    setTimeout(() => {
+      this.showSuccess();
+      this.form.reset();
+      this.fields.forEach(field => {
+        field.container.classList.remove('valid', 'invalid', 'touched');
+      });
+      
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('loading');
+      }
+      
+      this.isSubmitting = false;
+    }, 2000);
   }
   
-  onSubmitSuccess() {
-    // Dispatch custom event
-    this.form.dispatchEvent(new CustomEvent('formValid', {
-      detail: { form: this.form, fields: this.fields }
-    }));
-    
-    console.log('✅ Form validation passed');
-  }
-  
-  onSubmitError() {
-    // Dispatch custom event
-    this.form.dispatchEvent(new CustomEvent('formInvalid', {
-      detail: { form: this.form, invalidFields: this.fields.filter(f => !f.isValid) }
-    }));
-    
-    console.warn('❌ Form validation failed');
-  }
-  
-  addStyles() {
-    const styleId = 'smart-form-validation-styles';
-    if (document.getElementById(styleId)) return;
-    
-    const styles = document.createElement('style');
-    styles.id = styleId;
-    styles.textContent = `
-      .form-field {
-        position: relative;
-        transition: all 0.3s ease;
-      }
-      
-      .form-field input,
-      .form-field textarea,
-      .form-field select {
-        transition: all 0.3s ease;
-        border: 2px solid rgba(201, 206, 214, 0.2);
-      }
-      
-      .form-field input:focus,
-      .form-field textarea:focus,
-      .form-field select:focus {
-        border-color: rgba(201, 206, 214, 0.5);
-        outline: none;
-      }
-      
-      .form-field.invalid input,
-      .form-field.invalid textarea,
-      .form-field.invalid select {
-        border-color: #ef4444;
-        background-color: rgba(239, 68, 68, 0.05);
-      }
-      
-      .form-field.valid input,
-      .form-field.valid textarea,
-      .form-field.valid select {
-        border-color: #22c55e;
-      }
-      
-      .form-field.valid input:not(:focus),
-      .form-field.valid textarea:not(:focus),
-      .form-field.valid select:not(:focus) {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2322c55e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 12px center;
-        background-size: 20px;
-        padding-right: 40px;
-      }
-      
-      @keyframes form-field-shake {
-        0%, 100% { transform: translateX(0); }
-        20% { transform: translateX(-10px); }
-        40% { transform: translateX(10px); }
-        60% { transform: translateX(-5px); }
-        80% { transform: translateX(5px); }
-      }
-      
-      .form-field.shake-invalid {
-        animation: form-field-shake 0.5s ease-in-out;
-      }
-      
-      .form-error-message {
-        color: #ef4444;
-        font-size: 12px;
-        margin-top: 4px;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-      }
-      
-      .form-error-message::before {
-        content: '⚠';
-        font-size: 14px;
-      }
-      
-      .form-field-label {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        margin-bottom: 8px;
-        font-size: 14px;
-        font-weight: 500;
-        color: var(--chrome);
-      }
-      
-      .form-field-label .required {
-        color: #ef4444;
-      }
+  createSuccessMessage() {
+    const successDiv = document.createElement('div');
+    successDiv.className = 'form-success';
+    successDiv.innerHTML = `
+      <div class="form-success-icon">✓</div>
+      <h3>Thank You!</h3>
+      <p>Your message has been sent successfully. We'll get back to you soon.</p>
     `;
-    document.head.appendChild(styles);
+    
+    this.form.parentNode.insertBefore(successDiv, this.form.nextSibling);
+    this.successMessage = successDiv;
   }
   
-  // Public API
-  reset() {
-    this.fields.forEach(field => {
-      field.element.value = '';
-      field.element.classList.remove('error', 'success');
-      field.errorElement.style.display = 'none';
-      field.touched = false;
-      field.isValid = true;
-    });
-  }
-  
-  destroy() {
-    // Clean up event listeners
-    this.fields.forEach(field => {
-      field.element.removeEventListener('blur', this.validateField);
-      field.element.removeEventListener('input', this.validateField);
-      field.element.removeEventListener('focus', this.clearError);
-    });
+  showSuccess() {
+    this.form.style.display = 'none';
+    this.successMessage.classList.add('visible');
+    
+    setTimeout(() => {
+      this.successMessage.classList.remove('visible');
+      this.form.style.display = 'block';
+    }, 5000);
   }
 }
 
-// Auto-initialize forms with data attribute
+// Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
-  const forms = document.querySelectorAll('form[data-validate]');
-  forms.forEach(form => {
+  // Auto-initialize forms with data-validate attribute
+  document.querySelectorAll('form[data-validate]').forEach(form => {
     new SmartFormValidation(form);
   });
-  
-  if (forms.length > 0) {
-    console.log('📝 SmartFormValidation initialized for ' + forms.length + ' form(s)');
-  }
 });
 
 // Export for module usage

@@ -1,257 +1,242 @@
 /**
- * Scroll Progress Timeline - v22.1 Professional Enhancement
- * Visual timeline showing scroll progress through page sections
+ * v65.1: Scroll Progress Timeline
+ * Visual scroll journey with section milestones
+ * Fortune 500 Quality - Elegant & Informative
  */
 
 class ScrollProgressTimeline {
   constructor(options = {}) {
-    this.sections = options.sections || '[data-section]';
-    this.container = options.container || document.body;
-    this.position = options.position || 'right';
-    this.showLabels = options.showLabels !== false;
-    this.showProgress = options.showProgress !== false;
+    this.options = {
+      position: options.position || 'left',
+      offset: options.offset || 30,
+      smoothing: options.smoothing || 0.1,
+      ...options
+    };
     
+    this.timeline = null;
+    this.sections = [];
+    this.items = [];
     this.currentSection = 0;
-    this.sectionsList = [];
+    this.progressBar = null;
+    this.isScrolling = false;
+    this.scrollTimeout = null;
     
     this.init();
   }
   
   init() {
-    this.detectSections();
+    this.findSections();
+    if (this.sections.length === 0) return;
+    
     this.createTimeline();
     this.bindEvents();
     this.updateActiveSection();
   }
   
-  detectSections() {
-    const elements = document.querySelectorAll(this.sections);
-    this.sectionsList = Array.from(elements).map((el, index) => ({
-      id: el.id || `section-${index}`,
-      label: el.dataset.navLabel || el.dataset.section || `Section ${index + 1}`,
-      element: el,
-      index
-    }));
+  findSections() {
+    // Find all major sections with data attributes
+    const sectionElements = document.querySelectorAll('section[id], .section[data-section]');
+    
+    this.sections = Array.from(sectionElements)
+      .filter(section => {
+        const id = section.id || section.dataset.section;
+        return id && id !== '';
+      })
+      .map((section, index) => ({
+        element: section,
+        id: section.id || section.dataset.section,
+        label: section.dataset.navLabel || section.dataset.section || this.formatLabel(section.id),
+        number: index + 1
+      }));
+  }
+  
+  formatLabel(id) {
+    return id
+      .replace(/-/g, ' ')
+      .replace(/_/g, ' ')
+      .replace(/\b\w/g, l => l.toUpperCase());
   }
   
   createTimeline() {
     this.timeline = document.createElement('nav');
-    this.timeline.className = `scroll-timeline scroll-timeline--${this.position}`;
+    this.timeline.className = `scroll-timeline scroll-timeline--${this.options.position}`;
     this.timeline.setAttribute('aria-label', 'Page sections');
     
-    // Create progress container
-    if (this.showProgress) {
-      this.progressBar = document.createElement('div');
-      this.progressBar.className = 'scroll-timeline__progress';
-      this.timeline.appendChild(this.progressBar);
-    }
+    // Progress line with gradient
+    this.progressBar = document.createElement('div');
+    this.progressBar.className = 'scroll-timeline-progress';
+    this.timeline.appendChild(this.progressBar);
     
-    // Create dots container
-    this.dotsContainer = document.createElement('div');
-    this.dotsContainer.className = 'scroll-timeline__dots';
-    
-    this.sectionsList.forEach((section, index) => {
-      const dot = document.createElement('button');
-      dot.className = 'scroll-timeline__dot';
-      dot.setAttribute('aria-label', `Go to ${section.label}`);
-      dot.dataset.index = index;
-      dot.dataset.section = section.id;
+    // Create timeline items
+    this.sections.forEach((section, index) => {
+      const item = document.createElement('div');
+      item.className = 'scroll-timeline-item';
+      item.dataset.index = index;
+      item.setAttribute('role', 'button');
+      item.setAttribute('tabindex', '0');
+      item.setAttribute('aria-label', `Go to ${section.label}`);
       
-      // Add label if enabled
-      if (this.showLabels) {
-        const label = document.createElement('span');
-        label.className = 'scroll-timeline__label';
-        label.textContent = section.label;
-        dot.appendChild(label);
-      }
+      // Number indicator
+      const number = document.createElement('span');
+      number.className = 'scroll-timeline-number';
+      number.textContent = String(section.number).padStart(2, '0');
       
-      // Add tooltip
-      const tooltip = document.createElement('span');
-      tooltip.className = 'scroll-timeline__tooltip';
-      tooltip.textContent = section.label;
-      dot.appendChild(tooltip);
+      // Dot
+      const dot = document.createElement('div');
+      dot.className = 'scroll-timeline-dot';
       
-      dot.addEventListener('click', () => this.scrollToSection(index));
-      this.dotsContainer.appendChild(dot);
+      // Label
+      const label = document.createElement('span');
+      label.className = 'scroll-timeline-label';
+      label.textContent = section.label;
+      
+      item.appendChild(number);
+      item.appendChild(dot);
+      item.appendChild(label);
+      
+      // Click handler
+      item.addEventListener('click', () => this.scrollToSection(index));
+      item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.scrollToSection(index);
+        }
+      });
+      
+      this.timeline.appendChild(item);
+      this.items.push(item);
     });
     
-    this.timeline.appendChild(this.dotsContainer);
-    this.container.appendChild(this.timeline);
+    document.body.appendChild(this.timeline);
     
-    // Create mobile timeline
-    this.createMobileTimeline();
+    // Add base styles
+    this.addStyles();
   }
   
-  createMobileTimeline() {
-    this.mobileTimeline = document.createElement('div');
-    this.mobileTimeline.className = 'scroll-timeline-mobile';
-    
-    const progress = document.createElement('div');
-    progress.className = 'scroll-timeline-mobile__progress';
-    
-    const bar = document.createElement('div');
-    bar.className = 'scroll-timeline-mobile__bar';
-    progress.appendChild(bar);
-    
-    this.mobileTimeline.appendChild(progress);
-    
-    // Section name display
-    this.mobileLabel = document.createElement('span');
-    this.mobileLabel.className = 'scroll-timeline-mobile__label';
-    this.mobileTimeline.appendChild(this.mobileLabel);
-    
-    document.body.appendChild(this.mobileTimeline);
+  addStyles() {
+    const style = document.createElement('style');
+    style.textContent = `
+      .scroll-timeline-progress {
+        position: absolute;
+        left: ${this.options.position === 'right' ? 'auto' : '15px'};
+        right: ${this.options.position === 'right' ? '15px' : 'auto'};
+        top: 30px;
+        bottom: 30px;
+        width: 2px;
+        background: rgba(201, 206, 214, 0.1);
+        overflow: hidden;
+      }
+      
+      .scroll-timeline-progress::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: var(--progress, 0%);
+        background: linear-gradient(
+          to bottom,
+          #C9CED6,
+          rgba(201, 206, 214, 0.5)
+        );
+        transition: height 0.1s linear;
+      }
+    `;
+    document.head.appendChild(style);
   }
   
   bindEvents() {
-    // Scroll listener
-    let ticking = false;
+    // Update on scroll
     window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          this.updateActiveSection();
-          ticking = false;
-        });
-        ticking = true;
-      }
+      this.isScrolling = true;
+      this.updateActiveSection();
+      
+      clearTimeout(this.scrollTimeout);
+      this.scrollTimeout = setTimeout(() => {
+        this.isScrolling = false;
+      }, 150);
     }, { passive: true });
     
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowDown' && e.altKey) {
-        e.preventDefault();
-        this.navigateSection(1);
-      } else if (e.key === 'ArrowUp' && e.altKey) {
-        e.preventDefault();
-        this.navigateSection(-1);
-      }
+    // Update on resize
+    window.addEventListener('resize', () => {
+      this.debounce(() => this.updateActiveSection(), 100)();
     });
-    
-    // Show/hide on scroll direction
-    let lastScrollY = window.scrollY;
-    let scrollTimeout;
-    
-    window.addEventListener('scroll', () => {
-      const currentScrollY = window.scrollY;
-      const direction = currentScrollY > lastScrollY ? 'down' : 'up';
-      
-      if (currentScrollY > 100) {
-        this.timeline.classList.add('scroll-timeline--visible');
-      } else {
-        this.timeline.classList.remove('scroll-timeline--visible');
-      }
-      
-      lastScrollY = currentScrollY;
-      
-      // Hide after inactivity
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        this.timeline.classList.remove('scroll-timeline--active');
-      }, 2000);
-      
-      this.timeline.classList.add('scroll-timeline--active');
-    }, { passive: true });
   }
   
   updateActiveSection() {
-    const scrollPosition = window.scrollY + window.innerHeight / 3;
-    
-    let activeIndex = 0;
-    this.sectionsList.forEach((section, index) => {
-      const rect = section.element.getBoundingClientRect();
-      const sectionTop = rect.top + window.scrollY;
-      
-      if (scrollPosition >= sectionTop) {
-        activeIndex = index;
-      }
-    });
-    
-    if (activeIndex !== this.currentSection) {
-      this.currentSection = activeIndex;
-      this.highlightDot(activeIndex);
-    }
-    
-    // Update progress
-    this.updateProgress();
-  }
-  
-  highlightDot(index) {
-    const dots = this.dotsContainer.querySelectorAll('.scroll-timeline__dot');
-    dots.forEach((dot, i) => {
-      dot.classList.toggle('active', i === index);
-      dot.classList.toggle('visited', i < index);
-    });
-    
-    // Update mobile label
-    if (this.mobileLabel) {
-      this.mobileLabel.textContent = this.sectionsList[index]?.label || '';
-      this.mobileLabel.classList.add('visible');
-      
-      clearTimeout(this.labelTimeout);
-      this.labelTimeout = setTimeout(() => {
-        this.mobileLabel.classList.remove('visible');
-      }, 2000);
-    }
-  }
-  
-  updateProgress() {
-    if (!this.progressBar && !this.mobileTimeline) return;
-    
-    const scrollTop = window.scrollY;
+    const scrollPos = window.scrollY + window.innerHeight / 2;
     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = (scrollTop / docHeight) * 100;
+    const scrollProgress = (window.scrollY / docHeight) * 100;
     
+    // Update progress bar
     if (this.progressBar) {
-      this.progressBar.style.height = `${progress}%`;
+      this.timeline.style.setProperty('--progress', `${scrollProgress}%`);
     }
     
-    if (this.mobileTimeline) {
-      const bar = this.mobileTimeline.querySelector('.scroll-timeline-mobile__bar');
-      if (bar) {
-        bar.style.width = `${progress}%`;
+    // Find current section
+    let newCurrent = 0;
+    this.sections.forEach((section, index) => {
+      const rect = section.element.getBoundingClientRect();
+      const top = rect.top + window.scrollY;
+      const bottom = top + rect.height;
+      
+      if (scrollPos >= top && scrollPos < bottom) {
+        newCurrent = index;
       }
+    });
+    
+    if (newCurrent !== this.currentSection) {
+      this.items[this.currentSection]?.classList.remove('active');
+      this.currentSection = newCurrent;
+      this.items[this.currentSection]?.classList.add('active');
     }
   }
   
   scrollToSection(index) {
-    const section = this.sectionsList[index];
-    if (section) {
-      const offset = section.element.offsetTop - 100;
+    const section = this.sections[index];
+    if (section?.element) {
+      const offset = 80; // Account for fixed header
+      const top = section.element.getBoundingClientRect().top + window.scrollY - offset;
+      
       window.scrollTo({
-        top: offset,
+        top: top,
         behavior: 'smooth'
       });
     }
   }
   
-  navigateSection(direction) {
-    const newIndex = Math.max(0, Math.min(
-      this.sectionsList.length - 1,
-      this.currentSection + direction
-    ));
-    this.scrollToSection(newIndex);
+  debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
   }
   
   destroy() {
-    this.timeline?.remove();
-    this.mobileTimeline?.remove();
+    if (this.timeline) {
+      this.timeline.remove();
+    }
+    clearTimeout(this.scrollTimeout);
   }
 }
 
-// Initialize
+// Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  
-  if (!prefersReducedMotion) {
+  // Only initialize on larger screens
+  if (window.innerWidth > 1024) {
     window.scrollTimeline = new ScrollProgressTimeline({
-      position: 'right',
-      showLabels: true,
-      showProgress: true
+      position: 'left',
+      offset: 30
     });
   }
 });
 
-// Export
+// Export for module usage
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = ScrollProgressTimeline;
 }
