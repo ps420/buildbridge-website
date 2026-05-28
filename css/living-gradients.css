@@ -1,0 +1,324 @@
+/* ========================================
+   v55.0: LIVING GRADIENT BACKGROUNDS
+   Fortune 500 - Organic Animated Gradients
+======================================== */
+
+.living-gradient-container {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.living-gradient-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  animation: living-gradient-float 20s ease-in-out infinite;
+}
+
+.living-gradient-blob--1 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(201, 206, 214, 0.3) 0%, transparent 70%);
+  top: -10%;
+  left: -10%;
+  animation-delay: 0s;
+}
+
+.living-gradient-blob--2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(42, 45, 52, 0.5) 0%, transparent 70%);
+  bottom: -5%;
+  right: -5%;
+  animation-delay: -5s;
+}
+
+.living-gradient-blob--3 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(82, 88, 98, 0.3) 0%, transparent 70%);
+  top: 40%;
+  left: 30%;
+  animation-delay: -10s;
+  animation-duration: 25s;
+}
+
+.living-gradient-blob--4 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(201, 206, 214, 0.2) 0%, transparent 70%);
+  bottom: 30%;
+  left: 10%;
+  animation-delay: -15s;
+  animation-duration: 22s;
+}
+
+@keyframes living-gradient-float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(50px, -30px) scale(1.1);
+  }
+  50% {
+    transform: translate(-20px, 40px) scale(0.95);
+  }
+  75% {
+    transform: translate(-40px, -20px) scale(1.05);
+  }
+}
+
+/* Mesh Gradient Variant */
+.living-mesh-gradient {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background: 
+    radial-gradient(at 40% 20%, rgba(201, 206, 214, 0.15) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, rgba(42, 45, 52, 0.3) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, rgba(82, 88, 98, 0.15) 0px, transparent 50%),
+    radial-gradient(at 80% 50%, rgba(201, 206, 214, 0.1) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(42, 45, 52, 0.2) 0px, transparent 50%),
+    radial-gradient(at 80% 100%, rgba(82, 88, 98, 0.15) 0px, transparent 50%);
+  animation: mesh-shift 15s ease-in-out infinite;
+}
+
+@keyframes mesh-shift {
+  0%, 100% {
+    background-position: 
+      40% 20%,
+      80% 0%,
+      0% 50%,
+      80% 50%,
+      0% 100%,
+      80% 100%;
+  }
+  50% {
+    background-position: 
+      60% 30%,
+      70% 10%,
+      10% 60%,
+      70% 40%,
+      10% 90%,
+      70% 90%;
+  }
+}
+
+/* Animated Gradient Border Cards */
+.gradient-border-animated {
+  position: relative;
+  background: var(--black);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.gradient-border-animated::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    rgba(201, 206, 214, 0.8) 10%,
+    transparent 20%,
+    transparent 40%,
+    rgba(201, 206, 214, 0.6) 50%,
+    transparent 60%,
+    transparent 80%,
+    rgba(201, 206, 214, 0.8) 90%,
+    transparent 100%
+  );
+  border-radius: 14px;
+  animation: gradient-border-rotate 4s linear infinite;
+  z-index: -1;
+}
+
+.gradient-border-animated::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: var(--black);
+  border-radius: 10px;
+  z-index: -1;
+}
+
+@keyframes gradient-border-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Gradient Text Shimmer */
+.gradient-text-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--chrome) 0%,
+    var(--white) 25%,
+    var(--chrome) 50%,
+    var(--white) 75%,
+    var(--chrome) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shimmer 3s linear infinite;
+}
+
+@keyframes gradient-shimmer {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* Aurora Gradient Effect */
+.aurora-gradient {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.aurora-gradient::before,
+.aurora-gradient::after {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  opacity: 0.3;
+}
+
+.aurora-gradient::before {
+  background: radial-gradient(ellipse at 30% 20%, rgba(201, 206, 214, 0.3) 0%, transparent 50%);
+  animation: aurora-1 15s ease-in-out infinite;
+}
+
+.aurora-gradient::after {
+  background: radial-gradient(ellipse at 70% 80%, rgba(42, 45, 52, 0.4) 0%, transparent 50%);
+  animation: aurora-2 18s ease-in-out infinite;
+}
+
+@keyframes aurora-1 {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  33% {
+    transform: translate(5%, 5%) rotate(5deg);
+  }
+  66% {
+    transform: translate(-5%, 3%) rotate(-3deg);
+  }
+}
+
+@keyframes aurora-2 {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  33% {
+    transform: translate(-3%, -5%) rotate(-5deg);
+  }
+  66% {
+    transform: translate(5%, -3%) rotate(3deg);
+  }
+}
+
+/* Pulse Gradient Button */
+.btn-gradient-pulse {
+  position: relative;
+  background: linear-gradient(135deg, var(--white) 0%, var(--chrome) 100%);
+  border: none;
+  color: var(--black);
+  overflow: visible;
+}
+
+.btn-gradient-pulse::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, var(--white), var(--chrome), var(--white));
+  border-radius: inherit;
+  z-index: -1;
+  animation: gradient-pulse 2s ease-in-out infinite;
+}
+
+@keyframes gradient-pulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+/* Section Gradient Transition */
+.section-gradient-top {
+  position: relative;
+}
+
+.section-gradient-top::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(180deg, rgba(201, 206, 214, 0.05) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.section-gradient-bottom {
+  position: relative;
+}
+
+.section-gradient-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(0deg, rgba(201, 206, 214, 0.05) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Hover Gradient Reveal */
+.hover-gradient-reveal {
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-gradient-reveal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.1) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.hover-gradient-reveal:hover::before {
+  opacity: 1;
+}
+
+/* Noise Texture Overlay with Gradient */
+.noise-gradient-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}

@@ -1,0 +1,475 @@
+/* ========================================
+   v55.0: MICRO-INTERACTIONS PRO v2
+   Fortune 500 - Advanced Hover States & Effects
+======================================== */
+
+/* Magnetic Button Effect */
+.magnetic-btn-v2 {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.magnetic-btn-v2 .btn-inner {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Liquid Fill Button */
+.btn-liquid-fill {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn-liquid-fill::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background: var(--chrome);
+  transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
+}
+
+.btn-liquid-fill:hover::before {
+  height: 100%;
+}
+
+.btn-liquid-fill:hover {
+  color: var(--black);
+}
+
+/* Ripple Effect */
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-effect span {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.3);
+  transform: scale(0);
+  animation: ripple 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Bounce on Hover */
+.bounce-hover {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.bounce-hover:hover {
+  transform: translateY(-5px);
+}
+
+.bounce-hover:active {
+  transform: translateY(-2px) scale(0.98);
+}
+
+/* Elastic Scale */
+.elastic-scale {
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.elastic-scale:hover {
+  transform: scale(1.05);
+}
+
+.elastic-scale:active {
+  transform: scale(0.95);
+}
+
+/* Glow Pulse on Hover */
+.glow-pulse-hover {
+  position: relative;
+}
+
+.glow-pulse-hover::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  background: var(--chrome);
+  opacity: 0;
+  filter: blur(15px);
+  z-index: -1;
+  transition: opacity 0.3s ease;
+}
+
+.glow-pulse-hover:hover::after {
+  opacity: 0.3;
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.05);
+  }
+}
+
+/* Underline Slide Effect */
+.underline-slide {
+  position: relative;
+  display: inline-block;
+}
+
+.underline-slide::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--chrome);
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.underline-slide:hover::after {
+  width: 100%;
+}
+
+/* Arrow Slide Effect */
+.arrow-slide {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.arrow-slide .arrow {
+  transition: transform 0.3s ease;
+}
+
+.arrow-slide:hover .arrow {
+  transform: translateX(5px);
+}
+
+/* Card Lift with Shadow */
+.card-lift-shadow {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s ease;
+}
+
+.card-lift-shadow:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+}
+
+/* Icon Spin on Hover */
+.icon-spin-hover .icon {
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.icon-spin-hover:hover .icon {
+  transform: rotate(360deg);
+}
+
+/* Image Zoom with Overlay */
+.img-zoom-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.img-zoom-overlay img {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.img-zoom-overlay:hover img {
+  transform: scale(1.1);
+}
+
+.img-zoom-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 15, 16, 0);
+  transition: background 0.4s ease;
+}
+
+.img-zoom-overlay:hover::after {
+  background: rgba(15, 15, 16, 0.3);
+}
+
+/* Border Draw Effect */
+.border-draw {
+  position: relative;
+}
+
+.border-draw::before,
+.border-draw::after {
+  content: '';
+  position: absolute;
+  background: var(--chrome);
+  transition: all 0.4s ease;
+}
+
+.border-draw::before {
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+}
+
+.border-draw::after {
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 2px;
+}
+
+.border-draw:hover::before {
+  width: 100%;
+}
+
+.border-draw:hover::after {
+  width: 100%;
+}
+
+/* 3D Tilt Card */
+.tilt-3d-card {
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+}
+
+.tilt-3d-card .card-content {
+  transform: translateZ(30px);
+}
+
+/* Staggered Link Hover */
+.stagger-links a {
+  display: inline-block;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.stagger-links:hover a:not(:hover) {
+  opacity: 0.5;
+}
+
+.stagger-links a:hover {
+  transform: translateX(5px);
+}
+
+/* Focus Ring Animation */
+.focus-ring-animated:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(201, 206, 214, 0.5);
+  animation: focus-ring-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes focus-ring-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 3px rgba(201, 206, 214, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(201, 206, 214, 0.3);
+  }
+}
+
+/* Loading Dots */
+.loading-dots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.loading-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--chrome);
+  animation: loading-dot 1.4s ease-in-out infinite both;
+}
+
+.loading-dots span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes loading-dot {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+/* Success Checkmark Animation */
+.checkmark-animate {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 2;
+  stroke: #22c55e;
+  stroke-miterlimit: 10;
+  animation: checkmark-scale 0.3s ease-in-out forwards;
+}
+
+.checkmark-animate .checkmark-circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke: #22c55e;
+  fill: none;
+  animation: checkmark-stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark-animate .checkmark-check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: checkmark-stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.3s forwards;
+}
+
+@keyframes checkmark-stroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes checkmark-scale {
+  0%, 100% {
+    transform: none;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Shake on Invalid */
+.shake-invalid {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+/* Pulse Dot */
+.pulse-dot {
+  position: relative;
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: #22c55e;
+  border-radius: 50%;
+}
+
+.pulse-dot::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 2px solid #22c55e;
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Scroll Indicator Animation */
+.scroll-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.scroll-indicator .mouse {
+  width: 24px;
+  height: 40px;
+  border: 2px solid var(--chrome);
+  border-radius: 12px;
+  position: relative;
+}
+
+.scroll-indicator .mouse::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 8px;
+  background: var(--chrome);
+  border-radius: 2px;
+  animation: scroll-wheel 2s ease-in-out infinite;
+}
+
+@keyframes scroll-wheel {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(-50%) translateY(8px);
+    opacity: 0.3;
+  }
+}
+
+/* Gradient Button Hover */
+.btn-gradient-hover {
+  position: relative;
+  background: linear-gradient(135deg, var(--white), var(--chrome));
+  background-size: 200% 200%;
+  transition: background-position 0.5s ease;
+}
+
+.btn-gradient-hover:hover {
+  background-position: right center;
+}
+
+/* Card Corner Fold */
+.card-corner-fold {
+  position: relative;
+}
+
+.card-corner-fold::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 50px 50px 0;
+  border-color: transparent rgba(201, 206, 214, 0.1) transparent transparent;
+  transition: all 0.3s ease;
+}
+
+.card-corner-fold:hover::before {
+  border-width: 0 70px 70px 0;
+  border-color: transparent rgba(201, 206, 214, 0.2) transparent transparent;
+}
