@@ -1,192 +1,170 @@
 /**
- * BuildBridge Dark Mode System v13.0
- * Fortune 500-grade theme switching with persistent state
+ * DARK MODE SYSTEM - v41 Fortune 500
+ * Professional theme toggle with persistence and system preference
  */
 
 class DarkModeSystem {
-  constructor(options = {}) {
-    this.options = {
-      storageKey: 'buildbridge-theme',
-      defaultTheme: 'dark',
-      togglePosition: 'fixed',
-      respectSystemPreference: true,
-      transitionDuration: 300,
-      ...options
-    };
-
-    this.currentTheme = this.getInitialTheme();
-    this.toggle = null;
-    this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    
+  constructor() {
+    this.currentTheme = 'dark';
     this.init();
   }
-
+  
   init() {
-    this.applyTheme(this.currentTheme, false);
-    this.createToggle();
+    this.loadTheme();
+    this.createUI();
+    this.applyTheme();
     this.bindEvents();
-    this.notifyThemeChange();
-    
-    console.log(`🌓 Dark Mode System activated - Current theme: ${this.currentTheme}`);
   }
-
-  getInitialTheme() {
-    // Check localStorage first
-    const saved = localStorage.getItem(this.options.storageKey);
-    if (saved) return saved;
-
-    // Check system preference
-    if (this.options.respectSystemPreference) {
-      return this.mediaQuery.matches ? 'dark' : 'light';
-    }
-
-    return this.options.defaultTheme;
-  }
-
-  applyTheme(theme, animate = true) {
-    this.currentTheme = theme;
-
-    if (animate) {
-      // Add transition class
-      document.documentElement.classList.add('theme-transition');
-      
-      // Remove after transition
-      setTimeout(() => {
-        document.documentElement.classList.remove('theme-transition');
-      }, this.options.transitionDuration);
-    }
-
-    // Apply theme
-    document.documentElement.setAttribute('data-theme', theme);
-
-    // Update meta theme-color
-    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-    if (metaThemeColor) {
-      metaThemeColor.setAttribute('content', theme === 'dark' ? '#0f0f10' : '#fafafa');
-    }
-
-    // Update toggle state
-    this.updateToggleState();
-
-    // Store preference
-    localStorage.setItem(this.options.storageKey, theme);
-
-    // Dispatch event
-    window.dispatchEvent(new CustomEvent('themeChange', { 
-      detail: { theme, previousTheme: this.currentTheme === 'dark' ? 'light' : 'dark' }
-    }));
-  }
-
-  toggleTheme() {
-    const newTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
-    this.applyTheme(newTheme, true);
-    
-    // Show toast notification
-    if (window.Toast) {
-      Toast.success(`Switched to ${newTheme} mode`, {
-        duration: 2000
-      });
-    }
-  }
-
-  createToggle() {
-    // Create icon-only toggle
-    this.toggle = document.createElement('button');
-    this.toggle.className = 'theme-toggle-icon';
-    this.toggle.setAttribute('aria-label', 'Toggle dark mode');
-    this.toggle.setAttribute('aria-pressed', this.currentTheme === 'dark');
-    this.toggle.innerHTML = `
-      <svg class="moon-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
-      </svg>
-      <svg class="sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
-      </svg>
+  
+  createUI() {
+    // Create toggle button
+    const toggle = document.createElement('button');
+    toggle.className = 'theme-toggle';
+    toggle.setAttribute('aria-label', 'Toggle dark mode');
+    toggle.innerHTML = `
+      <div class="theme-toggle-icons">
+        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/>
+          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </div>
     `;
-
-    document.body.appendChild(this.toggle);
-    this.updateToggleState();
-  }
-
-  updateToggleState() {
-    if (!this.toggle) return;
+    document.body.appendChild(toggle);
+    this.toggle = toggle;
     
-    const isDark = this.currentTheme === 'dark';
-    this.toggle.setAttribute('aria-pressed', isDark);
-    this.toggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+    // Create theme menu
+    const menu = document.createElement('div');
+    menu.className = 'theme-menu';
+    menu.innerHTML = `
+      <div class="theme-menu-header">Appearance</div>
+      <div class="theme-option ${this.currentTheme === 'light' ? '' : 'active'}" data-theme="dark">
+        <div class="theme-option-icon">🌙</div>
+        <div>
+          <div class="theme-option-text">Dark</div>
+          <div class="theme-option-desc">Easier on the eyes</div>
+        </div>
+      </div>
+      <div class="theme-option ${this.currentTheme === 'light' ? 'active' : ''}" data-theme="light">
+        <div class="theme-option-icon">☀️</div>
+        <div>
+          <div class="theme-option-text">Light</div>
+          <div class="theme-option-desc">Classic look</div>
+        </div>
+      </div>
+      <div class="theme-option" data-theme="system">
+        <div class="theme-option-icon">💻</div>
+        <div>
+          <div class="theme-option-text">System</div>
+          <div class="theme-option-desc">Follow OS setting</div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(menu);
+    this.menu = menu;
   }
-
+  
   bindEvents() {
     // Toggle click
-    this.toggle.addEventListener('click', () => this.toggleTheme());
-
-    // Keyboard shortcut (Ctrl/Cmd + Shift + L)
-    document.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'L') {
-        e.preventDefault();
-        this.toggleTheme();
+    this.toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.menu.classList.toggle('active');
+    });
+    
+    // Menu option click
+    this.menu.addEventListener('click', (e) => {
+      const option = e.target.closest('.theme-option');
+      if (option) {
+        this.setTheme(option.dataset.theme);
+        this.menu.classList.remove('active');
       }
     });
-
+    
+    // Close menu on outside click
+    document.addEventListener('click', () => {
+      this.menu.classList.remove('active');
+    });
+    
     // Listen for system preference changes
-    if (this.options.respectSystemPreference) {
-      this.mediaQuery.addEventListener('change', (e) => {
-        // Only apply if user hasn't set a preference
-        if (!localStorage.getItem(this.options.storageKey)) {
-          this.applyTheme(e.matches ? 'dark' : 'light', true);
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (this.currentTheme === 'system') {
+          this.applyTheme();
         }
       });
     }
-
-    // Listen for theme change from other tabs
-    window.addEventListener('storage', (e) => {
-      if (e.key === this.options.storageKey) {
-        this.applyTheme(e.newValue || this.options.defaultTheme, true);
-      }
-    });
   }
-
-  notifyThemeChange() {
-    // Notify any waiting components
-    window.dispatchEvent(new CustomEvent('themeReady', { 
-      detail: { theme: this.currentTheme }
+  
+  setTheme(theme) {
+    this.currentTheme = theme;
+    this.saveTheme();
+    this.applyTheme();
+    this.updateMenuUI();
+  }
+  
+  applyTheme() {
+    const isDark = this.getEffectiveTheme() === 'dark';
+    
+    document.body.classList.toggle('light-mode', !isDark);
+    document.body.classList.toggle('dark-mode', isDark);
+    
+    // Update meta theme-color
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    if (themeColor) {
+      themeColor.content = isDark ? '#0f0f10' : '#F5F7FA';
+    }
+    
+    // Dispatch event for other components
+    window.dispatchEvent(new CustomEvent('themechange', {
+      detail: { theme: isDark ? 'dark' : 'light' }
     }));
   }
-
-  // Public API
-  getTheme() {
+  
+  getEffectiveTheme() {
+    if (this.currentTheme === 'system') {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
     return this.currentTheme;
   }
-
-  setTheme(theme) {
-    if (theme === 'dark' || theme === 'light') {
-      this.applyTheme(theme, true);
+  
+  updateMenuUI() {
+    const options = this.menu.querySelectorAll('.theme-option');
+    options.forEach(option => {
+      option.classList.toggle('active', 
+        (option.dataset.theme === this.currentTheme) || 
+        (this.currentTheme === 'system' && option.dataset.theme === 'system')
+      );
+    });
+  }
+  
+  saveTheme() {
+    try {
+      localStorage.setItem('buildbridge_theme', this.currentTheme);
+    } catch (e) {
+      // Ignore storage errors
     }
   }
-
-  isDark() {
-    return this.currentTheme === 'dark';
-  }
-
-  onChange(callback) {
-    window.addEventListener('themeChange', (e) => callback(e.detail));
-  }
-
-  // Force a theme without saving to storage
-  previewTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-  }
-
-  // Revert preview
-  revertPreview() {
-    document.documentElement.setAttribute('data-theme', this.currentTheme);
+  
+  loadTheme() {
+    try {
+      const saved = localStorage.getItem('buildbridge_theme');
+      if (saved && ['dark', 'light', 'system'].includes(saved)) {
+        this.currentTheme = saved;
+      } else {
+        // Default to system preference
+        this.currentTheme = 'dark';
+      }
+    } catch (e) {
+      this.currentTheme = 'dark';
+    }
   }
 }
 
-// Auto-initialize
-document.addEventListener('DOMContentLoaded', () => {
-  window.darkMode = new DarkModeSystem();
-});
-
-// Expose to global
-window.DarkModeSystem = DarkModeSystem;
+// Initialize
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => new DarkModeSystem());
+} else {
+  new DarkModeSystem();
+}
