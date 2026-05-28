@@ -1,0 +1,214 @@
+/* ========================================
+   V49.0: WebGL Atmospheric Fog Effect
+   Fortune 500 Immersive Background
+======================================== */
+
+.webgl-atmospheric-fog {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+.webgl-atmospheric-fog--loaded {
+  opacity: 1;
+}
+
+.webgl-atmospheric-fog canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.webgl-atmospheric-fog--hero {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Fog Overlay for Gradient Control */
+.fog-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 100%,
+    transparent 0%,
+    rgba(15, 15, 16, 0.3) 50%,
+    rgba(15, 15, 16, 0.8) 100%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Fog in Hero Section Only */
+.hero-fog-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.hero-fog-container .webgl-atmospheric-fog {
+  position: absolute;
+  opacity: 0.6;
+}
+
+/* Interactive Fog - Responds to Mouse */
+.webgl-atmospheric-fog--interactive {
+  --mouse-x: 0.5;
+  --mouse-y: 0.5;
+}
+
+/* Fog Density Controls */
+.fog-density-low {
+  --fog-density: 0.3;
+}
+
+.fog-density-medium {
+  --fog-density: 0.5;
+}
+
+.fog-density-high {
+  --fog-density: 0.8;
+}
+
+/* Fog Color Variants */
+.fog-color-warm {
+  --fog-color-1: rgba(201, 176, 147, 0.1);
+  --fog-color-2: rgba(180, 160, 140, 0.05);
+}
+
+.fog-color-cool {
+  --fog-color-1: rgba(147, 166, 201, 0.1);
+  --fog-color-2: rgba(140, 160, 180, 0.05);
+}
+
+.fog-color-neutral {
+  --fog-color-1: rgba(201, 206, 214, 0.08);
+  --fog-color-2: rgba(180, 185, 195, 0.04);
+}
+
+/* Fog Animation States */
+@keyframes fog-drift {
+  0%, 100% {
+    transform: translateX(0) translateY(0);
+  }
+  25% {
+    transform: translateX(2%) translateY(-1%);
+  }
+  50% {
+    transform: translateX(-1%) translateY(2%);
+  }
+  75% {
+    transform: translateX(-2%) translateY(-1%);
+  }
+}
+
+.webgl-atmospheric-fog--drifting {
+  animation: fog-drift 20s ease-in-out infinite;
+}
+
+/* Fog Visibility States */
+.webgl-atmospheric-fog--visible {
+  opacity: var(--fog-opacity, 0.6);
+}
+
+.webgl-atmospheric-fog--hidden {
+  opacity: 0;
+}
+
+/* Section-Specific Fog */
+.fog-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.fog-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(201, 206, 214, 0.02) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Fog Particle Overlay */
+.fog-particles-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(201, 206, 214, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(201, 206, 214, 0.02) 0%, transparent 40%),
+    radial-gradient(circle at 40% 40%, rgba(201, 206, 214, 0.02) 0%, transparent 30%);
+  pointer-events: none;
+  animation: fog-particles-move 15s ease-in-out infinite;
+}
+
+@keyframes fog-particles-move {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(1%, -1%);
+  }
+  66% {
+    transform: translate(-1%, 1%);
+  }
+}
+
+/* Fog Transition Zones */
+.fog-transition-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 15, 16, 1) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.fog-transition-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(
+    to top,
+    rgba(15, 15, 16, 1) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Mobile Fallback */
+@media (max-width: 768px), (pointer: coarse) {
+  .webgl-atmospheric-fog {
+    display: none;
+  }
+  
+  .fog-fallback {
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 30% 70%, rgba(201, 206, 214, 0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 30%, rgba(201, 206, 214, 0.03) 0%, transparent 40%);
+    z-index: -1;
+    pointer-events: none;
+  }
+}

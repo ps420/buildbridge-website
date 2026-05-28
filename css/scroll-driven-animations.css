@@ -1,0 +1,572 @@
+/* ============================================
+   BuildBridge v48.0 - CSS Scroll-Driven Animations
+   Native CSS @scroll-timeline & scroll() API
+   Fortune 500 Performance-First Animation System
+   ============================================ */
+
+/* ============================================
+   CORE SCROLL TIMELINE DEFINITIONS
+   ============================================ */
+
+/* Main document scroll timeline */
+@scroll-timeline document-scroll {
+  source: auto;
+  orientation: vertical;
+  scroll-offsets: 0% 100%;
+}
+
+/* Hero section timeline */
+@scroll-timeline hero-scroll {
+  source: selector(#hero);
+  orientation: vertical;
+  scroll-offsets: entry 0%, exit 100%;
+}
+
+/* Section-specific timelines */
+@scroll-timeline section-reveal {
+  source: auto;
+  orientation: vertical;
+  scroll-offsets: entry 80%, cover 50%;
+}
+
+/* ============================================
+   SCROLL-LINKED ANIMATIONS
+   ============================================ */
+
+/* Reading Progress Line */
+.scroll-progress-line {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #C9CED6, #F5F7FA, #C9CED6);
+  z-index: 10000;
+  transform-origin: left;
+  animation: progress-grow linear;
+  animation-timeline: scroll();
+}
+
+@keyframes progress-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* Scroll-driven Fade In */
+.scroll-fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fade-in-scroll 1ms linear both;
+  animation-timeline: view();
+  animation-range: entry 10% cover 50%;
+}
+
+@keyframes fade-in-scroll {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered Scroll Reveals */
+.scroll-reveal-1 { animation-range: entry 10% cover 40%; }
+.scroll-reveal-2 { animation-range: entry 20% cover 50%; }
+.scroll-reveal-3 { animation-range: entry 30% cover 60%; }
+.scroll-reveal-4 { animation-range: entry 40% cover 70%; }
+.scroll-reveal-5 { animation-range: entry 50% cover 80%; }
+
+/* Scroll-Linked Scale Animation */
+.scroll-scale-up {
+  transform: scale(0.8);
+  opacity: 0.5;
+  animation: scale-up-scroll 1ms linear both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 50%;
+}
+
+@keyframes scale-up-scroll {
+  from {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Scroll-Linked Rotation */
+.scroll-rotate {
+  animation: rotate-scroll 1ms linear both;
+  animation-timeline: view();
+}
+
+@keyframes rotate-scroll {
+  from { transform: rotate(-5deg); }
+  to { transform: rotate(0deg); }
+}
+
+/* Parallax Scroll Layers */
+.scroll-parallax-slow {
+  will-change: transform;
+  animation: parallax-slow 1ms linear;
+  animation-timeline: scroll();
+}
+
+@keyframes parallax-slow {
+  from { transform: translateY(0); }
+  to { transform: translateY(-100px); }
+}
+
+.scroll-parallax-fast {
+  will-change: transform;
+  animation: parallax-fast 1ms linear;
+  animation-timeline: scroll();
+}
+
+@keyframes parallax-fast {
+  from { transform: translateY(0); }
+  to { transform: translateY(-200px); }
+}
+
+/* Horizontal Scroll on Vertical */
+.scroll-horizontal {
+  animation: horizontal-move 1ms linear;
+  animation-timeline: view();
+  animation-range: entry 0% exit 100%;
+}
+
+@keyframes horizontal-move {
+  from { transform: translateX(-50px); }
+  to { transform: translateX(50px); }
+}
+
+/* ============================================
+   CARD SCROLL ANIMATIONS
+   ============================================ */
+
+/* Card Entry from Different Directions */
+.card-scroll-left {
+  opacity: 0;
+  transform: translateX(-100px);
+  animation: card-enter-left 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-timeline: view();
+  animation-range: entry 20% cover 50%;
+}
+
+@keyframes card-enter-left {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.card-scroll-right {
+  opacity: 0;
+  transform: translateX(100px);
+  animation: card-enter-right 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-timeline: view();
+  animation-range: entry 20% cover 50%;
+}
+
+@keyframes card-enter-right {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Card Stack Animation */
+.card-stack-scroll {
+  animation: card-stack-grow 1ms linear;
+  animation-timeline: view();
+  animation-range: entry 0% cover 50%;
+}
+
+@keyframes card-stack-grow {
+  from {
+    transform: translateY(100px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Scroll Pin Cards */
+.pin-card {
+  position: sticky;
+  top: 100px;
+  animation: pin-scale 1ms linear;
+  animation-timeline: view();
+}
+
+@keyframes pin-scale {
+  entry 0% {
+    transform: scale(1);
+  }
+  entry 100% {
+    transform: scale(0.9);
+  }
+  exit 0% {
+    transform: scale(0.9);
+  }
+  exit 100% {
+    transform: scale(0.8);
+  }
+}
+
+/* ============================================
+   TEXT SCROLL ANIMATIONS
+   ============================================ */
+
+/* Character-by-character Reveal on Scroll */
+.scroll-text-reveal {
+  overflow: hidden;
+}
+
+.scroll-text-reveal span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(100%);
+  animation: char-reveal 0.5s ease forwards;
+  animation-timeline: view();
+  animation-range: entry 30% cover 60%;
+}
+
+.scroll-text-reveal span:nth-child(1) { animation-delay: 0ms; }
+.scroll-text-reveal span:nth-child(2) { animation-delay: 50ms; }
+.scroll-text-reveal span:nth-child(3) { animation-delay: 100ms; }
+.scroll-text-reveal span:nth-child(4) { animation-delay: 150ms; }
+.scroll-text-reveal span:nth-child(5) { animation-delay: 200ms; }
+.scroll-text-reveal span:nth-child(6) { animation-delay: 250ms; }
+.scroll-text-reveal span:nth-child(7) { animation-delay: 300ms; }
+
+@keyframes char-reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Gradient Text Scroll Animation */
+.scroll-gradient-text {
+  background: linear-gradient(
+    90deg,
+    rgba(201, 206, 214, 0.3) 0%,
+    #F5F7FA 50%,
+    rgba(201, 206, 214, 0.3) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 1ms linear;
+  animation-timeline: view();
+}
+
+@keyframes gradient-shift {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+/* ============================================
+   IMAGE SCROLL ANIMATIONS
+   ============================================ */
+
+/* Reveal on Scroll (Clip Path) */
+.scroll-image-reveal {
+  clip-path: inset(100% 0 0 0);
+  animation: image-reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-timeline: view();
+  animation-range: entry 20% cover 50%;
+}
+
+@keyframes image-reveal {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Image Zoom on Scroll */
+.scroll-image-zoom {
+  transform: scale(1.2);
+  animation: image-zoom 1ms linear;
+  animation-timeline: view();
+  animation-range: entry 0% exit 100%;
+}
+
+@keyframes image-zoom {
+  from { transform: scale(1.2); }
+  to { transform: scale(1); }
+}
+
+/* Image Ken Burns Effect */
+.scroll-ken-burns {
+  animation: ken-burns 10s ease-out forwards;
+  animation-timeline: view();
+}
+
+@keyframes ken-burns {
+  from {
+    transform: scale(1.1) translate(0, 0);
+  }
+  to {
+    transform: scale(1) translate(-2%, -2%);
+  }
+}
+
+/* ============================================
+   SECTION-SPECIFIC ANIMATIONS
+   ============================================ */
+
+/* Hero Section Scroll Effects */
+.hero-scroll-fade {
+  animation: hero-fade 1ms linear;
+  animation-timeline: scroll();
+}
+
+@keyframes hero-fade {
+  from { opacity: 1; }
+  50% { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Stats Counter Scroll Animation */
+.scroll-counter {
+  font-variant-numeric: tabular-nums;
+  animation: count-up 1ms linear;
+  animation-timeline: view();
+  animation-range: entry 50% cover 50%;
+}
+
+/* Line Draw Animation */
+.scroll-line-draw {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: line-draw 1s ease forwards;
+  animation-timeline: view();
+  animation-range: entry 30% cover 50%;
+}
+
+@keyframes line-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ============================================
+   SCROLL-SNAP CONTAINER
+   ============================================ */
+
+.scroll-snap-container {
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 100vh;
+}
+
+.scroll-snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  min-height: 100vh;
+}
+
+/* ============================================
+   SMOOTH REVEAL UTILITY CLASSES
+   ============================================ */
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-on-scroll.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger utilities */
+.stagger-1 { transition-delay: 0.1s; }
+.stagger-2 { transition-delay: 0.2s; }
+.stagger-3 { transition-delay: 0.3s; }
+.stagger-4 { transition-delay: 0.4s; }
+.stagger-5 { transition-delay: 0.5s; }
+
+/* ============================================
+   SCROLL-TRIGGERED 3D TRANSFORMS
+   ============================================ */
+
+.scroll-3d-flip {
+  transform: perspective(1000px) rotateY(90deg);
+  opacity: 0;
+  animation: flip-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-timeline: view();
+  animation-range: entry 20% cover 50%;
+}
+
+@keyframes flip-in {
+  to {
+    transform: perspective(1000px) rotateY(0);
+    opacity: 1;
+  }
+}
+
+.scroll-3d-tilt {
+  transform: perspective(1000px) rotateX(20deg);
+  opacity: 0;
+  animation: tilt-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-timeline: view();
+  animation-range: entry 30% cover 60%;
+}
+
+@keyframes tilt-in {
+  to {
+    transform: perspective(1000px) rotateX(0);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   SCROLL VELOCITY EFFECTS
+   ============================================ */
+
+.scroll-velocity-container {
+  --scroll-velocity: 0;
+  animation: track-velocity 1ms linear;
+  animation-timeline: scroll();
+}
+
+@keyframes track-velocity {
+  from { --scroll-velocity: 0; }
+  to { --scroll-velocity: 1; }
+}
+
+/* Skew on fast scroll */
+.velocity-skew {
+  transition: transform 0.1s linear;
+}
+
+.velocity-skew.skewing {
+  transform: skewY(calc(var(--scroll-velocity) * 2deg));
+}
+
+/* ============================================
+   PROGESSIVE REVEAL PATTERNS
+   ============================================ */
+
+/* Progressive blur on scroll */
+.scroll-blur-reveal {
+  filter: blur(10px);
+  opacity: 0;
+  animation: blur-clear 0.8s ease forwards;
+  animation-timeline: view();
+  animation-range: entry 20% cover 50%;
+}
+
+@keyframes blur-clear {
+  to {
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+/* Mask reveal diagonal */
+.scroll-mask-diagonal {
+  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  animation: mask-diagonal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-timeline: view();
+  animation-range: entry 20% cover 50%;
+}
+
+@keyframes mask-diagonal {
+  to {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+/* Circular reveal */
+.scroll-mask-circle {
+  clip-path: circle(0% at 50% 50%);
+  animation: mask-circle 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-timeline: view();
+  animation-range: entry 20% cover 50%;
+}
+
+@keyframes mask-circle {
+  to {
+    clip-path: circle(100% at 50% 50%);
+  }
+}
+
+/* ============================================
+   FALLBACK FOR NON-SUPPORTING BROWSERS
+   ============================================ */
+
+@supports not (animation-timeline: view()) {
+  /* Fallback to intersection observer behavior */
+  .scroll-fade-in,
+  .scroll-scale-up,
+  .card-scroll-left,
+  .card-scroll-right,
+  .scroll-image-reveal,
+  .scroll-3d-flip,
+  .scroll-3d-tilt,
+  .scroll-blur-reveal,
+  .scroll-mask-diagonal,
+  .scroll-mask-circle {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+    filter: none;
+    animation: none;
+  }
+  
+  .scroll-progress-line {
+    display: none;
+  }
+}
+
+/* ============================================
+   REDUCED MOTION SUPPORT
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-fade-in,
+  .scroll-scale-up,
+  .card-scroll-left,
+  .card-scroll-right,
+  .scroll-image-reveal,
+  .scroll-3d-flip,
+  .scroll-3d-tilt,
+  .scroll-blur-reveal,
+  .scroll-mask-diagonal,
+  .scroll-mask-circle,
+  .scroll-gradient-text {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+    filter: none;
+  }
+  
+  .scroll-progress-line,
+  .scroll-parallax-slow,
+  .scroll-parallax-fast {
+    display: none;
+  }
+}
+
+/* ============================================
+   DEBUG MODE (Development)
+   ============================================ */
+
+.scroll-debug [style*="animation-timeline"] {
+  outline: 2px solid rgba(201, 206, 214, 0.3);
+  outline-offset: 4px;
+}
