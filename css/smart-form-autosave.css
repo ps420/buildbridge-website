@@ -1,0 +1,381 @@
+/* ============================================
+   SMART FORM AUTOSAVE SYSTEM v46.0
+   Fortune 500 Quality Form Persistence
+   ============================================ */
+
+/* Form Wrapper with Autosave Indicators */
+.form-autosave-wrapper {
+  position: relative;
+}
+
+/* Autosave Status Indicator */
+.autosave-status {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(15, 15, 16, 0.9);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 20px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(201, 206, 214, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+}
+
+.autosave-status.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.autosave-status.saving {
+  color: #f59e0b;
+}
+
+.autosave-status.saved {
+  color: #10b981;
+}
+
+.autosave-status.error {
+  color: #ef4444;
+}
+
+/* Status Icon */
+.autosave-icon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.autosave-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Saving Animation */
+.autosave-status.saving .autosave-icon {
+  animation: autosave-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes autosave-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+/* Saved Checkmark Animation */
+.autosave-status.saved .autosave-icon svg {
+  animation: autosave-check 0.4s ease-out;
+}
+
+@keyframes autosave-check {
+  0% { transform: scale(0) rotate(-45deg); }
+  50% { transform: scale(1.2) rotate(0deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+/* Last Saved Timestamp */
+.autosave-timestamp {
+  font-size: 11px;
+  color: rgba(201, 206, 214, 0.5);
+  margin-left: 4px;
+}
+
+/* Form Fields with Autosave Indicator */
+.form-field-autosave {
+  position: relative;
+}
+
+.form-field-autosave::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.2);
+  transition: all 0.3s ease;
+  opacity: 0;
+}
+
+.form-field-autosave.saving::after {
+  background: #f59e0b;
+  opacity: 1;
+  animation: field-save-pulse 1s ease-in-out infinite;
+}
+
+.form-field-autosave.saved::after {
+  background: #10b981;
+  opacity: 1;
+}
+
+@keyframes field-save-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.7; }
+}
+
+/* Restore Draft Notification */
+.draft-restore-notification {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  max-width: 400px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, rgba(15, 15, 16, 0.98), rgba(25, 25, 28, 0.98));
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 9998;
+  transform: translateX(120%);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.draft-restore-notification.visible {
+  transform: translateX(0);
+}
+
+.draft-restore-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.draft-restore-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.15), rgba(201, 206, 214, 0.05));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.draft-restore-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin: 0;
+}
+
+.draft-restore-meta {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: rgba(201, 206, 214, 0.6);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.draft-restore-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.draft-restore-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.draft-restore-btn.primary {
+  background: linear-gradient(135deg, #C9CED6, #A8B0BD);
+  color: #0f0f10;
+}
+
+.draft-restore-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(201, 206, 214, 0.3);
+}
+
+.draft-restore-btn.secondary {
+  background: transparent;
+  color: rgba(201, 206, 214, 0.8);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+}
+
+.draft-restore-btn.secondary:hover {
+  background: rgba(201, 206, 214, 0.1);
+  color: #F5F7FA;
+}
+
+/* Form Progress with Autosave */
+.form-progress-autosave {
+  margin-bottom: 30px;
+}
+
+.form-progress-bar {
+  height: 4px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.form-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #C9CED6, #A8B0BD);
+  border-radius: 2px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.form-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: progress-shimmer 2s infinite;
+}
+
+@keyframes progress-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.form-progress-text {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: rgba(201, 206, 214, 0.6);
+}
+
+/* Autosave Conflict Resolution */
+.autosave-conflict-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.autosave-conflict-modal.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.autosave-conflict-content {
+  max-width: 500px;
+  width: 90%;
+  padding: 32px;
+  background: linear-gradient(135deg, rgba(15, 15, 16, 0.98), rgba(25, 25, 28, 0.98));
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 20px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.autosave-conflict-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin-bottom: 12px;
+}
+
+.autosave-conflict-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: rgba(201, 206, 214, 0.7);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.autosave-conflict-options {
+  display: grid;
+  gap: 12px;
+}
+
+.autosave-conflict-option {
+  padding: 16px 20px;
+  background: rgba(201, 206, 214, 0.05);
+  border: 2px solid rgba(201, 206, 214, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.autosave-conflict-option:hover {
+  background: rgba(201, 206, 214, 0.1);
+  border-color: rgba(201, 206, 214, 0.25);
+}
+
+.autosave-conflict-option-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin-bottom: 4px;
+}
+
+.autosave-conflict-option-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: rgba(201, 206, 214, 0.6);
+}
+
+/* Mobile Autosave Indicator */
+@media (max-width: 768px) {
+  .autosave-status {
+    top: auto;
+    bottom: -40px;
+    right: 0;
+    left: auto;
+    transform: translateY(10px);
+  }
+  
+  .autosave-status.visible {
+    transform: translateY(0);
+  }
+  
+  .draft-restore-notification {
+    left: 20px;
+    right: 20px;
+    max-width: none;
+    bottom: 80px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .autosave-status,
+  .draft-restore-notification,
+  .form-progress-fill {
+    transition: none;
+  }
+  
+  .autosave-status.saving .autosave-icon,
+  .form-field-autosave.saving::after {
+    animation: none;
+  }
+}
