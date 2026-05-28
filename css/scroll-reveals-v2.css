@@ -1,0 +1,304 @@
+/* ========================================
+   v50.0: SCROLL REVEALS v2
+   Advanced scroll-triggered animations
+======================================== */
+
+/* Base Reveal States */
+.reveal-v2 {
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity;
+}
+
+.reveal-v2.revealed {
+  opacity: 1;
+  transform: translate(0) scale(1) rotate(0);
+}
+
+/* Direction Variants */
+.reveal-up { transform: translateY(60px); }
+.reveal-down { transform: translateY(-60px); }
+.reveal-left { transform: translateX(60px); }
+.reveal-right { transform: translateX(-60px); }
+
+/* Scale Variants */
+.reveal-scale-sm { transform: scale(0.9); }
+.reveal-scale { transform: scale(0.8); }
+.reveal-scale-lg { transform: scale(0.6); }
+
+/* Rotate Variants */
+.reveal-rotate-l { transform: rotate(-10deg); }
+.reveal-rotate-r { transform: rotate(10deg); }
+.reveal-rotate-z { transform: rotateZ(-5deg) scale(0.9); }
+
+/* 3D Flip Variants */
+.reveal-flip-x { transform: perspective(1000px) rotateX(30deg); }
+.reveal-flip-y { transform: perspective(1000px) rotateY(30deg); }
+.reveal-flip-x.revealed,
+.reveal-flip-y.revealed { transform: perspective(1000px) rotate(0); }
+
+/* Blur Reveal */
+.reveal-blur {
+  filter: blur(20px);
+  transform: scale(1.1);
+}
+
+.reveal-blur.revealed {
+  filter: blur(0);
+  transform: scale(1);
+}
+
+/* Mask Reveals */
+.reveal-mask-up {
+  clip-path: inset(100% 0 0 0);
+}
+
+.reveal-mask-down {
+  clip-path: inset(0 0 100% 0);
+}
+
+.reveal-mask-left {
+  clip-path: inset(0 100% 0 0);
+}
+
+.reveal-mask-right {
+  clip-path: inset(0 0 0 100%);
+}
+
+.reveal-mask-center {
+  clip-path: inset(50%);
+}
+
+.reveal-mask-up.revealed,
+.reveal-mask-down.revealed,
+.reveal-mask-left.revealed,
+.reveal-mask-right.revealed,
+.reveal-mask-center.revealed {
+  clip-path: inset(0);
+}
+
+/* Stagger Children */
+.reveal-group .reveal-child {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal-group.revealed .reveal-child {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-group.revealed .reveal-child:nth-child(1) { transition-delay: 0s; }
+.reveal-group.revealed .reveal-child:nth-child(2) { transition-delay: 0.1s; }
+.reveal-group.revealed .reveal-child:nth-child(3) { transition-delay: 0.2s; }
+.reveal-group.revealed .reveal-child:nth-child(4) { transition-delay: 0.3s; }
+.reveal-group.revealed .reveal-child:nth-child(5) { transition-delay: 0.4s; }
+.reveal-group.revealed .reveal-child:nth-child(6) { transition-delay: 0.5s; }
+.reveal-group.revealed .reveal-child:nth-child(7) { transition-delay: 0.6s; }
+.reveal-group.revealed .reveal-child:nth-child(8) { transition-delay: 0.7s; }
+
+/* Cascade Reveal */
+.reveal-cascade .cascade-item {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal-cascade.revealed .cascade-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-cascade.revealed .cascade-item:nth-child(1) { transition-delay: 0.05s; }
+.reveal-cascade.revealed .cascade-item:nth-child(2) { transition-delay: 0.1s; }
+.reveal-cascade.revealed .cascade-item:nth-child(3) { transition-delay: 0.15s; }
+.reveal-cascade.revealed .cascade-item:nth-child(4) { transition-delay: 0.2s; }
+.reveal-cascade.revealed .cascade-item:nth-child(5) { transition-delay: 0.25s; }
+
+/* Wave Reveal for Text */
+.reveal-wave .wave-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal-wave.revealed .wave-char {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Line Reveal */
+.reveal-line {
+  position: relative;
+  overflow: hidden;
+}
+
+.reveal-line .line-inner {
+  transform: translateY(100%);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal-line.revealed .line-inner {
+  transform: translateY(0);
+}
+
+/* Image Reveal Overlays */
+.image-reveal-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-reveal-wrapper img {
+  transform: scale(1.2);
+  transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.image-reveal-wrapper.revealed img {
+  transform: scale(1);
+}
+
+.image-reveal-overlay {
+  position: absolute;
+  inset: 0;
+  background: #0f0f10;
+  transform-origin: left;
+  transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+  z-index: 2;
+}
+
+.image-reveal-wrapper.revealed .image-reveal-overlay {
+  transform: scaleX(0);
+}
+
+/* Parallax Reveal */
+.reveal-parallax {
+  transition: none;
+  will-change: transform;
+}
+
+/* Split Reveal */
+.reveal-split {
+  position: relative;
+  overflow: hidden;
+}
+
+.reveal-split .split-top,
+.reveal-split .split-bottom {
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.reveal-split .split-top {
+  transform: translateY(-100%);
+}
+
+.reveal-split .split-bottom {
+  transform: translateY(100%);
+}
+
+.reveal-split.revealed .split-top,
+.reveal-split.revealed .split-bottom {
+  transform: translateY(0);
+}
+
+/* Counter Reveal */
+.reveal-counter {
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.reveal-counter.revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Title Reveal with Underline */
+.reveal-title {
+  position: relative;
+  display: inline-block;
+}
+
+.reveal-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #C9CED6, transparent);
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+}
+
+.reveal-title.revealed::after {
+  width: 100%;
+}
+
+/* Card Stack Reveal */
+.reveal-card-stack .stack-card {
+  opacity: 0;
+  transform: translateY(60px) rotate(-5deg);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal-card-stack.revealed .stack-card:nth-child(1) { 
+  opacity: 1; 
+  transform: translateY(0) rotate(-2deg);
+  transition-delay: 0s;
+}
+.reveal-card-stack.revealed .stack-card:nth-child(2) { 
+  opacity: 1; 
+  transform: translateY(0) rotate(0deg);
+  transition-delay: 0.15s;
+}
+.reveal-card-stack.revealed .stack-card:nth-child(3) { 
+  opacity: 1; 
+  transform: translateY(0) rotate(2deg);
+  transition-delay: 0.3s;
+}
+
+/* Section Reveal */
+.section-reveal {
+  opacity: 0;
+  transform: translateY(80px);
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.section-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Progressive Reveal */
+.progressive-reveal {
+  --progress: 0;
+  opacity: calc(var(--progress));
+  transform: translateY(calc((1 - var(--progress)) * 50px));
+  transition: none;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-v2,
+  .reveal-child,
+  .cascade-item,
+  .wave-char,
+  .line-inner,
+  .stack-card {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: opacity 0.3s ease !important;
+  }
+  
+  .reveal-mask-up,
+  .reveal-mask-down,
+  .reveal-mask-left,
+  .reveal-mask-right,
+  .reveal-mask-center {
+    clip-path: none !important;
+  }
+}

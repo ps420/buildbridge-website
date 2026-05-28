@@ -1,0 +1,321 @@
+/* ========================================
+   v50.0: TEXT MASK ANIMATIONS
+   Creative text reveal effects
+======================================== */
+
+/* Text Mask Container */
+.text-mask-container {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+/* Clip Path Text Reveals */
+.text-clip-reveal {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.text-clip-reveal.revealed {
+  clip-path: inset(0 0 0 0);
+}
+
+.text-clip-reveal-rtl {
+  clip-path: inset(0 0 0 100%);
+  transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.text-clip-reveal-rtl.revealed {
+  clip-path: inset(0 0 0 0);
+}
+
+.text-clip-reveal-up {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.text-clip-reveal-up.revealed {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Circle Mask Reveal */
+.text-mask-circle {
+  clip-path: circle(0% at 50% 50%);
+  transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.text-mask-circle.revealed {
+  clip-path: circle(100% at 50% 50%);
+}
+
+/* Diamond Mask Reveal */
+.text-mask-diamond {
+  clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
+  transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.text-mask-diamond.revealed {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+/* Wipe Text Animation */
+.text-wipe {
+  position: relative;
+  display: inline-block;
+}
+
+.text-wipe::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: #C9CED6;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 0;
+  transition: width 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.text-wipe.revealed::before {
+  width: 100%;
+}
+
+/* Text Fill Animation */
+.text-fill-animate {
+  background: linear-gradient(90deg, #C9CED6 50%, rgba(201, 206, 214, 0.2) 50%);
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: background-position 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.text-fill-animate.revealed {
+  background-position: 0 0;
+}
+
+/* Gradient Text Slide */
+.text-gradient-slide {
+  background: linear-gradient(
+    90deg,
+    #F5F7FA 0%,
+    #C9CED6 25%,
+    #F5F7FA 50%,
+    #C9CED6 75%,
+    #F5F7FA 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-slide 3s linear infinite;
+  animation-play-state: paused;
+}
+
+.text-gradient-slide.revealed {
+  animation-play-state: running;
+}
+
+@keyframes gradient-slide {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* Typewriter Effect Enhanced */
+.text-typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid #C9CED6;
+  animation: 
+    typing 1.5s steps(40) forwards,
+    blink-caret 0.75s step-end infinite;
+  width: 0;
+}
+
+.text-typewriter.revealed {
+  width: 100%;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  50% { border-color: transparent; }
+}
+
+/* Scramble Text Effect Container */
+.text-scramble-effect {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+
+/* Character Reveal Stagger */
+.char-reveal .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.char-reveal.revealed .char {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Word Reveal Stagger */
+.word-reveal .word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-right: 0.3em;
+}
+
+.word-reveal.revealed .word {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Line Mask Reveal */
+.line-mask {
+  position: relative;
+  overflow: hidden;
+}
+
+.line-mask .line-text {
+  transform: translateY(100%);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.line-mask.revealed .line-text {
+  transform: translateY(0);
+}
+
+/* Glitch Text Effect */
+.text-glitch {
+  position: relative;
+}
+
+.text-glitch::before,
+.text-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.text-glitch.revealed::before {
+  animation: glitch-1 0.3s ease forwards;
+  color: #ff0000;
+  z-index: -1;
+}
+
+.text-glitch.revealed::after {
+  animation: glitch-2 0.3s ease forwards 0.1s;
+  color: #00ffff;
+  z-index: -2;
+}
+
+@keyframes glitch-1 {
+  0% { opacity: 1; transform: translate(0); }
+  20% { transform: translate(-3px, 3px); }
+  40% { transform: translate(3px, -3px); }
+  60% { transform: translate(-3px, -3px); }
+  80% { transform: translate(3px, 3px); }
+  100% { opacity: 0; transform: translate(0); }
+}
+
+@keyframes glitch-2 {
+  0% { opacity: 1; transform: translate(0); }
+  20% { transform: translate(3px, -3px); }
+  40% { transform: translate(-3px, 3px); }
+  60% { transform: translate(3px, 3px); }
+  80% { transform: translate(-3px, -3px); }
+  100% { opacity: 0; transform: translate(0); }
+}
+
+/* Curtain Text Reveal */
+.curtain-text {
+  position: relative;
+  display: inline-block;
+}
+
+.curtain-text::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: #0f0f10;
+  transition: width 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.curtain-text.revealed::after {
+  width: 0;
+}
+
+/* Focus Text Effect */
+.text-focus {
+  filter: blur(10px);
+  opacity: 0.5;
+  transition: all 0.6s ease;
+}
+
+.text-focus.revealed {
+  filter: blur(0);
+  opacity: 1;
+}
+
+/* 3D Text Flip */
+.text-3d-flip {
+  perspective: 1000px;
+}
+
+.text-3d-flip .flip-inner {
+  transform: rotateX(-90deg);
+  transform-origin: center bottom;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.text-3d-flip.revealed .flip-inner {
+  transform: rotateX(0);
+}
+
+/* Glow Text Reveal */
+.text-glow-reveal {
+  text-shadow: 0 0 0 transparent;
+  opacity: 0;
+  transition: all 1s ease;
+}
+
+.text-glow-reveal.revealed {
+  opacity: 1;
+  text-shadow: 
+    0 0 20px rgba(201, 206, 214, 0.5),
+    0 0 40px rgba(201, 206, 214, 0.3),
+    0 0 60px rgba(201, 206, 214, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .text-typewriter {
+    white-space: normal;
+    border-right: none;
+    animation: none;
+    width: auto;
+  }
+  
+  .text-glitch::before,
+  .text-glitch::after {
+    display: none;
+  }
+}

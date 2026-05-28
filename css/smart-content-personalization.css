@@ -1,0 +1,440 @@
+/* ========================================
+   v50.0 SMART CONTENT PERSONALIZATION
+   Fortune 500 Dynamic Content Adaptation
+======================================== */
+
+.personalization-container {
+  --personalization-transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+/* Dynamic Content Blocks */
+.content-block {
+  opacity: 1;
+  transform: translateY(0);
+  transition: var(--personalization-transition);
+}
+
+.content-block.personalized-hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.content-block.personalized-visible {
+  animation: contentReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes contentReveal {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Interest-Based Content Highlighting */
+.interest-highlight {
+  position: relative;
+  transition: var(--personalization-transition);
+}
+
+.interest-highlight::before {
+  content: '';
+  position: absolute;
+  inset: -8px -16px;
+  background: linear-gradient(135deg, var(--chrome) 0%, var(--accent) 100%);
+  opacity: 0;
+  border-radius: 12px;
+  z-index: -1;
+  transform: scale(0.9);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.interest-highlight.active::before {
+  opacity: 0.1;
+  transform: scale(1);
+}
+
+.interest-highlight.active {
+  transform: scale(1.02);
+}
+
+/* Smart Recommendation Cards */
+.recommendation-card {
+  background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: var(--personalization-transition);
+  cursor: pointer;
+}
+
+.recommendation-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--chrome), var(--accent));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.recommendation-card:hover::before {
+  transform: scaleX(1);
+}
+
+.recommendation-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(212, 175, 55, 0.4);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+/* Relevance Score Indicator */
+.relevance-score {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--chrome);
+}
+
+.relevance-dots {
+  display: flex;
+  gap: 3px;
+}
+
+.relevance-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0.2);
+  transition: all 0.3s ease;
+}
+
+.relevance-dot.active {
+  background: var(--chrome);
+  box-shadow: 0 0 8px var(--chrome);
+}
+
+/* Behavioral Trigger Animations */
+.behavior-pulse {
+  animation: behaviorPulse 2s ease-in-out infinite;
+}
+
+@keyframes behaviorPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Contextual Content Switcher */
+.context-switcher {
+  display: flex;
+  gap: 12px;
+  padding: 8px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 100px;
+  width: fit-content;
+  margin-bottom: 32px;
+}
+
+.context-option {
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--stone);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  background: transparent;
+}
+
+.context-option:hover {
+  color: var(--white);
+}
+
+.context-option.active {
+  background: linear-gradient(135deg, var(--chrome) 0%, var(--accent) 100%);
+  color: var(--black);
+  font-weight: 600;
+}
+
+/* Smart Content Fade Transitions */
+.content-fade-enter {
+  animation: contentFadeEnter 0.5s ease forwards;
+}
+
+.content-fade-exit {
+  animation: contentFadeExit 0.3s ease forwards;
+}
+
+@keyframes contentFadeEnter {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes contentFadeExit {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-20px);
+    filter: blur(4px);
+  }
+}
+
+/* Personalized Hero Content */
+.personalized-hero {
+  position: relative;
+}
+
+.personalized-hero .hero-content-variant {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.personalized-hero .hero-content-variant.active {
+  opacity: 1;
+  transform: translateY(0);
+  position: relative;
+}
+
+/* Dynamic CTA Based on Behavior */
+.smart-cta {
+  position: relative;
+  overflow: hidden;
+}
+
+.smart-cta .cta-variant {
+  transition: all 0.4s ease;
+}
+
+.smart-cta .cta-variant.hidden {
+  position: absolute;
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+/* Interest Tag Cloud */
+.interest-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.interest-tag {
+  padding: 6px 14px;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 100px;
+  font-size: 12px;
+  color: var(--chrome);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.interest-tag:hover {
+  background: rgba(212, 175, 55, 0.2);
+  transform: translateY(-2px);
+}
+
+.interest-tag.active {
+  background: var(--chrome);
+  color: var(--black);
+  font-weight: 600;
+}
+
+/* Scroll Depth Personalization */
+.scroll-personalized .reveal-depth-1 { animation-delay: 0.1s; }
+.scroll-personalized .reveal-depth-2 { animation-delay: 0.2s; }
+.scroll-personalized .reveal-depth-3 { animation-delay: 0.3s; }
+
+/* Time-Based Content */
+.time-relevant {
+  display: none;
+}
+
+.time-relevant.active {
+  display: block;
+  animation: timeReveal 0.5s ease;
+}
+
+@keyframes timeReveal {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Returning Visitor Recognition */
+.returning-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(139, 115, 85, 0.15) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 100px;
+  font-size: 13px;
+  color: var(--chrome);
+  margin-bottom: 24px;
+  animation: badgeSlideIn 0.5s ease;
+}
+
+@keyframes badgeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.returning-badge svg {
+  width: 16px;
+  height: 16px;
+  color: var(--chrome);
+}
+
+/* Content Preference Slider */
+.preference-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  outline: none;
+  margin: 16px 0;
+}
+
+.preference-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--chrome);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.preference-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Smart Content Grid */
+.smart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.smart-grid.personalized .grid-item {
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.smart-grid.personalized .grid-item.priority-high {
+  grid-row: span 2;
+}
+
+/* Exit Intent Modal */
+.exit-intent-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.exit-intent-modal.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.exit-intent-content {
+  background: linear-gradient(145deg, #1a1a22 0%, #0f0f12 100%);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 24px;
+  padding: 48px;
+  max-width: 500px;
+  text-align: center;
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.exit-intent-modal.active .exit-intent-content {
+  transform: scale(1) translateY(0);
+}
+
+/* Device Context Adaptations */
+@media (pointer: coarse) {
+  .personalization-container {
+    --personalization-transition: all 0.3s ease;
+  }
+  
+  .recommendation-card:hover {
+    transform: none;
+  }
+  
+  .interest-highlight.active::before {
+    opacity: 0.05;
+  }
+}
+
+/* Reduced Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  .content-block.personalized-visible,
+  .content-fade-enter,
+  .returning-badge,
+  .time-relevant.active {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
