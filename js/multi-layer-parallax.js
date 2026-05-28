@@ -1,390 +1,342 @@
 /**
- * v36.0: Multi-Layer Deep Parallax System
- * Fortune 500 Immersive Depth Architecture
- * Multiple z-depth layers for realistic parallax effects
+ * Multi-Layer Parallax System v36.0
+ * Fortune 500 Depth-Based Scrolling Effects
  */
 
 class MultiLayerParallax {
-  constructor() {
-    this.sections = [];
-    this.compositions = [];
-    this.mouseParallax = [];
-    this.scrollSpeed = 0;
-    this.lastScrollY = 0;
-    this.isActive = true;
+  constructor(container, options = {}) {
+    this.container = container;
+    this.layers = [];
+    this.options = {
+      speedFactor: options.speedFactor || 0.5,
+      direction: options.direction || 'vertical',
+      debug: options.debug || false,
+      ...options
+    };
+    
+    this.scrollY = 0;
+    this.windowHeight = window.innerHeight;
     this.rafId = null;
-    this.preferReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.isActive = true;
     
     this.init();
   }
   
   init() {
-    if (this.preferReducedMotion) return;
+    if (!this.container) return;
     
-    this.findSections();
-    this.findCompositions();
-    this.findMouseParallax();
-    this.createParticles();
+    this.layers = Array.from(this.container.querySelectorAll('[data-parallax-depth]'));
+    
+    if (this.layers.length === 0) {
+      // Auto-create layers from child elements
+      this.setupAutoLayers();
+    }
+    
     this.bindEvents();
     this.animate();
+    
+    if (this.options.debug) {
+      this.addDebugInfo();
+    }
   }
   
-  findSections() {
-    document.querySelectorAll('.multi-parallax-section').forEach(section => {
-      const layers = section.querySelectorAll('.multi-parallax-layer');
-      
-      this.sections.push({
-        element: section,
-        layers: Array.from(layers).map((layer, index) => ({
-          element: layer,
-          speed: parseFloat(layer.dataset.speed) || (index + 1) * 0.1,
-          direction: layer.dataset.direction || 'vertical',
-          offset: parseFloat(layer.dataset.offset) || 0,
-          currentY: 0,
-          currentX: 0
-        })),
-        rect: null
-      });
-    });
-  }
-  
-  findCompositions() {
-    document.querySelectorAll('.parallax-composition').forEach(comp => {
-      const inner = comp.querySelector('.parallax-composition-inner');
-      const layers = inner.querySelectorAll('.parallax-composition-layer');
-      
-      this.compositions.push({
-        element: comp,
-        inner: inner,
-        layers: Array.from(layers).map((layer, index) => ({
-          element: layer,
-          speed: parseFloat(layer.dataset.speed) || (index + 1) * 0.15,
-          scale: parseFloat(layer.dataset.scale) || 1,
-          opacity: parseFloat(layer.dataset.opacity) || 1,
-          targetY: 0,
-          targetScale: 1,
-          targetOpacity: 1,
-          currentY: 0,
-          currentScale: 1,
-          currentOpacity: 1
-        }))
-      });
-    });
-  }
-  
-  findMouseParallax() {
-    document.querySelectorAll('.mouse-parallax-container').forEach(container => {
-      const layers = container.querySelectorAll('.mouse-parallax-layer');
-      
-      this.mouseParallax.push({
-        element: container,
-        layers: Array.from(layers).map((layer, index) => ({
-          element: layer,
-          depth: parseFloat(layer.dataset.depth) || (index + 1) * 0.1,
-          currentX: 0,
-          currentY: 0,
-          targetX: 0,
-          targetY: 0
-        })),
-        mouseX: 0,
-        mouseY: 0,
-        rect: null
-      });
-    });
-  }
-  
-  createParticles() {
-    document.querySelectorAll('.multi-parallax-particles').forEach(container => {
-      const particleCount = parseInt(container.dataset.particles) || 20;
-      
-      for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'multi-parallax-particle';
-        
-        const size = Math.random() * 4 + 2;
-        const x = Math.random() * 100;
-        const y = Math.random() * 100;
-        const depth = Math.random();
-        
-        particle.style.cssText = `
-          width: ${size}px;
-          height: ${size}px;
-          left: ${x}%;
-          top: ${y}%;
-          --depth: ${depth};
-          opacity: ${0.2 + depth * 0.3};
-        `;
-        
-        container.appendChild(particle);
-      }
+  setupAutoLayers() {
+    const children = Array.from(this.container.children);
+    const totalChildren = children.length;
+    
+    children.forEach((child, index) => {
+      const depth = (index + 1) / totalChildren;
+      child.setAttribute('data-parallax-depth', depth.toFixed(2));
+      child.classList.add('parallax-layer');
+      this.layers.push(child);
     });
   }
   
   bindEvents() {
-    // Scroll
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          this.updateScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    }, { passive: true });
+    window.addEventListener('scroll', this.handleScroll.bind(this), { passive: true });
+    window.addEventListener('resize', this.handleResize.bind(this), { passive: true });
     
-    // Mouse movement for parallax containers
-    this.mouseParallax.forEach(mp => {
-      mp.element.addEventListener('mousemove', (e) => {
-        const rect = mp.element.getBoundingClientRect();
-        mp.mouseX = (e.clientX - rect.left - rect.width / 2) / rect.width;
-        mp.mouseY = (e.clientY - rect.top - rect.height / 2) / rect.height;
-      }, { passive: true });
-    });
-    
-    // Resize
-    window.addEventListener('resize', () => {
-      this.updateRects();
-    }, { passive: true });
-    
-    // Visibility
-    document.addEventListener('visibilitychange', () => {
-      this.isActive = !document.hidden;
-    });
-    
-    this.updateRects();
-  }
-  
-  updateRects() {
-    this.sections.forEach(section => {
-      section.rect = section.element.getBoundingClientRect();
-    });
-    
-    this.mouseParallax.forEach(mp => {
-      mp.rect = mp.element.getBoundingClientRect();
-    });
-  }
-  
-  updateScroll() {
-    const scrollY = window.scrollY;
-    const viewportHeight = window.innerHeight;
-    
-    // Calculate scroll speed
-    this.scrollSpeed = Math.abs(scrollY - this.lastScrollY);
-    this.lastScrollY = scrollY;
-    
-    // Update sections
-    this.sections.forEach(section => {
-      const rect = section.element.getBoundingClientRect();
-      const sectionTop = rect.top;
-      const sectionHeight = rect.height;
-      
-      // Calculate progress through section
-      const progress = (viewportHeight - sectionTop) / (viewportHeight + sectionHeight);
-      const clampedProgress = Math.max(0, Math.min(1, progress));
-      
-      section.layers.forEach(layer => {
-        if (layer.direction === 'vertical') {
-          layer.targetY = (clampedProgress - 0.5) * layer.speed * 200;
-        } else if (layer.direction === 'horizontal') {
-          layer.targetX = (clampedProgress - 0.5) * layer.speed * 200;
+    // IntersectionObserver for performance
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        this.isActive = entry.isIntersecting;
+        if (this.isActive && !this.rafId) {
+          this.animate();
         }
       });
-    });
+    }, { threshold: 0 });
     
-    // Update compositions
-    this.compositions.forEach(comp => {
-      const rect = comp.element.getBoundingClientRect();
-      const progress = (viewportHeight - rect.top) / (viewportHeight + rect.height);
-      const clampedProgress = Math.max(0, Math.min(1, progress));
-      
-      comp.layers.forEach((layer, index) => {
-        const layerProgress = (clampedProgress - 0.5) * 2;
-        
-        // Different animations based on layer index
-        layer.targetY = layerProgress * layer.speed * 300;
-        layer.targetScale = layer.scale + Math.abs(layerProgress) * 0.1;
-        layer.targetOpacity = Math.max(0, layer.opacity - Math.abs(layerProgress) * 0.3);
-      });
-    });
+    this.observer.observe(this.container);
+  }
+  
+  handleScroll() {
+    this.scrollY = window.pageYOffset || document.documentElement.scrollTop;
+  }
+  
+  handleResize() {
+    this.windowHeight = window.innerHeight;
   }
   
   animate() {
     if (!this.isActive) {
-      this.rafId = requestAnimationFrame(() => this.animate());
+      this.rafId = null;
       return;
     }
     
-    // Smooth interpolation factor
-    const lerp = 0.1;
+    this.updateLayers();
+    this.rafId = requestAnimationFrame(() => this.animate());
+  }
+  
+  updateLayers() {
+    const containerRect = this.container.getBoundingClientRect();
+    const containerTop = containerRect.top;
+    const containerHeight = containerRect.height;
     
-    // Animate section layers
-    this.sections.forEach(section => {
-      section.layers.forEach(layer => {
-        layer.currentY += (layer.targetY - layer.currentY) * lerp;
-        layer.currentX += (layer.targetX - layer.currentX) * lerp;
-        
-        layer.element.style.transform = `translate3d(${layer.currentX}px, ${layer.currentY}px, 0)`;
-      });
+    // Calculate scroll progress through container
+    const scrollProgress = -containerTop / containerHeight;
+    
+    this.layers.forEach((layer, index) => {
+      const depth = parseFloat(layer.dataset.parallaxDepth) || ((index + 1) / this.layers.length);
+      const speed = parseFloat(layer.dataset.parallaxSpeed) || (depth * this.options.speedFactor);
+      
+      let translateValue = 0;
+      
+      if (this.options.direction === 'vertical') {
+        translateValue = scrollProgress * speed * containerHeight;
+        layer.style.transform = `translate3d(0, ${translateValue}px, 0)`;
+      } else if (this.options.direction === 'horizontal') {
+        translateValue = scrollProgress * speed * 100;
+        layer.style.transform = `translate3d(${translateValue}px, 0, 0)`;
+      } else if (this.options.direction === 'both') {
+        const translateY = scrollProgress * speed * containerHeight;
+        const translateX = scrollProgress * speed * 50;
+        layer.style.transform = `translate3d(${translateX}px, ${translateY}px, 0)`;
+      }
+      
+      // Apply additional effects if specified
+      if (layer.dataset.parallaxBlur) {
+        const blurAmount = Math.abs(translateValue / 100) * parseFloat(layer.dataset.parallaxBlur);
+        layer.style.filter = `blur(${Math.min(blurAmount, 10)}px)`;
+      }
+      
+      if (layer.dataset.parallaxScale) {
+        const scaleAmount = 1 + (scrollProgress * parseFloat(layer.dataset.parallaxScale));
+        layer.style.transform += ` scale(${scaleAmount})`;
+      }
+      
+      if (layer.dataset.parallaxOpacity) {
+        const opacity = 1 - (Math.abs(scrollProgress) * parseFloat(layer.dataset.parallaxOpacity));
+        layer.style.opacity = Math.max(0.2, Math.min(1, opacity));
+      }
     });
+  }
+  
+  addDebugInfo() {
+    const debugPanel = document.createElement('div');
+    debugPanel.className = 'parallax-debug';
+    debugPanel.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.9);
+      color: #0f0;
+      padding: 15px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 12px;
+      z-index: 99999;
+      max-width: 300px;
+    `;
+    document.body.appendChild(debugPanel);
     
-    // Animate compositions
-    this.compositions.forEach(comp => {
-      comp.layers.forEach(layer => {
-        layer.currentY += (layer.targetY - layer.currentY) * lerp;
-        layer.currentScale += (layer.targetScale - layer.currentScale) * lerp;
-        layer.currentOpacity += (layer.targetOpacity - layer.currentOpacity) * lerp;
-        
-        layer.element.style.transform = `translate3d(0, ${layer.currentY}px, 0) scale(${layer.currentScale})`;
-        layer.element.style.opacity = layer.currentOpacity;
-      });
+    const updateDebug = () => {
+      const containerRect = this.container.getBoundingClientRect();
+      debugPanel.innerHTML = `
+        <div><strong>Parallax Debug</strong></div>
+        <div>Layers: ${this.layers.length}</div>
+        <div>ScrollY: ${Math.round(this.scrollY)}px</div>
+        <div>Container Y: ${Math.round(containerRect.top)}px</div>
+        <div>Direction: ${this.options.direction}</div>
+        <div>Active: ${this.isActive}</div>
+      `;
+      requestAnimationFrame(updateDebug);
+    };
+    updateDebug();
+  }
+  
+  destroy() {
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+    }
+    if (this.observer) {
+      this.observer.disconnect();
+    }
+    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('resize', this.handleResize);
+  }
+}
+
+// Mouse-based parallax effect
+class MouseParallax {
+  constructor(container, options = {}) {
+    this.container = container;
+    this.options = {
+      intensity: options.intensity || 20,
+      easing: options.easing || 0.1,
+      ...options
+    };
+    
+    this.mouseX = 0;
+    this.mouseY = 0;
+    this.currentX = 0;
+    this.currentY = 0;
+    this.rafId = null;
+    
+    this.init();
+  }
+  
+  init() {
+    if (!this.container) return;
+    
+    this.layers = this.container.querySelectorAll('.mouse-parallax-layer');
+    
+    this.container.addEventListener('mousemove', this.handleMouseMove.bind(this));
+    this.container.addEventListener('mouseleave', this.handleMouseLeave.bind(this));
+    
+    this.animate();
+  }
+  
+  handleMouseMove(e) {
+    const rect = this.container.getBoundingClientRect();
+    this.mouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+    this.mouseY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+  }
+  
+  handleMouseLeave() {
+    this.mouseX = 0;
+    this.mouseY = 0;
+  }
+  
+  animate() {
+    this.currentX += (this.mouseX - this.currentX) * this.options.easing;
+    this.currentY += (this.mouseY - this.currentY) * this.options.easing;
+    
+    this.layers.forEach((layer, index) => {
+      const depth = parseFloat(layer.dataset.parallaxDepth) || ((index + 1) / this.layers.length);
+      const x = this.currentX * this.options.intensity * depth;
+      const y = this.currentY * this.options.intensity * depth;
+      
+      layer.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     });
-    
-    // Animate mouse parallax
-    this.mouseParallax.forEach(mp => {
-      mp.layers.forEach(layer => {
-        const maxMove = 30 * layer.depth;
-        layer.targetX = mp.mouseX * maxMove;
-        layer.targetY = mp.mouseY * maxMove;
-        
-        layer.currentX += (layer.targetX - layer.currentX) * lerp;
-        layer.currentY += (layer.targetY - layer.currentY) * lerp;
-        
-        layer.element.style.transform = `translate3d(${-layer.currentX}px, ${-layer.currentY}px, 0)`;
-      });
-    });
-    
-    // Decay scroll speed
-    this.scrollSpeed *= 0.9;
     
     this.rafId = requestAnimationFrame(() => this.animate());
   }
   
-  // Public API
-  pause() {
-    this.isActive = false;
-  }
-  
-  resume() {
-    this.isActive = true;
-  }
-  
-  setSpeed(percentage) {
-    this.sections.forEach(section => {
-      section.layers.forEach(layer => {
-        layer.speed = layer.speed * percentage;
-      });
-    });
-  }
-  
   destroy() {
-    this.isActive = false;
     if (this.rafId) {
       cancelAnimationFrame(this.rafId);
     }
   }
 }
 
-// Card Stack Parallax Controller
-class CardStackParallax {
-  constructor(element) {
-    this.element = element;
-    this.inner = element.querySelector('.parallax-card-stack-inner');
-    this.cards = Array.from(element.querySelectorAll('.parallax-card-stack-item'));
-    this.scrollProgress = 0;
-    
+// Floating animation controller
+class FloatingElements {
+  constructor(container) {
+    this.container = container || document;
+    this.elements = [];
     this.init();
   }
   
   init() {
-    window.addEventListener('scroll', () => this.update(), { passive: true });
-    this.update();
-  }
-  
-  update() {
-    const rect = this.element.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
-    const progress = (viewportHeight - rect.top) / (rect.height);
-    const clampedProgress = Math.max(0, Math.min(1, progress));
+    this.elements = this.container.querySelectorAll('.parallax-floating');
     
-    this.cards.forEach((card, index) => {
-      const cardProgress = (clampedProgress * this.cards.length) - index;
-      const clampedCardProgress = Math.max(-1, Math.min(2, cardProgress));
+    this.elements.forEach((el, index) => {
+      // Stagger animations
+      el.style.animationDelay = `${index * 0.5}s`;
       
-      const y = -clampedCardProgress * 30;
-      const scale = 1 - clampedCardProgress * 0.05;
-      const opacity = 1 - Math.abs(clampedCardProgress) * 0.3;
-      const zIndex = this.cards.length - index;
-      
-      card.style.transform = `translate3d(0, ${y}%, 0) scale(${scale})`;
-      card.style.opacity = Math.max(0, opacity);
-      card.style.zIndex = zIndex;
+      // Randomize slightly for organic feel
+      const randomDuration = 6 + Math.random() * 4;
+      el.style.animationDuration = `${randomDuration}s`;
     });
   }
 }
 
-// Zoom Parallax Controller
-class ZoomParallax {
-  constructor(element) {
-    this.element = element;
-    this.inner = element.querySelector('.parallax-zoom-inner');
-    this.image = element.querySelector('.parallax-zoom-image');
-    this.content = element.querySelector('.parallax-zoom-content');
-    
+// Parallax Cards with 3D tilt
+class ParallaxCards {
+  constructor(container) {
+    this.container = container;
+    this.cards = [];
     this.init();
   }
   
   init() {
-    window.addEventListener('scroll', () => this.update(), { passive: true });
-    this.update();
+    this.cards = this.container.querySelectorAll('.parallax-card');
+    
+    this.cards.forEach(card => {
+      card.addEventListener('mousemove', (e) => this.handleMouseMove(e, card));
+      card.addEventListener('mouseleave', (e) => this.handleMouseLeave(e, card));
+    });
   }
   
-  update() {
-    const rect = this.element.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
-    const progress = (viewportHeight - rect.top) / (rect.height);
-    const clampedProgress = Math.max(0, Math.min(1, progress));
+  handleMouseMove(e, card) {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
     
-    // Calculate zoom phase
-    const zoomPhase = clampedProgress < 0.5 
-      ? clampedProgress * 2  // First half: zoom in
-      : 1 - (clampedProgress - 0.5) * 2;  // Second half: zoom out
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
     
-    const scale = 1 + zoomPhase * 0.3;
-    const blur = (1 - zoomPhase) * 5;
+    const rotateX = (y - centerY) / 10;
+    const rotateY = (centerX - x) / 10;
     
-    this.image.style.transform = `scale(${scale})`;
-    this.image.style.filter = `blur(${blur}px)`;
-    
-    if (this.content) {
-      this.content.style.opacity = zoomPhase;
+    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(30px)`;
+  }
+  
+  handleMouseLeave(e, card) {
+    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+  }
+}
+
+// Initialize all parallax systems
+document.addEventListener('DOMContentLoaded', () => {
+  // Multi-layer parallax containers
+  document.querySelectorAll('.multi-layer-parallax-container').forEach(container => {
+    new MultiLayerParallax(container, {
+      speedFactor: parseFloat(container.dataset.parallaxSpeed) || 0.5,
+      direction: container.dataset.parallaxDirection || 'vertical'
+    });
+  });
+  
+  // Mouse parallax
+  document.querySelectorAll('.mouse-parallax-container').forEach(container => {
+    new MouseParallax(container, {
+      intensity: parseFloat(container.dataset.mouseIntensity) || 20
+    });
+  });
+  
+  // Floating elements
+  new FloatingElements();
+  
+  // Parallax cards
+  document.querySelectorAll('.parallax-cards-container').forEach(container => {
+    new ParallaxCards(container);
+  });
+  
+  // Parallax sections
+  document.querySelectorAll('.parallax-section').forEach(section => {
+    const bg = section.querySelector('.parallax-section__bg img');
+    if (bg) {
+      window.addEventListener('scroll', () => {
+        const rect = section.getBoundingClientRect();
+        const scrollProgress = -rect.top / rect.height;
+        const translateY = scrollProgress * 100;
+        bg.style.transform = `translate3d(0, ${translateY}px, 0)`;
+      }, { passive: true });
     }
-  }
-}
+  });
+});
 
-// Initialize systems
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    window.multiLayerParallax = new MultiLayerParallax();
-    
-    // Initialize card stacks
-    document.querySelectorAll('.parallax-card-stack').forEach(stack => {
-      new CardStackParallax(stack);
-    });
-    
-    // Initialize zoom parallax
-    document.querySelectorAll('.parallax-zoom-container').forEach(zoom => {
-      new ZoomParallax(zoom);
-    });
-  });
-} else {
-  window.multiLayerParallax = new MultiLayerParallax();
-  
-  document.querySelectorAll('.parallax-card-stack').forEach(stack => {
-    new CardStackParallax(stack);
-  });
-  
-  document.querySelectorAll('.parallax-zoom-container').forEach(zoom => {
-    new ZoomParallax(zoom);
-  });
+// Export for module usage
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { MultiLayerParallax, MouseParallax, FloatingElements, ParallaxCards };
 }

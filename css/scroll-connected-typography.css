@@ -1,16 +1,240 @@
-/* ========================================
-   v36.0: SCROLL-CONNECTED TYPOGRAPHY
-   Fortune 500 Text Transformation System
-   Text that evolves and transforms as users scroll
-======================================== */
+/* ============================================
+   SCROLL-CONNECTED TYPOGRAPHY v36.0
+   Fortune 500 Scroll-Responsive Text Effects
+   ============================================ */
 
-.scroll-typography-section {
+/* Base Container */
+.scroll-typography-container {
   position: relative;
-  min-height: 300vh;
-  padding: 0;
+  overflow: hidden;
 }
 
-.scroll-typography-container {
+/* Variable Font Weight Animation */
+.scroll-variable-text {
+  font-family: 'Montserrat', sans-serif;
+  font-variation-settings: 'wght' 400;
+  transition: font-variation-settings 0.1s ease-out;
+}
+
+.scroll-variable-text--bold {
+  font-variation-settings: 'wght' 800;
+}
+
+/* Letter Spacing Animation */
+.scroll-tracking-text {
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 0;
+  transition: letter-spacing 0.3s ease;
+}
+
+.scroll-tracking-text--expanded {
+  letter-spacing: 0.3em;
+}
+
+/* Opacity Cascade */
+.scroll-opacity-word {
+  opacity: 0.2;
+  transition: opacity 0.4s ease;
+}
+
+.scroll-opacity-word--active {
+  opacity: 1;
+}
+
+/* Text Reveal on Scroll */
+.scroll-reveal-text {
+  overflow: hidden;
+  display: inline-block;
+}
+
+.scroll-reveal-text span {
+  display: inline-block;
+  transform: translateY(100%);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-reveal-text--revealed span {
+  transform: translateY(0);
+}
+
+/* Horizontal Text Slide */
+.scroll-slide-text {
+  display: inline-block;
+  transform: translateX(-50px);
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-slide-text--active {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Scale Typography */
+.scroll-scale-text {
+  display: inline-block;
+  transform: scale(0.9);
+  opacity: 0.5;
+  transition: all 0.5s ease;
+}
+
+.scroll-scale-text--active {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* Color Transition Text */
+.scroll-color-text {
+  background: linear-gradient(
+    90deg,
+    rgba(201, 206, 214, 0.3) 0%,
+    rgba(201, 206, 214, 0.3) 100%
+  );
+  background-size: 0% 100%;
+  background-position: left;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition: background-size 0.1s ease;
+}
+
+.scroll-color-text--filled {
+  background-size: 100% 100%;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Strikethrough Reveal */
+.scroll-strike-text {
+  position: relative;
+  display: inline-block;
+}
+
+.scroll-strike-text::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 2px;
+  background: #C9CED6;
+  transition: width 0.4s ease;
+}
+
+.scroll-strike-text--active::after {
+  width: 100%;
+}
+
+/* Underline Grow */
+.scroll-underline-text {
+  position: relative;
+  display: inline-block;
+}
+
+.scroll-underline-text::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #C9CED6, #F5F7FA);
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-underline-text--active::after {
+  width: 100%;
+}
+
+/* Split Line Reveal */
+.scroll-split-line {
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-split-line::before,
+.scroll-split-line::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-split-line::before {
+  top: 0;
+  height: 50%;
+  transform: translateY(-100%);
+}
+
+.scroll-split-line::after {
+  bottom: 0;
+  height: 50%;
+  line-height: 0;
+  transform: translateY(100%);
+}
+
+.scroll-split-line--active::before,
+.scroll-split-line--active::after {
+  transform: translateY(0);
+}
+
+/* Word by Word Cascade */
+.scroll-cascade-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-cascade-word--active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Character Wave Animation */
+.scroll-wave-char {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.scroll-wave-char--active {
+  animation: char-wave 0.6s ease forwards;
+}
+
+@keyframes char-wave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Scroll Progress Typography */
+.scroll-progress-text {
+  position: relative;
+  display: inline-block;
+}
+
+.scroll-progress-text__fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #C9CED6;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+.scroll-progress-text__base {
+  color: rgba(201, 206, 214, 0.2);
+}
+
+/* Kinetic Typography Section */
+.kinetic-section {
+  min-height: 200vh;
+  position: relative;
+}
+
+.kinetic-section__sticky {
   position: sticky;
   top: 0;
   height: 100vh;
@@ -20,345 +244,245 @@
   overflow: hidden;
 }
 
-.scroll-typography-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 1400px;
-  padding: 0 40px;
-  text-align: center;
-}
-
-/* Main Typography Element */
-.scroll-typography-headline {
+.kinetic-section__text {
   font-family: 'Montserrat', sans-serif;
   font-size: clamp(48px, 10vw, 120px);
-  font-weight: 900;
-  line-height: 1.1;
-  color: #F5F7FA;
-  margin: 0;
-  position: relative;
-  display: inline-block;
-}
-
-.scroll-typography-headline .char {
-  display: inline-block;
-  transition: all 0.1s linear;
-  will-change: transform, opacity, filter;
-}
-
-.scroll-typography-headline .word {
-  display: inline-block;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Typography States */
-.scroll-typography-headline[data-state="compressed"] {
-  letter-spacing: -0.05em;
-}
-
-.scroll-typography-headline[data-state="expanded"] {
-  letter-spacing: 0.1em;
-}
-
-.scroll-typography-headline[data-state="scattered"] .char {
-  opacity: 0.3;
-  transform: translateY(var(--scatter-y, 0)) rotate(var(--scatter-rot, 0deg));
-}
-
-.scroll-typography-headline[data-state="focused"] .char {
-  opacity: 1;
-  filter: blur(0);
-}
-
-.scroll-typography-headline[data-state="blurred"] .char {
-  filter: blur(8px);
-  opacity: 0.5;
-}
-
-/* Progress Indicator */
-.scroll-typography-progress {
-  position: absolute;
-  left: 50%;
-  bottom: 60px;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.scroll-typography-dots {
-  display: flex;
-  gap: 8px;
-}
-
-.scroll-typography-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(201, 206, 214, 0.2);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.scroll-typography-dot.active {
-  background: #C9CED6;
-  transform: scale(1.5);
-}
-
-.scroll-typography-label {
-  font-family: 'Poppins', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  color: rgba(201, 206, 214, 0.6);
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  min-width: 80px;
+  font-weight: 800;
   text-align: center;
+  line-height: 1.1;
+  text-transform: uppercase;
+  max-width: 90vw;
 }
 
-/* Progress Bar */
-.scroll-typography-bar {
-  position: absolute;
-  left: 50%;
-  bottom: 40px;
-  transform: translateX(-50%);
-  width: 200px;
-  height: 2px;
-  background: rgba(201, 206, 214, 0.1);
-  border-radius: 1px;
+.kinetic-section__text-word {
+  display: block;
+  transition: all 0.1s ease;
+}
+
+/* Scroll Velocity Typography */
+.velocity-text {
+  transition: transform 0.1s ease-out;
+  will-change: transform;
+}
+
+.velocity-text--skew {
+  transform: skewX(0deg);
+}
+
+/* Clip Path Text Reveal */
+.clip-text-reveal {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clip-text-reveal--active {
+  clip-path: inset(0 0 0 0);
+}
+
+.clip-text-reveal--bottom {
+  clip-path: inset(100% 0 0 0);
+}
+
+.clip-text-reveal--bottom.clip-text-reveal--active {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Rotating Text Cylinder Effect */
+.cylinder-text-container {
+  perspective: 1000px;
+  height: 100px;
   overflow: hidden;
 }
 
-.scroll-typography-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #C9CED6, rgba(201, 206, 214, 0.5));
-  border-radius: 1px;
-  width: 0%;
-  transition: width 0.1s linear;
+.cylinder-text {
+  transform-style: preserve-3d;
+  animation: cylinder-rotate 10s linear infinite;
 }
 
-/* Scroll Direction Indicator */
-.scroll-typography-direction {
+.cylinder-text__item {
   position: absolute;
-  right: 40px;
-  top: 50%;
-  transform: translateY(-50%);
+  width: 100%;
+  text-align: center;
+  backface-visibility: hidden;
+}
+
+@keyframes cylinder-rotate {
+  from { transform: rotateX(0deg); }
+  to { transform: rotateX(360deg); }
+}
+
+/* Scroll-Linked Headline */
+.scroll-headline {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(36px, 6vw, 80px);
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1.1;
+  margin-bottom: 40px;
+}
+
+.scroll-headline__line {
+  display: block;
+  overflow: hidden;
+}
+
+.scroll-headline__line-inner {
+  display: block;
+  transform: translateY(100%);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-headline__line--active .scroll-headline__line-inner {
+  transform: translateY(0);
+}
+
+/* Stroke to Fill Animation */
+.stroke-fill-text {
+  position: relative;
+  -webkit-text-stroke: 1px rgba(201, 206, 214, 0.5);
+  -webkit-text-fill-color: transparent;
+  transition: all 0.5s ease;
+}
+
+.stroke-fill-text--filled {
+  -webkit-text-fill-color: #F5F7FA;
+  -webkit-text-stroke: 1px transparent;
+}
+
+/* Scroll Typography Hero */
+.scroll-typography-hero {
+  min-height: 150vh;
+  position: relative;
+}
+
+.scroll-typography-hero__sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-}
-
-.scroll-typography-arrow {
-  width: 40px;
-  height: 40px;
-  border: 1px solid rgba(201, 206, 214, 0.15);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  font-size: 18px;
-  color: rgba(201, 206, 214, 0.4);
-  animation: pulse-arrow 2s ease infinite;
+  text-align: center;
+  padding: 0 40px;
 }
 
-@keyframes pulse-arrow {
-  0%, 100% { transform: translateY(0); opacity: 0.4; }
-  50% { transform: translateY(5px); opacity: 1; }
-}
-
-/* Floating Word Elements */
-.scroll-typography-words {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.scroll-typography-word {
-  position: absolute;
-  font-family: 'Montserrat', sans-serif;
+.scroll-typography-hero__eyebrow {
+  font-family: 'Poppins', sans-serif;
   font-size: 14px;
-  font-weight: 600;
-  color: rgba(201, 206, 214, 0.3);
+  font-weight: 500;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  color: rgba(201, 206, 214, 0.6);
+  margin-bottom: 24px;
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(20px);
+  transition: all 0.6s ease;
 }
 
-.scroll-typography-word.visible {
+.scroll-typography-hero__eyebrow--active {
   opacity: 1;
   transform: translateY(0);
 }
 
-.scroll-typography-word.highlighted {
-  color: #C9CED6;
-  transform: scale(1.2);
+.scroll-typography-hero__title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(48px, 8vw, 120px);
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 32px;
 }
 
-/* Morphing Text Container */
-.scroll-typography-morph {
-  position: relative;
-  height: 200px;
-  perspective: 1000px;
+.scroll-typography-hero__title-line {
+  display: block;
+  overflow: hidden;
 }
 
-.scroll-typography-morph-item {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transform: translateZ(-100px) rotateX(20deg);
-  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.scroll-typography-morph-item.active {
-  opacity: 1;
-  transform: translateZ(0) rotateX(0);
-}
-
-.scroll-typography-morph-item.exiting {
-  opacity: 0;
-  transform: translateZ(100px) rotateX(-20deg);
-}
-
-/* Variable Font Animation Support */
-.scroll-typography-variable {
-  font-variation-settings: 'wght' 400, 'wdth' 100;
-  transition: font-variation-settings 0.3s ease;
-}
-
-.scroll-typography-variable:hover {
-  font-variation-settings: 'wght' 900, 'wdth' 125;
-}
-
-/* Character-by-Character Reveal */
-.scroll-typography-reveal .char {
-  opacity: 0;
-  transform: translateY(100%) rotateX(-90deg);
+.scroll-typography-hero__title-word {
   display: inline-block;
+  transform: translateY(100%) rotateX(-80deg);
+  opacity: 0;
+  transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.scroll-typography-reveal.revealed .char {
-  opacity: 1;
+.scroll-typography-hero__title-word--active {
   transform: translateY(0) rotateX(0);
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 1;
 }
 
-/* Scramble Effect on Scroll */
-.scroll-typography-scramble {
+.scroll-typography-hero__subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(201, 206, 214, 0.7);
+  line-height: 1.7;
+  max-width: 600px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease 0.3s;
+}
+
+.scroll-typography-hero__subtitle--active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Text Mask Animation */
+.text-mask-container {
   position: relative;
+  overflow: hidden;
 }
 
-.scroll-typography-scramble .scramble-char {
-  display: inline-block;
-  min-width: 0.6em;
-}
-
-/* Wave Animation */
-.scroll-typography-wave .char {
-  animation: char-wave 3s ease infinite;
-  animation-delay: calc(var(--char-index) * 0.05s);
-}
-
-@keyframes char-wave {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
-}
-
-/* Gradient Text Transition */
-.scroll-typography-gradient {
-  background: linear-gradient(
-    90deg,
-    #F5F7FA 0%,
-    #C9CED6 25%,
-    #F5F7FA 50%,
-    #C9CED6 75%,
-    #F5F7FA 100%
-  );
-  background-size: 200% 100%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  transition: background-position 0.5s ease;
-}
-
-.scroll-typography-gradient.shifted {
-  background-position: 100% 0;
-}
-
-/* Depth Layers */
-.scroll-typography-layers {
-  position: relative;
-}
-
-.scroll-typography-layer {
+.text-mask {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: #0f0f12;
+  transform: translateX(0);
+  transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
-.scroll-typography-layer-back {
-  color: rgba(201, 206, 214, 0.1);
-  transform: translateZ(-100px);
+.text-mask--revealed {
+  transform: translateX(100%);
 }
 
-.scroll-typography-layer-mid {
-  color: rgba(201, 206, 214, 0.2);
-  transform: translateZ(-50px);
+/* Parallax Text Layers */
+.parallax-text-layer {
+  will-change: transform;
+  transition: transform 0.1s linear;
 }
 
-.scroll-typography-layer-front {
-  color: #F5F7FA;
+.parallax-text-layer--back {
+  transform: translateZ(-100px) scale(1.1);
+}
+
+.parallax-text-layer--mid {
+  transform: translateZ(-50px) scale(1.05);
+}
+
+.parallax-text-layer--front {
   transform: translateZ(0);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .scroll-typography-wrapper {
-    padding: 0 20px;
+  .scroll-typography-hero__title {
+    font-size: clamp(32px, 10vw, 48px);
   }
   
-  .scroll-typography-headline {
-    font-size: clamp(36px, 12vw, 80px);
+  .kinetic-section__text {
+    font-size: clamp(32px, 10vw, 64px);
   }
   
-  .scroll-typography-direction {
-    display: none;
-  }
-  
-  .scroll-typography-progress {
-    bottom: 40px;
+  .scroll-headline {
+    font-size: clamp(28px, 8vw, 48px);
   }
 }
 
-/* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-  .scroll-typography-section {
-    min-height: auto;
-    padding: 100px 0;
-  }
-  
-  .scroll-typography-container {
-    position: relative;
-    height: auto;
-  }
-  
-  .scroll-typography-headline .char,
-  .scroll-typography-word,
-  .scroll-typography-morph-item {
-    opacity: 1 !important;
-    transform: none !important;
-    filter: none !important;
-  }
-  
-  .scroll-typography-progress,
-  .scroll-typography-direction,
-  .scroll-typography-bar {
-    display: none;
+  .scroll-typography-container *,
+  .kinetic-section *,
+  .scroll-typography-hero * {
+    animation: none !important;
+    transition: opacity 0.3s ease !important;
   }
 }
