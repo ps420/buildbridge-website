@@ -1,0 +1,460 @@
+/* ========================================
+   PROFESSIONAL INPUT MASKING SYSTEM v56.0
+   Fortune 500 Form Field Standard
+======================================== */
+
+/* Input Field Base with Masking */
+.input-masked {
+  position: relative;
+}
+
+.input-masked input,
+.input-masked textarea {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #F5F7FA;
+  background: rgba(201, 206, 214, 0.05);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 12px;
+  padding: 16px 20px;
+  width: 100%;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+.input-masked input:focus,
+.input-masked textarea:focus {
+  border-color: rgba(201, 206, 214, 0.4);
+  background: rgba(201, 206, 214, 0.08);
+  box-shadow: 0 0 0 4px rgba(201, 206, 214, 0.1);
+}
+
+/* Mask Placeholder Styling */
+.input-masked input::placeholder {
+  color: rgba(201, 206, 214, 0.4);
+  font-weight: 400;
+}
+
+/* Currency Input */
+.input-currency {
+  position: relative;
+}
+
+.input-currency::before {
+  content: attr(data-currency);
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: rgba(201, 206, 214, 0.6);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.input-currency input {
+  padding-left: 45px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Phone Input with Country Flag */
+.input-phone {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.phone-country-select {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 70px;
+  background: rgba(201, 206, 214, 0.08);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-right: none;
+  border-radius: 12px 0 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.phone-country-select:hover {
+  background: rgba(201, 206, 214, 0.12);
+}
+
+.phone-country-select .flag {
+  font-size: 20px;
+}
+
+.phone-country-select .code {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(201, 206, 214, 0.7);
+  margin-left: 4px;
+}
+
+.input-phone input {
+  padding-left: 80px;
+  border-radius: 12px;
+}
+
+/* Date Input */
+.input-date {
+  position: relative;
+}
+
+.input-date input {
+  font-variant-numeric: tabular-nums;
+}
+
+.input-date .date-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(201, 206, 214, 0.5);
+  pointer-events: none;
+}
+
+.input-date input::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50px;
+  height: 100%;
+}
+
+/* Credit Card Input */
+.input-credit-card {
+  position: relative;
+}
+
+.input-credit-card::before {
+  content: '💳';
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  pointer-events: none;
+}
+
+.input-credit-card input {
+  padding-left: 50px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 2px;
+}
+
+.card-type-indicator {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card-type-indicator.visible {
+  opacity: 1;
+}
+
+/* ID Number Input (South African Style) */
+.input-sa-id {
+  position: relative;
+}
+
+.input-sa-id input {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1px;
+}
+
+.id-validation-indicator {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.id-validation-indicator.valid {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4CAF50;
+  opacity: 1;
+}
+
+.id-validation-indicator.invalid {
+  background: rgba(244, 67, 54, 0.2);
+  color: #F44336;
+  opacity: 1;
+}
+
+/* Percentage Input */
+.input-percentage {
+  position: relative;
+}
+
+.input-percentage::after {
+  content: '%';
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: rgba(201, 206, 214, 0.6);
+  pointer-events: none;
+}
+
+.input-percentage input {
+  padding-right: 40px;
+}
+
+/* Mask Placeholder Characters */
+.mask-placeholder {
+  color: rgba(201, 206, 214, 0.3);
+  font-weight: 400;
+}
+
+/* Real Value Styling (hidden but accessible) */
+.mask-real-value {
+  color: #F5F7FA;
+}
+
+/* Input Validation States */
+.input-masked.valid input {
+  border-color: rgba(76, 175, 80, 0.5);
+  background: rgba(76, 175, 80, 0.05);
+}
+
+.input-masked.invalid input {
+  border-color: rgba(244, 67, 54, 0.5);
+  background: rgba(244, 67, 54, 0.05);
+}
+
+/* Validation Message */
+.mask-validation-message {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.mask-validation-message.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mask-validation-message.error {
+  color: #F44336;
+}
+
+.mask-validation-message.success {
+  color: #4CAF50;
+}
+
+/* Character Counter */
+.char-counter {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: rgba(201, 206, 214, 0.5);
+  text-align: right;
+  margin-top: 8px;
+  transition: color 0.3s ease;
+}
+
+.char-counter.warning {
+  color: #FF9800;
+}
+
+.char-counter.danger {
+  color: #F44336;
+}
+
+/* Input with Clear Button */
+.input-with-clear {
+  position: relative;
+}
+
+.input-clear-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%) scale(0);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.1);
+  border: none;
+  color: rgba(201, 206, 214, 0.6);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  opacity: 0;
+}
+
+.input-with-clear input:not(:placeholder-shown) ~ .input-clear-btn,
+.input-with-clear.has-value .input-clear-btn {
+  transform: translateY(-50%) scale(1);
+  opacity: 1;
+}
+
+.input-clear-btn:hover {
+  background: rgba(201, 206, 214, 0.2);
+  color: #F5F7FA;
+}
+
+/* Auto-complete Dropdown */
+.mask-autocomplete {
+  position: relative;
+}
+
+.mask-autocomplete-list {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: #1a1a22;
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 12px;
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s ease;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.mask-autocomplete-list.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.mask-autocomplete-item {
+  padding: 12px 16px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: rgba(201, 206, 214, 0.8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(201, 206, 214, 0.05);
+}
+
+.mask-autocomplete-item:last-child {
+  border-bottom: none;
+}
+
+.mask-autocomplete-item:hover,
+.mask-autocomplete-item.highlighted {
+  background: rgba(201, 206, 214, 0.08);
+  color: #F5F7FA;
+}
+
+.mask-autocomplete-item strong {
+  color: #F5F7FA;
+  font-weight: 600;
+}
+
+/* Copy to Clipboard Button */
+.mask-copy-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 6px 12px;
+  background: rgba(201, 206, 214, 0.08);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(201, 206, 214, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0;
+}
+
+.input-masked:hover .mask-copy-btn,
+.input-masked input:focus ~ .mask-copy-btn {
+  opacity: 1;
+}
+
+.mask-copy-btn:hover {
+  background: rgba(201, 206, 214, 0.15);
+  color: #F5F7FA;
+}
+
+.mask-copy-btn.copied {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4CAF50;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .input-masked input,
+  .input-masked textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 14px 16px;
+  }
+  
+  .phone-country-select {
+    width: 60px;
+  }
+  
+  .input-phone input {
+    padding-left: 70px;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .input-masked input,
+  .input-masked textarea {
+    border-width: 2px;
+  }
+  
+  .input-masked input:focus,
+  .input-masked textarea:focus {
+    outline: 3px solid currentColor;
+    outline-offset: 2px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .input-masked input,
+  .input-masked textarea,
+  .mask-validation-message,
+  .input-clear-btn,
+  .mask-autocomplete-list {
+    transition: none;
+  }
+}
