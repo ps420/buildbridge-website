@@ -1,0 +1,335 @@
+/* ========================================
+   CURSOR SPOTLIGHT ENHANCED - v39.0
+   Fortune 500 Professional Cursor System
+   With Magnetic Effects & Context Awareness
+======================================== */
+
+/* Custom Cursor Container */
+.custom-cursor-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 99999;
+  mix-blend-mode: difference;
+}
+
+/* Hide default cursor when custom is active */
+body.custom-cursor-active,
+body.custom-cursor-active * {
+  cursor: none !important;
+}
+
+/* Main Cursor Dot */
+.cursor-dot {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: #C9CED6;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.15s ease, height 0.15s ease, background 0.15s ease;
+  will-change: transform;
+}
+
+/* Cursor Ring */
+.cursor-ring {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(201, 206, 214, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease,
+              background 0.3s ease;
+  will-change: transform;
+}
+
+/* Cursor Spotlight Glow */
+.cursor-spotlight {
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(201, 206, 214, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99997;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  will-change: transform, opacity;
+}
+
+body.custom-cursor-active .cursor-spotlight {
+  opacity: 1;
+}
+
+/* Cursor States */
+.cursor-dot.hover-link,
+.cursor-dot.hover-button {
+  width: 12px;
+  height: 12px;
+  background: #F5F7FA;
+}
+
+.cursor-ring.hover-link {
+  width: 50px;
+  height: 50px;
+  border-color: rgba(201, 206, 214, 0.8);
+  background: rgba(201, 206, 214, 0.05);
+}
+
+.cursor-ring.hover-button {
+  width: 60px;
+  height: 60px;
+  border-color: rgba(245, 247, 250, 0.6);
+  background: rgba(245, 247, 250, 0.1);
+}
+
+.cursor-ring.hover-image {
+  width: 80px;
+  height: 80px;
+  border-color: rgba(201, 206, 214, 0.4);
+  background: rgba(201, 206, 214, 0.05);
+}
+
+.cursor-ring.hover-text {
+  width: 3px;
+  height: 24px;
+  border-radius: 2px;
+  border: none;
+  background: rgba(201, 206, 214, 0.6);
+}
+
+/* Cursor Text Label */
+.cursor-label {
+  position: fixed;
+  padding: 8px 14px;
+  background: rgba(15, 15, 16, 0.95);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #F5F7FA;
+  pointer-events: none;
+  z-index: 99996;
+  transform: translate(-50%, -150%);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  white-space: nowrap;
+  backdrop-filter: blur(10px);
+}
+
+.cursor-label.is-visible {
+  opacity: 1;
+  transform: translate(-50%, -180%);
+}
+
+/* Magnetic Effect Indicator */
+.cursor-magnetic-field {
+  position: fixed;
+  border-radius: 50%;
+  border: 1px dashed rgba(201, 206, 214, 0.2);
+  pointer-events: none;
+  z-index: 99995;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cursor-magnetic-field.is-active {
+  opacity: 1;
+  animation: magnetic-rotate 10s linear infinite;
+}
+
+@keyframes magnetic-rotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Click Effect */
+.cursor-click-effect {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #C9CED6;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99994;
+  transform: translate(-50%, -50%) scale(0.5);
+  opacity: 0;
+}
+
+.cursor-click-effect.animate {
+  animation: click-ripple 0.5s ease forwards;
+}
+
+@keyframes click-ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+/* Trail Effect */
+.cursor-trail {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  background: rgba(201, 206, 214, 0.4);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99993;
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity;
+}
+
+/* Spotlight Section Highlight */
+.spotlight-section-highlight {
+  position: absolute;
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 9990;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.03) 0%, transparent 50%);
+  border: 1px solid rgba(201, 206, 214, 0.08);
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: scale(0.95);
+}
+
+.spotlight-section-highlight.is-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Context-Aware Cursor Styles */
+.cursor-context-view {
+  width: 60px;
+  height: 60px;
+  background: rgba(201, 206, 214, 0.1);
+  border: 2px solid rgba(201, 206, 214, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: #C9CED6;
+}
+
+.cursor-context-drag {
+  width: 50px;
+  height: 50px;
+  border: 2px dashed rgba(201, 206, 214, 0.5);
+  background: rgba(201, 206, 214, 0.05);
+}
+
+.cursor-context-zoom {
+  width: 50px;
+  height: 50px;
+  background: rgba(201, 206, 214, 0.1);
+  border: 2px solid rgba(201, 206, 214, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cursor-context-zoom::before,
+.cursor-context-zoom::after {
+  content: '';
+  position: absolute;
+  background: #C9CED6;
+}
+
+.cursor-context-zoom::before {
+  width: 16px;
+  height: 2px;
+}
+
+.cursor-context-zoom::after {
+  width: 2px;
+  height: 16px;
+}
+
+/* Scroll Indicator on Cursor */
+.cursor-scroll-indicator {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99996;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cursor-scroll-indicator.is-visible {
+  opacity: 1;
+}
+
+.cursor-scroll-indicator svg {
+  width: 24px;
+  height: 24px;
+  color: rgba(201, 206, 214, 0.6);
+  animation: scroll-bounce 1.5s ease infinite;
+}
+
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+
+/* Performance Mode */
+body.cursor-performance-mode .cursor-spotlight,
+body.cursor-performance-mode .cursor-trail,
+body.cursor-performance-mode .cursor-magnetic-field {
+  display: none;
+}
+
+/* Mobile Hide */
+@media (pointer: coarse), (max-width: 768px) {
+  .custom-cursor-container,
+  .cursor-dot,
+  .cursor-ring,
+  .cursor-spotlight,
+  .cursor-label,
+  .cursor-magnetic-field,
+  .cursor-trail {
+    display: none !important;
+  }
+  
+  body.custom-cursor-active,
+  body.custom-cursor-active * {
+    cursor: auto !important;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .cursor-dot,
+  .cursor-ring,
+  .cursor-label {
+    transition: none;
+  }
+  
+  .cursor-magnetic-field.is-active {
+    animation: none;
+  }
+}
+
+/* Focus Visible Override */
+body.custom-cursor-active *:focus-visible {
+  outline: 2px solid rgba(201, 206, 214, 0.6);
+  outline-offset: 4px;
+}

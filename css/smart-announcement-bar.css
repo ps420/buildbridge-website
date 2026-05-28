@@ -1,0 +1,430 @@
+/* ========================================
+   SMART ANNOUNCEMENT BAR - v39.0
+   Fortune 500 Professional Announcements
+   With Smart Targeting & Animation System
+======================================== */
+
+/* Base Announcement Bar */
+.smart-announcement {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10001;
+  transform: translateY(-100%);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.smart-announcement.is-visible {
+  transform: translateY(0);
+}
+
+.smart-announcement.is-hidden {
+  transform: translateY(-100%);
+}
+
+.smart-announcement.is-dismissed {
+  transform: translateY(-100%);
+  pointer-events: none;
+}
+
+/* Announcement Inner */
+.smart-announcement__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 24px;
+  min-height: 50px;
+  position: relative;
+}
+
+/* Variants */
+.smart-announcement--info .smart-announcement__inner {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(37, 99, 235, 0.95));
+  color: #fff;
+}
+
+.smart-announcement--success .smart-announcement__inner {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.95), rgba(5, 150, 105, 0.95));
+  color: #fff;
+}
+
+.smart-announcement--warning .smart-announcement__inner {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.95), rgba(217, 119, 6, 0.95));
+  color: #fff;
+}
+
+.smart-announcement--error .smart-announcement__inner {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.95), rgba(220, 38, 38, 0.95));
+  color: #fff;
+}
+
+.smart-announcement--promo .smart-announcement__inner {
+  background: linear-gradient(90deg, #C9CED6 0%, #F5F7FA 50%, #C9CED6 100%);
+  background-size: 200% 100%;
+  animation: promo-shimmer 3s linear infinite;
+  color: #0f0f10;
+}
+
+@keyframes promo-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.smart-announcement--dark .smart-announcement__inner {
+  background: linear-gradient(135deg, rgba(15, 15, 16, 0.98), rgba(30, 30, 35, 0.98));
+  color: #C9CED6;
+  border-bottom: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+/* Announcement Content */
+.smart-announcement__content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  flex: 1;
+  justify-content: center;
+  padding: 0 40px;
+}
+
+.smart-announcement__icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.smart-announcement__text {
+  line-height: 1.5;
+}
+
+.smart-announcement__text strong {
+  font-weight: 700;
+}
+
+.smart-announcement__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+.smart-announcement__link:hover {
+  opacity: 0.8;
+}
+
+.smart-announcement--promo .smart-announcement__link {
+  color: #0f0f10;
+}
+
+.smart-announcement--dark .smart-announcement__link {
+  color: #F5F7FA;
+}
+
+/* Countdown Timer */
+.smart-announcement__countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin: 0 8px;
+}
+
+/* Action Button */
+.smart-announcement__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  margin-left: 12px;
+}
+
+.smart-announcement__action:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.smart-announcement--promo .smart-announcement__action {
+  background: #0f0f10;
+  color: #fff;
+  border-color: #0f0f10;
+}
+
+.smart-announcement--promo .smart-announcement__action:hover {
+  background: #1a1a22;
+}
+
+/* Close Button */
+.smart-announcement__close {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  color: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+}
+
+.smart-announcement__close:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-50%) rotate(90deg);
+}
+
+.smart-announcement__close svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Progress Bar */
+.smart-announcement__progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.smart-announcement__progress-bar {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  width: 100%;
+  transform-origin: left;
+}
+
+/* Marquee Support */
+.smart-announcement--marquee .smart-announcement__content {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.smart-announcement__marquee {
+  display: inline-block;
+  animation: marquee 20s linear infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Stacked Announcements */
+.smart-announcement-stack {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10001;
+}
+
+.smart-announcement-stack .smart-announcement {
+  position: relative;
+}
+
+/* Position Variants */
+.smart-announcement--bottom {
+  top: auto;
+  bottom: 0;
+  transform: translateY(100%);
+}
+
+.smart-announcement--bottom.is-visible {
+  transform: translateY(0);
+}
+
+.smart-announcement--bottom.is-dismissed {
+  transform: translateY(100%);
+}
+
+/* Compact Variant */
+.smart-announcement--compact .smart-announcement__inner {
+  padding: 10px 16px;
+  min-height: 40px;
+}
+
+.smart-announcement--compact .smart-announcement__content {
+  font-size: 12px;
+  padding: 0 30px;
+}
+
+/* Large Variant */
+.smart-announcement--large .smart-announcement__inner {
+  padding: 20px 32px;
+  min-height: 70px;
+}
+
+.smart-announcement--large .smart-announcement__content {
+  font-size: 16px;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.smart-announcement--large .smart-announcement__action {
+  padding: 12px 24px;
+  font-size: 14px;
+}
+
+/* Cookie Consent Specific */
+.smart-announcement--cookies .smart-announcement__inner {
+  background: rgba(15, 15, 16, 0.98);
+  color: #C9CED6;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.smart-announcement--cookies .smart-announcement__content {
+  text-align: left;
+  justify-content: flex-start;
+  flex: 1 1 300px;
+  padding: 0;
+}
+
+.smart-announcement--cookies .smart-announcement__actions {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* Floating Pill Variant */
+.smart-announcement--pill {
+  top: 20px;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%) translateY(-150%);
+  max-width: 600px;
+  width: calc(100% - 40px);
+}
+
+.smart-announcement--pill.is-visible {
+  transform: translateX(-50%) translateY(0);
+}
+
+.smart-announcement--pill .smart-announcement__inner {
+  border-radius: 50px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* With Navigation Compensation */
+body.has-announcement .nav {
+  top: 50px;
+}
+
+body.has-announcement--compact .nav {
+  top: 40px;
+}
+
+body.has-announcement--large .nav {
+  top: 70px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .smart-announcement__inner {
+    padding: 12px 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .smart-announcement__content {
+    padding: 0 30px 0 0;
+    font-size: 13px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  
+  .smart-announcement__close {
+    position: static;
+    transform: none;
+    margin-left: auto;
+  }
+  
+  .smart-announcement__close:hover {
+    transform: rotate(90deg);
+  }
+  
+  .smart-announcement__action {
+    width: 100%;
+    justify-content: center;
+    margin: 8px 0 0 0;
+  }
+  
+  body.has-announcement .nav,
+  body.has-announcement--compact .nav,
+  body.has-announcement--large .nav {
+    top: 0;
+  }
+}
+
+/* Animation Variants */
+.smart-announcement--slide-right {
+  transform: translateX(-100%);
+}
+
+.smart-announcement--slide-right.is-visible {
+  transform: translateX(0);
+}
+
+.smart-announcement--fade {
+  opacity: 0;
+  transform: translateY(0);
+  transition: opacity 0.5s ease;
+}
+
+.smart-announcement--fade.is-visible {
+  opacity: 1;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .smart-announcement,
+  .smart-announcement__inner,
+  .smart-announcement__close {
+    transition: none;
+  }
+  
+  .smart-announcement__marquee {
+    animation: none;
+  }
+  
+  .smart-announcement--promo .smart-announcement__inner {
+    animation: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .smart-announcement__inner {
+    border: 2px solid currentColor;
+  }
+}

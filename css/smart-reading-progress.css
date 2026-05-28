@@ -1,0 +1,416 @@
+/* ========================================
+   SMART READING PROGRESS - v39.0
+   Fortune 500 Professional Reading Indicator
+   With Section Awareness & Scroll Velocity
+======================================== */
+
+.smart-reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(201, 206, 214, 0.1);
+  z-index: 9998;
+  overflow: visible;
+}
+
+.smart-reading-progress__bar {
+  height: 100%;
+  background: linear-gradient(90deg, 
+    rgba(201, 206, 214, 0.8) 0%, 
+    rgba(201, 206, 214, 1) 50%, 
+    rgba(245, 247, 250, 0.9) 100%);
+  width: 0%;
+  transition: width 0.1s linear;
+  position: relative;
+  box-shadow: 0 0 20px rgba(201, 206, 214, 0.4);
+}
+
+.smart-reading-progress__bar::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background: #C9CED6;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(201, 206, 214, 0.6);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.smart-reading-progress:hover .smart-reading-progress__bar::after,
+.smart-reading-progress.is-scrolling .smart-reading-progress__bar::after {
+  opacity: 1;
+}
+
+/* Section Markers */
+.smart-reading-progress__markers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.smart-reading-progress__marker {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: rgba(201, 206, 214, 0.3);
+  transition: all 0.3s ease;
+}
+
+.smart-reading-progress__marker::before {
+  content: attr(data-label);
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  background: rgba(15, 15, 16, 0.95);
+  color: #C9CED6;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  pointer-events: none;
+}
+
+.smart-reading-progress:hover .smart-reading-progress__marker::before,
+.smart-reading-progress__marker.is-active::before {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+}
+
+.smart-reading-progress__marker.is-active {
+  background: rgba(201, 206, 214, 0.6);
+  box-shadow: 0 0 10px rgba(201, 206, 214, 0.3);
+}
+
+/* Section Tooltip */
+.smart-reading-progress__tooltip {
+  position: fixed;
+  background: rgba(15, 15, 16, 0.98);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 8px;
+  padding: 12px 16px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.2s ease;
+  z-index: 9999;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.smart-reading-progress__tooltip.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.smart-reading-progress__tooltip-section {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin-bottom: 4px;
+}
+
+.smart-reading-progress__tooltip-progress {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: rgba(201, 206, 214, 0.7);
+}
+
+.smart-reading-progress__tooltip-bar {
+  width: 100%;
+  height: 3px;
+  background: rgba(201, 206, 214, 0.2);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.smart-reading-progress__tooltip-bar-inner {
+  height: 100%;
+  background: linear-gradient(90deg, #C9CED6, #F5F7FA);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* Chapter Indicators */
+.smart-reading-chapters {
+  position: fixed;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.smart-reading-chapters.is-visible {
+  opacity: 1;
+}
+
+.smart-reading-chapter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 8px 0;
+}
+
+.smart-reading-chapter:hover {
+  transform: translateX(-5px);
+}
+
+.smart-reading-chapter__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.3);
+  border: 2px solid transparent;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.smart-reading-chapter__dot::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s ease;
+}
+
+.smart-reading-chapter.is-active .smart-reading-chapter__dot {
+  background: #C9CED6;
+  transform: scale(1.2);
+  box-shadow: 0 0 15px rgba(201, 206, 214, 0.4);
+}
+
+.smart-reading-chapter.is-active .smart-reading-chapter__dot::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.smart-reading-chapter.is-read .smart-reading-chapter__dot {
+  background: rgba(201, 206, 214, 0.6);
+}
+
+.smart-reading-chapter__label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(201, 206, 214, 0.5);
+  opacity: 0;
+  transform: translateX(10px);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.smart-reading-chapters:hover .smart-reading-chapter__label,
+.smart-reading-chapter.is-active .smart-reading-chapter__label {
+  opacity: 1;
+  transform: translateX(0);
+  color: rgba(201, 206, 214, 0.9);
+}
+
+/* Velocity Indicator */
+.smart-reading-velocity {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(15, 15, 16, 0.9);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  color: rgba(201, 206, 214, 0.7);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  z-index: 100;
+}
+
+.smart-reading-velocity.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.smart-reading-velocity__icon {
+  width: 16px;
+  height: 16px;
+  animation: velocity-pulse 1s ease infinite;
+}
+
+@keyframes velocity-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+.smart-reading-velocity__value {
+  font-weight: 600;
+  color: #C9CED6;
+  min-width: 40px;
+  text-align: right;
+}
+
+/* Reading Time Estimate */
+.smart-reading-time {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  background: rgba(15, 15, 16, 0.9);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 25px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: rgba(201, 206, 214, 0.7);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+}
+
+.smart-reading-time.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.smart-reading-time__icon {
+  width: 18px;
+  height: 18px;
+  color: #C9CED6;
+}
+
+.smart-reading-time__text strong {
+  color: #F5F7FA;
+  font-weight: 600;
+}
+
+/* Completion Celebration */
+.smart-reading-complete {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 15, 16, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.smart-reading-complete.is-visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.smart-reading-complete__content {
+  text-align: center;
+  padding: 60px;
+  transform: scale(0.9);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.smart-reading-complete.is-visible .smart-reading-complete__content {
+  transform: scale(1);
+}
+
+.smart-reading-complete__icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+  animation: complete-bounce 1s ease infinite;
+}
+
+@keyframes complete-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.smart-reading-complete__title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin-bottom: 12px;
+}
+
+.smart-reading-complete__text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  color: rgba(201, 206, 214, 0.7);
+  margin-bottom: 32px;
+}
+
+.smart-reading-complete__actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .smart-reading-progress {
+    height: 3px;
+  }
+  
+  .smart-reading-chapters {
+    display: none;
+  }
+  
+  .smart-reading-time {
+    left: 20px;
+    bottom: 20px;
+    padding: 10px 14px;
+    font-size: 11px;
+  }
+  
+  .smart-reading-velocity {
+    display: none;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .smart-reading-progress__bar,
+  .smart-reading-chapter,
+  .smart-reading-chapter__dot,
+  .smart-reading-time,
+  .smart-reading-velocity {
+    transition: none;
+  }
+  
+  .smart-reading-complete__content {
+    transition: none;
+  }
+}
