@@ -1,0 +1,275 @@
+/* ========================================
+   v38.0: SCROLL-DRIVEN MORPHING CARDS
+   Dynamic shape transformation on scroll
+   Fortune 500 Next-Gen Interaction Feature
+======================================== */
+
+.morphing-cards-section {
+  padding: 120px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.morphing-cards-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.morphing-cards-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.morphing-cards-header h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+
+.morphing-cards-header p {
+  color: var(--chrome);
+  font-size: 18px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.morphing-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  perspective: 1000px;
+}
+
+.morphing-card {
+  position: relative;
+  min-height: 400px;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.morphing-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, rgba(23, 25, 29, 0.8), rgba(26, 28, 33, 0.9));
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 24px;
+  padding: 40px;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(10px);
+}
+
+.morphing-card::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, var(--chrome), transparent, var(--chrome));
+  border-radius: 26px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+}
+
+.morphing-card:hover::before {
+  opacity: 0.3;
+}
+
+.morphing-card:hover .morphing-card-inner {
+  border-color: rgba(201, 206, 214, 0.2);
+  transform: translateY(-10px);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+}
+
+/* Morphing shape background */
+.morphing-shape {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.1), rgba(201, 206, 214, 0.05));
+  border-radius: 50%;
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.morphing-card[data-phase="1"] .morphing-shape {
+  border-radius: 50%;
+  transform: rotate(0deg) scale(1);
+}
+
+.morphing-card[data-phase="2"] .morphing-shape {
+  border-radius: 20%;
+  transform: rotate(45deg) scale(1.1);
+}
+
+.morphing-card[data-phase="3"] .morphing-shape {
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  transform: rotate(90deg) scale(1.2);
+}
+
+.morphing-card[data-phase="4"] .morphing-shape {
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  transform: rotate(135deg) scale(1.1);
+}
+
+.morphing-card[data-phase="5"] .morphing-shape {
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  transform: rotate(180deg) scale(1);
+}
+
+.morphing-card-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.15), rgba(201, 206, 214, 0.05));
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: 24px;
+  transition: transform 0.4s ease;
+}
+
+.morphing-card:hover .morphing-card-icon {
+  transform: scale(1.1) rotate(-5deg);
+}
+
+.morphing-card-number {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--chrome);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+  opacity: 0.7;
+}
+
+.morphing-card h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.morphing-card p {
+  color: var(--chrome);
+  font-size: 15px;
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+.morphing-card-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.morphing-card-features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(201, 206, 214, 0.05);
+  font-size: 14px;
+  color: var(--chrome);
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.morphing-card:hover .morphing-card-features li {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.morphing-card:hover .morphing-card-features li:nth-child(1) { transition-delay: 0.1s; }
+.morphing-card:hover .morphing-card-features li:nth-child(2) { transition-delay: 0.15s; }
+.morphing-card:hover .morphing-card-features li:nth-child(3) { transition-delay: 0.2s; }
+.morphing-card:hover .morphing-card-features li:nth-child(4) { transition-delay: 0.25s; }
+
+.morphing-card-features li::before {
+  content: '→';
+  color: var(--chrome);
+  font-weight: 700;
+}
+
+/* Progress indicator */
+.morphing-progress {
+  position: fixed;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 100;
+}
+
+.morphing-progress-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.2);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.morphing-progress-dot::before {
+  content: attr(data-label);
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--chrome);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.morphing-progress-dot:hover::before,
+.morphing-progress-dot.active::before {
+  opacity: 1;
+}
+
+.morphing-progress-dot.active {
+  background: var(--chrome);
+  box-shadow: 0 0 20px rgba(201, 206, 214, 0.5);
+  transform: scale(1.3);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .morphing-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .morphing-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .morphing-card {
+    min-height: auto;
+  }
+  
+  .morphing-progress {
+    display: none;
+  }
+  
+  .morphing-cards-container {
+    padding: 0 20px;
+  }
+}

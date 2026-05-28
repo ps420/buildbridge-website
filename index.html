@@ -173,6 +173,11 @@
   <link rel="stylesheet" href="css/scroll-connected-typography.css">
   <link rel="stylesheet" href="css/magnetic-grid-system.css">
   <link rel="stylesheet" href="css/multi-layer-parallax.css">
+  
+  <!-- v38.0 Fortune 500 Next-Gen Immersive Features -->
+  <link rel="stylesheet" href="css/neural-network-background.css">
+  <link rel="stylesheet" href="css/morphing-cards.css">
+  <link rel="stylesheet" href="css/advanced-kinetic-typography.css">
 
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
   <link rel="manifest" href="manifest.json">
@@ -380,6 +385,12 @@
   
   <!-- Aurora Background Effect v20.0 -->
   <div class="aurora-background"></div>
+  
+  <!-- v38.0: Neural Network Background - WebGL Connected Nodes -->
+  <div class="neural-network-bg">
+    <canvas></canvas>
+    <div class="neural-network-overlay"></div>
+  </div>
 
   <!-- Preloader - DISABLED -->
   <!--
@@ -2461,6 +2472,76 @@
     </div>
   </section>
 
+  <!-- v38.0: Morphing Cards Section - Fortune 500 Next-Gen Feature -->
+  <section class="morphing-cards-section" id="morphing-cards" data-section="Solutions" data-nav-label="Solutions">
+    <div class="morphing-cards-container">
+      <div class="morphing-cards-header">
+        <p class="eyebrow">Our Solutions</p>
+        <h2 class="gradient-flow-text">Built for Excellence</h2>
+        <p>Discover how BuildBridge transforms construction management with innovative solutions powered by expertise and technology.</p>
+      </div>
+      
+      <div class="morphing-cards-grid">
+        <div class="morphing-card" data-phase="1">
+          <div class="morphing-card-inner">
+            <div class="morphing-shape"></div>
+            <div class="morphing-card-icon">🏗️</div>
+            <div class="morphing-card-number">01 — Consultation</div>
+            <h3>Expert Planning</h3>
+            <p>We analyze your vision, budget, and timeline to create a comprehensive project roadmap tailored to your specific needs.</p>
+            <ul class="morphing-card-features">
+              <li>Requirements analysis</li>
+              <li>Budget optimization</li>
+              <li>Timeline planning</li>
+              <li>Risk assessment</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="morphing-card" data-phase="1">
+          <div class="morphing-card-inner">
+            <div class="morphing-shape"></div>
+            <div class="morphing-card-icon">🤝</div>
+            <div class="morphing-card-number">02 — Connection</div>
+            <h3>Perfect Matching</h3>
+            <p>Our vetted network of 50+ qualified contractors ensures you connect with professionals perfectly suited to your project.</p>
+            <ul class="morphing-card-features">
+              <li>Contractor vetting</li>
+              <li>Skill matching</li>
+              <li>Background checks</li>
+              <li>Past performance review</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="morphing-card" data-phase="1">
+          <div class="morphing-card-inner">
+            <div class="morphing-shape"></div>
+            <div class="morphing-card-icon">📊</div>
+            <div class="morphing-card-number">03 — Management</div>
+            <h3>Full Oversight</h3>
+            <p>End-to-end project management with real-time updates, quality control, and transparent communication throughout.</p>
+            <ul class="morphing-card-features">
+              <li>Progress tracking</li>
+              <li>Quality assurance</li>
+              <li>Milestone management</li>
+              <li>Real-time reporting</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Progress dots for morphing cards -->
+    <div class="morphing-progress">
+      <div class="morphing-progress-dot active" data-label="Start" data-phase="1"></div>
+      <div class="morphing-progress-dot" data-label="Plan" data-phase="2"></div>
+      <div class="morphing-progress-dot" data-label="Build" data-phase="3"></div>
+      <div class="morphing-progress-dot" data-label="Review" data-phase="4"></div>
+      <div class="morphing-progress-dot" data-label="Complete" data-phase="5"></div>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer>
     <div class="footer-grid">
@@ -2939,6 +3020,13 @@
   <script src="js/progressive-blur-navigation.js"></script>
   <script src="js/performance-monitor-dashboard.js"></script>
   
+  <!-- v38.0: Fortune 500 Next-Gen Immersive Features -->
+  <script src="js/neural-network-background.js"></script>
+  <script src="js/morphing-cards.js"></script>
+  <script src="js/ai-content-suggestions.js"></script>
+  <script src="js/advanced-kinetic-typography.js"></script>
+  <script src="js/smart-form-analytics.js"></script>
+  
   <script>
     // Log v33.0 features loaded
     console.log('📖 BuildBridge Fortune 500 v33.0 loaded: Smart Reading Mode (Shift+F), Velocity-Based Scroll Reveals, Dynamic Gradient Border Cards with Interactive Mouse Following');
@@ -2966,6 +3054,9 @@
     
     // Log v32.0 features loaded
     console.log('🚀 BuildBridge Fortune 500 v32.0 loaded: Scroll-Linked Process Timeline, Smart Predictive Search with Autocomplete, 3D Stats Showcase with Tilt Effects, Live Engagement Widget with Real-Time Activity');
+    
+    // Log v38.0 features loaded
+    console.log('🧠 BuildBridge Fortune 500 v38.0 loaded: Neural Network Background (WebGL Connected Nodes), Morphing Cards with Scroll-Driven Shape Transformation, AI Content Suggestion Engine, Advanced Kinetic Typography System, Smart Form Analytics');
     
     // Add smart tooltips to key elements
     document.addEventListener('DOMContentLoaded', function() {

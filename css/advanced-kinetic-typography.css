@@ -1,0 +1,290 @@
+/* ========================================
+   v38.0: ADVANCED KINETIC TYPOGRAPHY
+   Next-Gen Text Animation System
+   Fortune 500 Premium Typography Feature
+======================================== */
+
+.kinetic-text-container {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Wave Text Effect */
+.wave-text {
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+
+.wave-char {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wave-text:hover .wave-char {
+  animation: wave-bounce 0.6s ease infinite;
+}
+
+@keyframes wave-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Stagger delay for wave */
+.wave-char:nth-child(1) { animation-delay: 0s; }
+.wave-char:nth-child(2) { animation-delay: 0.05s; }
+.wave-char:nth-child(3) { animation-delay: 0.1s; }
+.wave-char:nth-child(4) { animation-delay: 0.15s; }
+.wave-char:nth-child(5) { animation-delay: 0.2s; }
+.wave-char:nth-child(6) { animation-delay: 0.25s; }
+.wave-char:nth-child(7) { animation-delay: 0.3s; }
+.wave-char:nth-child(8) { animation-delay: 0.35s; }
+.wave-char:nth-child(9) { animation-delay: 0.4s; }
+.wave-char:nth-child(10) { animation-delay: 0.45s; }
+
+/* Magnetic Text */
+.magnetic-text {
+  display: inline-block;
+  cursor: default;
+}
+
+.magnetic-char {
+  display: inline-block;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* Glitch Text Effect */
+.glitch-text {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.glitch-text.active::before {
+  animation: glitch-1 0.3s linear;
+  color: #ff0000;
+  z-index: -1;
+}
+
+.glitch-text.active::after {
+  animation: glitch-2 0.3s linear;
+  color: #00ffff;
+  z-index: -2;
+}
+
+@keyframes glitch-1 {
+  0%, 100% { opacity: 0; transform: translate(0); }
+  20% { opacity: 0.8; transform: translate(-3px, 3px); }
+  40% { opacity: 0.8; transform: translate(3px, -3px); }
+  60% { opacity: 0.8; transform: translate(-3px, -3px); }
+  80% { opacity: 0.8; transform: translate(3px, 3px); }
+}
+
+@keyframes glitch-2 {
+  0%, 100% { opacity: 0; transform: translate(0); }
+  20% { opacity: 0.8; transform: translate(3px, -3px); }
+  40% { opacity: 0.8; transform: translate(-3px, 3px); }
+  60% { opacity: 0.8; transform: translate(3px, 3px); }
+  80% { opacity: 0.8; transform: translate(-3px, -3px); }
+}
+
+/* Typewriter with cursor */
+.typewriter-text {
+  display: inline;
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  width: 3px;
+  height: 1em;
+  background: var(--chrome);
+  margin-left: 4px;
+  vertical-align: text-bottom;
+  animation: cursor-blink 1s step-end infinite;
+}
+
+@keyframes cursor-blink {
+  50% { opacity: 0; }
+}
+
+/* Gradient Flow Text */
+.gradient-flow-text {
+  background: linear-gradient(
+    90deg,
+    var(--white) 0%,
+    var(--chrome) 25%,
+    var(--white) 50%,
+    var(--chrome) 75%,
+    var(--white) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-flow 3s linear infinite;
+}
+
+@keyframes gradient-flow {
+  to { background-position: 200% center; }
+}
+
+/* Scroll Reveal Characters */
+.scroll-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(100%) rotateX(90deg);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-char.revealed {
+  opacity: 1;
+  transform: translateY(0) rotateX(0);
+}
+
+/* Scramble Text Effect */
+.scramble-text-advanced {
+  display: inline-block;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.scramble-char {
+  display: inline-block;
+  opacity: 0.7;
+  transition: opacity 0.1s;
+}
+
+.scramble-char.decoding {
+  animation: char-decode 0.5s ease;
+}
+
+@keyframes char-decode {
+  0% { opacity: 0.3; filter: blur(4px); }
+  100% { opacity: 1; filter: blur(0); }
+}
+
+/* Text Highlight Effect */
+.highlight-text {
+  position: relative;
+  display: inline;
+}
+
+.highlight-text::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 30%;
+  background: linear-gradient(90deg, rgba(201, 206, 214, 0.3), rgba(201, 206, 214, 0.1));
+  z-index: -1;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.highlight-text.active::after {
+  width: 100%;
+}
+
+/* 3D Perspective Text */
+.perspective-text-container {
+  perspective: 1000px;
+}
+
+.perspective-text {
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.perspective-text .char {
+  display: inline-block;
+  transform-origin: center bottom;
+  transition: transform 0.3s ease;
+}
+
+.perspective-text:hover .char {
+  transform: rotateX(-20deg);
+}
+
+/* Clip Path Reveal Text */
+.clip-reveal-text {
+  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.clip-reveal-text.revealed {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Split Line Animation */
+.split-line {
+  overflow: hidden;
+  display: block;
+}
+
+.split-line-inner {
+  display: block;
+  transform: translateY(100%);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.split-line.revealed .split-line-inner {
+  transform: translateY(0);
+}
+
+/* Stagger line delays */
+.split-line:nth-child(1) .split-line-inner { transition-delay: 0.1s; }
+.split-line:nth-child(2) .split-line-inner { transition-delay: 0.2s; }
+.split-line:nth-child(3) .split-line-inner { transition-delay: 0.3s; }
+.split-line:nth-child(4) .split-line-inner { transition-delay: 0.4s; }
+
+/* Text Fill Animation */
+.text-fill-container {
+  position: relative;
+  display: inline-block;
+}
+
+.text-fill-outline,
+.text-fill-solid {
+  font-size: inherit;
+  font-weight: inherit;
+  font-family: inherit;
+}
+
+.text-fill-outline {
+  -webkit-text-stroke: 1px var(--chrome);
+  color: transparent;
+}
+
+.text-fill-solid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--white);
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.text-fill-container.revealed .text-fill-solid {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .wave-char {
+    animation: none !important;
+  }
+  
+  .glitch-text::before,
+  .glitch-text::after {
+    display: none;
+  }
+}
