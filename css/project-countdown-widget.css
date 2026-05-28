@@ -1,0 +1,706 @@
+/* ============================================
+   PROJECT COUNTDOWN WIDGET - v68.0
+   Fortune 500 Professional Project Timeline Display
+   ============================================ */
+
+.project-countdown-section {
+  padding: 120px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.countdown-section-header {
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+  z-index: 1;
+}
+
+.countdown-section-header .eyebrow {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8A9199;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.countdown-section-header h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.countdown-section-header h2 span {
+  background: linear-gradient(135deg, #C9CED6 0%, #F5F7FA 50%, #C9CED6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.countdown-section-header p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  color: rgba(201, 206, 214, 0.7);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Countdown Widget Container */
+.countdown-widget-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* Individual Countdown Card */
+.countdown-card {
+  background: linear-gradient(145deg, rgba(201, 206, 214, 0.05) 0%, rgba(201, 206, 214, 0.02) 100%);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 24px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.countdown-card.countdown-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.countdown-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(201, 206, 214, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Status Indicator */
+.countdown-status {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.countdown-status.active {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4CAF50;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.countdown-status.upcoming {
+  background: rgba(255, 193, 7, 0.15);
+  color: #FFC107;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.countdown-status.completed {
+  background: rgba(201, 206, 214, 0.1);
+  color: #8A9199;
+  border: 1px solid rgba(201, 206, 214, 0.2);
+}
+
+.countdown-status::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+.countdown-status.completed::before {
+  animation: none;
+}
+
+/* Project Info Header */
+.countdown-project-info {
+  margin-bottom: 24px;
+  padding-right: 100px;
+}
+
+.countdown-project-category {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #C9CED6;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.countdown-project-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.countdown-project-location {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #8A9199;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.countdown-project-location::before {
+  content: '📍';
+  font-size: 12px;
+}
+
+/* Countdown Display */
+.countdown-display {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.countdown-unit {
+  text-align: center;
+  padding: 20px 12px;
+  background: rgba(201, 206, 214, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(201, 206, 214, 0.08);
+  transition: all 0.3s ease;
+}
+
+.countdown-unit:hover {
+  background: rgba(201, 206, 214, 0.08);
+  transform: translateY(-2px);
+}
+
+.countdown-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: #F5F7FA;
+  line-height: 1;
+  margin-bottom: 6px;
+  display: block;
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown-value.days { color: #C9CED6; }
+.countdown-value.hours { color: #F5F7FA; }
+.countdown-value.minutes { color: #C9CED6; }
+.countdown-value.seconds { color: #8A9199; }
+
+.countdown-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: #8A9199;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Split Flap Style Numbers */
+.countdown-flap {
+  position: relative;
+  height: 50px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.countdown-flap-number {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  color: #F5F7FA;
+  line-height: 50px;
+  font-variant-numeric: tabular-nums;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.countdown-flap-number.flip {
+  animation: flapFlip 0.3s ease;
+}
+
+@keyframes flapFlip {
+  0% { transform: rotateX(0deg); }
+  50% { transform: rotateX(-90deg); opacity: 0.5; }
+  100% { transform: rotateX(0deg); }
+}
+
+/* Progress Bar */
+.countdown-progress-wrapper {
+  margin-bottom: 20px;
+}
+
+.countdown-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.countdown-progress-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #8A9199;
+}
+
+.countdown-progress-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #C9CED6;
+}
+
+.countdown-progress-track {
+  height: 6px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.countdown-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #C9CED6 0%, #F5F7FA 50%, #C9CED6 100%);
+  background-size: 200% 100%;
+  border-radius: 3px;
+  width: 0%;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: progressShimmer 2s linear infinite;
+}
+
+@keyframes progressShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Milestone Info */
+.countdown-milestone {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(201, 206, 214, 0.05);
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.countdown-milestone-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.1) 0%, rgba(201, 206, 214, 0.05) 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.countdown-milestone-info {
+  flex: 1;
+}
+
+.countdown-milestone-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: #8A9199;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.countdown-milestone-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #F5F7FA;
+}
+
+.countdown-milestone-date {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #C9CED6;
+  text-align: right;
+}
+
+/* Action Buttons */
+.countdown-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.countdown-btn {
+  flex: 1;
+  padding: 14px 20px;
+  background: rgba(201, 206, 214, 0.1);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #F5F7FA;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.countdown-btn:hover {
+  background: rgba(201, 206, 214, 0.15);
+  border-color: rgba(201, 206, 214, 0.3);
+  transform: translateY(-2px);
+}
+
+.countdown-btn.primary {
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.2) 0%, rgba(201, 206, 214, 0.1) 100%);
+  border-color: rgba(201, 206, 214, 0.3);
+}
+
+.countdown-btn.primary:hover {
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.25) 0%, rgba(201, 206, 214, 0.15) 100%);
+}
+
+/* Large Featured Countdown */
+.countdown-featured {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.08) 0%, rgba(201, 206, 214, 0.03) 100%);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+}
+
+.countdown-featured-content {
+  padding-right: 20px;
+}
+
+.countdown-featured-visual {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  height: 300px;
+}
+
+.countdown-featured-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.countdown-featured-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(15, 15, 16, 0.8) 100%);
+}
+
+.countdown-featured-badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 8px 16px;
+  background: rgba(201, 206, 214, 0.95);
+  border-radius: 20px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f0f10;
+}
+
+.countdown-featured .countdown-display {
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.countdown-featured .countdown-unit {
+  padding: 24px 16px;
+}
+
+.countdown-featured .countdown-value {
+  font-size: 48px;
+}
+
+/* Circular Progress Variation */
+.countdown-circular {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 24px;
+}
+
+.countdown-circle {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.countdown-circle svg {
+  transform: rotate(-90deg);
+}
+
+.countdown-circle-bg {
+  fill: none;
+  stroke: rgba(201, 206, 214, 0.1);
+  stroke-width: 4;
+}
+
+.countdown-circle-progress {
+  fill: none;
+  stroke: url(#countdownGradient);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 283;
+  stroke-dashoffset: 283;
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.countdown-circle-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.countdown-circle-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #F5F7FA;
+  line-height: 1;
+  display: block;
+}
+
+.countdown-circle-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: #8A9199;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Compact Countdown Bar */
+.countdown-bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 24px;
+  background: rgba(201, 206, 214, 0.05);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 16px;
+  margin-bottom: 20px;
+}
+
+.countdown-bar-info {
+  flex: 1;
+}
+
+.countdown-bar-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin-bottom: 4px;
+}
+
+.countdown-bar-deadline {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #8A9199;
+}
+
+.countdown-bar-timer {
+  display: flex;
+  gap: 12px;
+}
+
+.countdown-bar-unit {
+  text-align: center;
+  min-width: 50px;
+}
+
+.countdown-bar-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #F5F7FA;
+  line-height: 1;
+  display: block;
+}
+
+.countdown-bar-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 9px;
+  color: #8A9199;
+  text-transform: uppercase;
+}
+
+/* Tooltip for detailed info */
+.countdown-tooltip {
+  position: fixed;
+  background: rgba(15, 15, 16, 0.95);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.2s ease;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  max-width: 280px;
+}
+
+.countdown-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.countdown-tooltip h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin-bottom: 8px;
+}
+
+.countdown-tooltip p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: rgba(201, 206, 214, 0.7);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.countdown-tooltip-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.countdown-tooltip-meta-item {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+}
+
+.countdown-tooltip-meta-label {
+  color: #8A9199;
+}
+
+.countdown-tooltip-meta-value {
+  color: #C9CED6;
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .countdown-widget-grid {
+    grid-template-columns: 1fr;
+    padding: 0 20px;
+  }
+  
+  .countdown-featured {
+    grid-template-columns: 1fr;
+  }
+  
+  .countdown-section-header h2 {
+    font-size: 36px;
+  }
+  
+  .countdown-circular {
+    gap: 20px;
+  }
+  
+  .countdown-circle {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .countdown-circle-value {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .countdown-display {
+    gap: 8px;
+  }
+  
+  .countdown-unit {
+    padding: 14px 8px;
+  }
+  
+  .countdown-value {
+    font-size: 24px;
+  }
+  
+  .countdown-featured .countdown-value {
+    font-size: 32px;
+  }
+  
+  .countdown-bar {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .countdown-value,
+  .countdown-flap-number,
+  .countdown-progress-fill,
+  .countdown-card {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .countdown-card {
+    break-inside: avoid;
+    border: 1px solid #ccc;
+  }
+  
+  .countdown-progress-fill {
+    background: #999 !important;
+  }
+}
