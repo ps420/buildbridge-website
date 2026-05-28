@@ -1,0 +1,448 @@
+/**
+ * Magnetic Links - Advanced Hover Interactions
+ * BuildBridge v63.0 - Fortune 500 Magnetic Cursor Effects
+ * 
+ * Features:
+ * - Magnetic attraction on hover
+ * - Smooth elastic return on leave
+ * - Configurable strength and radius
+ * - Text scramble effects on hover
+ */
+
+/* ============================================
+   MAGNETIC LINK BASE STYLES
+   ============================================ */
+
+.magnetic-link {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.magnetic-link::before {
+  content: '';
+  position: absolute;
+  inset: -10px -20px;
+  z-index: -1;
+  border-radius: 8px;
+  background: transparent;
+  transition: background 0.3s ease;
+}
+
+.magnetic-link:hover::before {
+  background: rgba(201, 206, 214, 0.05);
+}
+
+/* Magnetic attraction state */
+.magnetic-link.is-magnetic {
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Return animation */
+.magnetic-link.is-returning {
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ============================================
+   MAGNETIC TEXT EFFECT
+   ============================================ */
+
+.magnetic-text {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+
+.magnetic-text .char {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-link:hover .magnetic-text .char {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Staggered char animation */
+.magnetic-link:hover .magnetic-text .char:nth-child(1) { transition-delay: 0ms; }
+.magnetic-link:hover .magnetic-text .char:nth-child(2) { transition-delay: 20ms; }
+.magnetic-link:hover .magnetic-text .char:nth-child(3) { transition-delay: 40ms; }
+.magnetic-link:hover .magnetic-text .char:nth-child(4) { transition-delay: 60ms; }
+.magnetic-link:hover .magnetic-text .char:nth-child(5) { transition-delay: 80ms; }
+.magnetic-link:hover .magnetic-text .char:nth-child(6) { transition-delay: 100ms; }
+.magnetic-link:hover .magnetic-text .char:nth-child(7) { transition-delay: 120ms; }
+.magnetic-link:hover .magnetic-text .char:nth-child(8) { transition-delay: 140ms; }
+.magnetic-link:hover .magnetic-text .char:nth-child(9) { transition-delay: 160ms; }
+.magnetic-link:hover .magnetic-text .char:nth-child(10) { transition-delay: 180ms; }
+
+/* ============================================
+   MAGNETIC UNDERLINE
+   ============================================ */
+
+.magnetic-link .underline {
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #C9CED6, transparent);
+  transform: translateX(-50%);
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-link:hover .underline,
+.magnetic-link.is-magnetic .underline {
+  width: 100%;
+}
+
+/* Animated gradient underline */
+.magnetic-link .underline-animated {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, #C9CED6, #F5F7FA, #C9CED6);
+  background-size: 200% 100%;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-link:hover .underline-animated,
+.magnetic-link.is-magnetic .underline-animated {
+  transform: scaleX(1);
+  transform-origin: left;
+  animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ============================================
+   MAGNETIC ARROW INDICATOR
+   ============================================ */
+
+.magnetic-link .magnetic-arrow {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-link:hover .magnetic-arrow,
+.magnetic-link.is-magnetic .magnetic-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.magnetic-link .magnetic-arrow svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  transition: transform 0.3s ease;
+}
+
+.magnetic-link:hover .magnetic-arrow svg {
+  transform: translateX(4px);
+}
+
+/* ============================================
+   MAGNETIC DOT INDICATOR
+   ============================================ */
+
+.magnetic-link .magnetic-dot {
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  background: #C9CED6;
+  border-radius: 50%;
+  transform: translateY(-50%) scale(0);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-link:hover .magnetic-dot,
+.magnetic-link.is-magnetic .magnetic-dot {
+  transform: translateY(-50%) scale(1);
+}
+
+/* ============================================
+   MAGNETIC NAV LINKS
+   ============================================ */
+
+.magnetic-nav-link {
+  position: relative;
+  padding: 10px 0;
+  color: rgba(245, 247, 250, 0.7);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.magnetic-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  background: #C9CED6;
+  border-radius: 50%;
+  transform: translateX(-50%) scale(0);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-nav-link:hover,
+.magnetic-nav-link.is-magnetic {
+  color: #F5F7FA;
+}
+
+.magnetic-nav-link:hover::after,
+.magnetic-nav-link.is-magnetic::after {
+  transform: translateX(-50%) scale(1);
+}
+
+.magnetic-nav-link.active {
+  color: #F5F7FA;
+}
+
+.magnetic-nav-link.active::after {
+  width: 20px;
+  border-radius: 2px;
+  transform: translateX(-50%) scale(1);
+}
+
+/* ============================================
+   MAGNETIC BUTTON LINKS
+   ============================================ */
+
+.magnetic-btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  background: transparent;
+  border: 1px solid rgba(201, 206, 214, 0.3);
+  border-radius: 100px;
+  color: #F5F7FA;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-btn-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.1), rgba(201, 206, 214, 0.05));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.magnetic-btn-link:hover,
+.magnetic-btn-link.is-magnetic {
+  border-color: rgba(201, 206, 214, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.magnetic-btn-link:hover::before,
+.magnetic-btn-link.is-magnetic::before {
+  opacity: 1;
+}
+
+.magnetic-btn-link .btn-arrow {
+  transition: transform 0.3s ease;
+}
+
+.magnetic-btn-link:hover .btn-arrow,
+.magnetic-btn-link.is-magnetic .btn-arrow {
+  transform: translateX(4px);
+}
+
+/* ============================================
+   MAGNETIC SOCIAL LINKS
+   ============================================ */
+
+.magnetic-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: rgba(201, 206, 214, 0.05);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 50%;
+  color: rgba(245, 247, 250, 0.7);
+  font-size: 18px;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.magnetic-social-link::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #C9CED6, rgba(201, 206, 214, 0.3));
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+}
+
+.magnetic-social-link:hover,
+.magnetic-social-link.is-magnetic {
+  color: #F5F7FA;
+  background: rgba(201, 206, 214, 0.15);
+  border-color: rgba(201, 206, 214, 0.3);
+  transform: scale(1.1);
+}
+
+.magnetic-social-link:hover::before,
+.magnetic-social-link.is-magnetic::before {
+  opacity: 1;
+}
+
+/* ============================================
+   MAGNETIC CARD LINKS
+   ============================================ */
+
+.magnetic-card-link {
+  display: block;
+  padding: 30px;
+  background: rgba(201, 206, 214, 0.03);
+  border: 1px solid rgba(201, 206, 214, 0.08);
+  border-radius: 16px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.magnetic-card-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+    rgba(201, 206, 214, 0.1) 0%, 
+    transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.magnetic-card-link:hover,
+.magnetic-card-link.is-magnetic {
+  background: rgba(201, 206, 214, 0.06);
+  border-color: rgba(201, 206, 214, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.magnetic-card-link:hover::before,
+.magnetic-card-link.is-magnetic::before {
+  opacity: 1;
+}
+
+.magnetic-card-link .card-arrow {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-card-link:hover .card-arrow,
+.magnetic-card-link.is-magnetic .card-arrow {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ============================================
+   MAGNETIC FOOTER LINKS
+   ============================================ */
+
+.magnetic-footer-link {
+  display: inline-block;
+  color: rgba(201, 206, 214, 0.6);
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 4px 0;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.magnetic-footer-link::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #C9CED6;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-footer-link:hover,
+.magnetic-footer-link.is-magnetic {
+  color: #C9CED6;
+}
+
+.magnetic-footer-link:hover::after,
+.magnetic-footer-link.is-magnetic::after {
+  width: 100%;
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .magnetic-link,
+  .magnetic-nav-link,
+  .magnetic-btn-link,
+  .magnetic-social-link,
+  .magnetic-card-link,
+  .magnetic-footer-link {
+    transition: none;
+    transform: none !important;
+  }
+  
+  .magnetic-link.is-magnetic,
+  .magnetic-link.is-returning {
+    transition: none;
+  }
+}

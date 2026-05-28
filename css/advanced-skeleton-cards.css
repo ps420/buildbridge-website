@@ -1,0 +1,507 @@
+/**
+ * Advanced Skeleton Loading Cards
+ * BuildBridge v63.0 - Fortune 500 Loading States
+ * 
+ * Features:
+ * - Animated shimmer effect
+ * - Wave and pulse animations
+ * - Multi-level skeleton hierarchy
+ * - Progressive loading states
+ * - Dark theme optimized
+ */
+
+/* ============================================
+   SKELETON BASE CONTAINER
+   ============================================ */
+
+.skeleton-container {
+  --skeleton-base: rgba(201, 206, 214, 0.08);
+  --skeleton-highlight: rgba(201, 206, 214, 0.15);
+  --skeleton-shine: rgba(255, 255, 255, 0.05);
+  --skeleton-radius: 8px;
+  --skeleton-animation-duration: 1.5s;
+}
+
+/* ============================================
+   SKELETON SHIMMER EFFECT
+   ============================================ */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-base) 0%,
+    var(--skeleton-highlight) 50%,
+    var(--skeleton-base) 100%
+  );
+  background-size: 200% 100%;
+  border-radius: var(--skeleton-radius);
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--skeleton-shine) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  animation: skeleton-shimmer var(--skeleton-animation-duration) infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ============================================
+   SKELETON CARD
+   ============================================ */
+
+.skeleton-card {
+  background: rgba(201, 206, 214, 0.03);
+  border: 1px solid rgba(201, 206, 214, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Card header skeleton */
+.skeleton-card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.skeleton-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.skeleton-title-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skeleton-title {
+  height: 16px;
+  width: 60%;
+  border-radius: 4px;
+}
+
+.skeleton-subtitle {
+  height: 12px;
+  width: 40%;
+  border-radius: 4px;
+}
+
+/* Card image skeleton */
+.skeleton-card-image {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+}
+
+/* Card content skeleton */
+.skeleton-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skeleton-text {
+  height: 12px;
+  border-radius: 4px;
+}
+
+.skeleton-text.short { width: 40%; }
+.skeleton-text.medium { width: 75%; }
+.skeleton-text.long { width: 100%; }
+
+/* Card footer skeleton */
+.skeleton-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(201, 206, 214, 0.05);
+}
+
+.skeleton-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.skeleton-meta-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.skeleton-meta-text {
+  width: 80px;
+  height: 10px;
+  border-radius: 4px;
+}
+
+.skeleton-button {
+  width: 100px;
+  height: 36px;
+  border-radius: 8px;
+}
+
+/* ============================================
+   SKELETON PROJECT CARD
+   ============================================ */
+
+.skeleton-project-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(201, 206, 214, 0.03);
+}
+
+.skeleton-project-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+}
+
+.skeleton-project-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  background: linear-gradient(transparent, rgba(15, 15, 16, 0.9));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skeleton-project-title {
+  height: 20px;
+  width: 70%;
+  border-radius: 4px;
+}
+
+.skeleton-project-location {
+  height: 12px;
+  width: 40%;
+  border-radius: 4px;
+}
+
+/* ============================================
+   SKELETON SERVICE CARD
+   ============================================ */
+
+.skeleton-service-card {
+  padding: 40px 30px;
+  background: rgba(201, 206, 214, 0.03);
+  border: 1px solid rgba(201, 206, 214, 0.08);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+}
+
+.skeleton-service-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+}
+
+.skeleton-service-title {
+  height: 18px;
+  width: 80%;
+  border-radius: 4px;
+}
+
+.skeleton-service-text {
+  height: 12px;
+  width: 100%;
+  border-radius: 4px;
+}
+
+.skeleton-service-text.short {
+  width: 60%;
+}
+
+/* ============================================
+   SKELETON STATS
+   ============================================ */
+
+.skeleton-stat {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.skeleton-stat-number {
+  width: 100px;
+  height: 48px;
+  border-radius: 8px;
+}
+
+.skeleton-stat-label {
+  width: 120px;
+  height: 14px;
+  border-radius: 4px;
+}
+
+/* ============================================
+   SKELETON HERO
+   ============================================ */
+
+.skeleton-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  padding: 80px 0;
+}
+
+.skeleton-hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.skeleton-hero-eyebrow {
+  width: 150px;
+  height: 14px;
+  border-radius: 4px;
+}
+
+.skeleton-hero-title {
+  height: 48px;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.skeleton-hero-title:nth-child(3) {
+  width: 80%;
+}
+
+.skeleton-hero-text {
+  height: 16px;
+  width: 100%;
+  border-radius: 4px;
+}
+
+.skeleton-hero-text.short {
+  width: 70%;
+}
+
+.skeleton-hero-buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.skeleton-hero-btn {
+  width: 160px;
+  height: 48px;
+  border-radius: 100px;
+}
+
+.skeleton-hero-btn.ghost {
+  width: 140px;
+  background: rgba(201, 206, 214, 0.05);
+}
+
+.skeleton-hero-image {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 20px;
+}
+
+@media (max-width: 768px) {
+  .skeleton-hero {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .skeleton-hero-image {
+    order: -1;
+    aspect-ratio: 16 / 10;
+  }
+}
+
+/* ============================================
+   PULSE ANIMATION VARIANT
+   ============================================ */
+
+.skeleton.pulse {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton.pulse::after {
+  display: none;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* ============================================
+   WAVE ANIMATION VARIANT
+   ============================================ */
+
+.skeleton-wave .skeleton {
+  animation: skeleton-wave 1.5s ease-in-out infinite;
+  animation-fill-mode: both;
+}
+
+.skeleton-wave .skeleton:nth-child(1) { animation-delay: 0ms; }
+.skeleton-wave .skeleton-wave .skeleton:nth-child(2) { animation-delay: 100ms; }
+.skeleton-wave .skeleton:nth-child(3) { animation-delay: 200ms; }
+.skeleton-wave .skeleton:nth-child(4) { animation-delay: 300ms; }
+.skeleton-wave .skeleton:nth-child(5) { animation-delay: 400ms; }
+
+@keyframes skeleton-wave {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* ============================================
+   SKELETON GRID
+   ============================================ */
+
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.skeleton-grid-2 { grid-template-columns: repeat(2, 1fr); }
+.skeleton-grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 1024px) {
+  .skeleton-grid,
+  .skeleton-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .skeleton-grid,
+  .skeleton-grid-2,
+  .skeleton-grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
+   CONTENT LOADING TRANSITION
+   ============================================ */
+
+.content-skeleton {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.content-skeleton.is-loaded {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.content-real {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.content-real.is-visible {
+  opacity: 1;
+}
+
+/* ============================================
+   SKELETON LIST ITEMS
+   ============================================ */
+
+.skeleton-list-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(201, 206, 214, 0.05);
+}
+
+.skeleton-list-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.skeleton-list-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skeleton-list-title {
+  height: 14px;
+  width: 50%;
+  border-radius: 4px;
+}
+
+.skeleton-list-text {
+  height: 10px;
+  width: 80%;
+  border-radius: 4px;
+}
+
+.skeleton-list-action {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after {
+    animation: none;
+    transform: translateX(0);
+    opacity: 0.1;
+  }
+  
+  .skeleton.pulse,
+  .skeleton-wave .skeleton {
+    animation: none;
+    opacity: 0.5;
+  }
+}
