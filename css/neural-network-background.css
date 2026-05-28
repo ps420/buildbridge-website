@@ -1,73 +1,42 @@
-/* ========================================
-   v38.0: NEURAL NETWORK BACKGROUND
-   WebGL-Powered Connected Nodes System
-   Fortune 500 Next-Gen Visual Feature
-======================================== */
+/**
+ * Neural Network Background Styles
+ * WebGL Connected Nodes Background
+ * Version: v53.0
+ */
 
 .neural-network-bg {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 0;
-  opacity: 0.6;
+  z-index: -1;
+  overflow: hidden;
 }
 
-.neural-network-canvas {
+.neural-network-bg canvas {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  display: block;
 }
 
 .neural-network-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at center, transparent 0%, var(--black) 70%);
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(15, 15, 18, 0.3) 70%);
   pointer-events: none;
 }
 
-/* Node glow effect */
-.neural-glow {
-  position: absolute;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(201, 206, 214, 0.08) 0%, transparent 70%);
-  filter: blur(40px);
-  pointer-events: none;
-  animation: neural-pulse 4s ease-in-out infinite;
+/* Section-specific neural network configurations */
+.neural-network-bg--dense canvas {
+  opacity: 0.8;
 }
 
-@keyframes neural-pulse {
-  0%, 100% { transform: scale(1); opacity: 0.5; }
-  50% { transform: scale(1.2); opacity: 0.8; }
+.neural-network-bg--sparse canvas {
+  opacity: 0.4;
 }
 
-/* Interactive node highlight */
-.neural-highlight {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--chrome);
-  box-shadow: 0 0 30px var(--chrome), 0 0 60px var(--chrome);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.neural-highlight.active {
-  opacity: 1;
-}
-
-/* Connection line animation */
-.neural-connection {
-  stroke-dasharray: 100;
-  stroke-dashoffset: 100;
-  animation: neural-flow 3s linear infinite;
-}
-
-@keyframes neural-flow {
-  to { stroke-dashoffset: -100; }
+.neural-network-bg--bright .neural-network-overlay {
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(15, 15, 18, 0.1) 70%);
 }
 
 /* Reduced motion preference */
@@ -77,14 +46,23 @@
   }
 }
 
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .neural-network-bg {
+    display: none;
+  }
+}
+
 /* Mobile optimization */
 @media (max-width: 768px) {
-  .neural-network-bg {
-    opacity: 0.3;
+  .neural-network-bg canvas {
+    opacity: 0.6;
   }
-  
-  .neural-glow {
-    width: 150px;
-    height: 150px;
+}
+
+/* Print styles */
+@media print {
+  .neural-network-bg {
+    display: none;
   }
 }
