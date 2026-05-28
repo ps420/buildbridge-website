@@ -1,0 +1,137 @@
+/* =========================================
+   PAGE VISIBILITY OPTIMIZATIONS - v44
+   Battery & performance optimizations
+   ========================================= */
+
+/* Low Battery Mode */
+.low-battery-mode *,
+.low-battery-mode *::before,
+.low-battery-mode *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+.low-battery-mode .aurora-background,
+.low-battery-mode .neural-network-bg,
+.low-battery-mode .atmospheric-fog,
+.low-battery-mode .particle-network,
+.low-battery-mode [class*="gradient-mesh"] {
+  display: none !important;
+}
+
+.low-battery-mode .marquee-track {
+  animation-play-state: paused !important;
+}
+
+.low-battery-mode .floating-stats,
+.low-battery-mode .magnetic-el,
+.low-battery-mode [class*="magnetic"] {
+  transition: none !important;
+  transform: none !important;
+}
+
+/* Animation Pause via CSS Variables */
+[style*="animation-play-state: paused"],
+[data-animation-paused="true"] {
+  animation-play-state: paused !important;
+}
+
+/* Hidden Tab Optimizations */
+.hidden-tab-optimize {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 300px;
+}
+
+/* Reduced Motion Enhancement */
+@media (prefers-reduced-motion: reduce) {
+  .aurora-background,
+  .neural-network-bg canvas,
+  .atmospheric-fog,
+  .particle-network,
+  .magnetic-cursor-enhanced,
+  .mouse-trail {
+    display: none !important;
+  }
+  
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* GPU Optimization */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Content Visibility for Off-Screen Sections */
+section:not([data-in-viewport="true"]) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+/* Performance Monitor Badge */
+.performance-badge {
+  position: fixed;
+  bottom: 120px;
+  right: 32px;
+  background: rgba(15, 15, 16, 0.9);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: rgba(201, 206, 214, 0.8);
+  z-index: 9988;
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+}
+
+.performance-badge.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.performance-badge.low-battery {
+  border-color: #FF9800;
+  color: #FF9800;
+}
+
+/* Save Data Mode Support */
+@media (prefers-reduced-data: reduce) {
+  img:not([loading="eager"]) {
+    content-visibility: auto;
+  }
+  
+  video[data-src] {
+    display: none !important;
+  }
+  
+  .aurora-background,
+  .neural-network-bg {
+    display: none !important;
+  }
+}
+
+/* Print Mode - Disable All Animations */
+@media print {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .floating-action-menu,
+  .notification-toggle,
+  .context-menu,
+  .performance-badge {
+    display: none !important;
+  }
+}

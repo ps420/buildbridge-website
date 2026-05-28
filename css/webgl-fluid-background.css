@@ -1,0 +1,67 @@
+/* ========================================
+   v45.0: WebGL Fluid Simulation Background
+   Fortune 500 Immersive Visual Experience
+======================================== */
+
+.webgl-fluid-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.webgl-fluid-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.webgl-fluid-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 0%, #0f0f12 70%);
+  pointer-events: none;
+}
+
+/* Fluid color overlays */
+.webgl-fluid-container[data-theme="gold"] {
+  --fluid-color-1: rgba(201, 206, 214, 0.15);
+  --fluid-color-2: rgba(245, 247, 250, 0.1);
+  --fluid-color-3: rgba(201, 206, 214, 0.08);
+}
+
+.webgl-fluid-container[data-theme="blue"] {
+  --fluid-color-1: rgba(100, 150, 255, 0.12);
+  --fluid-color-2: rgba(150, 200, 255, 0.08);
+  --fluid-color-3: rgba(80, 120, 200, 0.06);
+}
+
+.webgl-fluid-container[data-theme="warm"] {
+  --fluid-color-1: rgba(255, 180, 100, 0.1);
+  --fluid-color-2: rgba(255, 200, 150, 0.08);
+  --fluid-color-3: rgba(200, 150, 100, 0.06);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .webgl-fluid-container {
+    display: none;
+  }
+}
+
+/* Mobile optimization - disable on touch devices for performance */
+@media (pointer: coarse) {
+  .webgl-fluid-container {
+    opacity: 0.3;
+  }
+  
+  .webgl-fluid-canvas {
+    filter: blur(30px);
+  }
+}
