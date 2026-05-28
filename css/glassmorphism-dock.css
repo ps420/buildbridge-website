@@ -1,0 +1,456 @@
+/* ========================================
+   GLASSMORPHISM FLOATING DOCK (v37.0)
+   macOS-style dock with frosted glass effect
+======================================== */
+
+/* Root dock container */
+.glass-dock {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 1px 0 rgba(255, 255, 255, 0.1) inset;
+  z-index: 1000;
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-dock.visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.glass-dock:hover {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 30px 60px -12px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+    0 1px 0 rgba(255, 255, 255, 0.15) inset;
+}
+
+/* Dock items */
+.glass-dock-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: center bottom;
+}
+
+.glass-dock-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-dock-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glass-dock-item:hover .glass-dock-icon::before {
+  opacity: 1;
+}
+
+/* Magnification effect on hover */
+.glass-dock:hover .glass-dock-item {
+  margin: 0 -4px;
+}
+
+.glass-dock-item:hover {
+  transform: scale(1.5) translateY(-10px);
+  margin: 0 16px !important;
+  z-index: 10;
+}
+
+.glass-dock-item:hover + .glass-dock-item,
+.glass-dock-item:has(+ .glass-dock-item:hover) {
+  transform: scale(1.2) translateY(-5px);
+  margin: 0 8px !important;
+}
+
+.glass-dock-item:hover .glass-dock-icon {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4);
+}
+
+/* Running indicator dot */
+.glass-dock-indicator {
+  width: 4px;
+  height: 4px;
+  background: var(--chrome);
+  border-radius: 50%;
+  margin-top: 6px;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s ease;
+}
+
+.glass-dock-item.active .glass-dock-indicator {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Tooltip */
+.glass-dock-tooltip {
+  position: absolute;
+  bottom: calc(100% + 15px);
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.glass-dock-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.8);
+}
+
+.glass-dock-item:hover .glass-dock-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Separator */
+.glass-dock-separator {
+  width: 1px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 4px;
+  align-self: center;
+}
+
+/* Bounce animation for new items */
+@keyframes dock-bounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-15px) scale(1.1); }
+}
+
+.glass-dock-item.new-item {
+  animation: dock-bounce 0.5s ease;
+}
+
+/* Jump animation */
+@keyframes dock-jump {
+  0%, 100% { transform: translateY(0) scale(var(--dock-scale, 1)); }
+  50% { transform: translateY(-30px) scale(var(--dock-scale, 1)); }
+}
+
+.glass-dock-item.jump {
+  animation: dock-jump 0.4s ease;
+}
+
+/* Notification badge */
+.glass-dock-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  background: #ef4444;
+  border-radius: 9px;
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+  animation: badge-pulse 2s ease-in-out infinite;
+}
+
+@keyframes badge-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Vertical dock variant */
+.glass-dock-vertical {
+  left: 30px;
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%) translateX(-100px);
+  flex-direction: column;
+  padding: 16px 12px;
+}
+
+.glass-dock-vertical.visible {
+  transform: translateY(-50%) translateX(0);
+}
+
+.glass-dock-vertical:hover .glass-dock-item {
+  margin: -4px 0;
+}
+
+.glass-dock-vertical .glass-dock-item:hover {
+  transform: scale(1.5) translateX(10px);
+  margin: 16px 0 !important;
+}
+
+.glass-dock-vertical .glass-dock-item:hover + .glass-dock-item,
+.glass-dock-vertical .glass-dock-item:has(+ .glass-dock-item:hover) {
+  transform: scale(1.2) translateX(5px);
+  margin: 8px 0 !important;
+}
+
+.glass-dock-vertical .glass-dock-separator {
+  width: 32px;
+  height: 1px;
+}
+
+.glass-dock-vertical .glass-dock-tooltip {
+  bottom: auto;
+  left: calc(100% + 15px);
+  top: 50%;
+  transform: translateY(-50%) translateX(-10px);
+}
+
+.glass-dock-vertical .glass-dock-tooltip::after {
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%) translateX(-100%);
+  border: 6px solid transparent;
+  border-right-color: rgba(0, 0, 0, 0.8);
+  border-top-color: transparent;
+}
+
+.glass-dock-vertical .glass-dock-item:hover .glass-dock-tooltip {
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Dock menu (long-press/secondary click) */
+.glass-dock-menu {
+  position: absolute;
+  bottom: calc(100% + 15px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  background: rgba(30, 30, 35, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 8px 0;
+  min-width: 160px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.glass-dock-menu.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) scale(1);
+}
+
+.glass-dock-menu-item {
+  padding: 10px 16px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.glass-dock-menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.glass-dock-menu-separator {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 8px 0;
+}
+
+/* Right-positioned dock */
+.glass-dock-right {
+  left: auto;
+  right: 30px;
+  transform: translateY(-50%) translateX(100px);
+}
+
+.glass-dock-right.visible {
+  transform: translateY(-50%) translateX(0);
+}
+
+.glass-dock-right .glass-dock-tooltip {
+  left: auto;
+  right: calc(100% + 15px);
+  transform: translateY(-50%) translateX(10px);
+}
+
+.glass-dock-right .glass-dock-tooltip::after {
+  left: 100%;
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-left-color: rgba(0, 0, 0, 0.8);
+  border-right-color: transparent;
+}
+
+.glass-dock-right .glass-dock-item:hover .glass-dock-tooltip {
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Mobile dock (bottom bar) */
+@media (max-width: 768px) {
+  .glass-dock {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transform: translateY(100%);
+    border-radius: 0;
+    padding: 10px 20px calc(10px + env(safe-area-inset-bottom));
+    justify-content: space-around;
+    gap: 4px;
+  }
+  
+  .glass-dock.visible {
+    transform: translateY(0);
+  }
+  
+  .glass-dock-item {
+    flex: 1;
+    max-width: 60px;
+  }
+  
+  .glass-dock-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+  
+  .glass-dock-item:hover {
+    transform: scale(1.2) translateY(-5px);
+    margin: 0 !important;
+  }
+  
+  .glass-dock-item:hover + .glass-dock-item,
+  .glass-dock-item:has(+ .glass-dock-item:hover) {
+    transform: none;
+    margin: 0 !important;
+  }
+  
+  .glass-dock-tooltip {
+    display: none;
+  }
+  
+  .glass-dock-separator {
+    height: 24px;
+  }
+  
+  /* Hide vertical dock on mobile */
+  .glass-dock-vertical,
+  .glass-dock-right {
+    display: none;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .glass-dock-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+  
+  .glass-dock-item:hover {
+    transform: scale(1.3) translateY(-8px);
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .glass-dock {
+    background: rgba(0, 0, 0, 0.9);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+  
+  .glass-dock-icon {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Reduced transparency */
+@media (prefers-reduced-transparency: reduce) {
+  .glass-dock {
+    background: #1a1c21;
+    backdrop-filter: none;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .glass-dock,
+  .glass-dock-item,
+  .glass-dock-icon {
+    transition: none;
+  }
+  
+  .glass-dock-item:hover {
+    transform: scale(1.1);
+  }
+  
+  .glass-dock-badge {
+    animation: none;
+  }
+}
+
+/* Dark theme adjustments (already dark, but for completeness) */
+@media (prefers-color-scheme: dark) {
+  .glass-dock {
+    background: rgba(20, 20, 25, 0.7);
+  }
+}
+
+/* Print styles */
+@media print {
+  .glass-dock {
+    display: none;
+  }
+}

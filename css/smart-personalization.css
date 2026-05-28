@@ -1,0 +1,549 @@
+/* ========================================
+   SMART CONTENT PERSONALIZATION (v37.0)
+   Dynamic content based on user behavior
+======================================== */
+
+/* Personalized greeting banner */
+.personalization-banner {
+  position: fixed;
+  top: 82px;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.1), rgba(42, 45, 52, 0.2));
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(201, 206, 214, 0.1);
+  padding: 12px 40px;
+  z-index: 999;
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.personalization-banner.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.personalization-banner-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.personalization-message {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: var(--chrome);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.personalization-message strong {
+  color: var(--white);
+  font-weight: 600;
+}
+
+.personalization-close {
+  background: none;
+  border: none;
+  color: var(--slate);
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  padding: 4px;
+}
+
+.personalization-close:hover {
+  color: var(--white);
+}
+
+/* Smart content sections that adapt based on user interest */
+.smart-content-section {
+  opacity: 1;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.smart-content-section.hidden-by-preference {
+  opacity: 0.3;
+  transform: scale(0.98);
+  pointer-events: none;
+  filter: grayscale(50%);
+}
+
+.smart-content-section.highlighted {
+  transform: scale(1.02);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+  border-color: rgba(201, 206, 214, 0.3);
+}
+
+/* Interest-based badges */
+.interest-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: rgba(201, 206, 214, 0.1);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 20px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--chrome);
+  margin-right: 8px;
+  animation: badge-pulse 2s ease-in-out infinite;
+}
+
+.interest-badge.active {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #22c55e;
+}
+
+@keyframes badge-pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* Recommended content cards */
+.recommended-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.recommended-card::before {
+  content: 'Recommended for you';
+  position: absolute;
+  top: 16px;
+  left: -30px;
+  background: linear-gradient(135deg, #C9CED6, #F5F7FA);
+  color: var(--black);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 4px 35px;
+  transform: rotate(-45deg);
+  z-index: 10;
+}
+
+.recommendation-score {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(15, 15, 16, 0.9);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: var(--chrome);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.recommendation-score::before {
+  content: '★';
+  color: #fbbf24;
+}
+
+/* Smart shuffle - reorder items based on interest */
+.smart-shuffle-container {
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.smart-shuffle-item {
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.smart-shuffle-item.reordering {
+  transform: scale(0.95);
+  opacity: 0.7;
+}
+
+/* Dynamic CTA based on user journey */
+.dynamic-cta {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: linear-gradient(135deg, rgba(15, 15, 16, 0.95), rgba(42, 45, 52, 0.95));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 50px;
+  padding: 8px 8px 8px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 998;
+  opacity: 0;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dynamic-cta.visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.dynamic-cta-message {
+  font-size: 14px;
+  color: var(--chrome);
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dynamic-cta-message strong {
+  color: var(--white);
+  font-weight: 600;
+}
+
+.dynamic-cta-btn {
+  background: var(--white);
+  color: var(--black);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dynamic-cta-btn:hover {
+  background: var(--chrome);
+  transform: scale(1.05);
+}
+
+/* Insight hints - show why content is recommended */
+.insight-hint {
+  position: absolute;
+  bottom: -40px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--slate);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+.recommended-card:hover .insight-hint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Preference pills for user selection */
+.preference-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 20px 0;
+}
+
+.preference-pill {
+  background: transparent;
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: var(--chrome);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.preference-pill:hover {
+  border-color: rgba(201, 206, 214, 0.4);
+  background: rgba(201, 206, 214, 0.05);
+}
+
+.preference-pill.active {
+  background: var(--white);
+  border-color: var(--white);
+  color: var(--black);
+}
+
+.preference-pill .check-icon {
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.2s ease;
+}
+
+.preference-pill.active .check-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Interest heatmap on sections */
+.interest-heatmap {
+  position: relative;
+}
+
+.interest-heatmap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--interest-x, 50%) var(--interest-y, 50%), rgba(201, 206, 214, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  opacity: var(--interest-intensity, 0);
+  transition: opacity 0.3s ease;
+}
+
+/* Smart toast notifications based on behavior */
+.smart-toast {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  background: linear-gradient(135deg, rgba(15, 15, 16, 0.98), rgba(42, 45, 52, 0.98));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 350px;
+  z-index: 10000;
+  transform: translateX(400px);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.smart-toast.visible {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.smart-toast-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.smart-toast-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+
+.smart-toast-message {
+  font-size: 13px;
+  color: var(--chrome);
+  line-height: 1.5;
+}
+
+.smart-toast-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.smart-toast-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.smart-toast-btn.primary {
+  background: var(--white);
+  color: var(--black);
+  border: none;
+}
+
+.smart-toast-btn.secondary {
+  background: transparent;
+  color: var(--chrome);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+}
+
+/* Personalization panel */
+.personalization-panel {
+  position: fixed;
+  top: 82px;
+  right: -400px;
+  width: 380px;
+  height: calc(100vh - 82px);
+  background: linear-gradient(180deg, rgba(15, 15, 16, 0.98), rgba(26, 28, 33, 0.98));
+  backdrop-filter: blur(30px);
+  border-left: 1px solid rgba(201, 206, 214, 0.1);
+  z-index: 1000;
+  overflow-y: auto;
+  transition: right 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.personalization-panel.open {
+  right: 0;
+}
+
+.personalization-panel-header {
+  padding: 30px;
+  border-bottom: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.personalization-panel-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+.personalization-panel-subtitle {
+  font-size: 14px;
+  color: var(--slate);
+}
+
+.personalization-panel-content {
+  padding: 30px;
+}
+
+.personalization-section {
+  margin-bottom: 30px;
+}
+
+.personalization-section-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--slate);
+  margin-bottom: 16px;
+}
+
+/* Interest progress bars */
+.interest-bar {
+  margin-bottom: 16px;
+}
+
+.interest-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--chrome);
+  margin-bottom: 6px;
+}
+
+.interest-bar-track {
+  height: 6px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.interest-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--chrome), var(--white));
+  border-radius: 3px;
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Personalization toggle button */
+.personalization-toggle {
+  position: fixed;
+  top: 100px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, rgba(42, 45, 52, 0.9), rgba(15, 15, 16, 0.9));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1001;
+  transition: all 0.3s ease;
+  font-size: 20px;
+}
+
+.personalization-toggle:hover {
+  transform: scale(1.1);
+  border-color: rgba(201, 206, 214, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.personalization-toggle.active {
+  background: var(--white);
+  color: var(--black);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .personalization-banner {
+    top: 65px;
+    padding: 10px 20px;
+  }
+  
+  .personalization-banner-content {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  
+  .personalization-message {
+    font-size: 12px;
+  }
+  
+  .dynamic-cta {
+    left: 20px;
+    right: 20px;
+    transform: translateX(0) translateY(100px);
+    padding: 6px 6px 6px 16px;
+  }
+  
+  .dynamic-cta.visible {
+    transform: translateX(0) translateY(0);
+  }
+  
+  .dynamic-cta-message {
+    font-size: 12px;
+    max-width: 200px;
+  }
+  
+  .personalization-panel {
+    width: 100%;
+    right: -100%;
+  }
+  
+  .personalization-toggle {
+    top: 80px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+  }
+  
+  .smart-toast {
+    left: 20px;
+    right: 20px;
+    max-width: none;
+    transform: translateY(200px);
+  }
+  
+  .smart-toast.visible {
+    transform: translateY(0);
+  }
+}

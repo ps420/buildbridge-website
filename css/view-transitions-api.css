@@ -1,0 +1,428 @@
+/* ========================================
+   VIEW TRANSITIONS API (v37.0)
+   Native browser page transitions
+======================================== */
+
+/* View Transition Root */
+::view-transition {
+  pointer-events: none;
+}
+
+/* Root container for transitions */
+::view-transition-group(root) {
+  animation-duration: 0.6s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* New page entering */
+::view-transition-new(root) {
+  animation-name: view-transition-enter;
+  animation-duration: 0.6s;
+  animation-fill-mode: both;
+}
+
+/* Old page exiting */
+::view-transition-old(root) {
+  animation-name: view-transition-exit;
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+}
+
+/* Enter Animation */
+@keyframes view-transition-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.98) translateY(20px);
+    filter: blur(10px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(0.99) translateY(10px);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* Exit Animation */
+@keyframes view-transition-exit {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.02) translateY(-10px);
+    filter: blur(4px);
+  }
+}
+
+/* Slide transition variant */
+::view-transition-new(root).slide-left {
+  animation-name: slide-enter-left;
+}
+
+::view-transition-old(root).slide-left {
+  animation-name: slide-exit-right;
+}
+
+@keyframes slide-enter-left {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-exit-right {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+}
+
+/* Fade scale transition variant */
+::view-transition-new(root).fade-scale {
+  animation-name: fade-scale-enter;
+}
+
+::view-transition-old(root).fade-scale {
+  animation-name: fade-scale-exit;
+}
+
+@keyframes fade-scale-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fade-scale-exit {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+}
+
+/* Flip transition for cards */
+::view-transition-group(flip-card) {
+  animation-duration: 0.5s;
+}
+
+::view-transition-new(flip-card) {
+  animation-name: flip-enter;
+}
+
+::view-transition-old(flip-card) {
+  animation-name: flip-exit;
+}
+
+@keyframes flip-enter {
+  0% {
+    opacity: 0;
+    transform: rotateY(-90deg);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateY(0);
+  }
+}
+
+@keyframes flip-exit {
+  0% {
+    opacity: 1;
+    transform: rotateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: rotateY(90deg);
+  }
+}
+
+/* Section level transitions */
+::view-transition-group(section) {
+  animation-duration: 0.7s;
+}
+
+::view-transition-new(section) {
+  animation-name: section-enter;
+}
+
+@keyframes section-enter {
+  0% {
+    opacity: 0;
+    clip-path: inset(100% 0 0 0);
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Image reveal transition */
+::view-transition-group(image-reveal) {
+  animation-duration: 0.8s;
+}
+
+::view-transition-new(image-reveal) {
+  animation-name: image-reveal-enter;
+}
+
+@keyframes image-reveal-enter {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    filter: grayscale(100%);
+  }
+  50% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    filter: grayscale(50%);
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    filter: grayscale(0%);
+  }
+}
+
+/* Text reveal transition */
+::view-transition-group(text-reveal) {
+  animation-duration: 0.5s;
+}
+
+::view-transition-new(text-reveal) {
+  animation-name: text-reveal-enter;
+}
+
+@keyframes text-reveal-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* Navigation link active states with view transition */
+.nav-link-view-transition {
+  view-transition-name: nav-active;
+}
+
+::view-transition-group(nav-active) {
+  animation-duration: 0.3s;
+}
+
+::view-transition-new(nav-active) {
+  animation-name: nav-active-enter;
+}
+
+@keyframes nav-active-enter {
+  0% {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+/* Page loader with view transition */
+.view-transition-loader {
+  position: fixed;
+  inset: 0;
+  background: var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  view-transition-name: page-loader;
+}
+
+::view-transition-group(page-loader) {
+  animation-duration: 0.5s;
+}
+
+::view-transition-old(page-loader) {
+  animation-name: loader-exit;
+}
+
+@keyframes loader-exit {
+  0% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+}
+
+/* Cross-fade for shared elements */
+::view-transition-group(shared-element) {
+  animation-duration: 0.6s;
+}
+
+::view-transition-new(shared-element),
+::view-transition-old(shared-element) {
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reduced motion support for view transitions */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-new(*),
+  ::view-transition-old(*) {
+    animation-duration: 0.01s !important;
+  }
+}
+
+/* Performance optimizations */
+.view-transition-container {
+  contain: layout style paint;
+}
+
+.view-transition-optimize {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+/* Fallback for browsers without View Transitions API */
+@supports not (view-transition-name: test) {
+  .view-transition-fade {
+    animation: legacy-fade-in 0.5s ease;
+  }
+  
+  @keyframes legacy-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Transition overlay styles */
+.transition-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, var(--black) 0%, var(--gun) 100%);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.transition-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.transition-overlay-content {
+  text-align: center;
+}
+
+.transition-overlay-logo {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 24px;
+  animation: transition-pulse 1.5s ease-in-out infinite;
+}
+
+.transition-overlay-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--chrome);
+}
+
+@keyframes transition-pulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Smooth scroll behavior with view transitions */
+html {
+  scroll-behavior: smooth;
+}
+
+html.view-transition-active {
+  scroll-behavior: auto;
+}
+
+/* Custom transition for gallery items */
+.gallery-item-transition {
+  view-transition-name: gallery-item;
+}
+
+::view-transition-group(gallery-item) {
+  animation-duration: 0.5s;
+}
+
+::view-transition-new(gallery-item) {
+  animation-name: gallery-zoom-in;
+}
+
+::view-transition-old(gallery-item) {
+  animation-name: gallery-zoom-out;
+}
+
+@keyframes gallery-zoom-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes gallery-zoom-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+}

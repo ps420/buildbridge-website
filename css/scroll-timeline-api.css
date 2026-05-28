@@ -1,0 +1,523 @@
+/* ========================================
+   SCROLL TIMELINE API ANIMATIONS (v37.0)
+   Native CSS scroll-driven animations
+   @supports for progressive enhancement
+======================================== */
+
+/* Base setup for scroll animations */
+@supports (animation-timeline: scroll()) {
+  .scroll-animate {
+    animation-fill-mode: both;
+    animation-timing-function: linear;
+    animation-timeline: view();
+  }
+  
+  /* Fade up on scroll */
+  .scroll-fade-up {
+    animation-name: scroll-fade-up;
+    animation-range: entry 10% cover 50%;
+  }
+  
+  @keyframes scroll-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(60px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Scale reveal on scroll */
+  .scroll-scale-in {
+    animation-name: scroll-scale-in;
+    animation-range: entry 0% cover 40%;
+  }
+  
+  @keyframes scroll-scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  /* Slide in from left */
+  .scroll-slide-left {
+    animation-name: scroll-slide-left;
+    animation-range: entry 10% cover 40%;
+  }
+  
+  @keyframes scroll-slide-left {
+    from {
+      opacity: 0;
+      transform: translateX(-100px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  /* Slide in from right */
+  .scroll-slide-right {
+    animation-name: scroll-slide-right;
+    animation-range: entry 10% cover 40%;
+  }
+  
+  @keyframes scroll-slide-right {
+    from {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  /* Rotate in */
+  .scroll-rotate-in {
+    animation-name: scroll-rotate-in;
+    animation-range: entry 0% cover 50%;
+  }
+  
+  @keyframes scroll-rotate-in {
+    from {
+      opacity: 0;
+      transform: rotate(-15deg) scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: rotate(0) scale(1);
+    }
+  }
+  
+  /* Clip path reveal */
+  .scroll-clip-reveal {
+    animation-name: scroll-clip-reveal;
+    animation-range: entry 0% cover 60%;
+  }
+  
+  @keyframes scroll-clip-reveal {
+    from {
+      clip-path: inset(100% 0 0 0);
+      opacity: 0;
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+      opacity: 1;
+    }
+  }
+  
+  /* Image parallax effect */
+  .scroll-parallax-image {
+    animation-name: scroll-parallax-image;
+    animation-timing-function: linear;
+    animation-timeline: view();
+    animation-range: entry 0% exit 100%;
+  }
+  
+  @keyframes scroll-parallax-image {
+    from {
+      transform: scale(1.2) translateY(-50px);
+    }
+    to {
+      transform: scale(1) translateY(50px);
+    }
+  }
+  
+  /* Text split reveal */
+  .scroll-text-reveal {
+    animation-name: scroll-text-reveal;
+    animation-range: entry 20% cover 50%;
+  }
+  
+  @keyframes scroll-text-reveal {
+    from {
+      opacity: 0;
+      filter: blur(10px);
+      letter-spacing: 0.5em;
+    }
+    to {
+      opacity: 1;
+      filter: blur(0);
+      letter-spacing: normal;
+    }
+  }
+  
+  /* Stagger children with scroll */
+  .scroll-stagger > * {
+    animation-name: scroll-fade-up;
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    animation-timeline: view();
+  }
+  
+  .scroll-stagger > *:nth-child(1) { animation-range: entry 10% cover 30%; }
+  .scroll-stagger > *:nth-child(2) { animation-range: entry 15% cover 35%; }
+  .scroll-stagger > *:nth-child(3) { animation-range: entry 20% cover 40%; }
+  .scroll-stagger > *:nth-child(4) { animation-range: entry 25% cover 45%; }
+  .scroll-stagger > *:nth-child(5) { animation-range: entry 30% cover 50%; }
+  .scroll-stagger > *:nth-child(6) { animation-range: entry 35% cover 55%; }
+  
+  /* Horizontal scroll progress on vertical scroll */
+  .scroll-horizontal-progress {
+    animation-name: scroll-horizontal-move;
+    animation-timing-function: linear;
+    animation-timeline: scroll(root);
+  }
+  
+  @keyframes scroll-horizontal-move {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  
+  /* Background color transition on scroll */
+  .scroll-bg-shift {
+    animation-name: scroll-bg-shift;
+    animation-timing-function: linear;
+    animation-timeline: view();
+  }
+  
+  @keyframes scroll-bg-shift {
+    0% {
+      background: linear-gradient(135deg, #0f0f10, #1a1a22);
+    }
+    50% {
+      background: linear-gradient(135deg, #1a1c21, #2a2d34);
+    }
+    100% {
+      background: linear-gradient(135deg, #0f0f10, #1a1a22);
+    }
+  }
+  
+  /* Width grow animation */
+  .scroll-width-grow {
+    animation-name: scroll-width-grow;
+    animation-range: entry 0% cover 50%;
+  }
+  
+  @keyframes scroll-width-grow {
+    from {
+      width: 0;
+      opacity: 0;
+    }
+    to {
+      width: 100%;
+      opacity: 1;
+    }
+  }
+  
+  /* Counter animation triggered by scroll */
+  .scroll-counter {
+    animation-name: scroll-counter;
+    animation-timing-function: steps(100);
+    animation-timeline: view();
+    animation-range: entry 30% cover 70%;
+  }
+  
+  @keyframes scroll-counter {
+    from {
+      --counter-value: 0;
+    }
+    to {
+      --counter-value: 100;
+    }
+  }
+  
+  /* 3D perspective scroll */
+  .scroll-3d-perspective {
+    animation-name: scroll-3d-perspective;
+    animation-timing-function: linear;
+    animation-timeline: view();
+  }
+  
+  @keyframes scroll-3d-perspective {
+    from {
+      transform: perspective(1000px) rotateX(15deg) translateZ(-100px);
+      opacity: 0;
+    }
+    to {
+      transform: perspective(1000px) rotateX(0) translateZ(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Line draw animation */
+  .scroll-line-draw {
+    animation-name: scroll-line-draw;
+    animation-timing-function: linear;
+    animation-timeline: view();
+    animation-range: entry 0% cover 60%;
+  }
+  
+  @keyframes scroll-line-draw {
+    from {
+      stroke-dashoffset: 1000;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  
+  /* Opacity pulse on scroll */
+  .scroll-pulse {
+    animation-name: scroll-pulse;
+    animation-timing-function: ease-in-out;
+    animation-timeline: view();
+  }
+  
+  @keyframes scroll-pulse {
+    0%, 100% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+}
+
+/* ================================================================== 
+   FALLBACK ANIMATIONS for browsers without Scroll Timeline support
+================================================================== */
+
+@supports not (animation-timeline: scroll()) {
+  .scroll-animate,
+  .scroll-fade-up,
+  .scroll-scale-in,
+  .scroll-slide-left,
+  .scroll-slide-right,
+  .scroll-rotate-in,
+  .scroll-clip-reveal,
+  .scroll-parallax-image,
+  .scroll-text-reveal,
+  .scroll-stagger > *,
+  .scroll-horizontal-progress,
+  .scroll-bg-shift,
+  .scroll-width-grow,
+  .scroll-counter,
+  .scroll-3d-perspective,
+  .scroll-line-draw,
+  .scroll-pulse {
+    opacity: 1;
+    transform: none;
+    animation: none;
+    clip-path: none;
+  }
+  
+  /* Use IntersectionObserver fallback */
+  .scroll-animate[data-scroll-animate] {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .scroll-animate[data-scroll-animate].visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   SCROLL-DRIVEN PROGRESS INDICATORS
+======================================== */
+
+/* Global scroll progress bar */
+.scroll-progress-document {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--chrome), var(--white));
+  z-index: 10001;
+  transform-origin: left;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress-document {
+    animation: document-progress linear;
+    animation-timeline: scroll(root);
+  }
+  
+  @keyframes document-progress {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+}
+
+/* Section-specific progress indicator */
+.section-scroll-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: var(--chrome);
+  transform-origin: left;
+}
+
+@supports (animation-timeline: view()) {
+  .section-scroll-progress {
+    animation: section-progress linear;
+    animation-timeline: view();
+  }
+  
+  @keyframes section-progress {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+}
+
+/* Circular progress */
+.scroll-progress-circle {
+  width: 60px;
+  height: 60px;
+}
+
+.scroll-progress-circle svg {
+  transform: rotate(-90deg);
+}
+
+.scroll-progress-circle circle {
+  fill: none;
+  stroke-width: 3;
+}
+
+.scroll-progress-circle .bg {
+  stroke: rgba(201, 206, 214, 0.1);
+}
+
+.scroll-progress-circle .progress {
+  stroke: var(--chrome);
+  stroke-dasharray: 157;
+  stroke-dashoffset: 157;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress-circle .progress {
+    animation: circle-progress linear;
+    animation-timeline: scroll(root);
+  }
+  
+  @keyframes circle-progress {
+    from { stroke-dashoffset: 157; }
+    to { stroke-dashoffset: 0; }
+  }
+}
+
+/* ========================================
+   SCROLL-DRIVEN LAYOUT CHANGES
+======================================== */
+
+/* Variable font weight based on scroll */
+.scroll-variable-weight {
+  font-variation-settings: 'wght' 400;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-variable-weight {
+    animation: variable-weight linear;
+    animation-timeline: scroll(root);
+  }
+  
+  @keyframes variable-weight {
+    0% { font-variation-settings: 'wght' 400; }
+    50% { font-variation-settings: 'wght' 800; }
+    100% { font-variation-settings: 'wght' 400; }
+  }
+}
+
+/* Sticky section with scroll-driven scale */
+.scroll-sticky-scale {
+  position: sticky;
+  top: 0;
+}
+
+@supports (animation-timeline: view()) {
+  .scroll-sticky-scale {
+    animation: sticky-scale linear;
+    animation-timeline: view();
+  }
+  
+  @keyframes sticky-scale {
+    entry 0% { transform: scale(1); }
+    entry 50% { transform: scale(0.9); }
+    exit 50% { transform: scale(0.9); }
+    exit 100% { transform: scale(1); }
+  }
+}
+
+/* ========================================
+   REDUCED MOTION SUPPORT
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  @supports (animation-timeline: scroll()) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    
+    .scroll-animate,
+    .scroll-fade-up,
+    .scroll-scale-in,
+    .scroll-slide-left,
+    .scroll-slide-right,
+    .scroll-rotate-in,
+    .scroll-clip-reveal,
+    .scroll-parallax-image,
+    .scroll-text-reveal,
+    .scroll-stagger > *,
+    .scroll-horizontal-progress,
+    .scroll-bg-shift,
+    .scroll-width-grow,
+    .scroll-counter,
+    .scroll-3d-perspective,
+    .scroll-line-draw,
+    .scroll-pulse {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+      clip-path: none !important;
+    }
+  }
+}
+
+/* ========================================
+   PROGRESSIVE ENHANCEMENT HELPERS
+======================================== */
+
+/* Class to disable scroll animations temporarily */
+.no-scroll-animations * {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Debug mode - shows animation ranges */
+.scroll-debug .scroll-animate {
+  outline: 2px solid rgba(255, 0, 0, 0.5);
+  outline-offset: 4px;
+}
+
+.scroll-debug .scroll-animate::after {
+  content: attr(class);
+  position: absolute;
+  top: -20px;
+  left: 0;
+  font-size: 10px;
+  color: red;
+  white-space: nowrap;
+}
