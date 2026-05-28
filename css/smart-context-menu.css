@@ -1,0 +1,398 @@
+/* =========================================
+   SMART CONTEXT MENU - v42 Fortune 500
+   Professional right-click menu system
+   ========================================= */
+
+:root {
+  --cm-bg: rgba(15, 15, 16, 0.98);
+  --cm-border: rgba(201, 206, 214, 0.12);
+  --cm-item-hover: rgba(201, 206, 214, 0.08);
+  --cm-item-active: rgba(201, 206, 214, 0.15);
+  --cm-text: #F5F7FA;
+  --cm-text-muted: rgba(201, 206, 214, 0.6);
+  --cm-accent: #C9CED6;
+  --cm-divider: rgba(201, 206, 214, 0.08);
+  --cm-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+  --cm-radius: 12px;
+}
+
+/* Context Menu Container */
+.context-menu {
+  position: fixed;
+  min-width: 220px;
+  max-width: 320px;
+  background: var(--cm-bg);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--cm-radius);
+  box-shadow: var(--cm-shadow);
+  backdrop-filter: blur(20px);
+  z-index: 99999;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.95) translateY(-10px);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.context-menu.active {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1) translateY(0);
+  pointer-events: all;
+}
+
+/* Menu Sections */
+.context-menu-section {
+  padding: 6px 0;
+}
+
+.context-menu-section + .context-menu-section {
+  border-top: 1px solid var(--cm-divider);
+}
+
+/* Menu Items */
+.context-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  margin: 0 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cm-text);
+  position: relative;
+}
+
+.context-menu-item:hover {
+  background: var(--cm-item-hover);
+}
+
+.context-menu-item:active {
+  background: var(--cm-item-active);
+  transform: scale(0.98);
+}
+
+.context-menu-item.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.context-menu-item.danger {
+  color: #F44336;
+}
+
+.context-menu-item.danger:hover {
+  background: rgba(244, 67, 54, 0.1);
+}
+
+/* Item Icon */
+.context-menu-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* Item Label */
+.context-menu-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Shortcut Badge */
+.context-menu-shortcut {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--cm-text-muted);
+  padding: 3px 8px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* Submenu Arrow */
+.context-menu-arrow {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--cm-text-muted);
+  transition: transform 0.2s ease;
+}
+
+.context-menu-item:hover .context-menu-arrow {
+  transform: translateX(2px);
+  color: var(--cm-accent);
+}
+
+/* Has Submenu */
+.context-menu-item.has-submenu {
+  position: relative;
+}
+
+.context-menu-item.has-submenu::after {
+  content: '›';
+  margin-left: auto;
+  font-size: 16px;
+  color: var(--cm-text-muted);
+  transition: transform 0.2s ease;
+}
+
+.context-menu-item.has-submenu:hover::after {
+  transform: translateX(2px);
+  color: var(--cm-accent);
+}
+
+/* Submenu */
+.context-submenu {
+  position: fixed;
+  min-width: 200px;
+  max-width: 280px;
+  background: var(--cm-bg);
+  border: 1px solid var(--cm-border);
+  border-radius: var(--cm-radius);
+  box-shadow: var(--cm-shadow);
+  backdrop-filter: blur(20px);
+  z-index: 100000;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.95);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.context-submenu.active {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  pointer-events: all;
+}
+
+/* Menu Header */
+.context-menu-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--cm-divider);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.context-menu-header-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.15), rgba(201, 206, 214, 0.05));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.context-menu-header-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.context-menu-header-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cm-text);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.context-menu-header-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: var(--cm-text-muted);
+  margin: 2px 0 0;
+}
+
+/* Backdrop */
+.context-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  z-index: 99998;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.15s ease;
+}
+
+.context-menu-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Animation Keyframes */
+@keyframes context-menu-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.context-menu.animating {
+  animation: context-menu-appear 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Image-specific Menu */
+.context-menu-image-preview {
+  padding: 12px;
+  border-bottom: 1px solid var(--cm-divider);
+}
+
+.context-menu-image-preview img {
+  width: 100%;
+  max-height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.context-menu-image-info {
+  padding: 10px 16px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: var(--cm-text-muted);
+  border-bottom: 1px solid var(--cm-divider);
+}
+
+/* Link-specific Info */
+.context-menu-link-info {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--cm-divider);
+  font-family: 'Poppins', sans-serif;
+}
+
+.context-menu-link-url {
+  font-size: 12px;
+  color: var(--cm-accent);
+  word-break: break-all;
+  margin-bottom: 4px;
+}
+
+.context-menu-link-domain {
+  font-size: 11px;
+  color: var(--cm-text-muted);
+}
+
+/* Selection Info */
+.context-menu-selection-info {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--cm-divider);
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: var(--cm-text-muted);
+}
+
+.context-menu-selection-text {
+  color: var(--cm-text);
+  font-weight: 500;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Dark Theme Specific */
+[data-theme="dark"] .context-menu,
+.context-menu {
+  background: rgba(15, 15, 16, 0.98);
+}
+
+/* Mobile Adaptations */
+@media (max-width: 768px) {
+  .context-menu {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    min-width: auto;
+    max-width: none;
+    border-radius: 20px 20px 0 0;
+    transform: translateY(100%);
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  
+  .context-menu.active {
+    transform: translateY(0);
+  }
+  
+  .context-menu-item {
+    padding: 16px 20px;
+    font-size: 15px;
+  }
+  
+  .context-menu-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+  }
+  
+  .context-submenu {
+    position: fixed;
+    inset: 0;
+    transform: translateX(100%);
+    border-radius: 0;
+  }
+  
+  .context-submenu.active {
+    transform: translateX(0);
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .context-menu {
+    border-width: 2px;
+    border-color: #fff;
+  }
+  
+  .context-menu-item:hover,
+  .context-menu-item:focus {
+    outline: 2px solid #fff;
+    outline-offset: -2px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .context-menu,
+  .context-submenu,
+  .context-menu-item {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .context-menu,
+  .context-submenu,
+  .context-menu-backdrop {
+    display: none !important;
+  }
+}
