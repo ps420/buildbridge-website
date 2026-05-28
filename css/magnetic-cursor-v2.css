@@ -1,0 +1,313 @@
+/**
+ * BuildBridge Magnetic Cursor v2.0
+ * Fortune 500 Custom Cursor System
+ * Magnetic attraction with spring physics and trails
+ * =====================================================
+ */
+
+/* ========================================
+   BASE CURSOR SETUP
+======================================== */
+@media (pointer: fine) {
+  body {
+    cursor: none;
+  }
+  
+  body * {
+    cursor: none !important;
+  }
+  
+  /* Show default cursor on touch devices */
+  @media (hover: none) and (pointer: coarse) {
+    body,
+    body * {
+      cursor: auto !important;
+    }
+  }
+}
+
+/* ========================================
+   MAIN CURSOR
+======================================== */
+.cursor-main {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  z-index: 99999;
+  mix-blend-mode: difference;
+  transition: transform 0.1s ease-out;
+}
+
+.cursor-main::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #F5F7FA;
+  border-radius: 50%;
+  transform: scale(1);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hover states */
+.cursor-main.hover-link::before {
+  transform: scale(2.5);
+  background: rgba(245, 247, 250, 0.8);
+}
+
+.cursor-main.hover-button::before {
+  transform: scale(3);
+  background: rgba(201, 206, 214, 0.9);
+}
+
+.cursor-main.hover-image::before {
+  transform: scale(4);
+  background: transparent;
+  border: 2px solid #F5F7FA;
+}
+
+.cursor-main.hover-text::before {
+  transform: scale(0.5);
+  background: #C9CED6;
+}
+
+/* Click animation */
+.cursor-main.clicking::before {
+  transform: scale(0.8);
+}
+
+/* ========================================
+   CURSOR TRAIL
+======================================== */
+.cursor-trail {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99998;
+}
+
+.cursor-trail-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: rgba(201, 206, 214, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+}
+
+/* ========================================
+   CURSOR RING
+======================================== */
+.cursor-ring {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+  z-index: 99997;
+  border: 1px solid rgba(201, 206, 214, 0.5);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: 
+    width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s ease,
+    border-width 0.3s ease;
+}
+
+.cursor-ring.hover-link {
+  width: 60px;
+  height: 60px;
+  border-color: rgba(245, 247, 250, 0.8);
+}
+
+.cursor-ring.hover-button {
+  width: 80px;
+  height: 80px;
+  border-color: rgba(201, 206, 214, 1);
+  border-width: 2px;
+}
+
+.cursor-ring.clicking {
+  width: 35px;
+  height: 35px;
+  border-color: rgba(245, 247, 250, 0.9);
+}
+
+/* ========================================
+   CURSOR LABEL
+======================================== */
+.cursor-label {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99996;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: #0F0F10;
+  background: #F5F7FA;
+  padding: 6px 12px;
+  border-radius: 100px;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.8);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.cursor-label.visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* ========================================
+   MAGNETIC ELEMENTS
+======================================== */
+.magnetic-cursor-zone {
+  position: relative;
+}
+
+.magnetic-cursor-zone .magnetic-content {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* ========================================
+   CURSOR MODES
+======================================== */
+.cursor-mode--pointer .cursor-main::before {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 17px solid #F5F7FA;
+  border-radius: 0;
+  background: transparent;
+}
+
+.cursor-mode--crosshair .cursor-main::before {
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: 2px solid #F5F7FA;
+  border-radius: 0;
+}
+
+.cursor-mode--crosshair .cursor-main::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid #F5F7FA;
+}
+
+/* ========================================
+   LOADING STATE
+======================================== */
+.cursor-main.loading::before {
+  animation: cursor-spin 1s linear infinite;
+  background: conic-gradient(from 0deg, transparent, #F5F7FA, transparent);
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #fff calc(100% - 3px));
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #fff calc(100% - 3px));
+}
+
+@keyframes cursor-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========================================
+   TEXT SELECTION MODE
+======================================== */
+.cursor-mode--text .cursor-main {
+  mix-blend-mode: normal;
+}
+
+.cursor-mode--text .cursor-main::before {
+  width: 2px;
+  height: 24px;
+  border-radius: 1px;
+  background: #C9CED6;
+  animation: cursor-blink 1s step-end infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* ========================================
+   HIDE ON REDUCED MOTION
+======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .cursor-main,
+  .cursor-trail,
+  .cursor-ring,
+  .cursor-label {
+    display: none !important;
+  }
+  
+  body,
+  body * {
+    cursor: auto !important;
+  }
+}
+
+/* ========================================
+   MOBILE/TABLET HIDE
+======================================== */
+@media (hover: none) and (pointer: coarse) {
+  .cursor-main,
+  .cursor-trail,
+  .cursor-ring,
+  .cursor-label {
+    display: none !important;
+  }
+}
+
+/* ========================================
+   CURSOR OUTLINE MODE
+======================================== */
+.cursor-outline-mode .cursor-main::before {
+  background: transparent;
+  border: 2px solid #F5F7FA;
+}
+
+.cursor-outline-mode .cursor-main.hover-link::before {
+  background: rgba(245, 247, 250, 0.1);
+}
+
+/* ========================================
+   HOLD TO DRAG INDICATOR
+======================================== */
+.cursor-drag-indicator {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99995;
+  width: 60px;
+  height: 60px;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.5);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cursor-drag-indicator.visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.cursor-drag-indicator svg {
+  width: 100%;
+  height: 100%;
+  stroke: #C9CED6;
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.cursor-drag-indicator .drag-arrows {
+  animation: drag-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes drag-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}

@@ -1,0 +1,329 @@
+/**
+ * BuildBridge Scroll Reveal v2.0
+ * Fortune 500 Scroll-Triggered Animation System
+ * Multiple reveal types with stagger support
+ * =====================================================
+ */
+
+/* ========================================
+   BASE REVEAL STYLES
+======================================== */
+[data-reveal] {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+[data-reveal].revealed {
+  opacity: 1;
+}
+
+/* ========================================
+   SLIDE UP REVEAL
+======================================== */
+[data-reveal="slide-up"] {
+  transform: translateY(60px);
+  transition: 
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-reveal="slide-up"].revealed {
+  transform: translateY(0);
+}
+
+/* ========================================
+   SLIDE DOWN REVEAL
+======================================== */
+[data-reveal="slide-down"] {
+  transform: translateY(-60px);
+  transition: 
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-reveal="slide-down"].revealed {
+  transform: translateY(0);
+}
+
+/* ========================================
+   SLIDE LEFT REVEAL
+======================================== */
+[data-reveal="slide-left"] {
+  transform: translateX(60px);
+  transition: 
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-reveal="slide-left"].revealed {
+  transform: translateX(0);
+}
+
+/* ========================================
+   SLIDE RIGHT REVEAL
+======================================== */
+[data-reveal="slide-right"] {
+  transform: translateX(-60px);
+  transition: 
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-reveal="slide-right"].revealed {
+  transform: translateX(0);
+}
+
+/* ========================================
+   FADE SCALE REVEAL
+======================================== */
+[data-reveal="fade-scale"] {
+  transform: scale(0.9);
+  transition: 
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-reveal="fade-scale"].revealed {
+  transform: scale(1);
+}
+
+/* ========================================
+   FADE ROTATE REVEAL
+======================================== */
+[data-reveal="fade-rotate"] {
+  transform: rotate(-5deg) scale(0.95);
+  transform-origin: center;
+  transition: 
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-reveal="fade-rotate"].revealed {
+  transform: rotate(0) scale(1);
+}
+
+/* ========================================
+   FLIP X REVEAL
+======================================== */
+[data-reveal="flip-x"] {
+  transform: perspective(1000px) rotateX(90deg);
+  transform-origin: center bottom;
+  transition: 
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-reveal="flip-x"].revealed {
+  transform: perspective(1000px) rotateX(0);
+}
+
+/* ========================================
+   FLIP Y REVEAL
+======================================== */
+[data-reveal="flip-y"] {
+  transform: perspective(1000px) rotateY(90deg);
+  transform-origin: left center;
+  transition: 
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-reveal="flip-y"].revealed {
+  transform: perspective(1000px) rotateY(0);
+}
+
+/* ========================================
+   MASK REVEAL (CLIP-PATH)
+======================================== */
+[data-reveal="mask-up"] {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+[data-reveal="mask-up"].revealed {
+  clip-path: inset(0 0 0 0);
+}
+
+[data-reveal="mask-down"] {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+[data-reveal="mask-down"].revealed {
+  clip-path: inset(0 0 0 0);
+}
+
+[data-reveal="mask-left"] {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+[data-reveal="mask-left"].revealed {
+  clip-path: inset(0 0 0 0);
+}
+
+[data-reveal="mask-right"] {
+  clip-path: inset(0 0 0 100%);
+  transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+[data-reveal="mask-right"].revealed {
+  clip-path: inset(0 0 0 0);
+}
+
+[data-reveal="mask-center"] {
+  clip-path: circle(0% at 50% 50%);
+  transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-reveal="mask-center"].revealed {
+  clip-path: circle(150% at 50% 50%);
+}
+
+/* ========================================
+   CHARACTER SPLIT REVEAL
+======================================== */
+[data-reveal="chars"] .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(100%) rotateX(-80deg);
+  transform-origin: center bottom;
+}
+
+[data-reveal="chars"].revealed .char {
+  opacity: 1;
+  transform: translateY(0) rotateX(0);
+}
+
+/* ========================================
+   WORD SPLIT REVEAL
+======================================== */
+[data-reveal="words"] .word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+[data-reveal="words"].revealed .word {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+   LINE SPLIT REVEAL
+======================================== */
+[data-reveal="lines"] .line {
+  display: block;
+  overflow: hidden;
+}
+
+[data-reveal="lines"] .line-inner {
+  display: block;
+  transform: translateY(100%);
+}
+
+[data-reveal="lines"].revealed .line-inner {
+  transform: translateY(0);
+}
+
+/* ========================================
+   STAGGER DELAYS
+======================================== */
+[data-reveal][data-stagger="1"] { transition-delay: 0.1s; }
+[data-reveal][data-stagger="2"] { transition-delay: 0.2s; }
+[data-reveal][data-stagger="3"] { transition-delay: 0.3s; }
+[data-reveal][data-stagger="4"] { transition-delay: 0.4s; }
+[data-reveal][data-stagger="5"] { transition-delay: 0.5s; }
+[data-reveal][data-stagger="6"] { transition-delay: 0.6s; }
+[data-reveal][data-stagger="7"] { transition-delay: 0.7s; }
+[data-reveal][data-stagger="8"] { transition-delay: 0.8s; }
+
+/* Stagger for children */
+[data-reveal-children] > *:nth-child(1) { transition-delay: 0.1s; }
+[data-reveal-children] > *:nth-child(2) { transition-delay: 0.15s; }
+[data-reveal-children] > *:nth-child(3) { transition-delay: 0.2s; }
+[data-reveal-children] > *:nth-child(4) { transition-delay: 0.25s; }
+[data-reveal-children] > *:nth-child(5) { transition-delay: 0.3s; }
+[data-reveal-children] > *:nth-child(6) { transition-delay: 0.35s; }
+[data-reveal-children] > *:nth-child(7) { transition-delay: 0.4s; }
+[data-reveal-children] > *:nth-child(8) { transition-delay: 0.45s; }
+[data-reveal-children] > *:nth-child(9) { transition-delay: 0.5s; }
+[data-reveal-children] > *:nth-child(10) { transition-delay: 0.55s; }
+
+/* ========================================
+   DURATION MODIFIERS
+======================================== */
+[data-reveal][data-duration="fast"] { transition-duration: 0.5s; }
+[data-reveal][data-duration="slow"] { transition-duration: 1.2s; }
+[data-reveal][data-duration="slower"] { transition-duration: 1.5s; }
+
+/* ========================================
+   IMAGE REVEAL OVERLAY
+======================================== */
+[data-reveal-img] {
+  position: relative;
+  overflow: hidden;
+}
+
+[data-reveal-img]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #0F0F10;
+  transform: scaleY(1);
+  transform-origin: bottom;
+  transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+[data-reveal-img].revealed::after {
+  transform: scaleY(0);
+}
+
+[data-reveal-img] img {
+  transform: scale(1.2);
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-reveal-img].revealed img {
+  transform: scale(1);
+}
+
+/* ========================================
+   PARALLAX REVEAL
+======================================== */
+[data-reveal-parallax] {
+  transform: translateY(var(--parallax-offset, 50px));
+  opacity: calc(1 - var(--parallax-progress, 0) * 0.5);
+}
+
+[data-reveal-parallax].revealed {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ========================================
+   REDUCED MOTION
+======================================== */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+    transition: none;
+  }
+  
+  [data-reveal] .char,
+  [data-reveal] .word,
+  [data-reveal] .line-inner {
+    opacity: 1;
+    transform: none;
+  }
+  
+  [data-reveal-img]::after {
+    display: none;
+  }
+  
+  [data-reveal-img] img {
+    transform: none;
+  }
+}

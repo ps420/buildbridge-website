@@ -1,0 +1,113 @@
+/**
+ * BuildBridge Particle Network Background v2.0
+ * Fortune 500 Interactive Background System
+ * Connected particles with cursor interaction
+ * =====================================================
+ */
+
+/* ========================================
+   PARTICLE NETWORK CONTAINER
+======================================== */
+.particle-network-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle-network-bg canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.particle-network-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    rgba(15, 15, 16, 0.4) 70%,
+    rgba(15, 15, 16, 0.8) 100%
+  );
+  pointer-events: none;
+}
+
+/* Variant: Subtle (reduced opacity) */
+.particle-network-bg.subtle canvas {
+  opacity: 0.4;
+}
+
+.particle-network-bg.subtle .particle-network-overlay {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    rgba(15, 15, 16, 0.6) 70%,
+    rgba(15, 15, 16, 0.95) 100%
+  );
+}
+
+/* Variant: Dense (more particles) */
+.particle-network-bg.dense canvas {
+  opacity: 0.8;
+}
+
+/* Variant: Hero only (positioned behind hero) */
+.particle-network-bg.hero-only {
+  position: absolute;
+  height: 100vh;
+}
+
+/* ========================================
+   DARK MODE ADJUSTMENTS
+======================================== */
+[data-theme="light"] .particle-network-bg canvas {
+  filter: invert(1);
+  opacity: 0.15;
+}
+
+[data-theme="light"] .particle-network-overlay {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    rgba(245, 247, 250, 0.4) 70%,
+    rgba(245, 247, 250, 0.8) 100%
+  );
+}
+
+/* ========================================
+   REDUCED MOTION
+======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .particle-network-bg canvas {
+    display: none;
+  }
+}
+
+/* ========================================
+   MOBILE OPTIMIZATIONS
+======================================== */
+@media (max-width: 768px) {
+  .particle-network-bg canvas {
+    opacity: 0.5;
+  }
+}
+
+/* ========================================
+   SECTION-SPECIFIC POSITIONING
+======================================== */
+.section-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.section-particles canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
