@@ -1,0 +1,320 @@
+/* ========================================
+   v88.0: Advanced Ripple Effects - Material Design Touch Feedback
+   Fortune 500 Quality Interactive Feedback
+======================================== */
+
+/* Base Ripple Container */
+.ripple-container {
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+}
+
+/* Ripple Element */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.3;
+  transform: scale(0);
+  pointer-events: none;
+  animation: ripple-effect 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes ripple-effect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Ripple on Dark Backgrounds */
+.ripple-dark .ripple {
+  background: rgba(201, 169, 104, 0.4);
+}
+
+/* Ripple on Light Backgrounds */
+.ripple-light .ripple {
+  background: rgba(15, 15, 16, 0.2);
+}
+
+/* Ripple on Chrome/Gold */
+.ripple-chrome .ripple {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Button Ripple Enhancement */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+}
+
+.btn-ripple::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--ripple-x, 50%) var(--ripple-y, 50%), 
+    rgba(201, 169, 104, 0.4) 0%, 
+    transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.btn-ripple:active::before {
+  opacity: 1;
+}
+
+/* Card Ripple Effect */
+.card-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-ripple::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(201, 169, 104, 0.15) 0%,
+    transparent 50%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.card-ripple:hover::after {
+  opacity: 1;
+}
+
+/* Magnetic Ripple Button */
+.magnetic-ripple {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.magnetic-ripple .ripple {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Ripple Wave Animation */
+.ripple-wave {
+  position: relative;
+}
+
+.ripple-wave::before,
+.ripple-wave::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid var(--chrome);
+  opacity: 0;
+  animation: ripple-wave 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.ripple-wave::after {
+  animation-delay: 0.5s;
+}
+
+@keyframes ripple-wave {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Touch Ripple for Mobile */
+.touch-ripple {
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.touch-ripple::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(201, 169, 104, 0.3) 0%, transparent 70%);
+  opacity: 0;
+  transform: scale(0);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.touch-ripple:active::before {
+  opacity: 1;
+  transform: scale(2);
+}
+
+/* Icon Button Ripple */
+.icon-btn-ripple {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--white);
+  transition: background 0.3s ease;
+  overflow: hidden;
+}
+
+.icon-btn-ripple:hover {
+  background: rgba(201, 169, 104, 0.1);
+}
+
+.icon-btn-ripple .ripple {
+  background: rgba(201, 169, 104, 0.4);
+}
+
+/* List Item Ripple */
+.list-item-ripple {
+  position: relative;
+  overflow: hidden;
+  transition: background 0.2s ease;
+}
+
+.list-item-ripple:hover {
+  background: rgba(201, 169, 104, 0.05);
+}
+
+.list-item-ripple .ripple {
+  background: rgba(201, 169, 104, 0.2);
+}
+
+/* Tab Ripple */
+.tab-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-ripple::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: var(--tab-indicator-x, 0);
+  width: var(--tab-indicator-width, 0);
+  height: 2px;
+  background: var(--chrome);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Floating Action Button Ripple */
+.fab-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.fab-ripple .ripple {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Ripple on Image Hover */
+.image-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-ripple::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(201, 169, 104, 0.2) 0%,
+    transparent 50%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.image-ripple:hover::before {
+  opacity: 1;
+}
+
+/* Checkbox/Radio Ripple */
+.checkbox-ripple,
+.radio-ripple {
+  position: relative;
+}
+
+.checkbox-ripple::before,
+.radio-ripple::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: rgba(201, 169, 104, 0.2);
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s ease;
+}
+
+.checkbox-ripple:active::before,
+.radio-ripple:active::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Speed Dial Ripple */
+.speed-dial-item-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.speed-dial-item-ripple .ripple {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Ripple Animation Keyframes Collection */
+@keyframes ripple-expand {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes ripple-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.3;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .ripple {
+    animation: none;
+    opacity: 0;
+  }
+  
+  .ripple-wave::before,
+  .ripple-wave::after {
+    animation: none;
+  }
+  
+  .btn-ripple::before,
+  .card-ripple::after,
+  .touch-ripple::before,
+  .image-ripple::before {
+    transition: none;
+  }
+}
