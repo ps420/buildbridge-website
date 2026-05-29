@@ -1,496 +1,388 @@
-/**
- * BuildBridge - 3D Perspective Gallery v17.3
- * Immersive 3D gallery with perspective transforms
- * Fortune 500 Quality Interactive Gallery
- */
+/* ========================================
+   v90.0: Advanced 3D Perspective Card Gallery
+   Fortune 500 Quality Scroll-Triggered Gallery
+======================================== */
 
-/* ============================================
-   3D GALLERY CONTAINER
-   ============================================ */
+.perspective-gallery-section {
+  padding: 120px 5%;
+  position: relative;
+  overflow: hidden;
+}
 
-.perspective-gallery {
+.perspective-gallery-section .section-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 80px;
+}
+
+/* 3D Gallery Container */
+.perspective-gallery-container {
   perspective: 2000px;
   perspective-origin: center center;
-  overflow: visible;
-  padding: 100px 0;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-.perspective-gallery__container {
-  position: relative;
-  width: 100%;
-  height: 600px;
+.perspective-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 40px;
   transform-style: preserve-3d;
 }
 
-/* ============================================
-   3D CAROUSEL
-   ============================================ */
-
-.carousel-3d {
+/* 3D Cards */
+.perspective-card {
   position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+  transform: translateY(60px) rotateX(15deg);
+}
+
+.perspective-card.revealed {
+  opacity: 1;
+  transform: translateY(0) rotateX(0);
+}
+
+.perspective-card-inner {
+  position: relative;
+  background: linear-gradient(145deg, rgba(30, 30, 35, 0.9), rgba(20, 20, 25, 0.95));
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(201, 206, 214, 0.08);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(201, 206, 214, 0.05) inset;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+}
+
+.perspective-card:hover .perspective-card-inner {
+  box-shadow: 
+    0 35px 60px -15px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(201, 206, 214, 0.1) inset,
+    0 0 80px -20px rgba(201, 206, 214, 0.1);
+  border-color: rgba(201, 206, 214, 0.15);
+}
+
+/* Card Image Section */
+.perspective-card-image {
+  position: relative;
+  height: 280px;
+  overflow: hidden;
+  transform: translateZ(20px);
+}
+
+.perspective-card-image img {
   width: 100%;
   height: 100%;
-  transform-style: preserve-3d;
+  object-fit: cover;
   transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.carousel-3d__item {
-  position: absolute;
-  width: 400px;
-  height: 500px;
-  left: 50%;
-  top: 50%;
-  margin-left: -200px;
-  margin-top: -250px;
-  transform-style: preserve-3d;
-  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  cursor: pointer;
-}
-
-.carousel-3d__item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 20px;
-  box-shadow: 
-    0 25px 50px -12px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.carousel-3d__item:hover img {
-  transform: scale(1.05);
-  box-shadow: 
-    0 35px 60px -15px rgba(0, 0, 0, 0.6),
-    0 0 0 2px rgba(255, 193, 7, 0.3);
-}
-
-/* Position items in 3D space */
-.carousel-3d__item:nth-child(1) { transform: rotateY(0deg) translateZ(500px); }
-.carousel-3d__item:nth-child(2) { transform: rotateY(72deg) translateZ(500px); }
-.carousel-3d__item:nth-child(3) { transform: rotateY(144deg) translateZ(500px); }
-.carousel-3d__item:nth-child(4) { transform: rotateY(216deg) translateZ(500px); }
-.carousel-3d__item:nth-child(5) { transform: rotateY(288deg) translateZ(500px); }
-
-/* Active state */
-.carousel-3d__item.active {
-  z-index: 10;
-}
-
-.carousel-3d__item.active img {
-  box-shadow: 
-    0 30px 60px -15px rgba(255, 193, 7, 0.3),
-    0 0 0 3px rgba(255, 193, 7, 0.5);
-}
-
-/* ============================================
-   3D CARD STACK
-   ============================================ */
-
-.card-stack-3d {
-  position: relative;
-  width: 100%;
-  max-width: 400px;
-  height: 500px;
-  margin: 0 auto;
-  perspective: 1500px;
-}
-
-.card-stack-3d__card {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 24px;
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  overflow: hidden;
-  transform-style: preserve-3d;
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  cursor: grab;
-}
-
-.card-stack-3d__card:active {
-  cursor: grabbing;
-}
-
-.card-stack-3d__card img {
-  width: 100%;
-  height: 60%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-
-.card-stack-3d__card:hover img {
+.perspective-card:hover .perspective-card-image img {
   transform: scale(1.1);
 }
 
-.card-stack-3d__content {
-  padding: 24px;
-}
-
-.card-stack-3d__card:nth-child(1) {
-  transform: translateZ(0) rotateZ(-2deg);
-  z-index: 5;
-}
-
-.card-stack-3d__card:nth-child(2) {
-  transform: translateZ(-50px) translateY(10px) rotateZ(2deg) scale(0.95);
-  z-index: 4;
-  opacity: 0.9;
-}
-
-.card-stack-3d__card:nth-child(3) {
-  transform: translateZ(-100px) translateY(20px) rotateZ(-1deg) scale(0.9);
-  z-index: 3;
-  opacity: 0.8;
-}
-
-.card-stack-3d__card:nth-child(4) {
-  transform: translateZ(-150px) translateY(30px) rotateZ(3deg) scale(0.85);
-  z-index: 2;
-  opacity: 0.7;
-}
-
-.card-stack-3d__card:nth-child(5) {
-  transform: translateZ(-200px) translateY(40px) rotateZ(-2deg) scale(0.8);
-  z-index: 1;
-  opacity: 0.6;
-}
-
-/* Card being swiped */
-.card-stack-3d__card.swiping-left {
-  transform: translateX(-150%) rotateZ(-30deg) !important;
-  opacity: 0;
-}
-
-.card-stack-3d__card.swiping-right {
-  transform: translateX(150%) rotateZ(30deg) !important;
-  opacity: 0;
-}
-
-/* ============================================
-   3D COVER FLOW
-   ============================================ */
-
-.coverflow-3d {
-  position: relative;
-  width: 100%;
-  height: 400px;
-  perspective: 1000px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-}
-
-.coverflow-3d__item {
-  position: relative;
-  width: 300px;
-  height: 350px;
-  transform-style: preserve-3d;
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  cursor: pointer;
-}
-
-.coverflow-3d__item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 16px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-}
-
-.coverflow-3d__item.prev {
-  transform: translateX(-50%) rotateY(45deg) scale(0.8);
-  opacity: 0.6;
-}
-
-.coverflow-3d__item.active {
-  transform: translateX(0) rotateY(0) scale(1);
-  z-index: 10;
-}
-
-.coverflow-3d__item.next {
-  transform: translateX(50%) rotateY(-45deg) scale(0.8);
-  opacity: 0.6;
-}
-
-.coverflow-3d__item.hidden {
-  transform: translateX(0) rotateY(0) scale(0.6);
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* ============================================
-   3D FLIP GALLERY
-   ============================================ */
-
-.flip-gallery-3d {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  perspective: 2000px;
-}
-
-.flip-card-3d {
-  position: relative;
-  width: 100%;
-  height: 400px;
-  transform-style: preserve-3d;
-  cursor: pointer;
-}
-
-.flip-card-3d__inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.flip-card-3d:hover .flip-card-3d__inner,
-.flip-card-3d.flipped .flip-card-3d__inner {
-  transform: rotateY(180deg);
-}
-
-.flip-card-3d__front,
-.flip-card-3d__back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-.flip-card-3d__front img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.flip-card-3d__back {
-  background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 152, 0, 0.05));
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transform: rotateY(180deg);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 30px;
-  text-align: center;
-}
-
-/* ============================================
-   3D TILT CARDS
-   ============================================ */
-
-.tilt-card-3d {
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.1s ease-out;
-}
-
-.tilt-card-3d__shine {
+.perspective-card-image::after {
+  content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.1) 50%,
-    rgba(255, 255, 255, 0) 100%
+    to bottom,
+    transparent 0%,
+    transparent 50%,
+    rgba(20, 20, 25, 0.8) 100%
   );
-  opacity: 0;
-  transition: opacity 0.3s ease;
   pointer-events: none;
-  border-radius: inherit;
 }
 
-.tilt-card-3d:hover .tilt-card-3d__shine {
-  opacity: 1;
-}
-
-.tilt-card-3d__content {
-  transform: translateZ(50px);
-}
-
-/* ============================================
-   PARALLAX LAYERS
-   ============================================ */
-
-.parallax-layer {
+/* Shimmer Effect on Hover */
+.perspective-card-shimmer {
   position: absolute;
-  transition: transform 0.1s ease-out;
-  will-change: transform;
-}
-
-.parallax-layer--back {
-  transform: translateZ(-100px) scale(1.5);
-  z-index: 1;
-}
-
-.parallax-layer--mid {
-  transform: translateZ(-50px) scale(1.25);
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.05) 45%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 55%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  transition: background-position 0.8s ease;
+  pointer-events: none;
   z-index: 2;
 }
 
-.parallax-layer--front {
-  transform: translateZ(0);
+.perspective-card:hover .perspective-card-shimmer {
+  background-position: -100% 0;
+}
+
+/* Project Value Badge */
+.project-value-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.15), rgba(201, 206, 214, 0.05));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 8px 16px;
+  border-radius: 100px;
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #c9ced6;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transform: translateZ(40px);
   z-index: 3;
 }
 
-/* ============================================
-   3D NAVIGATION
-   ============================================ */
-
-.gallery-3d-nav {
+/* Status Indicator */
+.project-status {
+  position: absolute;
+  top: 20px;
+  left: 20px;
   display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 40px;
+  align-items: center;
+  gap: 8px;
+  background: rgba(20, 20, 25, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 8px 14px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transform: translateZ(40px);
+  z-index: 3;
 }
 
-.gallery-3d-btn {
-  width: 50px;
-  height: 50px;
+.status-indicator {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+.status-indicator.completed {
+  background: #22c55e;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+}
+
+.status-indicator.in-progress {
+  background: #f59e0b;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}
+
+.status-indicator.planning {
+  background: #3b82f6;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+@keyframes statusPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.7; }
+}
+
+/* Card Content */
+.perspective-card-content {
+  padding: 28px;
+  transform: translateZ(30px);
+  position: relative;
+  z-index: 2;
+}
+
+.perspective-card-category {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #c9ced6;
+  opacity: 0.6;
+  margin-bottom: 8px;
+}
+
+.perspective-card-title {
+  font-family: 'Montserrat', sans-serif;
   font-size: 20px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.perspective-card-location {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #9ca3af;
+  margin-bottom: 20px;
 }
 
-.gallery-3d-btn:hover {
-  background: rgba(255, 193, 7, 0.2);
-  border-color: rgba(255, 193, 7, 0.5);
-  transform: scale(1.1);
+.perspective-card-location svg {
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
 }
 
-.gallery-3d-dots {
+/* Project Stats Grid */
+.perspective-card-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  border: 1px solid rgba(201, 206, 214, 0.05);
+}
+
+.perspective-stat {
+  text-align: center;
+}
+
+.perspective-stat-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #c9ced6;
+  display: block;
+}
+
+.perspective-stat-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* Card Action */
+.perspective-card-action {
   display: flex;
-  gap: 10px;
   align-items: center;
+  justify-content: space-between;
+  padding-top: 20px;
+  border-top: 1px solid rgba(201, 206, 214, 0.08);
 }
 
-.gallery-3d-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  cursor: pointer;
+.perspective-card-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #c9ced6;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none;
   transition: all 0.3s ease;
 }
 
-.gallery-3d-dot.active {
-  background: #ffc107;
-  transform: scale(1.3);
+.perspective-card-btn:hover {
+  color: #ffffff;
+  gap: 12px;
 }
 
-/* ============================================
-   LOADING STATES
-   ============================================ */
+.perspective-card-btn svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s ease;
+}
 
-.gallery-3d__loading {
+.perspective-card-btn:hover svg {
+  transform: translateX(4px);
+}
+
+/* View Full Gallery Link */
+.perspective-gallery-cta {
+  text-align: center;
+  margin-top: 60px;
+}
+
+/* Stagger Animation Delays */
+.perspective-card:nth-child(1) { transition-delay: 0s; }
+.perspective-card:nth-child(2) { transition-delay: 0.1s; }
+.perspective-card:nth-child(3) { transition-delay: 0.2s; }
+.perspective-card:nth-child(4) { transition-delay: 0.3s; }
+.perspective-card:nth-child(5) { transition-delay: 0.4s; }
+.perspective-card:nth-child(6) { transition-delay: 0.5s; }
+
+/* Depth Layers on Hover */
+.perspective-card::before {
+  content: '';
   position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(15, 15, 16, 0.9);
-  z-index: 100;
+  inset: -2px;
+  background: linear-gradient(
+    135deg,
+    rgba(201, 206, 214, 0.1),
+    transparent 50%,
+    rgba(201, 206, 214, 0.05)
+  );
+  border-radius: 26px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: -1;
 }
 
-.gallery-3d__spinner {
-  width: 50px;
-  height: 50px;
-  border: 3px solid rgba(255, 193, 7, 0.1);
-  border-top-color: #ffc107;
-  border-radius: 50%;
-  animation: gallery-spin 1s linear infinite;
+.perspective-card:hover::before {
+  opacity: 1;
 }
 
-@keyframes gallery-spin {
-  to { transform: rotate(360deg); }
+/* 3D Tilt Effect Enhancement */
+.perspective-card.tilt-3d {
+  transition: transform 0.1s ease-out;
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
-
+/* Mobile Optimizations */
 @media (max-width: 768px) {
-  .perspective-gallery__container {
-    height: 400px;
-  }
-  
-  .carousel-3d__item {
-    width: 250px;
-    height: 320px;
-    margin-left: -125px;
-    margin-top: -160px;
-  }
-  
-  .carousel-3d__item:nth-child(1) { transform: rotateY(0deg) translateZ(300px); }
-  .carousel-3d__item:nth-child(2) { transform: rotateY(72deg) translateZ(300px); }
-  .carousel-3d__item:nth-child(3) { transform: rotateY(144deg) translateZ(300px); }
-  .carousel-3d__item:nth-child(4) { transform: rotateY(216deg) translateZ(300px); }
-  .carousel-3d__item:nth-child(5) { transform: rotateY(288deg) translateZ(300px); }
-  
-  .card-stack-3d {
-    height: 400px;
-  }
-  
-  .coverflow-3d {
-    height: 300px;
-  }
-  
-  .coverflow-3d__item {
-    width: 200px;
-    height: 250px;
-  }
-}
-
-@media (max-width: 480px) {
   .perspective-gallery {
-    perspective: 1000px;
+    grid-template-columns: 1fr;
+    gap: 24px;
   }
   
-  .carousel-3d__item {
-    width: 200px;
-    height: 260px;
-    margin-left: -100px;
-    margin-top: -130px;
+  .perspective-card-image {
+    height: 220px;
   }
   
-  .carousel-3d__item:nth-child(n) {
-    transform: rotateY(var(--rotate, 0deg)) translateZ(200px);
+  .perspective-card-content {
+    padding: 20px;
+  }
+  
+  .perspective-card-title {
+    font-size: 18px;
+  }
+  
+  .perspective-card-stats {
+    gap: 12px;
+    padding: 12px;
+  }
+  
+  .perspective-stat-value {
+    font-size: 16px;
   }
 }
 
-/* ============================================
-   REDUCED MOTION
-   ============================================ */
-
+/* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-  .carousel-3d,
-  .carousel-3d__item,
-  .card-stack-3d__card,
-  .coverflow-3d__item,
-  .flip-card-3d__inner {
-    transition: none !important;
-  }
-  
-  .tilt-card-3d {
+  .perspective-card {
+    transition: opacity 0.3s ease;
     transform: none !important;
   }
   
-  .gallery-3d__spinner {
-    animation: none;
+  .perspective-card.revealed {
+    transform: none;
+  }
+  
+  .perspective-card-image img {
+    transition: none;
   }
 }

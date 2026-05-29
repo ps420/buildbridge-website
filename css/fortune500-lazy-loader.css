@@ -1,0 +1,295 @@
+/* ============================================
+   FORTUNE 500 SMART LAZY LOADER v89.0
+   Professional Progressive Image Loading
+   ============================================ */
+
+/* Lazy Image Container */
+.fortune-lazy-container {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a1a1b 0%, #252528 50%, #1a1a1b 100%);
+  background-size: 200% 200%;
+  animation: skeletonShimmer 2s ease-in-out infinite;
+}
+
+@keyframes skeletonShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Blur-Up Placeholder */
+.fortune-lazy-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fortune-lazy-image.placeholder {
+  filter: blur(20px);
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+.fortune-lazy-image.full {
+  filter: blur(0);
+  transform: scale(1);
+  opacity: 0;
+}
+
+.fortune-lazy-image.full.loaded {
+  opacity: 1;
+}
+
+/* Loading States */
+.fortune-lazy-container.loading::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 206, 214, 0.05) 50%,
+    transparent 100%
+  );
+  animation: loadingShimmer 1.5s infinite;
+}
+
+@keyframes loadingShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Low Quality Image Placeholder (LQIP) */
+.fortune-lazy-container .lqip {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(10px);
+  transform: scale(1.05);
+  transition: opacity 0.5s ease;
+}
+
+.fortune-lazy-container.loaded .lqip {
+  opacity: 0;
+}
+
+/* Aspect Ratio Preservation */
+.fortune-lazy-container[data-aspect="16:9"] { aspect-ratio: 16 / 9; }
+.fortune-lazy-container[data-aspect="4:3"] { aspect-ratio: 4 / 3; }
+.fortune-lazy-container[data-aspect="1:1"] { aspect-ratio: 1 / 1; }
+.fortune-lazy-container[data-aspect="3:2"] { aspect-ratio: 3 / 2; }
+.fortune-lazy-container[data-aspect="21:9"] { aspect-ratio: 21 / 9; }
+
+/* Skeleton Loading Card */
+.fortune-skeleton-card {
+  background: linear-gradient(135deg, #1a1a1b 0%, #252528 50%, #1a1a1b 100%);
+  background-size: 200% 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  animation: skeletonShimmer 1.5s ease-in-out infinite;
+}
+
+.fortune-skeleton-card .skeleton-header {
+  height: 200px;
+  background: rgba(201, 206, 214, 0.05);
+}
+
+.fortune-skeleton-card .skeleton-body {
+  padding: 24px;
+}
+
+.fortune-skeleton-card .skeleton-title {
+  height: 24px;
+  width: 70%;
+  background: rgba(201, 206, 214, 0.08);
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.fortune-skeleton-card .skeleton-text {
+  height: 14px;
+  background: rgba(201, 206, 214, 0.05);
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.fortune-skeleton-card .skeleton-text:nth-child(2) { width: 100%; }
+.fortune-skeleton-card .skeleton-text:nth-child(3) { width: 85%; }
+.fortune-skeleton-card .skeleton-text:nth-child(4) { width: 60%; }
+
+/* Progressive Loading Indicator */
+.fortune-lazy-progress {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.fortune-lazy-container.loading .fortune-lazy-progress {
+  opacity: 1;
+}
+
+.fortune-lazy-progress svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.fortune-lazy-progress circle {
+  fill: none;
+  stroke-width: 3;
+}
+
+.fortune-lazy-progress .progress-bg {
+  stroke: rgba(201, 206, 214, 0.1);
+}
+
+.fortune-lazy-progress .progress-bar {
+  stroke: #C9CED6;
+  stroke-linecap: round;
+  stroke-dasharray: 126;
+  stroke-dashoffset: 126;
+  transition: stroke-dashoffset 0.3s ease;
+}
+
+/* Image Zoom Container */
+.fortune-image-zoom {
+  position: relative;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+
+.fortune-image-zoom img {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fortune-image-zoom:hover img {
+  transform: scale(1.05);
+}
+
+.fortune-image-zoom.zoomed {
+  cursor: zoom-out;
+}
+
+.fortune-image-zoom.zoomed img {
+  transform: scale(1.5);
+}
+
+/* Magnifier Lens */
+.fortune-magnifier {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 3px solid rgba(201, 206, 214, 0.5);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3),
+              inset 0 0 20px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.fortune-image-zoom:hover .fortune-magnifier {
+  opacity: 1;
+}
+
+.fortune-magnifier img {
+  position: absolute;
+  max-width: none;
+  width: auto;
+  height: auto;
+}
+
+/* Responsive Image Gallery */
+.fortune-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.fortune-gallery-item {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+}
+
+.fortune-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fortune-gallery-item:hover img {
+  transform: scale(1.08);
+}
+
+.fortune-gallery-item .gallery-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(15, 15, 16, 0.8) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  display: flex;
+  align-items: flex-end;
+  padding: 20px;
+}
+
+.fortune-gallery-item:hover .gallery-overlay {
+  opacity: 1;
+}
+
+/* Intersection Observer Trigger */
+[data-lazy-trigger] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-lazy-trigger].loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Prefers Reduced Data */
+@media (prefers-reduced-data: reduce) {
+  .fortune-lazy-container {
+    animation: none;
+    background: #1a1a1b;
+  }
+  
+  .fortune-lazy-image.placeholder {
+    display: none;
+  }
+}
+
+/* Print Optimization */
+@media print {
+  .fortune-lazy-container {
+    background: none;
+    animation: none;
+  }
+  
+  .fortune-lazy-image.placeholder {
+    display: none;
+  }
+  
+  .fortune-lazy-progress,
+  .fortune-magnifier {
+    display: none;
+  }
+}

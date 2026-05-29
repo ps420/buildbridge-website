@@ -1,0 +1,301 @@
+/* ========================================
+   v90.1: Smart Typewriter Text Effect System
+   Professional Typewriter with Variable Speed & Cursor
+======================================== */
+
+.typewriter-container {
+  display: inline-block;
+  position: relative;
+}
+
+.typewriter-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  line-height: inherit;
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  width: 3px;
+  height: 1em;
+  background: currentColor;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: cursorBlink 1s step-end infinite;
+}
+
+.typewriter-cursor.typing {
+  animation: cursorBlink 0.5s step-end infinite;
+}
+
+.typewriter-cursor.paused {
+  animation: none;
+  opacity: 1;
+}
+
+.typewriter-cursor.hidden {
+  opacity: 0;
+}
+
+@keyframes cursorBlink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Different Cursor Styles */
+.typewriter-cursor.style-block {
+  width: 3px;
+  border-radius: 1px;
+}
+
+.typewriter-cursor.style-line {
+  width: 2px;
+  border-radius: 0;
+}
+
+.typewriter-cursor.style-underscore {
+  width: 0.6em;
+  height: 3px;
+  border-radius: 1px;
+  vertical-align: baseline;
+  margin-bottom: 0.1em;
+}
+
+.typewriter-cursor.style-box {
+  width: 0.6em;
+  height: 1.1em;
+  border: 2px solid currentColor;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+/* Cursor Colors */
+.typewriter-cursor.color-gold {
+  background: #c9ced6;
+}
+
+.typewriter-cursor.color-white {
+  background: #ffffff;
+}
+
+/* Multi-line Typewriter */
+.typewriter-multiline {
+  display: block;
+}
+
+.typewriter-line {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.typewriter-line.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.typewriter-line.completed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Character Reveal Effect */
+.typewriter-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.typewriter-char.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Word by Word Effect */
+.typewriter-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-right: 0.3em;
+}
+
+.typewriter-word.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero Typewriter Special Styles */
+.hero-typewriter {
+  font-size: clamp(36px, 6vw, 72px);
+  font-weight: 800;
+  line-height: 1.1;
+  color: #ffffff;
+}
+
+.hero-typewriter .typewriter-text {
+  background: linear-gradient(135deg, #ffffff 0%, #c9ced6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-typewriter .typewriter-cursor {
+  background: #c9ced6;
+  box-shadow: 0 0 10px rgba(201, 206, 214, 0.5);
+}
+
+/* Typewriter with Glow Effect */
+.typewriter-glow .typewriter-cursor {
+  box-shadow: 
+    0 0 5px currentColor,
+    0 0 10px currentColor,
+    0 0 20px currentColor;
+}
+
+/* Section Title Typewriter */
+.section-typewriter {
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+/* Typing Speed Indicators */
+.typing-speed-slow { --typing-speed: 150ms; }
+.typing-speed-normal { --typing-speed: 80ms; }
+.typing-speed-fast { --typing-speed: 40ms; }
+.typing-speed-ultra { --typing-speed: 20ms; }
+
+/* Pause Indicator (visible during pause) */
+.typewriter-pause-indicator {
+  display: inline-block;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.typewriter-pause-indicator.visible {
+  opacity: 0.5;
+}
+
+/* Typewriter Complete Indicator */
+.typewriter-complete {
+  position: relative;
+}
+
+.typewriter-complete::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #c9ced6, transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+
+.typewriter-complete.finished::after {
+  transform: scaleX(1);
+}
+
+/* Rotate Words Typewriter */
+.typewriter-rotate {
+  position: relative;
+  display: inline-block;
+}
+
+.typewriter-rotate-word {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.typewriter-rotate-word.active {
+  position: relative;
+  opacity: 1;
+}
+
+/* Error Effect (shake on typo) */
+@keyframes typewriterShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-3px); }
+  40% { transform: translateX(3px); }
+  60% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+}
+
+.typewriter-error {
+  animation: typewriterShake 0.3s ease;
+}
+
+/* Sound Wave Effect (visual feedback) */
+.typewriter-soundwave {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  height: 20px;
+  gap: 2px;
+}
+
+.typewriter-soundwave-bar {
+  width: 3px;
+  background: currentColor;
+  border-radius: 1px;
+  transition: height 0.1s ease;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .hero-typewriter {
+    font-size: clamp(28px, 8vw, 48px);
+  }
+  
+  .typewriter-cursor {
+    width: 2px;
+  }
+  
+  .typewriter-cursor.style-underscore {
+    width: 0.5em;
+    height: 2px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .typewriter-cursor {
+    animation: none;
+    opacity: 1;
+  }
+  
+  .typewriter-char,
+  .typewriter-word {
+    transition: opacity 0.1s ease;
+  }
+  
+  .typewriter-line {
+    transition: opacity 0.1s ease;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .typewriter-cursor {
+    display: none;
+  }
+  
+  .typewriter-char,
+  .typewriter-word,
+  .typewriter-line {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

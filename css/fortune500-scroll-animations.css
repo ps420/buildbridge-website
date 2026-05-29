@@ -1,0 +1,338 @@
+/* ============================================
+   FORTUNE 500 SCROLL-TRIGGERED ANIMATIONS v89.0
+   Professional Scroll-Driven Interactive Effects
+   ============================================ */
+
+/* Base Animation Classes */
+[data-scroll-animate] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+[data-scroll-animate].animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Fade Variations */
+[data-scroll-animate="fade-up"] {
+  transform: translateY(40px);
+}
+
+[data-scroll-animate="fade-down"] {
+  transform: translateY(-40px);
+}
+
+[data-scroll-animate="fade-left"] {
+  transform: translateX(40px);
+}
+
+[data-scroll-animate="fade-right"] {
+  transform: translateX(-40px);
+}
+
+[data-scroll-animate="fade-scale"] {
+  transform: scale(0.9);
+}
+
+[data-scroll-animate="fade-rotate"] {
+  transform: rotateX(15deg) translateY(30px);
+  transform-origin: center bottom;
+}
+
+/* All variations reset on animate-in */
+[data-scroll-animate].animate-in {
+  transform: translate(0) scale(1) rotate(0);
+}
+
+/* Stagger Children Animation */
+[data-stagger-parent] > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-stagger-parent].animate-in > *:nth-child(1) { transition-delay: 0ms; opacity: 1; transform: translateY(0); }
+[data-stagger-parent].animate-in > *:nth-child(2) { transition-delay: 80ms; opacity: 1; transform: translateY(0); }
+[data-stagger-parent].animate-in > *:nth-child(3) { transition-delay: 160ms; opacity: 1; transform: translateY(0); }
+[data-stagger-parent].animate-in > *:nth-child(4) { transition-delay: 240ms; opacity: 1; transform: translateY(0); }
+[data-stagger-parent].animate-in > *:nth-child(5) { transition-delay: 320ms; opacity: 1; transform: translateY(0); }
+[data-stagger-parent].animate-in > *:nth-child(6) { transition-delay: 400ms; opacity: 1; transform: translateY(0); }
+[data-stagger-parent].animate-in > *:nth-child(7) { transition-delay: 480ms; opacity: 1; transform: translateY(0); }
+[data-stagger-parent].animate-in > *:nth-child(8) { transition-delay: 560ms; opacity: 1; transform: translateY(0); }
+
+/* Clip Path Reveals */
+[data-clip-reveal] {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-clip-reveal="left"] {
+  clip-path: inset(0 100% 0 0);
+}
+
+[data-clip-reveal="right"] {
+  clip-path: inset(0 0 0 100%);
+}
+
+[data-clip-reveal="center"] {
+  clip-path: inset(0 50% 0 50%);
+}
+
+[data-clip-reveal].animate-in {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Mask Reveal Animation */
+[data-mask-reveal] {
+  position: relative;
+  overflow: hidden;
+}
+
+[data-mask-reveal]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #0f0f10 0%, #1a1a1b 100%);
+  transform: scaleX(1);
+  transform-origin: right;
+  transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+[data-mask-reveal].animate-in::after {
+  transform: scaleX(0);
+}
+
+/* Blur Reveal */
+[data-blur-reveal] {
+  opacity: 0;
+  filter: blur(20px);
+  transform: scale(1.1);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-blur-reveal].animate-in {
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1);
+}
+
+/* Split Text Line Animation */
+[data-split-lines] {
+  overflow: hidden;
+}
+
+[data-split-lines] .line {
+  display: block;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-split-lines].animate-in .line:nth-child(1) { transition-delay: 0ms; transform: translateY(0); opacity: 1; }
+[data-split-lines].animate-in .line:nth-child(2) { transition-delay: 100ms; transform: translateY(0); opacity: 1; }
+[data-split-lines].animate-in .line:nth-child(3) { transition-delay: 200ms; transform: translateY(0); opacity: 1; }
+[data-split-lines].animate-in .line:nth-child(4) { transition-delay: 300ms; transform: translateY(0); opacity: 1; }
+
+/* Parallax Scroll Elements */
+[data-parallax] {
+  will-change: transform;
+  transition: transform 0.1s linear;
+}
+
+/* Scroll Progress Indicator for Sections */
+.section-progress {
+  position: fixed;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 100;
+}
+
+.section-progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.2);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.section-progress-dot::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.section-progress-dot:hover,
+.section-progress-dot.active {
+  background: #C9CED6;
+  transform: scale(1.3);
+}
+
+.section-progress-dot.active::before {
+  border-color: rgba(201, 206, 214, 0.3);
+}
+
+.section-progress-label {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%) translateX(10px);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: #C9CED6;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.section-progress-dot:hover .section-progress-label {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Horizontal Scroll Container */
+.horizontal-scroll-container {
+  display: flex;
+  gap: 30px;
+  padding: 40px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.horizontal-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.horizontal-scroll-item {
+  flex: 0 0 auto;
+  width: 400px;
+  scroll-snap-align: start;
+}
+
+/* Scroll-triggered Counter Animation */
+[data-counter-scroll] {
+  font-variant-numeric: tabular-nums;
+}
+
+.counter-value {
+  display: inline-block;
+  position: relative;
+}
+
+.counter-value.rolling {
+  animation: counterRoll 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes counterRoll {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Variable Font Weight on Scroll */
+[data-font-weight-scroll] {
+  font-variation-settings: 'wght' 400;
+  transition: font-variation-settings 0.3s ease;
+}
+
+/* Image Zoom on Scroll */
+[data-zoom-scroll] {
+  transform: scale(1);
+  transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-zoom-scroll].zoomed {
+  transform: scale(1.1);
+}
+
+/* Text Reveal Character by Character */
+[data-char-reveal] .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(50px) rotateX(-90deg);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-char-reveal].animate-in .char {
+  opacity: 1;
+  transform: translateY(0) rotateX(0);
+}
+
+/* Sequential Card Deal Animation */
+[data-card-deal] > * {
+  opacity: 0;
+  transform: translateY(60px) rotate(-5deg);
+  transform-origin: left center;
+}
+
+[data-card-deal].animate-in > *:nth-child(1) { animation: cardDeal 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0ms forwards; }
+[data-card-deal].animate-in > *:nth-child(2) { animation: cardDeal 0.6s cubic-bezier(0.16, 1, 0.3, 1) 100ms forwards; }
+[data-card-deal].animate-in > *:nth-child(3) { animation: cardDeal 0.6s cubic-bezier(0.16, 1, 0.3, 1) 200ms forwards; }
+[data-card-deal].animate-in > *:nth-child(4) { animation: cardDeal 0.6s cubic-bezier(0.16, 1, 0.3, 1) 300ms forwards; }
+
+@keyframes cardDeal {
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .section-progress {
+    display: none;
+  }
+  
+  [data-scroll-animate] {
+    transform: translateY(20px);
+    transition-duration: 0.6s;
+  }
+  
+  [data-stagger-parent].animate-in > *:nth-child(n) {
+    transition-delay: calc((n - 1) * 50ms);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  [data-scroll-animate],
+  [data-clip-reveal],
+  [data-blur-reveal],
+  [data-mask-reveal],
+  [data-split-lines] .line {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    clip-path: none;
+    transition: none;
+  }
+  
+  [data-mask-reveal]::after {
+    display: none;
+  }
+  
+  [data-card-deal] > * {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}

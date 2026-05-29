@@ -411,6 +411,12 @@
   <link rel="stylesheet" href="css/advanced-ripple-effects.css">
   <link rel="stylesheet" href="css/scroll-section-dots.css">
   <link rel="stylesheet" href="css/glass-morphism-cards-v2.css">
+  
+  <!-- v89.0: Godzai Fortune 500 Elite Enhancement Suite -->
+  <link rel="stylesheet" href="css/fortune500-scroll-animations.css">
+  <link rel="stylesheet" href="css/fortune500-toast-system.css">
+  <link rel="stylesheet" href="css/fortune500-breadcrumbs.css">
+  <link rel="stylesheet" href="css/fortune500-lazy-loader.css">
 
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
   <link rel="manifest" href="manifest.json">
@@ -686,6 +692,9 @@
     </div>
   </header>
 
+  <!-- v89.0: Breadcrumb Navigation -->
+  <div class="fortune-breadcrumbs floating" data-breadcrumbs='[]'></div>
+
   <!-- Hero Section -->
   <section class="hero" id="main-content" data-section="Hero" data-nav-label="Home">
     <div class="hero-copy">
@@ -762,12 +771,12 @@
 
   <!-- Services Section -->
   <section id="services" class="section" data-section="Services" data-nav-label="Services">
-    <div class="section-header fade-in-up reveal-section">
+    <div class="section-header" data-scroll-animate="fade-up">
       <p class="eyebrow">What We Do</p>
-      <h2 class="scramble-text kinetic-text">Our Core Services</h2>
-      <p>From initial consultation to final handover, we provide comprehensive construction management services that ensure your project succeeds on time, within budget, and to the highest standards.</p>
+      <h2 class="scramble-text kinetic-text" data-char-reveal>Our Core Services</h2>
+      <p data-scroll-animate="fade-up" data-scroll-delay="100">From initial consultation to final handover, we provide comprehensive construction management services that ensure your project succeeds on time, within budget, and to the highest standards.</p>
     </div>
-    <div class="services-grid">
+    <div class="services-grid" data-stagger-parent>
       <article class="service-card tilt-card-3d tilt-card-advanced flip-card fade-in-up stagger-1" data-magnetic="0.2" data-flip="true" data-back-content="<div class='card-back-content'><span class='card-back-icon'>📋</span><h4>Expert Consultation</h4><p>From concept to blueprint, we guide every step of your construction journey.</p><a href='contact.html' class='btn btn-sm'>Start Now</a></div>">
         <div class="card-content">
           <div class="service-icon">📋</div>
@@ -800,22 +809,22 @@
   </section>
 
   <!-- Stats Section -->
-  <section id="stats" class="stats-section" data-section="Stats" data-nav-label="Stats">
-    <div class="stats-grid">
-      <div class="stat-item fade-in-up">
-        <div class="number counter-gold" data-counter="150" data-suffix="+" data-duration="2000">0</div>
+  <section id="stats" class="stats-section" data-section="Stats" data-nav-label="Stats" data-blur-reveal>
+    <div class="stats-grid" data-stagger-parent>
+      <div class="stat-item" data-scroll-animate="fade-scale">
+        <div class="number counter-gold" data-counter-scroll data-target="150" data-suffix="+" data-duration="2000">0</div>
         <div class="label">Projects Completed</div>
       </div>
-      <div class="stat-item fade-in-up stagger-1">
-        <div class="number counter-gold" data-counter="50" data-prefix="R" data-suffix="M+" data-duration="2500">0</div>
+      <div class="stat-item" data-scroll-animate="fade-scale">
+        <div class="number counter-gold" data-counter-scroll data-target="50" data-prefix="R" data-suffix="M+" data-duration="2500">0</div>
         <div class="label">Value Managed</div>
       </div>
-      <div class="stat-item fade-in-up stagger-2">
-        <div class="number counter-gold" data-counter="12" data-suffix="+" data-duration="1800">0</div>
+      <div class="stat-item" data-scroll-animate="fade-scale">
+        <div class="number counter-gold" data-counter-scroll data-target="12" data-suffix="+" data-duration="1800">0</div>
         <div class="label">Years Experience</div>
       </div>
-      <div class="stat-item fade-in-up stagger-3">
-        <div class="number counter-gold" data-counter="50" data-suffix="+" data-duration="2200">0</div>
+      <div class="stat-item" data-scroll-animate="fade-scale">
+        <div class="number counter-gold" data-counter-scroll data-target="50" data-suffix="+" data-duration="2200">0</div>
         <div class="label">Contractor Partners</div>
       </div>
     </div>
@@ -823,12 +832,12 @@
 
   <!-- Featured Projects -->
   <section id="projects" class="section" data-section="Projects" data-nav-label="Projects">
-    <div class="section-header fade-in-up reveal-section">
+    <div class="section-header" data-scroll-animate="fade-up">
       <p class="eyebrow">Our Work</p>
-      <h2 class="scramble-text kinetic-text">Featured Projects</h2>
-      <p>Explore some of our recent success stories across residential, commercial, and industrial sectors.</p>
+      <h2 class="scramble-text kinetic-text" data-char-reveal>Featured Projects</h2>
+      <p data-scroll-animate="fade-up" data-scroll-delay="100">Explore some of our recent success stories across residential, commercial, and industrial sectors.</p>
     </div>
-    <div class="projects-grid">
+    <div class="projects-grid" data-card-deal>
       <div class="project-card fade-in-up stagger-1 shine magnetic-el" data-category="residential">
         <div data-reveal="up">
           <img src="assets/02_Website_Heroes/Hero_2.png" alt="Modern Residential Complex">
@@ -1839,11 +1848,11 @@
 
   <!-- Testimonials -->
   <section id="testimonials" class="section testimonials" data-section="Testimonials" data-nav-label="Reviews">
-    <div class="section-header reveal-section">
+    <div class="section-header" data-scroll-animate="fade-up">
       <p class="eyebrow">Testimonials</p>
-      <h2 class="scramble-text kinetic-text">What Clients Say</h2>
+      <h2 class="scramble-text kinetic-text" data-char-reveal>What Clients Say</h2>
     </div>
-    <div class="testimonial-carousel-3d">
+    <div class="testimonial-carousel-3d" data-blur-reveal>
       <div class="testimonial-carousel-card">
         <blockquote>BuildBridge transformed our construction experience. Their attention to detail and communication made the entire process stress-free. Our home was delivered on time and exceeded expectations.</blockquote>
         <div class="carousel-author">
@@ -4121,9 +4130,15 @@
   <script src="js/ripple-effects.js"></script>
   <script src="js/scroll-section-dots.js"></script>
   
+  <!-- v89.0: Godzai Fortune 500 Elite Enhancement Suite -->
+  <script src="js/fortune500-features.js"></script>
+  
   <script>
     // Log v88.0 features loaded
     console.log('🎯 BuildBridge Fortune 500 v88.0 loaded: Advanced Ripple Effects, Scroll Section Navigation, Glass Morphism Cards V2, Section Dots Indicator');
+    
+    // Log v89.0 features loaded
+    console.log('🏆 BuildBridge Fortune 500 v89.0 loaded: Scroll Animations, Toast System, Breadcrumbs, Smart Lazy Loader');
   </script>
   
 </body>
