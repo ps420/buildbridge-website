@@ -1,0 +1,314 @@
+/* ========================================
+   SCROLL COUNTER PRO v81.1
+   Fortune 500 Animated Statistics
+======================================== */
+
+.scroll-counter-section {
+  padding: 120px 0;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, 
+    rgba(201, 206, 214, 0.02) 0%, 
+    transparent 50%, 
+    rgba(201, 206, 214, 0.02) 100%
+  );
+}
+
+.scroll-counter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.scroll-counter-item {
+  text-align: center;
+  padding: 40px 30px;
+  background: rgba(15, 15, 16, 0.5);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  transform: translateY(40px);
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-counter-item.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.scroll-counter-item:nth-child(1) { transition-delay: 0s; }
+.scroll-counter-item:nth-child(2) { transition-delay: 0.1s; }
+.scroll-counter-item:nth-child(3) { transition-delay: 0.2s; }
+.scroll-counter-item:nth-child(4) { transition-delay: 0.3s; }
+
+.scroll-counter-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(201, 206, 214, 0.05) 0%, 
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.scroll-counter-item:hover::before {
+  opacity: 1;
+}
+
+.scroll-counter-item:hover {
+  transform: translateY(-8px);
+  border-color: rgba(201, 206, 214, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Icon Container */
+.scroll-counter-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 24px;
+  background: linear-gradient(135deg, 
+    rgba(201, 206, 214, 0.1) 0%, 
+    rgba(201, 206, 214, 0.02) 100%
+  );
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-counter-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    transparent 40%, 
+    rgba(201, 206, 214, 0.1) 50%, 
+    transparent 60%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.scroll-counter-item:hover .scroll-counter-icon::before {
+  transform: translateX(100%);
+}
+
+/* Number Display */
+.scroll-counter-number {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+}
+
+.scroll-counter-value {
+  background: linear-gradient(135deg, #F5F7FA 0%, #C9CED6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.scroll-counter-prefix,
+.scroll-counter-suffix {
+  font-size: 0.5em;
+  font-weight: 600;
+  color: #C9CED6;
+}
+
+.scroll-counter-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(201, 206, 214, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Progress Ring Variant */
+.scroll-counter-ring {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 24px;
+}
+
+.scroll-counter-ring svg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.scroll-counter-ring-bg {
+  fill: none;
+  stroke: rgba(201, 206, 214, 0.1);
+  stroke-width: 8;
+}
+
+.scroll-counter-ring-progress {
+  fill: none;
+  stroke: url(#counterGradient);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 440;
+  stroke-dashoffset: 440;
+  transition: stroke-dashoffset 2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-counter-ring-number {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.scroll-counter-ring-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  color: #F5F7FA;
+}
+
+.scroll-counter-ring-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: rgba(201, 206, 214, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Animated Background Numbers */
+.scroll-counter-bg-number {
+  position: absolute;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 200px;
+  font-weight: 900;
+  color: rgba(201, 206, 214, 0.03);
+  line-height: 1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Floating Badge */
+.scroll-counter-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: linear-gradient(135deg, #C9CED6, #F5F7FA);
+  color: #0f0f12;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(201, 206, 214, 0.3);
+  animation: counter-badge-pulse 2s ease-in-out infinite;
+}
+
+@keyframes counter-badge-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Stacked Counters */
+.scroll-counter-stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.scroll-counter-bar {
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 8px;
+  height: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.scroll-counter-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #C9CED6, #F5F7FA);
+  border-radius: 8px;
+  width: 0;
+  transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-counter-bar-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.scroll-counter-bar-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: rgba(201, 206, 214, 0.8);
+}
+
+.scroll-counter-bar-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #F5F7FA;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .scroll-counter-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .scroll-counter-section {
+    padding: 80px 0;
+  }
+  
+  .scroll-counter-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 0 20px;
+  }
+  
+  .scroll-counter-item {
+    padding: 30px 20px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-counter-item {
+    transform: none;
+    opacity: 1;
+    transition: none;
+  }
+  
+  .scroll-counter-ring-progress {
+    transition: none;
+  }
+  
+  .scroll-counter-bar-fill {
+    transition: none;
+  }
+}

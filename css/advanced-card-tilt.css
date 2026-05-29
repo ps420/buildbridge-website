@@ -1,0 +1,338 @@
+/* ========================================
+   ADVANCED CARD TILT EFFECTS v80.1
+   Fortune 500 3D Card Interactions
+======================================== */
+
+.tilt-card-container {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.tilt-card-advanced-v2 {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease-out;
+  will-change: transform;
+  cursor: pointer;
+}
+
+.tilt-card-advanced-v2 .card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Glare Effect */
+.tilt-card-advanced-v2 .card-glare {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.tilt-card-advanced-v2 .card-glare::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.05) 20%,
+    transparent 50%
+  );
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tilt-card-advanced-v2:hover .card-glare::before {
+  opacity: 1;
+}
+
+/* Shine Effect */
+.tilt-card-advanced-v2 .card-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.tilt-card-advanced-v2 .card-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: skewX(-25deg);
+  transition: none;
+}
+
+.tilt-card-advanced-v2:hover .card-shine::after {
+  animation: card-shine-sweep 0.8s ease forwards;
+}
+
+@keyframes card-shine-sweep {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 200%;
+  }
+}
+
+/* Border Glow Effect */
+.tilt-card-advanced-v2 .card-border {
+  position: absolute;
+  inset: -1px;
+  border-radius: calc(inherit + 1px);
+  background: linear-gradient(
+    135deg,
+    rgba(201, 206, 214, 0.3),
+    rgba(201, 206, 214, 0.1) 50%,
+    rgba(201, 206, 214, 0.3)
+  );n  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.tilt-card-advanced-v2:hover .card-border {
+  opacity: 1;
+}
+
+/* 3D Content Layers */
+.tilt-card-advanced-v2 .card-content-3d {
+  transform: translateZ(30px);
+}
+
+.tilt-card-advanced-v2 .card-icon-3d {
+  transform: translateZ(50px);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tilt-card-advanced-v2:hover .card-icon-3d {
+  transform: translateZ(60px) scale(1.1);
+}
+
+.tilt-card-advanced-v2 .card-title-3d {
+  transform: translateZ(40px);
+}
+
+.tilt-card-advanced-v2 .card-text-3d {
+  transform: translateZ(20px);
+}
+
+/* Floating Animation */
+.tilt-card-advanced-v2.floating {
+  animation: card-float 6s ease-in-out infinite;
+}
+
+.tilt-card-advanced-v2.floating:hover {
+  animation-play-state: paused;
+}
+
+@keyframes card-float {
+  0%, 100% {
+    transform: translateY(0) rotateX(0) rotateY(0);
+  }
+  25% {
+    transform: translateY(-10px) rotateX(2deg) rotateY(-2deg);
+  }
+  50% {
+    transform: translateY(-5px) rotateX(-1deg) rotateY(1deg);
+  }
+  75% {
+    transform: translateY(-15px) rotateX(1deg) rotateY(-1deg);
+  }
+}
+
+/* Magnetic Effect Variant */
+.tilt-card-magnetic {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Parallax Depth Layers */
+.tilt-card-depth .depth-layer-1 {
+  transform: translateZ(10px);
+}
+
+.tilt-card-depth .depth-layer-2 {
+  transform: translateZ(30px);
+}
+
+.tilt-card-depth .depth-layer-3 {
+  transform: translateZ(50px);
+}
+
+/* Card Flip Variant */
+.tilt-card-flip {
+  transform-style: preserve-3d;
+}
+
+.tilt-card-flip .card-front,
+.tilt-card-flip .card-back {
+  backface-visibility: hidden;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tilt-card-flip .card-back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+}
+
+.tilt-card-flip.flipped .card-front {
+  transform: rotateY(180deg);
+}
+
+.tilt-card-flip.flipped .card-back {
+  transform: rotateY(0deg);
+}
+
+/* Glassmorphism Card Variant */
+.tilt-card-glass {
+  background: rgba(201, 206, 214, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.tilt-card-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* Rainbow Border Effect */
+.tilt-card-rainbow {
+  position: relative;
+}
+
+.tilt-card-rainbow::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    45deg,
+    #ff0000,
+    #ff7300,
+    #fffb00,
+    #48ff00,
+    #00ffd5,
+    #002bff,
+    #7a00ff,
+    #ff00c8,
+    #ff0000
+  );
+  background-size: 400%;
+  border-radius: calc(inherit + 2px);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: rainbow-glow 20s linear infinite;
+}
+
+.tilt-card-rainbow:hover::before {
+  opacity: 0.5;
+}
+
+@keyframes rainbow-glow {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 400% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+/* Stats Card Variant */
+.tilt-card-stats {
+  text-align: center;
+  padding: 40px 30px;
+}
+
+.tilt-card-stats .stat-number {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 48px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #C9CED6, #F5F7FA);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transform: translateZ(60px);
+  transition: transform 0.4s ease;
+}
+
+.tilt-card-stats:hover .stat-number {
+  transform: translateZ(80px) scale(1.1);
+}
+
+.tilt-card-stats .stat-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: rgba(201, 206, 214, 0.7);
+  margin-top: 8px;
+  transform: translateZ(30px);
+}
+
+/* Feature Card Grid */
+.tilt-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  padding: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tilt-card-advanced-v2 {
+    transform: none !important;
+  }
+  
+  .tilt-card-advanced-v2 .card-glare::before,
+  .tilt-card-advanced-v2 .card-shine::after {
+    display: none;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .tilt-card-advanced-v2,
+  .tilt-card-advanced-v2 .card-inner,
+  .tilt-card-advanced-v2 .card-icon-3d,
+  .tilt-card-flip .card-front,
+  .tilt-card-flip .card-back {
+    transition: none;
+    transform: none !important;
+  }
+  
+  .tilt-card-advanced-v2.floating {
+    animation: none;
+  }
+}

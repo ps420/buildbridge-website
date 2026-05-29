@@ -1,0 +1,330 @@
+/* ========================================
+   ADVANCED TYPEWRITER HERO v81.0
+   Fortune 500 Dynamic Text Effects
+======================================== */
+
+.typewriter-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0f0f12 0%, #1a1a22 50%, #0f0f12 100%);
+}
+
+.typewriter-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(201, 206, 214, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(201, 206, 214, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 50% 20%, rgba(201, 206, 214, 0.04) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+.typewriter-container {
+  text-align: center;
+  max-width: 1200px;
+  padding: 0 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.typewriter-eyebrow {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #C9CED6;
+  margin-bottom: 30px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: typewriter-fade-up 0.8s ease forwards;
+  animation-delay: 0.2s;
+}
+
+.typewriter-main {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(36px, 8vw, 80px);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  color: #F5F7FA;
+}
+
+.typewriter-line {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.typewriter-text {
+  display: inline-block;
+  position: relative;
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  width: 4px;
+  height: 1em;
+  background: linear-gradient(180deg, #C9CED6, #F5F7FA);
+  margin-left: 4px;
+  animation: typewriter-blink 1s step-end infinite;
+  vertical-align: middle;
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(201, 206, 214, 0.5);
+}
+
+.typewriter-cursor.typing {
+  animation: none;
+}
+
+.typewriter-cursor.blinking {
+  animation: typewriter-blink 1s step-end infinite;
+}
+
+@keyframes typewriter-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.typewriter-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(16px, 2.5vw, 22px);
+  font-weight: 300;
+  color: rgba(201, 206, 214, 0.8);
+  margin-bottom: 50px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: typewriter-fade-up 0.8s ease forwards;
+  animation-delay: 3.5s;
+}
+
+.typewriter-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: typewriter-fade-up 0.8s ease forwards;
+  animation-delay: 4s;
+}
+
+@keyframes typewriter-fade-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Glitch Effect on Complete */
+.typewriter-glitch {
+  position: relative;
+}
+
+.typewriter-glitch::before,
+.typewriter-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.typewriter-glitch.glitching::before {
+  animation: typewriter-glitch-1 0.3s ease;
+  color: #ff0000;
+  z-index: -1;
+}
+
+.typewriter-glitch.glitching::after {
+  animation: typewriter-glitch-2 0.3s ease;
+  color: #00ff00;
+  z-index: -2;
+}
+
+@keyframes typewriter-glitch-1 {
+  0%, 100% { opacity: 0; transform: translate(0); }
+  20% { opacity: 0.8; transform: translate(-3px, 3px); }
+  40% { opacity: 0.8; transform: translate(3px, -3px); }
+  60% { opacity: 0.8; transform: translate(-3px, -3px); }
+  80% { opacity: 0.8; transform: translate(3px, 3px); }
+}
+
+@keyframes typewriter-glitch-2 {
+  0%, 100% { opacity: 0; transform: translate(0); }
+  20% { opacity: 0.8; transform: translate(3px, -3px); }
+  40% { opacity: 0.8; transform: translate(-3px, 3px); }
+  60% { opacity: 0.8; transform: translate(3px, 3px); }
+  80% { opacity: 0.8; transform: translate(-3px, -3px); }
+}
+
+/* Multiple Lines Animation */
+.typewriter-multi .typewriter-line {
+  width: 0;
+  animation: typewriter-line-expand 1.5s steps(40) forwards;
+}
+
+.typewriter-multi .typewriter-line:nth-child(1) {
+  animation-delay: 0.5s;
+}
+
+.typewriter-multi .typewriter-line:nth-child(2) {
+  animation-delay: 2s;
+}
+
+.typewriter-multi .typewriter-line:nth-child(3) {
+  animation-delay: 3.5s;
+}
+
+@keyframes typewriter-line-expand {
+  to { width: 100%; }
+}
+
+/* Rotating Words Style */
+.typewriter-rotate {
+  display: inline-block;
+  position: relative;
+  height: 1.2em;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.typewriter-rotate-inner {
+  display: flex;
+  flex-direction: column;
+  animation: typewriter-rotate 8s ease-in-out infinite;
+}
+
+.typewriter-rotate-word {
+  display: block;
+  height: 1.2em;
+  line-height: 1.2em;
+  background: linear-gradient(90deg, #C9CED6, #F5F7FA);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes typewriter-rotate {
+  0%, 20% { transform: translateY(0); }
+  25%, 45% { transform: translateY(-1.2em); }
+  50%, 70% { transform: translateY(-2.4em); }
+  75%, 95% { transform: translateY(-3.6em); }
+  100% { transform: translateY(0); }
+}
+
+/* Particle Decorations */
+.typewriter-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.typewriter-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(201, 206, 214, 0.3);
+  border-radius: 50%;
+  animation: typewriter-float 20s ease-in-out infinite;
+}
+
+@keyframes typewriter-float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.5;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(50px);
+    opacity: 0;
+  }
+}
+
+/* Sound Wave Visualization */
+.typewriter-soundwave {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 40px;
+  margin-top: 40px;
+  opacity: 0;
+  animation: typewriter-fade-up 0.8s ease forwards;
+  animation-delay: 4.5s;
+}
+
+.typewriter-soundwave-bar {
+  width: 3px;
+  background: linear-gradient(to top, #C9CED6, transparent);
+  border-radius: 2px;
+  animation: typewriter-soundwave 1s ease-in-out infinite;
+}
+
+.typewriter-soundwave-bar:nth-child(1) { height: 20%; animation-delay: 0s; }
+.typewriter-soundwave-bar:nth-child(2) { height: 40%; animation-delay: 0.1s; }
+.typewriter-soundwave-bar:nth-child(3) { height: 60%; animation-delay: 0.2s; }
+.typewriter-soundwave-bar:nth-child(4) { height: 80%; animation-delay: 0.3s; }
+.typewriter-soundwave-bar:nth-child(5) { height: 100%; animation-delay: 0.4s; }
+.typewriter-soundwave-bar:nth-child(6) { height: 80%; animation-delay: 0.5s; }
+.typewriter-soundwave-bar:nth-child(7) { height: 60%; animation-delay: 0.6s; }
+.typewriter-soundwave-bar:nth-child(8) { height: 40%; animation-delay: 0.7s; }
+.typewriter-soundwave-bar:nth-child(9) { height: 20%; animation-delay: 0.8s; }
+
+@keyframes typewriter-soundwave {
+  0%, 100% { transform: scaleY(0.5); opacity: 0.5; }
+  50% { transform: scaleY(1); opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .typewriter-container {
+    padding: 0 20px;
+  }
+  
+  .typewriter-line {
+    white-space: normal;
+  }
+  
+  .typewriter-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .typewriter-cursor {
+    animation: none;
+    opacity: 1;
+  }
+  
+  .typewriter-multi .typewriter-line {
+    width: 100%;
+    animation: none;
+  }
+  
+  .typewriter-rotate-inner {
+    animation: none;
+  }
+  
+  .typewriter-particle {
+    animation: none;
+  }
+}

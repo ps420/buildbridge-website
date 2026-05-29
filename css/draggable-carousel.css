@@ -1,0 +1,368 @@
+/* ========================================
+   DRAGGABLE TOUCH CAROUSEL v80.3
+   Fortune 500 Swipe/Drag Gallery
+======================================== */
+
+.draggable-carousel {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.draggable-track {
+  display: flex;
+  gap: 30px;
+  cursor: grab;
+  transform: translateX(0);
+  will-change: transform;
+  padding: 20px 0;
+}
+
+.draggable-track:active {
+  cursor: grabbing;
+}
+
+.draggable-track.dragging {
+  transition: none;
+}
+
+.draggable-track.snapping {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Carousel Items */
+.carousel-item {
+  flex: 0 0 auto;
+  width: 350px;
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(201, 206, 214, 0.05);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.carousel-item:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-item img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.carousel-item-content {
+  padding: 24px;
+}
+
+.carousel-item-content h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin-bottom: 8px;
+}
+
+.carousel-item-content p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: rgba(201, 206, 214, 0.7);
+  line-height: 1.6;
+}
+
+/* Center Item Highlight */
+.carousel-item.center-item {
+  transform: scale(1.05);
+  z-index: 2;
+}
+
+.carousel-item.center-item .carousel-highlight {
+  position: absolute;
+  inset: -2px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.3), rgba(201, 206, 214, 0.1));
+  z-index: -1;
+  opacity: 1;
+}
+
+/* Navigation Arrows */
+.carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(15, 15, 16, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.draggable-carousel:hover .carousel-nav {
+  opacity: 1;
+  visibility: visible;
+}
+
+.carousel-nav:hover {
+  background: rgba(201, 206, 214, 0.2);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-nav.prev {
+  left: 20px;
+}
+
+.carousel-nav.next {
+  right: 20px;
+}
+
+.carousel-nav::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid #C9CED6;
+  border-right: 2px solid #C9CED6;
+}
+
+.carousel-nav.prev::before {
+  transform: rotate(-135deg);
+  margin-left: 4px;
+}
+
+.carousel-nav.next::before {
+  transform: rotate(45deg);
+  margin-left: -4px;
+}
+
+/* Pagination Dots */
+.carousel-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 30px;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  padding: 0;
+}
+
+.carousel-dot:hover {
+  background: rgba(201, 206, 214, 0.5);
+}
+
+.carousel-dot.active {
+  background: #C9CED6;
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* Progress Bar */
+.carousel-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #C9CED6, rgba(201, 206, 214, 0.5));
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+/* Autoplay Controls */
+.carousel-autoplay-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.carousel-autoplay-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(15, 15, 16, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  color: #C9CED6;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-autoplay-btn:hover {
+  background: rgba(201, 206, 214, 0.2);
+}
+
+/* Drag Hint */
+.carousel-drag-hint {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(15, 15, 16, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: rgba(201, 206, 214, 0.7);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  animation: drag-hint-pulse 2s ease infinite;
+}
+
+.draggable-carousel:hover .carousel-drag-hint {
+  opacity: 1;
+  visibility: visible;
+}
+
+@keyframes drag-hint-pulse {
+  0%, 100% {
+    transform: translateX(-50%) translateX(0);
+  }
+  50% {
+    transform: translateX(-50%) translateX(5px);
+  }
+}
+
+.carousel-drag-hint::before,
+.carousel-drag-hint::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid rgba(201, 206, 214, 0.5);
+  border-right: 2px solid rgba(201, 206, 214, 0.5);
+}
+
+.carousel-drag-hint::before {
+  transform: rotate(-135deg);
+}
+
+.carousel-drag-hint::after {
+  transform: rotate(45deg);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .carousel-item {
+    width: 280px;
+  }
+  
+  .carousel-item img {
+    height: 200px;
+  }
+  
+  .carousel-nav {
+    display: none;
+  }
+  
+  .carousel-drag-hint {
+    display: none;
+  }
+}
+
+/* Gallery Variant - Larger Images */
+.draggable-carousel.gallery .carousel-item {
+  width: 500px;
+}
+
+.draggable-carousel.gallery .carousel-item img {
+  height: 350px;
+}
+
+@media (max-width: 768px) {
+  .draggable-carousel.gallery .carousel-item {
+    width: 320px;
+  }
+  
+  .draggable-carousel.gallery .carousel-item img {
+    height: 240px;
+  }
+}
+
+/* Testimonial Variant */
+.draggable-carousel.testimonials .carousel-item {
+  width: 450px;
+  text-align: center;
+  padding: 40px;
+}
+
+.draggable-carousel.testimonials .testimonial-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  object-fit: cover;
+  border: 3px solid rgba(201, 206, 214, 0.3);
+}
+
+.draggable-carousel.testimonials .testimonial-quote {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-style: italic;
+  color: #F5F7FA;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.draggable-carousel.testimonials .testimonial-author {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #C9CED6;
+}
+
+.draggable-carousel.testimonials .testimonial-role {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: rgba(201, 206, 214, 0.6);
+}
+
+@media (max-width: 768px) {
+  .draggable-carousel.testimonials .carousel-item {
+    width: 300px;
+    padding: 30px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .draggable-track,
+  .carousel-item,
+  .carousel-dot,
+  .carousel-nav,
+  .carousel-drag-hint {
+    transition: none !important;
+    animation: none !important;
+  }
+}
