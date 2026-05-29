@@ -380,17 +380,8 @@
   <!-- v82.3: Voice Command System - Speech Recognition Interface -->
   <link rel="stylesheet" href="css/voice-command-system.css">
   
-  <!-- v82.0: AI Smart Search System - Fortune 500 Intelligent Search -->
-  <link rel="stylesheet" href="css/ai-smart-search.css">
-  
-  <!-- v82.1: Dynamic Personalization - Adaptive Content System -->
-  <link rel="stylesheet" href="css/dynamic-personalization.css">
-  
-  <!-- v82.2: Project Analytics Dashboard - Real-Time Metrics -->
-  <link rel="stylesheet" href="css/project-analytics-dashboard.css">
-  
-  <!-- v82.3: Voice Command System - Speech Recognition Interface -->
-  <link rel="stylesheet" href="css/voice-command-system.css">
+  <!-- v83.0: Parallax Card System - Fortune 500 Scroll-Triggered 3D Cards -->
+  <link rel="stylesheet" href="css/parallax-card-system.css">
 
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
   <link rel="manifest" href="manifest.json">
@@ -3644,6 +3635,9 @@
   <!-- v82.3: Voice Command System - Speech Recognition Interface -->
   <script src="js/voice-command-system.js"></script>
   
+  <!-- v83.0: Parallax Card System - Fortune 500 Scroll-Triggered 3D Cards -->
+  <script src="js/parallax-card-system.js"></script>
+  
   <!-- Initialize New Features -->
   <script>
     // Log v49.0 features loaded
@@ -3723,6 +3717,9 @@
     console.log('📊 BuildBridge Fortune 500 v82.2 loaded: Project Analytics Dashboard (Real-Time Metrics, Interactive Charts, Activity Timeline)');
     console.log('🎙️ BuildBridge Fortune 500 v82.3 loaded: Voice Command System (Speech Recognition, Hands-Free Navigation, Voice Feedback)');
     
+    // Log v83.0 features loaded - Godzai Fortune 500 Parallax System
+    console.log('🎴 BuildBridge Fortune 500 v83.0 loaded: Parallax Card System (Scroll-Triggered 3D Cards, Mouse Tilt, Depth Layers, Intersection Observer)');
+    
     // Initialize text morphing hero
     document.addEventListener('DOMContentLoaded', function() {
       // Add morphing text effect to main headline
@@ -3735,6 +3732,134 @@
       }
     });
   </script>
+  
+  <!-- ===========================================
+       v83.0: FORTUNE 500 PARALLAX CARD SYSTEM
+       Scroll-Triggered 3D Cards with Depth Effects
+       =========================================== -->
+  <section class="parallax-card-section" id="parallaxCards">
+    <div class="parallax-card-container">
+      <div class="parallax-card-header">
+        <h2>Featured Projects</h2>
+        <p>Explore our portfolio of award-winning construction projects with immersive 3D card interactions</p>
+      </div>
+      <div class="parallax-cards-grid">
+        <!-- Card 1: Commercial Project -->
+        <div class="parallax-card" data-card-index="0">
+          <div class="parallax-card-inner">
+            <div class="parallax-card-face">
+              <div class="parallax-card-image-layer">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80" alt="Commercial Tower" class="parallax-card-image">
+              </div>
+              <div class="parallax-card-overlay"></div>
+              <div class="parallax-card-shine"></div>
+              <div class="parallax-card-float parallax-card-float-1">
+                <div class="parallax-card-float-icon">🏢</div>
+              </div>
+              <div class="parallax-card-content">
+                <span class="parallax-card-category">Commercial</span>
+                <h3 class="parallax-card-title">Axis Business Tower</h3>
+                <p class="parallax-card-description">A 45-story commercial skyscraper featuring sustainable design and smart building technology.</p>
+                <div class="parallax-card-stats">
+                  <div class="parallax-stat">
+                    <span class="parallax-stat-value">$85M</span>
+                    <span class="parallax-stat-label">Value</span>
+                  </div>
+                  <div class="parallax-stat">
+                    <span class="parallax-stat-value">18mo</span>
+                    <span class="parallax-stat-label">Duration</span>
+                  </div>
+                </div>
+                <button class="parallax-card-action">
+                  View Project
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14"></path>
+                    <path d="m12 5 7 7-7 7"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Card 2: Residential Project -->
+        <div class="parallax-card" data-card-index="1">
+          <div class="parallax-card-inner">
+            <div class="parallax-card-face">
+              <div class="parallax-card-image-layer">
+                <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80" alt="Luxury Residences" class="parallax-card-image">
+              </div>
+              <div class="parallax-card-overlay"></div>
+              <div class="parallax-card-shine"></div>
+              <div class="parallax-card-float parallax-card-float-2">
+                <div class="parallax-card-float-icon">🏘️</div>
+              </div>
+              <div class="parallax-card-content">
+                <span class="parallax-card-category">Residential</span>
+                <h3 class="parallax-card-title">Horizon Luxury Estates</h3>
+                <p class="parallax-card-description">Premium residential community with 120 luxury villas and world-class amenities.</p>
+                <div class="parallax-card-stats">
+                  <div class="parallax-stat">
+                    <span class="parallax-stat-value">$42M</span>
+                    <span class="parallax-stat-label">Value</span>
+                  </div>
+                  <div class="parallax-stat">
+                    <span class="parallax-stat-value">24mo</span>
+                    <span class="parallax-stat-label">Duration</span>
+                  </div>
+                </div>
+                <button class="parallax-card-action">
+                  View Project
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14"></path>
+                    <path d="m12 5 7 7-7 7"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Card 3: Industrial Project -->
+        <div class="parallax-card" data-card-index="2">
+          <div class="parallax-card-inner">
+            <div class="parallax-card-face">
+              <div class="parallax-card-image-layer">
+                <img src="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=800&q=80" alt="Industrial Complex" class="parallax-card-image">
+              </div>
+              <div class="parallax-card-overlay"></div>
+              <div class="parallax-card-shine"></div>
+              <div class="parallax-card-float parallax-card-float-1">
+                <div class="parallax-card-float-icon">🏭</div>
+              </div>
+              <div class="parallax-card-content">
+                <span class="parallax-card-category">Industrial</span>
+                <h3 class="parallax-card-title">Titan Manufacturing Hub</h3>
+                <p class="parallax-card-description">State-of-the-art industrial facility with automated logistics and green certification.</p>
+                <div class="parallax-card-stats">
+                  <div class="parallax-stat">
+                    <span class="parallax-stat-value">$65M</span>
+                    <span class="parallax-stat-label">Value</span>
+                  </div>
+                  <div class="parallax-stat">
+                    <span class="parallax-stat-value">14mo</span>
+                    <span class="parallax-stat-label">Duration</span>
+                  </div>
+                </div>
+                <button class="parallax-card-action">
+                  View Project
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14"></path>
+                    <path d="m12 5 7 7-7 7"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
   
   <!-- ===========================================
        v82.0-82.3: FORTUNE 500 ELITE FEATURES
