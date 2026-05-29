@@ -1,0 +1,397 @@
+/**
+ * WebGL Button Ripple Effects - v81.3
+ * Fortune 500 style interactive buttons with WebGL ripple/liquid effects
+ */
+
+/* Base WebGL button container */
+.webgl-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.1), rgba(201, 206, 214, 0.05));
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 12px;
+  color: #F5F7FA;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  isolation: isolate;
+}
+
+.webgl-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.2), rgba(201, 206, 214, 0.05));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+}
+
+.webgl-button:hover::before {
+  opacity: 1;
+}
+
+/* WebGL canvas overlay */
+.webgl-button-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+.webgl-button-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.3s ease;
+}
+
+.webgl-button:hover .webgl-button-content {
+  transform: scale(1.02);
+}
+
+/* Ripple button variant */
+.webgl-button-ripple {
+  --ripple-color: rgba(201, 206, 214, 0.3);
+  --ripple-size: 0px;
+  --ripple-x: 50%;
+  --ripple-y: 50%;
+}
+
+.webgl-button-ripple::after {
+  content: '';
+  position: absolute;
+  left: var(--ripple-x);
+  top: var(--ripple-y);
+  width: var(--ripple-size);
+  height: var(--ripple-size);
+  background: radial-gradient(circle, var(--ripple-color) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.webgl-button-ripple.rippling::after {
+  opacity: 1;
+  animation: ripple-expand 0.6s ease-out forwards;
+}
+
+@keyframes ripple-expand {
+  to {
+    width: 300%;
+    height: 300%;
+    opacity: 0;
+  }
+}
+
+/* Liquid button effect */
+.webgl-button-liquid {
+  position: relative;
+}
+
+.webgl-button-liquid .liquid-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.15), rgba(201, 206, 214, 0.05));
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.webgl-button-liquid .liquid-blob {
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(circle at 30% 30%, rgba(201, 206, 214, 0.2), transparent 60%);
+  border-radius: 40%;
+  animation: liquid-morph 8s ease-in-out infinite;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.webgl-button-liquid:hover .liquid-blob {
+  opacity: 1;
+}
+
+@keyframes liquid-morph {
+  0%, 100% {
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    transform: translate(-25%, -25%) rotate(0deg);
+  }
+  25% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    transform: translate(-25%, -25%) rotate(90deg);
+  }
+  50% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+    transform: translate(-25%, -25%) rotate(180deg);
+  }
+  75% {
+    border-radius: 60% 40% 60% 40% / 40% 50% 50% 60%;
+    transform: translate(-25%, -25%) rotate(270deg);
+  }
+}
+
+/* Magnetic button with WebGL shine */
+.webgl-button-magnetic {
+  --shine-opacity: 0;
+  --shine-x: 50%;
+  --shine-y: 50%;
+}
+
+.webgl-button-magnetic::before {
+  background: radial-gradient(
+    circle at var(--shine-x) var(--shine-y),
+    rgba(255, 255, 255, 0.15) 0%,
+    transparent 50%
+  );
+  opacity: var(--shine-opacity);
+}
+
+/* Glow button effect */
+.webgl-button-glow {
+  position: relative;
+}
+
+.webgl-button-glow::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.5), rgba(201, 206, 214, 0.1), rgba(201, 206, 214, 0.5));
+  border-radius: 14px;
+  z-index: -2;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  filter: blur(8px);
+}
+
+.webgl-button-glow:hover::after {
+  opacity: 1;
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { 
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+}
+
+/* 3D tilt button */
+.webgl-button-3d {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: transform 0.3s ease;
+}
+
+.webgl-button-3d .button-layers {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+}
+
+.webgl-button-3d .button-layer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.1), rgba(201, 206, 214, 0.05));
+  border-radius: inherit;
+  border: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.webgl-button-3d .button-layer:nth-child(1) { transform: translateZ(5px); }
+.webgl-button-3d .button-layer:nth-child(2) { transform: translateZ(10px); opacity: 0.5; }
+.webgl-button-3d .button-layer:nth-child(3) { transform: translateZ(15px); opacity: 0.25; }
+
+/* Particle burst button */
+.webgl-button-particles {
+  position: relative;
+}
+
+.webgl-button-particles .particle-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Confetti button */
+.webgl-button-confetti {
+  position: relative;
+}
+
+.webgl-button-confetti.clicked {
+  animation: button-celebrate 0.5s ease;
+}
+
+@keyframes button-celebrate {
+  0% { transform: scale(1); }
+  25% { transform: scale(0.95); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Progress button */
+.webgl-button-progress {
+  position: relative;
+  overflow: hidden;
+}
+
+.webgl-button-progress .progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(201, 206, 214, 0.3), rgba(201, 206, 214, 0.1));
+  width: 0%;
+  transition: width 0.3s ease;
+  z-index: 0;
+}
+
+.webgl-button-progress.loading .progress-fill {
+  animation: progress-fill 2s ease-in-out infinite;
+}
+
+@keyframes progress-fill {
+  0% { width: 0%; left: 0; }
+  50% { width: 100%; left: 0; }
+  100% { width: 0%; left: 100%; }
+}
+
+/* Loading state */
+.webgl-button.loading {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.webgl-button.loading .webgl-button-content {
+  opacity: 0;
+}
+
+.webgl-button .loader {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(201, 206, 214, 0.2);
+  border-top-color: #C9CED6;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.webgl-button.loading .loader {
+  opacity: 1;
+  animation: loader-spin 1s linear infinite;
+}
+
+@keyframes loader-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Success state */
+.webgl-button.success {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.1));
+  border-color: rgba(76, 175, 80, 0.3);
+}
+
+.webgl-button.success .webgl-button-content::before {
+  content: '✓';
+  margin-right: 8px;
+}
+
+/* Error state */
+.webgl-button.error {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.2), rgba(244, 67, 54, 0.1));
+  border-color: rgba(244, 67, 54, 0.3);
+}
+
+/* Size variants */
+.webgl-button-sm {
+  padding: 12px 24px;
+  font-size: 13px;
+}
+
+.webgl-button-lg {
+  padding: 20px 40px;
+  font-size: 16px;
+}
+
+.webgl-button-full {
+  width: 100%;
+}
+
+/* Variant styles */
+.webgl-button-primary {
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.9), rgba(201, 206, 214, 0.7));
+  color: #0f0f10;
+  border-color: transparent;
+}
+
+.webgl-button-primary:hover {
+  background: linear-gradient(135deg, #F5F7FA, rgba(201, 206, 214, 0.9));
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px -10px rgba(201, 206, 214, 0.3);
+}
+
+.webgl-button-ghost {
+  background: transparent;
+  border-color: rgba(201, 206, 214, 0.3);
+}
+
+.webgl-button-ghost:hover {
+  background: rgba(201, 206, 214, 0.1);
+  border-color: rgba(201, 206, 214, 0.5);
+}
+
+/* Ripple fallback for no-WebGL */
+.no-webgl .webgl-button-ripple::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  background: rgba(201, 206, 214, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease, opacity 0.6s ease;
+}
+
+.no-webgl .webgl-button-ripple:active::after {
+  width: 300%;
+  height: 300%;
+  opacity: 0;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .webgl-button,
+  .webgl-button::before,
+  .webgl-button-content {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .webgl-button-3d {
+    transform: none !important;
+  }
+  
+  .liquid-blob {
+    animation: none !important;
+  }
+}

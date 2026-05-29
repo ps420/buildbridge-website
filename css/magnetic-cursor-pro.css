@@ -1,0 +1,276 @@
+/**
+ * Professional Magnetic Cursor System - v81.1
+ * Fortune 500 style cursor with magnetic attraction to interactive elements
+ */
+
+/* Hide default cursor on desktop */
+@media (pointer: fine) {
+  body.magnetic-cursor-enabled,
+  body.magnetic-cursor-enabled *,
+  body.magnetic-cursor-enabled a,
+  body.magnetic-cursor-enabled button {
+    cursor: none !important;
+  }
+}
+
+/* Main cursor dot */
+.magnetic-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  background: #C9CED6;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  mix-blend-mode: difference;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
+  will-change: transform;
+}
+
+/* Cursor outer ring */
+.magnetic-cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(201, 206, 214, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;
+  will-change: transform;
+}
+
+/* Hover states */
+.magnetic-cursor.hover {
+  width: 8px;
+  height: 8px;
+  background: #F5F7FA;
+}
+
+.magnetic-cursor.hover + .magnetic-cursor-ring,
+.magnetic-cursor-ring.hover {
+  width: 60px;
+  height: 60px;
+  border-color: rgba(201, 206, 214, 0.8);
+  background: rgba(201, 206, 214, 0.05);
+}
+
+/* Click state */
+.magnetic-cursor.clicking {
+  width: 6px;
+  height: 6px;
+  background: #F5F7FA;
+}
+
+.magnetic-cursor.clicking + .magnetic-cursor-ring,
+.magnetic-cursor-ring.clicking {
+  width: 50px;
+  height: 50px;
+  border-color: rgba(201, 206, 214, 1);
+  border-width: 2px;
+}
+
+/* Magnetic snap state - when hovering magnetic elements */
+.magnetic-cursor.magnetic {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.magnetic-cursor.magnetic + .magnetic-cursor-ring,
+.magnetic-cursor-ring.magnetic {
+  width: 80px;
+  height: 80px;
+  border-color: #C9CED6;
+  border-width: 2px;
+  background: rgba(201, 206, 214, 0.1);
+}
+
+/* Text selection state */
+.magnetic-cursor.selecting {
+  width: 4px;
+  height: 24px;
+  border-radius: 2px;
+  background: #C9CED6;
+}
+
+.magnetic-cursor.selecting + .magnetic-cursor-ring,
+.magnetic-cursor-ring.selecting {
+  opacity: 0;
+}
+
+/* Drag state */
+.magnetic-cursor.dragging {
+  width: 16px;
+  height: 16px;
+  background: transparent;
+  border: 2px solid #C9CED6;
+}
+
+.magnetic-cursor.dragging + .magnetic-cursor-ring,
+.magnetic-cursor-ring.dragging {
+  width: 50px;
+  height: 50px;
+  border-style: dashed;
+  animation: cursor-rotate 4s linear infinite;
+}
+
+@keyframes cursor-rotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Link hover indicator */
+.magnetic-cursor-link-icon {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 60px;
+  height: 60px;
+  pointer-events: none;
+  z-index: 99997;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.magnetic-cursor-link-icon.visible {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+.magnetic-cursor-link-icon svg {
+  width: 20px;
+  height: 20px;
+  color: #C9CED6;
+}
+
+/* Magnetic element hover effect */
+[data-magnetic] {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Trail effect for fast movements */
+.cursor-trail {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background: rgba(201, 206, 214, 0.3);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99990;
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity;
+}
+
+/* Hide on touch devices */
+@media (pointer: coarse), (hover: none) {
+  .magnetic-cursor,
+  .magnetic-cursor-ring,
+  .magnetic-cursor-link-icon,
+  .cursor-trail {
+    display: none !important;
+  }
+  
+  body.magnetic-cursor-enabled,
+  body.magnetic-cursor-enabled *,
+  body.magnetic-cursor-enabled a,
+  body.magnetic-cursor-enabled button {
+    cursor: auto !important;
+  }
+}
+
+/* Context menu indicator */
+.magnetic-cursor.context {
+  width: 4px;
+  height: 4px;
+}
+
+.magnetic-cursor.context + .magnetic-cursor-ring,
+.magnetic-cursor-ring.context {
+  width: 30px;
+  height: 30px;
+  border-style: dotted;
+  opacity: 0.5;
+}
+
+/* Loading state */
+.magnetic-cursor.loading {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.magnetic-cursor.loading + .magnetic-cursor-ring,
+.magnetic-cursor-ring.loading {
+  width: 40px;
+  height: 40px;
+  border-top-color: transparent;
+  animation: cursor-loading 1s linear infinite;
+}
+
+@keyframes cursor-loading {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Reading mode cursor */
+.magnetic-cursor.reading + .magnetic-cursor-ring,
+.magnetic-cursor-ring.reading {
+  width: 100px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(201, 206, 214, 0.1);
+  border: none;
+}
+
+/* Constrained cursor for sliders */
+.magnetic-cursor.constrained-h + .magnetic-cursor-ring,
+.magnetic-cursor-ring.constrained-h {
+  width: 60px;
+  height: 20px;
+  border-radius: 10px;
+}
+
+.magnetic-cursor.constrained-v + .magnetic-cursor-ring,
+.magnetic-cursor-ring.constrained-v {
+  width: 20px;
+  height: 60px;
+  border-radius: 10px;
+}
+
+/* Cursor label/tooltip */
+.magnetic-cursor-label {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 6px 12px;
+  background: rgba(15, 15, 16, 0.9);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #C9CED6;
+  pointer-events: none;
+  z-index: 99996;
+  transform: translate(-50%, calc(-100% - 20px)) scale(0.8);
+  opacity: 0;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+.magnetic-cursor-label.visible {
+  transform: translate(-50%, calc(-100% - 20px)) scale(1);
+  opacity: 1;
+}
