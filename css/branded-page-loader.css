@@ -1,0 +1,375 @@
+/* ========================================
+   BUILD BRIDGE - BRANDED PAGE LOADER
+   Fortune 500 Professional Loading Experience
+   ======================================== */
+
+.branded-loader {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #0f0f12 0%, #1a1a22 50%, #0f0f12 100%);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+              visibility 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.branded-loader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Construction Crane Animation */
+.branded-loader__crane {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin-bottom: 40px;
+}
+
+.branded-loader__crane-tower {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 140px;
+  background: linear-gradient(180deg, #C9CED6 0%, #8A9199 100%);
+  border-radius: 2px;
+}
+
+.branded-loader__crane-tower::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #8A9199 0%, #C9CED6 50%, #8A9199 100%);
+  border-radius: 2px;
+}
+
+.branded-loader__crane-jib {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #C9CED6 0%, #8A9199 100%);
+  border-radius: 2px;
+  transform-origin: left center;
+  animation: craneSwing 3s ease-in-out infinite;
+}
+
+@keyframes craneSwing {
+  0%, 100% { transform: rotate(-15deg); }
+  50% { transform: rotate(15deg); }
+}
+
+.branded-loader__crane-cable {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(180deg, #C9CED6 0%, transparent 100%);
+  transform-origin: top center;
+  animation: cableSwing 3s ease-in-out infinite;
+}
+
+@keyframes cableSwing {
+  0%, 100% { 
+    transform: rotate(15deg);
+    height: 60px;
+  }
+  50% { 
+    transform: rotate(-15deg);
+    height: 80px;
+  }
+}
+
+.branded-loader__crane-hook {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  border: 2px solid #C9CED6;
+  border-top: none;
+  border-radius: 0 0 50% 50%;
+}
+
+/* Building Blocks Animation */
+.branded-loader__blocks {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  align-items: flex-end;
+}
+
+.branded-loader__block {
+  width: 20px;
+  background: linear-gradient(135deg, #C9CED6 0%, #8A9199 100%);
+  border-radius: 2px;
+  animation: blockBuild 2s ease-in-out infinite;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.branded-loader__block:nth-child(1) {
+  height: 20px;
+  animation-delay: 0s;
+}
+
+.branded-loader__block:nth-child(2) {
+  height: 30px;
+  animation-delay: 0.2s;
+}
+
+.branded-loader__block:nth-child(3) {
+  height: 25px;
+  animation-delay: 0.4s;
+}
+
+.branded-loader__block:nth-child(4) {
+  height: 35px;
+  animation-delay: 0.6s;
+}
+
+.branded-loader__block:nth-child(5) {
+  height: 28px;
+  animation-delay: 0.8s;
+}
+
+@keyframes blockBuild {
+  0%, 100% { 
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: translateY(-10px) scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+/* Logo Container */
+.branded-loader__logo-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.branded-loader__logo {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 24px;
+  animation: logoPulse 2s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+  0%, 100% { 
+    transform: scale(1);
+    filter: drop-shadow(0 0 20px rgba(201, 206, 214, 0.3));
+  }
+  50% { 
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 40px rgba(201, 206, 214, 0.5));
+  }
+}
+
+.branded-loader__title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #C9CED6;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+
+.branded-loader__subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.875rem;
+  color: rgba(201, 206, 214, 0.6);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* Progress Bar */
+.branded-loader__progress {
+  width: 280px;
+  height: 3px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 2px;
+  margin-top: 40px;
+  overflow: hidden;
+  position: relative;
+}
+
+.branded-loader__progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #C9CED6 0%, #8A9199 50%, #C9CED6 100%);
+  background-size: 200% 100%;
+  border-radius: 2px;
+  width: 0%;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.branded-loader__percentage {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #C9CED6;
+  margin-top: 16px;
+  letter-spacing: 0.1em;
+}
+
+/* Status Text */
+.branded-loader__status {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.75rem;
+  color: rgba(201, 206, 214, 0.5);
+  margin-top: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.branded-loader__status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #C9CED6;
+  border-radius: 50%;
+  margin-right: 8px;
+  animation: statusPulse 1s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* Particle Effects */
+.branded-loader__particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.branded-loader__particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(201, 206, 214, 0.3);
+  border-radius: 50%;
+  animation: particleFloat 8s ease-in-out infinite;
+}
+
+@keyframes particleFloat {
+  0%, 100% { 
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { 
+    transform: translateY(-100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* Variants */
+.branded-loader--minimal .branded-loader__crane,
+.branded-loader--minimal .branded-loader__blocks {
+  display: none;
+}
+
+.branded-loader--minimal .branded-loader__logo {
+  width: 60px;
+  height: 60px;
+}
+
+.branded-loader--dark {
+  background: linear-gradient(135deg, #0a0a0c 0%, #121216 50%, #0a0a0c 100%);
+}
+
+.branded-loader--light {
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 50%, #f8f9fa 100%);
+}
+
+.branded-loader--light .branded-loader__title,
+.branded-loader--light .branded-loader__percentage {
+  color: #0f0f12;
+}
+
+.branded-loader--light .branded-loader__subtitle,
+.branded-loader--light .branded-loader__status {
+  color: rgba(15, 15, 18, 0.6);
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .branded-loader__crane-jib,
+  .branded-loader__crane-cable,
+  .branded-loader__block,
+  .branded-loader__logo,
+  .branded-loader__progress-bar,
+  .branded-loader__particle {
+    animation: none;
+  }
+  
+  .branded-loader {
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .branded-loader__crane {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .branded-loader__crane-tower {
+    height: 100px;
+  }
+  
+  .branded-loader__crane-tower::before {
+    width: 60px;
+  }
+  
+  .branded-loader__crane-jib {
+    width: 70px;
+  }
+  
+  .branded-loader__block {
+    width: 15px;
+  }
+  
+  .branded-loader__logo {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .branded-loader__title {
+    font-size: 1.5rem;
+  }
+  
+  .branded-loader__progress {
+    width: 240px;
+  }
+}

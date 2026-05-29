@@ -1,22 +1,43 @@
-/* v50.0: Real-time Project Status Dashboard - Fortune 500 Professional Features */
+/* ========================================
+   v84.0: PROJECT STATUS DASHBOARD
+   Fortune 500 Real-Time Project Tracking
+======================================== */
 
-.project-dashboard-section {
+.project-status-dashboard {
   padding: 120px 0;
+  background: linear-gradient(180deg, var(--black) 0%, rgba(42, 45, 52, 0.3) 50%, var(--black) 100%);
   position: relative;
   overflow: hidden;
 }
 
-.project-dashboard-section::before {
+.project-status-dashboard::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: 
     radial-gradient(ellipse at 20% 30%, rgba(201, 206, 214, 0.03) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 70%, rgba(201, 206, 214, 0.02) 0%, transparent 50%);
+    radial-gradient(ellipse at 80% 70%, rgba(42, 45, 52, 0.2) 0%, transparent 50%);
   pointer-events: none;
+}
+
+.dashboard-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 60px;
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-header .eyebrow {
+  justify-content: center;
+}
+
+.dashboard-header .eyebrow::before,
+.dashboard-header .eyebrow::after {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--chrome);
 }
 
 .dashboard-container {
@@ -27,514 +48,604 @@
   z-index: 1;
 }
 
-/* Dashboard Header */
-.dashboard-header {
+/* Project Selector Tabs */
+.project-tabs {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  justify-content: center;
+  gap: 12px;
   margin-bottom: 50px;
   flex-wrap: wrap;
-  gap: 24px;
 }
 
-.dashboard-title h2 {
+.project-tab {
+  padding: 14px 28px;
+  background: rgba(201, 206, 214, 0.05);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 8px;
+  color: var(--chrome);
   font-family: 'Montserrat', sans-serif;
-  font-size: 36px;
-  font-weight: 700;
-  color: #F5F7FA;
-  margin-bottom: 12px;
-}
-
-.dashboard-title p {
-  font-family: 'Poppins', sans-serif;
-  font-size: 16px;
-  color: rgba(201, 206, 214, 0.7);
-}
-
-.dashboard-controls {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-}
-
-.dashboard-search {
-  position: relative;
-}
-
-.dashboard-search input {
-  width: 300px;
-  padding: 14px 20px 14px 48px;
-  background: rgba(201, 206, 214, 0.05);
-  border: 1px solid rgba(201, 206, 214, 0.15);
-  border-radius: 50px;
-  color: #F5F7FA;
-  font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-  transition: all 0.3s ease;
-}
-
-.dashboard-search input:focus {
-  outline: none;
-  border-color: rgba(201, 206, 214, 0.3);
-  background: rgba(201, 206, 214, 0.08);
-  width: 350px;
-}
-
-.dashboard-search input::placeholder {
-  color: rgba(201, 206, 214, 0.4);
-}
-
-.dashboard-search svg {
-  position: absolute;
-  left: 18px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 18px;
-  height: 18px;
-  color: rgba(201, 206, 214, 0.5);
-}
-
-.dashboard-filter {
-  padding: 14px 24px;
-  background: rgba(201, 206, 214, 0.05);
-  border: 1px solid rgba(201, 206, 214, 0.15);
-  border-radius: 50px;
-  color: #C9CED6;
-  font-family: 'Poppins', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.project-tab::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--chrome), var(--white));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.project-tab:hover {
+  border-color: rgba(201, 206, 214, 0.3);
+  transform: translateY(-2px);
+}
+
+.project-tab.active {
+  color: var(--black);
+  border-color: var(--chrome);
+}
+
+.project-tab.active::before {
+  opacity: 1;
+}
+
+.project-tab .status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 10px;
+  background: var(--slate);
   transition: all 0.3s ease;
 }
 
-.dashboard-filter:hover {
-  background: rgba(201, 206, 214, 0.1);
-  border-color: rgba(201, 206, 214, 0.25);
+.project-tab.active .status-dot {
+  background: var(--black);
 }
 
-/* Stats Overview */
-.dashboard-stats {
+.project-tab .status-dot.active-project {
+  background: #22c55e;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+}
+
+.project-tab .status-dot.completed {
+  background: #3b82f6;
+}
+
+.project-tab .status-dot.planning {
+  background: #f59e0b;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 30px;
   margin-bottom: 40px;
 }
 
-.stat-card {
-  background: rgba(201, 206, 214, 0.03);
-  border: 1px solid rgba(201, 206, 214, 0.1);
-  border-radius: 20px;
-  padding: 24px;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+@media (max-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-.stat-card::before {
+/* Project Overview Card */
+.project-overview-card {
+  background: linear-gradient(145deg, #17191d, #1a1c21);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 16px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-overview-card::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #C9CED6, #9BA3B0);
-  transform: scaleX(0);
-  transition: transform 0.4s ease;
+  background: linear-gradient(90deg, var(--chrome), var(--white), var(--chrome));
+  opacity: 0.5;
 }
 
-.stat-card:hover {
-  background: rgba(201, 206, 214, 0.06);
-  border-color: rgba(201, 206, 214, 0.15);
-  transform: translateY(-4px);
+.project-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #22c55e;
+  margin-bottom: 24px;
 }
 
-.stat-card:hover::before {
-  transform: scaleX(1);
+.project-status-badge.completed {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #3b82f6;
 }
 
-.stat-card.active::before {
-  transform: scaleX(1);
+.project-status-badge.planning {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #f59e0b;
 }
 
-.stat-card-value {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 32px;
+.project-status-badge::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: status-pulse 2s ease-in-out infinite;
+}
+
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.project-title {
+  font-size: 28px;
   font-weight: 700;
-  color: #F5F7FA;
-  margin-bottom: 8px;
-  background: linear-gradient(135deg, #F5F7FA, #C9CED6);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.project-location {
+  color: var(--chrome);
+  font-size: 15px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.project-stats-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.project-stat {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid rgba(201, 206, 214, 0.05);
+}
+
+.project-stat-value {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  margin-bottom: 6px;
+}
+
+.project-stat-label {
+  font-size: 12px;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Circular Progress */
+.progress-ring-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 30px 0;
+}
+
+.progress-ring {
+  width: 160px;
+  height: 160px;
+  transform: rotate(-90deg);
+}
+
+.progress-ring-bg {
+  fill: none;
+  stroke: rgba(201, 206, 214, 0.1);
+  stroke-width: 10;
+}
+
+.progress-ring-fill {
+  fill: none;
+  stroke: url(#progressGradient);
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 440;
+  stroke-dashoffset: 440;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.progress-ring-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.progress-percentage {
+  font-size: 42px;
+  font-weight: 800;
+  font-family: 'Montserrat', sans-serif;
+  background: linear-gradient(135deg, var(--white), var(--chrome));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.stat-card-label {
-  font-family: 'Poppins', sans-serif;
-  font-size: 13px;
-  color: rgba(201, 206, 214, 0.6);
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.progress-label {
+  font-size: 12px;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
-.stat-card-trend {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 8px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.stat-card-trend.up {
-  background: rgba(46, 213, 115, 0.15);
-  color: #2ed573;
-}
-
-.stat-card-trend.down {
-  background: rgba(255, 71, 87, 0.15);
-  color: #ff4757;
-}
-
-/* Project Cards Grid */
-.projects-grid-dashboard {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-}
-
-.project-status-card {
-  background: rgba(201, 206, 214, 0.03);
+/* Timeline Visualization */
+.project-timeline {
+  background: linear-gradient(145deg, #17191d, #1a1c21);
   border: 1px solid rgba(201, 206, 214, 0.1);
-  border-radius: 24px;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
+  border-radius: 16px;
+  padding: 40px;
 }
 
-.project-status-card:hover {
-  background: rgba(201, 206, 214, 0.05);
-  border-color: rgba(201, 206, 214, 0.15);
-  transform: translateY(-6px);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-}
-
-.project-status-header {
-  padding: 24px;
+.timeline-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  border-bottom: 1px solid rgba(201, 206, 214, 0.08);
-}
-
-.project-status-info h3 {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 18px;
-  font-weight: 600;
-  color: #F5F7FA;
-  margin-bottom: 8px;
-}
-
-.project-status-meta {
-  display: flex;
-  gap: 16px;
   align-items: center;
+  margin-bottom: 30px;
 }
 
-.project-status-meta span {
-  font-family: 'Poppins', sans-serif;
+.timeline-title {
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.timeline-legend {
+  display: flex;
+  gap: 20px;
   font-size: 12px;
-  color: rgba(201, 206, 214, 0.5);
+}
+
+.legend-item {
   display: flex;
   align-items: center;
   gap: 6px;
+  color: var(--slate);
 }
 
-.status-badge {
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-family: 'Poppins', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
 }
 
-.status-badge.planning {
-  background: rgba(156, 136, 255, 0.15);
-  color: #9c88ff;
+.legend-dot.completed { background: #22c55e; }
+.legend-dot.in-progress { background: #3b82f6; }
+.legend-dot.pending { background: var(--slate); }
+
+/* Visual Timeline */
+.visual-timeline {
+  position: relative;
+  padding: 20px 0;
 }
 
-.status-badge.in-progress {
-  background: rgba(46, 213, 115, 0.15);
-  color: #2ed573;
+.timeline-track {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 2px;
+  transform: translateY(-50%);
 }
 
-.status-badge.on-hold {
-  background: rgba(255, 165, 2, 0.15);
-  color: #ffa502;
+.timeline-progress-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #22c55e, #3b82f6);
+  border-radius: 2px;
+  transform: translateY(-50%);
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.status-badge.completed {
-  background: rgba(201, 206, 214, 0.15);
-  color: #C9CED6;
-}
-
-/* Progress Section */
-.project-progress-section {
-  padding: 24px;
-}
-
-.progress-header {
+.timeline-milestones {
   display: flex;
   justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-milestone {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 16px;
+  gap: 15px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
 }
 
-.progress-label {
-  font-family: 'Poppins', sans-serif;
-  font-size: 12px;
-  color: rgba(201, 206, 214, 0.6);
+.timeline-milestone:hover {
+  transform: translateY(-5px);
 }
 
-.progress-value {
-  font-family: 'Montserrat', sans-serif;
+.milestone-node {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--gun);
+  border: 3px solid rgba(201, 206, 214, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 20px;
-  font-weight: 700;
-  color: #F5F7FA;
-}
-
-.progress-bar-container {
-  height: 8px;
-  background: rgba(201, 206, 214, 0.08);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 20px;
-}
-
-.progress-bar {
-  height: 100%;
-  background: linear-gradient(90deg, #C9CED6, #9BA3B0);
-  border-radius: 4px;
-  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
 }
 
-.progress-bar::after {
+.milestone-node::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.timeline-milestone.completed .milestone-node {
+  background: #22c55e;
+  border-color: #22c55e;
+}
+
+.timeline-milestone.in-progress .milestone-node {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  animation: milestone-pulse 2s ease-in-out infinite;
+}
+
+@keyframes milestone-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+  50% { box-shadow: 0 0 0 15px rgba(59, 130, 246, 0); }
+}
+
+.timeline-milestone:hover .milestone-node::before {
+  border-color: rgba(201, 206, 214, 0.3);
+}
+
+.milestone-info {
+  text-align: center;
+}
+
+.milestone-name {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+
+.milestone-date {
+  font-size: 12px;
+  color: var(--slate);
+}
+
+/* Phase Cards */
+.phase-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 40px;
+}
+
+@media (max-width: 1024px) {
+  .phase-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .phase-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.phase-card {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(201, 206, 214, 0.08);
+  border-radius: 12px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.phase-card::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-  animation: progressShimmer 2s infinite;
+  height: 3px;
+  background: var(--slate);
+  transition: background 0.3s ease;
 }
 
-@keyframes progressShimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+.phase-card.completed::before {
+  background: #22c55e;
 }
 
-/* Milestones */
-.project-milestones {
-  display: flex;
-  gap: 8px;
+.phase-card.in-progress::before {
+  background: #3b82f6;
 }
 
-.milestone {
-  flex: 1;
-  text-align: center;
-  padding: 16px 8px;
-  background: rgba(201, 206, 214, 0.03);
+.phase-card:hover {
+  border-color: rgba(201, 206, 214, 0.15);
+  transform: translateY(-5px);
+}
+
+.phase-icon {
+  width: 48px;
+  height: 48px;
   border-radius: 12px;
-  border: 1px solid transparent;
-  transition: all 0.3s ease;
-}
-
-.milestone.completed {
-  background: rgba(46, 213, 115, 0.08);
-  border-color: rgba(46, 213, 115, 0.2);
-}
-
-.milestone.active {
-  background: rgba(201, 206, 214, 0.08);
-  border-color: rgba(201, 206, 214, 0.2);
-}
-
-.milestone.pending {
-  opacity: 0.5;
-}
-
-.milestone-icon {
-  width: 32px;
-  height: 32px;
-  margin: 0 auto 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-}
-
-.milestone.completed .milestone-icon {
-  background: rgba(46, 213, 115, 0.2);
-  color: #2ed573;
-  border-radius: 50%;
-}
-
-.milestone-label {
-  font-family: 'Poppins', sans-serif;
-  font-size: 10px;
-  font-weight: 500;
-  color: rgba(201, 206, 214, 0.6);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Project Quick Stats */
-.project-quick-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: rgba(201, 206, 214, 0.08);
-}
-
-.quick-stat {
-  padding: 16px;
-  text-align: center;
-  background: rgba(15, 15, 16, 0.95);
-}
-
-.quick-stat-value {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  color: #F5F7FA;
-}
-
-.quick-stat-label {
-  font-family: 'Poppins', sans-serif;
-  font-size: 10px;
-  color: rgba(201, 206, 214, 0.5);
-  margin-top: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* View Details Button */
-.project-view-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 16px;
-  background: transparent;
-  border: none;
-  border-top: 1px solid rgba(201, 206, 214, 0.08);
-  color: #C9CED6;
-  font-family: 'Poppins', sans-serif;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 100%;
-}
-
-.project-view-btn:hover {
   background: rgba(201, 206, 214, 0.05);
-  color: #F5F7FA;
-}
-
-.project-view-btn svg {
-  width: 16px;
-  height: 16px;
-  transition: transform 0.3s ease;
-}
-
-.project-view-btn:hover svg {
-  transform: translateX(4px);
-}
-
-/* Activity Feed Sidebar */
-.dashboard-sidebar {
-  position: fixed;
-  top: 0;
-  right: -400px;
-  width: 400px;
-  height: 100vh;
-  background: rgba(15, 15, 16, 0.98);
-  backdrop-filter: blur(20px);
-  border-left: 1px solid rgba(201, 206, 214, 0.1);
-  z-index: 1000;
-  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 16px;
 }
 
-.dashboard-sidebar.open {
-  right: 0;
+.phase-card.completed .phase-icon {
+  background: rgba(34, 197, 94, 0.1);
 }
 
-.sidebar-header {
-  padding: 24px;
-  border-bottom: 1px solid rgba(201, 206, 214, 0.1);
+.phase-card.in-progress .phase-icon {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.phase-name {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.phase-status {
+  font-size: 12px;
+  color: var(--slate);
+  margin-bottom: 16px;
+}
+
+.phase-progress-bar {
+  height: 6px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.phase-progress-fill {
+  height: 100%;
+  background: var(--slate);
+  border-radius: 3px;
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.phase-card.completed .phase-progress-fill {
+  background: #22c55e;
+}
+
+.phase-card.in-progress .phase-progress-fill {
+  background: #3b82f6;
+}
+
+/* Recent Activity */
+.dashboard-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+@media (max-width: 768px) {
+  .dashboard-bottom {
+    grid-template-columns: 1fr;
+  }
+}
+
+.activity-card,
+.team-card {
+  background: linear-gradient(145deg, #17191d, #1a1c21);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 16px;
+  padding: 30px;
+}
+
+.card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 24px;
 }
 
-.sidebar-header h3 {
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   font-family: 'Montserrat', sans-serif;
-  font-size: 18px;
-  font-weight: 600;
-  color: #F5F7FA;
 }
 
-.sidebar-close {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: rgba(201, 206, 214, 0.08);
+.view-all-btn {
+  font-size: 12px;
+  color: var(--chrome);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: none;
   border: none;
   cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.view-all-btn:hover {
+  color: var(--white);
+}
+
+.activity-list {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #C9CED6;
-  transition: all 0.3s ease;
-}
-
-.sidebar-close:hover {
-  background: rgba(201, 206, 214, 0.15);
-}
-
-.sidebar-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .activity-item {
   display: flex;
+  align-items: flex-start;
   gap: 16px;
   padding: 16px;
-  background: rgba(201, 206, 214, 0.03);
-  border-radius: 16px;
-  margin-bottom: 12px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
   transition: all 0.3s ease;
 }
 
 .activity-item:hover {
-  background: rgba(201, 206, 214, 0.06);
+  background: rgba(0, 0, 0, 0.25);
+  transform: translateX(5px);
 }
 
 .activity-icon {
   width: 40px;
   height: 40px;
-  border-radius: 12px;
+  border-radius: 10px;
+  background: rgba(201, 206, 214, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -542,78 +653,102 @@
   flex-shrink: 0;
 }
 
-.activity-icon.milestone { background: rgba(156, 136, 255, 0.15); }
-.activity-icon.update { background: rgba(46, 213, 115, 0.15); }
-.activity.icon.alert { background: rgba(255, 165, 2, 0.15); }
-.activity-icon.completed { background: rgba(201, 206, 214, 0.15); }
+.activity-icon.completed {
+  background: rgba(34, 197, 94, 0.1);
+}
 
-.activity-content h4 {
-  font-family: 'Montserrat', sans-serif;
+.activity-icon.update {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.activity-content {
+  flex: 1;
+}
+
+.activity-text {
   font-size: 14px;
-  font-weight: 600;
-  color: #F5F7FA;
+  color: var(--white);
   margin-bottom: 4px;
 }
 
-.activity-content p {
-  font-family: 'Poppins', sans-serif;
-  font-size: 12px;
-  color: rgba(201, 206, 214, 0.6);
+.activity-text strong {
+  color: var(--chrome);
 }
 
 .activity-time {
-  font-family: 'Poppins', sans-serif;
-  font-size: 11px;
-  color: rgba(201, 206, 214, 0.4);
-  margin-top: 8px;
+  font-size: 12px;
+  color: var(--slate);
 }
 
-/* Responsive */
-@media (max-width: 1024px) {
-  .dashboard-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .projects-grid-dashboard {
-    grid-template-columns: 1fr;
-  }
+/* Team Members */
+.team-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-@media (max-width: 768px) {
-  .dashboard-container {
-    padding: 0 20px;
-  }
-  
-  .dashboard-header {
-    flex-direction: column;
-  }
-  
-  .dashboard-search input,
-  .dashboard-search input:focus {
-    width: 100%;
-  }
-  
-  .dashboard-controls {
-    width: 100%;
-  }
-  
-  .dashboard-stats {
-    grid-template-columns: 1fr;
-  }
-  
-  .project-status-header {
-    flex-direction: column;
-    gap: 16px;
-  }
-  
-  .dashboard-sidebar {
-    right: -100%;
-    width: 100%;
-  }
+.team-member {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  transition: all 0.3s ease;
 }
 
-/* Animations */
-@keyframes cardEnter {
+.team-member:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.member-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gun), var(--slate));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--white);
+  flex-shrink: 0;
+}
+
+.member-info {
+  flex: 1;
+}
+
+.member-name {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.member-role {
+  font-size: 12px;
+  color: var(--slate);
+}
+
+.member-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #22c55e;
+}
+
+.member-status::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: status-pulse 2s ease-in-out infinite;
+}
+
+/* Dashboard Animations */
+@keyframes fadeInUp {
   from {
     opacity: 0;
     transform: translateY(20px);
@@ -624,11 +759,18 @@
   }
 }
 
-.project-status-card {
-  animation: cardEnter 0.5s ease forwards;
+.dashboard-animate {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.project-status-card:nth-child(1) { animation-delay: 0.1s; }
-.project-status-card:nth-child(2) { animation-delay: 0.2s; }
-.project-status-card:nth-child(3) { animation-delay: 0.3s; }
-.project-status-card:nth-child(4) { animation-delay: 0.4s; }
+/* Dark section variant */
+.project-status-dashboard.dark {
+  background: var(--black);
+}
+
+/* Gradient definitions for SVG */
+.dashboard-gradient-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}

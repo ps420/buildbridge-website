@@ -1,507 +1,410 @@
 /**
- * v50.0: Real-time Project Status Dashboard
- * Fortune 500 Professional Project Tracking System
+ * v84.0: Project Status Dashboard
+ * Fortune 500 Real-Time Project Tracking System
  */
 
 (function() {
   'use strict';
 
-  // Sample Project Data
-  const PROJECTS_DATA = [
-    {
-      id: 1,
-      name: "Cape Town Luxury Estate",
-      client: "Private Residence",
-      location: "Camps Bay, Cape Town",
-      status: "in-progress",
-      progress: 68,
-      value: "R12.5M",
-      startDate: "2024-03-15",
-      endDate: "2025-02-28",
+  // Project Data
+  const projectData = {
+    'residential-complex': {
+      name: 'Modern Residential Complex',
+      location: '📍 Cape Town, South Africa',
+      status: 'in-progress',
+      progress: 65,
+      budget: 'R24.5M',
+      spent: 'R15.8M',
+      days: 142,
+      totalDays: 218,
       milestones: [
-        { name: "Planning", status: "completed", icon: "📋" },
-        { name: "Foundation", status: "completed", icon: "🏗️" },
-        { name: "Structure", status: "completed", icon: "🏢" },
-        { name: "Finishing", status: "active", icon: "✨" },
-        { name: "Handover", status: "pending", icon: "🔑" }
+        { name: 'Planning', date: 'Jan 15', status: 'completed', icon: '📋' },
+        { name: 'Design', date: 'Feb 28', status: 'completed', icon: '✏️' },
+        { name: 'Foundation', date: 'Apr 10', status: 'completed', icon: '🏗️' },
+        { name: 'Structure', date: 'Jun 30', status: 'in-progress', icon: '🏢' },
+        { name: 'Finishing', date: 'Aug 15', status: 'pending', icon: '✨' }
       ],
-      quickStats: {
-        daysRemaining: 120,
-        budgetUsed: "58%",
-        teamSize: 24
-      }
+      phases: [
+        { name: 'Site Prep', icon: '🚧', progress: 100, status: 'completed' },
+        { name: 'Foundation', icon: '🏗️', progress: 100, status: 'completed' },
+        { name: 'Framing', icon: '🏢', progress: 75, status: 'in-progress' },
+        { name: 'Systems', icon: '⚡', progress: 30, status: 'in-progress' }
+      ],
+      activities: [
+        { icon: '🏗️', text: 'Concrete pouring completed for <strong>Block B</strong>', time: '2 hours ago', type: 'completed' },
+        { icon: '✅', text: 'Electrical rough-in inspection <strong>passed</strong>', time: '5 hours ago', type: 'completed' },
+        { icon: '📊', text: 'Weekly progress report <strong>submitted</strong>', time: '1 day ago', type: 'update' },
+        { icon: '🚚', text: 'Steel delivery scheduled for <strong>tomorrow</strong>', time: '1 day ago', type: 'update' }
+      ],
+      team: [
+        { name: 'John Anderson', role: 'Project Manager', avatar: 'JA', online: true },
+        { name: 'Sarah Mitchell', role: 'Site Supervisor', avatar: 'SM', online: true },
+        { name: 'Mike Okonkwo', role: 'Safety Officer', avatar: 'MO', online: false }
+      ]
     },
-    {
-      id: 2,
-      name: "Johannesburg Corporate HQ",
-      client: "TechCorp Africa",
-      location: "Sandton, Johannesburg",
-      status: "in-progress",
-      progress: 42,
-      value: "R45M",
-      startDate: "2024-06-01",
-      endDate: "2025-08-15",
+    'corporate-hq': {
+      name: 'Corporate Headquarters',
+      location: '📍 Johannesburg, South Africa',
+      status: 'planning',
+      progress: 25,
+      budget: 'R45M',
+      spent: 'R11.2M',
+      days: 45,
+      totalDays: 365,
       milestones: [
-        { name: "Planning", status: "completed", icon: "📋" },
-        { name: "Foundation", status: "completed", icon: "🏗️" },
-        { name: "Structure", status: "active", icon: "🏢" },
-        { name: "MEP", status: "pending", icon: "⚡" },
-        { name: "Finishing", status: "pending", icon: "✨" }
+        { name: 'Planning', date: 'May 01', status: 'completed', icon: '📋' },
+        { name: 'Design', date: 'Jun 15', status: 'in-progress', icon: '✏️' },
+        { name: 'Permits', date: 'Aug 01', status: 'pending', icon: '📄' },
+        { name: 'Groundwork', date: 'Sep 15', status: 'pending', icon: '🏗️' },
+        { name: 'Structure', date: 'Dec 31', status: 'pending', icon: '🏢' }
       ],
-      quickStats: {
-        daysRemaining: 320,
-        budgetUsed: "35%",
-        teamSize: 56
-      }
-    },
-    {
-      id: 3,
-      name: "Durban Waterfront Complex",
-      client: "OceanView Developments",
-      location: "Durban North, KZN",
-      status: "planning",
-      progress: 15,
-      value: "R28M",
-      startDate: "2024-09-01",
-      endDate: "2026-01-30",
-      milestones: [
-        { name: "Planning", status: "active", icon: "📋" },
-        { name: "Permits", status: "pending", icon: "📄" },
-        { name: "Site Prep", status: "pending", icon: "🏗️" },
-        { name: "Construction", status: "pending", icon: "🏢" },
-        { name: "Completion", status: "pending", icon: "🎉" }
+      phases: [
+        { name: 'Planning', icon: '📋', progress: 100, status: 'completed' },
+        { name: 'Design', icon: '✏️', progress: 60, status: 'in-progress' },
+        { name: 'Permits', icon: '📄', progress: 20, status: 'pending' },
+        { name: 'Prep', icon: '🚧', progress: 10, status: 'pending' }
       ],
-      quickStats: {
-        daysRemaining: 520,
-        budgetUsed: "8%",
-        teamSize: 12
-      }
+      activities: [
+        { icon: '✅', text: 'Architectural drawings <strong>approved</strong>', time: '3 hours ago', type: 'completed' },
+        { icon: '📊', text: 'Environmental impact assessment <strong>submitted</strong>', time: '1 day ago', type: 'update' },
+        { icon: '🤝', text: 'Contractor selection <strong>in progress</strong>', time: '2 days ago', type: 'update' }
+      ],
+      team: [
+        { name: 'Lisa van der Berg', role: 'Lead Architect', avatar: 'LB', online: true },
+        { name: 'John Anderson', role: 'Project Manager', avatar: 'JA', online: true },
+        { name: 'David Chen', role: 'Structural Engineer', avatar: 'DC', online: false }
+      ]
     },
-    {
-      id: 4,
-      name: "Pretoria Industrial Park",
-      client: "LogiTech Distribution",
-      location: "Centurion, Pretoria",
-      status: "completed",
+    'luxury-villa': {
+      name: 'Luxury Villa Estate',
+      location: '📍 Durban, South Africa',
+      status: 'completed',
       progress: 100,
-      value: "R65M",
-      startDate: "2023-01-10",
-      endDate: "2024-05-20",
+      budget: 'R18.2M',
+      spent: 'R17.9M',
+      days: 180,
+      totalDays: 180,
       milestones: [
-        { name: "Planning", status: "completed", icon: "📋" },
-        { name: "Foundation", status: "completed", icon: "🏗️" },
-        { name: "Structure", status: "completed", icon: "🏢" },
-        { name: "Systems", status: "completed", icon: "⚙️" },
-        { name: "Handover", status: "completed", icon: "🔑" }
+        { name: 'Planning', date: 'Nov 01', status: 'completed', icon: '📋' },
+        { name: 'Design', date: 'Dec 15', status: 'completed', icon: '✏️' },
+        { name: 'Construction', date: 'Apr 30', status: 'completed', icon: '🏗️' },
+        { name: 'Finishing', date: 'Jun 15', status: 'completed', icon: '✨' },
+        { name: 'Handover', date: 'Jul 01', status: 'completed', icon: '🎉' }
       ],
-      quickStats: {
-        daysRemaining: 0,
-        budgetUsed: "98%",
-        teamSize: 0
-      }
+      phases: [
+        { name: 'Site Prep', icon: '🚧', progress: 100, status: 'completed' },
+        { name: 'Structure', icon: '🏢', progress: 100, status: 'completed' },
+        { name: 'Finishing', icon: '✨', progress: 100, status: 'completed' },
+        { name: 'Landscape', icon: '🌳', progress: 100, status: 'completed' }
+      ],
+      activities: [
+        { icon: '🎉', text: 'Final walkthrough <strong>completed</strong>', time: '2 weeks ago', type: 'completed' },
+        { icon: '✅', text: 'Client handover <strong>successful</strong>', time: '2 weeks ago', type: 'completed' },
+        { icon: '🏆', text: 'Quality certification <strong>achieved</strong>', time: '3 weeks ago', type: 'completed' }
+      ],
+      team: [
+        { name: 'Sarah Mitchell', role: 'Project Manager', avatar: 'SM', online: false },
+        { name: 'Tom Bradley', role: 'Site Foreman', avatar: 'TB', online: false }
+      ]
     }
-  ];
+  };
 
-  // Recent Activity Data
-  const RECENT_ACTIVITY = [
-    {
-      type: "milestone",
-      project: "Cape Town Luxury Estate",
-      title: "Milestone Completed",
-      description: "Structural phase completed ahead of schedule",
-      time: "2 hours ago",
-      icon: "🏗️"
-    },
-    {
-      type: "update",
-      project: "Johannesburg Corporate HQ",
-      title: "Progress Update",
-      description: "Floor 8 concrete pour scheduled for tomorrow",
-      time: "4 hours ago",
-      icon: "📊"
-    },
-    {
-      type: "alert",
-      project: "Durban Waterfront Complex",
-      title: "Approval Received",
-      description: "Environmental impact assessment approved",
-      time: "1 day ago",
-      icon: "✅"
-    },
-    {
-      type: "completed",
-      project: "Pretoria Industrial Park",
-      title: "Project Handed Over",
-      description: "Final inspection passed, keys delivered",
-      time: "3 days ago",
-      icon: "🎉"
-    },
-    {
-      type: "milestone",
-      project: "Cape Town Luxury Estate",
-      title: "Quality Check",
-      description: "Interior finishing quality inspection passed",
-      time: "4 days ago",
-      icon: "✨"
-    }
-  ];
-
-  class ProjectDashboard {
+  class ProjectStatusDashboard {
     constructor() {
-      this.projects = [...PROJECTS_DATA];
-      this.filter = 'all';
-      this.searchTerm = '';
-      this.sidebarOpen = false;
+      this.currentProject = 'residential-complex';
+      this.container = null;
       this.init();
     }
 
     init() {
-      this.createDOM();
-      this.renderProjects();
-      this.renderStats();
-      this.attachEvents();
-      this.startRealTimeUpdates();
+      // Wait for DOM to be ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => this.setup());
+      } else {
+        this.setup();
+      }
     }
 
-    createDOM() {
-      const section = document.querySelector('#project-dashboard');
-      if (!section) return;
+    setup() {
+      this.container = document.querySelector('.project-status-dashboard');
+      if (!this.container) return;
 
-      section.innerHTML = `
-        <div class="dashboard-container">
-          <div class="dashboard-header">
-            <div class="dashboard-title">
-              <h2>Project Dashboard</h2>
-              <p>Real-time tracking of all active construction projects</p>
-            </div>
-            <div class="dashboard-controls">
-              <div class="dashboard-search">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="11" cy="11" r="8"/>
-                  <path d="M21 21l-4.35-4.35"/>
-                </svg>
-                <input type="text" id="dashboard-search" placeholder="Search projects...">
-              </div>
-              <button class="dashboard-filter" id="dashboard-filter">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-                </svg>
-                Filter
-              </button>
-              <button class="dashboard-filter" id="activity-toggle">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                  <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                </svg>
-                Activity
-              </button>
-            </div>
-          </div>
+      this.render();
+      this.attachEventListeners();
+      this.animateProgress();
+    }
 
-          <div class="dashboard-stats">
-            <div class="stat-card active">
-              <div class="stat-card-value">${this.projects.length}</div>
-              <div class="stat-card-label">
-                Active Projects
-                <span class="stat-card-trend up">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                    <polyline points="17 6 23 6 23 12"/>
-                  </svg>
-                  +2
-                </span>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-card-value">R150M+</div>
-              <div class="stat-card-label">
-                Total Value
-                <span class="stat-card-trend up">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                    <polyline points="17 6 23 6 23 12"/>
-                  </svg>
-                  +15%
-                </span>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-card-value">156</div>
-              <div class="stat-card-label">
-                Team Members
-                <span class="stat-card-trend up">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                    <polyline points="17 6 23 6 23 12"/>
-                  </svg>
-                  +8
-                </span>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-card-value">94%</div>
-              <div class="stat-card-label">
-                On Time
-                <span class="stat-card-trend down">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/>
-                    <polyline points="17 18 23 18 23 12"/>
-                  </svg>
-                  -2%
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div class="projects-grid-dashboard" id="projects-grid"></div>
+    render() {
+      const project = projectData[this.currentProject];
+      
+      this.container.innerHTML = `
+        <svg class="dashboard-gradient-defs">
+          <defs>
+            <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#22c55e"/>
+              <stop offset="100%" style="stop-color:#3b82f6"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        
+        <div class="dashboard-header">
+          <p class="eyebrow">Live Tracking</p>
+          <h2 class="scramble-text">Project Dashboard</h2>
+          <p>Real-time insights into your construction projects. Track progress, milestones, and team activity.</p>
         </div>
 
-        <!-- Activity Sidebar -->
-        <div class="dashboard-sidebar" id="activity-sidebar">
-          <div class="sidebar-header">
-            <h3>Recent Activity</h3>
-            <button class="sidebar-close" id="sidebar-close">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"/>
-                <line x1="6" y1="6" x2="18" y2="18"/>
-              </svg>
-            </button>
+        <div class="dashboard-container">
+          <!-- Project Selector -->
+          <div class="project-tabs">
+            ${Object.entries(projectData).map(([key, data]) => `
+              <button class="project-tab ${key === this.currentProject ? 'active' : ''}" data-project="${key}">
+                <span class="status-dot ${data.status === 'in-progress' ? 'active-project' : data.status}"></span>
+                ${data.name.split(' ')[0]}
+              </button>
+            `).join('')}
           </div>
-          <div class="sidebar-content" id="activity-content"></div>
+
+          <!-- Dashboard Grid -->
+          <div class="dashboard-grid">
+            <!-- Project Overview -->
+            <div class="project-overview-card dashboard-animate">
+              <div class="project-status-badge ${project.status}">
+                ${project.status === 'in-progress' ? 'Active Project' : project.status === 'completed' ? 'Completed' : 'Planning Phase'}
+              </div>
+              <h3 class="project-title">${project.name}</h3>
+              <p class="project-location">${project.location}</p>
+
+              <div class="project-stats-row">
+                <div class="project-stat">
+                  <div class="project-stat-value">${project.budget}</div>
+                  <div class="project-stat-label">Total Budget</div>
+                </div>
+                <div class="project-stat">
+                  <div class="project-stat-value">${project.spent}</div>
+                  <div class="project-stat-label">Spent to Date</div>
+                </div>
+              </div>
+
+              <div class="progress-ring-container" style="position: relative;">
+                <svg class="progress-ring" viewBox="0 0 160 160">
+                  <circle class="progress-ring-bg" cx="80" cy="80" r="70"/>
+                  <circle class="progress-ring-fill" cx="80" cy="80" r="70" 
+                    stroke-dasharray="440" 
+                    stroke-dashoffset="${440 - (440 * project.progress / 100)}"/>
+                </svg>
+                <div class="progress-ring-text">
+                  <div class="progress-percentage" data-target="${project.progress}">0%</div>
+                  <div class="progress-label">Complete</div>
+                </div>
+              </div>
+
+              <div class="project-stats-row" style="margin-top: 20px;">
+                <div class="project-stat">
+                  <div class="project-stat-value">${project.days}</div>
+                  <div class="project-stat-label">Days Elapsed</div>
+                </div>
+                <div class="project-stat">
+                  <div class="project-stat-value">${project.totalDays - project.days}</div>
+                  <div class="project-stat-label">Days Remaining</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="project-timeline dashboard-animate" style="animation-delay: 0.1s;">
+              <div class="timeline-header">
+                <h3 class="timeline-title">Project Timeline</h3>
+                <div class="timeline-legend">
+                  <div class="legend-item">
+                    <span class="legend-dot completed"></span>
+                    Completed
+                  </div>
+                  <div class="legend-item">
+                    <span class="legend-dot in-progress"></span>
+                    In Progress
+                  </div>
+                  <div class="legend-item">
+                    <span class="legend-dot pending"></span>
+                    Pending
+                  </div>
+                </div>
+              </div>
+
+              <div class="visual-timeline">
+                <div class="timeline-track"></div>
+                <div class="timeline-progress-line" style="width: ${project.progress}%"></div>
+                <div class="timeline-milestones">
+                  ${project.milestones.map((milestone, index) => `
+                    <div class="timeline-milestone ${milestone.status}" data-index="${index}">
+                      <div class="milestone-node">${milestone.icon}</div>
+                      <div class="milestone-info">
+                        <div class="milestone-name">${milestone.name}</div>
+                        <div class="milestone-date">${milestone.date}</div>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <div class="phase-cards">
+                ${project.phases.map(phase => `
+                  <div class="phase-card ${phase.status}">
+                    <div class="phase-icon">${phase.icon}</div>
+                    <div class="phase-name">${phase.name}</div>
+                    <div class="phase-status">${phase.status === 'completed' ? 'Completed' : phase.status === 'in-progress' ? 'In Progress' : 'Pending'}</div>
+                    <div class="phase-progress-bar">
+                      <div class="phase-progress-fill" style="width: ${phase.progress}%"></div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Section -->
+          <div class="dashboard-bottom">
+            <div class="activity-card dashboard-animate" style="animation-delay: 0.2s;">
+              <div class="card-header">
+                <h4 class="card-title">Recent Activity</h4>
+                <button class="view-all-btn">View All</button>
+              </div>
+              <div class="activity-list">
+                ${project.activities.map(activity => `
+                  <div class="activity-item">
+                    <div class="activity-icon ${activity.type}">${activity.icon}</div>
+                    <div class="activity-content">
+                      <div class="activity-text">${activity.text}</div>
+                      <div class="activity-time">${activity.time}</div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <div class="team-card dashboard-animate" style="animation-delay: 0.3s;">
+              <div class="card-header">
+                <h4 class="card-title">Project Team</h4>
+                <button class="view-all-btn">Contact</button>
+              </div>
+              <div class="team-list">
+                ${project.team.map(member => `
+                  <div class="team-member">
+                    <div class="member-avatar">${member.avatar}</div>
+                    <div class="member-info">
+                      <div class="member-name">${member.name}</div>
+                      <div class="member-role">${member.role}</div>
+                    </div>
+                    ${member.online ? '<div class="member-status">Online</div>' : ''}
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
         </div>
       `;
-
-      this.projectsGrid = section.querySelector('#projects-grid');
-      this.activitySidebar = section.querySelector('#activity-sidebar');
-      this.activityContent = section.querySelector('#activity-content');
     }
 
-    renderProjects() {
-      let filtered = this.projects;
-
-      // Apply filter
-      if (this.filter !== 'all') {
-        filtered = filtered.filter(p => p.status === this.filter);
-      }
-
-      // Apply search
-      if (this.searchTerm) {
-        const term = this.searchTerm.toLowerCase();
-        filtered = filtered.filter(p => 
-          p.name.toLowerCase().includes(term) ||
-          p.client.toLowerCase().includes(term) ||
-          p.location.toLowerCase().includes(term)
-        );
-      }
-
-      this.projectsGrid.innerHTML = filtered.map(project => `
-        <div class="project-status-card" data-project-id="${project.id}">
-          <div class="project-status-header">
-            <div class="project-status-info">
-              <h3>${project.name}</h3>
-              <div class="project-status-meta">
-                <span>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                    <circle cx="12" cy="10" r="3"/>
-                  </svg>
-                  ${project.location}
-                </span>
-                <span>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                    <line x1="16" y1="2" x2="16" y2="6"/>
-                    <line x1="8" y1="2" x2="8" y2="6"/>
-                    <line x1="3" y1="10" x2="21" y2="10"/>
-                  </svg>
-                  ${this.formatDate(project.endDate)}
-                </span>
-              </div>
-            </div>
-            <span class="status-badge ${project.status}">
-              ${project.status.replace('-', ' ')}
-            </span>
-          </div>
-
-          <div class="project-progress-section">
-            <div class="progress-header">
-              <span class="progress-label">Overall Progress</span>
-              <span class="progress-value">${project.progress}%</span>
-            </div>
-            <div class="progress-bar-container">
-              <div class="progress-bar" style="width: ${project.progress}%"></div>
-            </div>
-
-            <div class="project-milestones">
-              ${project.milestones.map(m => `
-                <div class="milestone ${m.status}">
-                  <div class="milestone-icon">${m.status === 'completed' ? '✓' : m.icon}</div>
-                  <div class="milestone-label">${m.name}</div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-
-          <div class="project-quick-stats">
-            <div class="quick-stat">
-              <div class="quick-stat-value">${project.quickStats.daysRemaining}</div>
-              <div class="quick-stat-label">Days Left</div>
-            </div>
-            <div class="quick-stat">
-              <div class="quick-stat-value">${project.quickStats.budgetUsed}</div>
-              <div class="quick-stat-label">Budget Used</div>
-            </div>
-            <div class="quick-stat">
-              <div class="quick-stat-value">${project.quickStats.teamSize}</div>
-              <div class="quick-stat-label">Team Size</div>
-            </div>
-          </div>
-
-          <button class="project-view-btn">
-            View Details
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="9 18 15 12 9 6"/>
-            </svg>
-          </button>
-        </div>
-      `).join('');
-
-      // Animate progress bars
-      setTimeout(() => {
-        this.projectsGrid.querySelectorAll('.progress-bar').forEach(bar => {
-          const width = bar.style.width;
-          bar.style.width = '0';
-          setTimeout(() => bar.style.width = width, 100);
-        });
-      }, 100);
-    }
-
-    renderStats() {
-      // Stats are already in DOM, but we could make them dynamic
-    }
-
-    renderActivity() {
-      this.activityContent.innerHTML = RECENT_ACTIVITY.map(activity => `
-        <div class="activity-item">
-          <div class="activity-icon ${activity.type}">${activity.icon}</div>
-          <div class="activity-content">
-            <h4>${activity.title}</h4>
-            <p>${activity.description}</p>
-            <div class="activity-time">${activity.time} • ${activity.project}</div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    attachEvents() {
-      // Search
-      const searchInput = document.getElementById('dashboard-search');
-      if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-          this.searchTerm = e.target.value;
-          this.renderProjects();
-        });
-      }
-
-      // Filter
-      const filterBtn = document.getElementById('dashboard-filter');
-      if (filterBtn) {
-        filterBtn.addEventListener('click', () => {
-          const filters = ['all', 'in-progress', 'planning', 'completed'];
-          const currentIndex = filters.indexOf(this.filter);
-          this.filter = filters[(currentIndex + 1) % filters.length];
-          filterBtn.innerHTML = `
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-            </svg>
-            ${this.filter === 'all' ? 'Filter' : this.filter.replace('-', ' ')}
-          `;
-          this.renderProjects();
-        });
-      }
-
-      // Activity Toggle
-      const activityToggle = document.getElementById('activity-toggle');
-      const sidebarClose = document.getElementById('sidebar-close');
-
-      if (activityToggle) {
-        activityToggle.addEventListener('click', () => this.toggleSidebar());
-      }
-
-      if (sidebarClose) {
-        sidebarClose.addEventListener('click', () => this.closeSidebar());
-      }
-
-      // Close sidebar on outside click
-      document.addEventListener('click', (e) => {
-        if (this.sidebarOpen && 
-            !this.activitySidebar.contains(e.target) && 
-            !activityToggle?.contains(e.target)) {
-          this.closeSidebar();
-        }
-      });
-    }
-
-    toggleSidebar() {
-      this.sidebarOpen = !this.sidebarOpen;
-      this.activitySidebar.classList.toggle('open', this.sidebarOpen);
-      if (this.sidebarOpen) {
-        this.renderActivity();
-      }
-    }
-
-    closeSidebar() {
-      this.sidebarOpen = false;
-      this.activitySidebar.classList.remove('open');
-    }
-
-    startRealTimeUpdates() {
-      // Simulate real-time progress updates
-      setInterval(() => {
-        this.projects.forEach(project => {
-          if (project.status === 'in-progress' && project.progress < 100) {
-            // Random small increment
-            if (Math.random() > 0.7) {
-              project.progress = Math.min(100, project.progress + 0.1);
-            }
+    attachEventListeners() {
+      // Tab switching
+      const tabs = this.container.querySelectorAll('.project-tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const projectKey = tab.dataset.project;
+          if (projectKey !== this.currentProject) {
+            this.currentProject = projectKey;
+            this.render();
+            this.attachEventListeners();
+            this.animateProgress();
           }
         });
-        
-        // Only update occasionally to avoid DOM thrashing
-        if (Math.random() > 0.9) {
-          this.updateProgressBars();
-        }
-      }, 5000);
+      });
+
+      // Milestone hover effects
+      const milestones = this.container.querySelectorAll('.timeline-milestone');
+      milestones.forEach(milestone => {
+        milestone.addEventListener('mouseenter', () => {
+          this.showMilestoneTooltip(milestone);
+        });
+        milestone.addEventListener('mouseleave', () => {
+          this.hideMilestoneTooltip();
+        });
+      });
     }
 
-    updateProgressBars() {
-      const cards = this.projectsGrid.querySelectorAll('.project-status-card');
-      cards.forEach((card, index) => {
-        const project = this.projects[index];
-        if (project) {
-          const bar = card.querySelector('.progress-bar');
-          const value = card.querySelector('.progress-value');
-          if (bar && value) {
-            bar.style.width = project.progress + '%';
-            value.textContent = Math.round(project.progress) + '%';
+    showMilestoneTooltip(milestone) {
+      const index = parseInt(milestone.dataset.index);
+      const project = projectData[this.currentProject];
+      const milestoneData = project.milestones[index];
+
+      // Remove existing tooltip
+      this.hideMilestoneTooltip();
+
+      const tooltip = document.createElement('div');
+      tooltip.className = 'milestone-tooltip';
+      tooltip.innerHTML = `
+        <div style="
+          position: absolute;
+          bottom: 100%;
+          left: 50%;
+          transform: translateX(-50%);
+          background: rgba(15, 15, 16, 0.98);
+          border: 1px solid rgba(201, 206, 214, 0.2);
+          border-radius: 8px;
+          padding: 12px 16px;
+          margin-bottom: 10px;
+          white-space: nowrap;
+          z-index: 100;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        ">
+          <div style="font-weight: 600; margin-bottom: 4px;">${milestoneData.name}</div>
+          <div style="color: var(--slate); font-size: 12px;">${milestoneData.date}</div>
+        </div>
+      `;
+      
+      milestone.style.position = 'relative';
+      milestone.appendChild(tooltip);
+    }
+
+    hideMilestoneTooltip() {
+      const tooltip = this.container.querySelector('.milestone-tooltip');
+      if (tooltip) tooltip.remove();
+    }
+
+    animateProgress() {
+      // Animate percentage counter
+      const percentageEl = this.container.querySelector('.progress-percentage');
+      if (!percentageEl) return;
+
+      const target = parseInt(percentageEl.dataset.target);
+      let current = 0;
+      const duration = 1500;
+      const increment = target / (duration / 16);
+
+      const updateCounter = () => {
+        current += increment;
+        if (current < target) {
+          percentageEl.textContent = Math.floor(current) + '%';
+          requestAnimationFrame(updateCounter);
+        } else {
+          percentageEl.textContent = target + '%';
+        }
+      };
+
+      // Use IntersectionObserver for animation trigger
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            updateCounter();
+            observer.disconnect();
           }
-        }
-      });
-    }
+        });
+      }, { threshold: 0.5 });
 
-    formatDate(dateString) {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('en-ZA', { 
-        month: 'short', 
-        year: 'numeric' 
-      });
+      observer.observe(percentageEl);
     }
   }
 
-  // Initialize
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new ProjectDashboard());
-  } else {
-    new ProjectDashboard();
-  }
+  // Initialize dashboard
+  new ProjectStatusDashboard();
+
 })();
