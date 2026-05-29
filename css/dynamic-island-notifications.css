@@ -1,0 +1,421 @@
+/**
+ * BuildBridge Dynamic Island Notifications
+ * iOS 17 Style Notification System - v79.0
+ * Fortune 500 Quality Alert System
+ */
+
+.dynamic-island-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.dynamic-island {
+  background: rgba(15, 15, 16, 0.95);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 50px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 180px;
+  max-width: 420px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  pointer-events: auto;
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: center top;
+  opacity: 0;
+  scale: 0.8;
+  translate: 0 -20px;
+}
+
+.dynamic-island.active {
+  opacity: 1;
+  scale: 1;
+  translate: 0 0;
+}
+
+.dynamic-island:hover {
+  transform: scale(1.02);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.dynamic-island.expanded {
+  border-radius: 28px;
+  padding: 20px;
+  max-width: 380px;
+}
+
+.dynamic-island-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  animation: island-icon-pulse 2s ease infinite;
+}
+
+@keyframes island-icon-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.dynamic-island-icon.success {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+.dynamic-island-icon.error {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+}
+
+.dynamic-island-icon.warning {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+}
+
+.dynamic-island-icon.info {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+}
+
+.dynamic-island-icon.message {
+  background: linear-gradient(135deg, #C9CED6, #9ca3af);
+  box-shadow: 0 4px 15px rgba(201, 206, 214, 0.3);
+}
+
+.dynamic-island-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dynamic-island-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dynamic-island-message {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: rgba(201, 206, 214, 0.8);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dynamic-island.expanded .dynamic-island-message {
+  white-space: normal;
+  line-height: 1.5;
+}
+
+.dynamic-island-actions {
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  max-width: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.dynamic-island:hover .dynamic-island-actions,
+.dynamic-island.expanded .dynamic-island-actions {
+  opacity: 1;
+  max-width: 200px;
+}
+
+.dynamic-island-action {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.1);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #C9CED6;
+  font-size: 14px;
+}
+
+.dynamic-island-action:hover {
+  background: rgba(201, 206, 214, 0.2);
+  transform: scale(1.1);
+}
+
+.dynamic-island-action.primary {
+  background: linear-gradient(135deg, #C9CED6, #9ca3af);
+  color: #0f0f10;
+}
+
+.dynamic-island-action.primary:hover {
+  background: linear-gradient(135deg, #F5F7FA, #C9CED6);
+}
+
+.dynamic-island-close {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.1);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: rgba(201, 206, 214, 0.6);
+  font-size: 12px;
+  opacity: 0;
+}
+
+.dynamic-island:hover .dynamic-island-close,
+.dynamic-island.expanded .dynamic-island-close {
+  opacity: 1;
+}
+
+.dynamic-island-close:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  transform: rotate(90deg);
+}
+
+/* Progress Bar */
+.dynamic-island-progress {
+  position: absolute;
+  bottom: 0;
+  left: 20px;
+  right: 20px;
+  height: 3px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.dynamic-island:hover .dynamic-island-progress,
+.dynamic-island.show-progress .dynamic-island-progress {
+  opacity: 1;
+}
+
+.dynamic-island-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #C9CED6, #F5F7FA);
+  border-radius: 3px;
+  transform-origin: left;
+  animation: island-progress var(--duration, 5s) linear forwards;
+}
+
+@keyframes island-progress {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+/* Expanded State Content */
+.dynamic-island-details {
+  display: none;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.dynamic-island.expanded .dynamic-island-details {
+  display: block;
+  animation: details-fade-in 0.3s ease;
+}
+
+@keyframes details-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dynamic-island-details-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: rgba(201, 206, 214, 0.85);
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+
+.dynamic-island-details-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.dynamic-island-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.dynamic-island-btn.primary {
+  background: linear-gradient(135deg, #C9CED6, #9ca3af);
+  color: #0f0f10;
+}
+
+.dynamic-island-btn.primary:hover {
+  background: linear-gradient(135deg, #F5F7FA, #C9CED6);
+  transform: translateY(-2px);
+}
+
+.dynamic-island-btn.secondary {
+  background: rgba(201, 206, 214, 0.1);
+  color: #C9CED6;
+  border: 1px solid rgba(201, 206, 214, 0.2);
+}
+
+.dynamic-island-btn.secondary:hover {
+  background: rgba(201, 206, 214, 0.2);
+}
+
+/* Stack Effect */
+.dynamic-island.stacked-1 {
+  transform: scale(0.95) translateY(4px);
+  opacity: 0.7;
+}
+
+.dynamic-island.stacked-2 {
+  transform: scale(0.9) translateY(8px);
+  opacity: 0.5;
+}
+
+.dynamic-island.stacked-3 {
+  transform: scale(0.85) translateY(12px);
+  opacity: 0.3;
+}
+
+/* Priority/Urgency Styles */
+.dynamic-island.urgent {
+  border-color: rgba(239, 68, 68, 0.3);
+  animation: island-urgent-pulse 2s ease infinite;
+}
+
+@keyframes island-urgent-pulse {
+  0%, 100% { box-shadow: 0 8px 32px rgba(239, 68, 68, 0.2); }
+  50% { box-shadow: 0 8px 32px rgba(239, 68, 68, 0.4); }
+}
+
+.dynamic-island.priority {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+/* Live Activity Style */
+.dynamic-island.live-activity {
+  min-width: 280px;
+}
+
+.dynamic-island.live-activity .dynamic-island-content {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.live-activity-visual {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.2), rgba(201, 206, 214, 0.05));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.live-activity-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.live-activity-status {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: rgba(201, 206, 214, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .dynamic-island-container {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    transform: none;
+  }
+  
+  .dynamic-island {
+    max-width: 100%;
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .dynamic-island.expanded {
+    max-width: 100%;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .dynamic-island {
+    transition: opacity 0.2s ease;
+  }
+  
+  .dynamic-island-icon {
+    animation: none;
+  }
+  
+  .dynamic-island-progress-bar {
+    animation: none;
+  }
+}
+
+/* Dark Mode Enhancement */
+@media (prefers-color-scheme: dark) {
+  .dynamic-island {
+    background: rgba(15, 15, 16, 0.98);
+  }
+}

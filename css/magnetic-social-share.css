@@ -1,0 +1,409 @@
+/**
+ * BuildBridge Magnetic Social Share
+ * Floating Magnetic Share Buttons - v79.3
+ * Fortune 500 Social Sharing Enhancement
+ */
+
+.magnetic-share-container {
+  position: fixed;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.magnetic-share-toggle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #C9CED6, #9ca3af);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #0f0f10;
+  box-shadow: 
+    0 4px 20px rgba(201, 206, 214, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  z-index: 2;
+}
+
+.magnetic-share-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 
+    0 6px 30px rgba(201, 206, 214, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.magnetic-share-toggle.active {
+  transform: rotate(45deg) scale(1.1);
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+}
+
+.magnetic-share-toggle .pulse-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid #C9CED6;
+  animation: share-pulse 2s ease infinite;
+}
+
+@keyframes share-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.magnetic-share-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.9);
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.magnetic-share-menu.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.magnetic-share-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #fff;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.magnetic-share-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+    rgba(255,255,255,0.3) 0%, 
+    transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.magnetic-share-btn:hover::before {
+  opacity: 1;
+}
+
+.magnetic-share-btn.twitter {
+  background: linear-gradient(135deg, #1da1f2, #0d8bd9);
+}
+
+.magnetic-share-btn.facebook {
+  background: linear-gradient(135deg, #4267B2, #365899);
+}
+
+.magnetic-share-btn.linkedin {
+  background: linear-gradient(135deg, #0077b5, #005885);
+}
+
+.magnetic-share-btn.whatsapp {
+  background: linear-gradient(135deg, #25d366, #128c7e);
+}
+
+.magnetic-share-btn.email {
+  background: linear-gradient(135deg, #ea4335, #c53929);
+}
+
+.magnetic-share-btn.copy {
+  background: linear-gradient(135deg, #6b7280, #4b5563);
+}
+
+.magnetic-share-btn:hover {
+  transform: scale(1.15) translateX(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.magnetic-share-btn .tooltip {
+  position: absolute;
+  right: 60px;
+  background: rgba(15, 15, 16, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #C9CED6;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(10px);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.magnetic-share-btn .tooltip::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 5px 0 5px 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent rgba(15, 15, 16, 0.95);
+}
+
+.magnetic-share-btn:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+/* Copy Success Animation */
+.magnetic-share-btn.copied {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+}
+
+.magnetic-share-btn.copied .tooltip {
+  content: 'Copied!';
+}
+
+/* Mobile Bottom Sheet */
+.magnetic-share-mobile-trigger {
+  display: none;
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #C9CED6, #9ca3af);
+  border: none;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #0f0f10;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 999;
+}
+
+.magnetic-share-sheet {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(15, 15, 16, 0.98);
+  backdrop-filter: blur(20px);
+  border-radius: 24px 24px 0 0;
+  padding: 24px;
+  z-index: 1000;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.magnetic-share-sheet.active {
+  transform: translateY(0);
+}
+
+.magnetic-share-sheet-handle {
+  width: 40px;
+  height: 4px;
+  background: rgba(201, 206, 214, 0.3);
+  border-radius: 2px;
+  margin: 0 auto 20px;
+}
+
+.magnetic-share-sheet-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #F5F7FA;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.magnetic-share-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.magnetic-share-grid-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(201, 206, 214, 0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.magnetic-share-grid-item:hover {
+  background: rgba(201, 206, 214, 0.1);
+  transform: translateY(-2px);
+}
+
+.magnetic-share-grid-item .icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #fff;
+}
+
+.magnetic-share-grid-item .label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: rgba(201, 206, 214, 0.8);
+}
+
+.magnetic-share-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.magnetic-share-overlay.active {
+  opacity: 1;
+}
+
+/* Inline Share Bar */
+.magnetic-share-inline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  background: rgba(201, 206, 214, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.magnetic-share-inline-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: rgba(201, 206, 214, 0.7);
+  margin-right: auto;
+}
+
+.magnetic-share-inline-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(201, 206, 214, 0.1);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #C9CED6;
+  transition: all 0.3s ease;
+}
+
+.magnetic-share-inline-btn:hover {
+  background: rgba(201, 206, 214, 0.2);
+  transform: translateY(-2px);
+  color: #F5F7FA;
+}
+
+/* Share Count Badge */
+.magnetic-share-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  animation: share-count-pop 0.3s ease;
+}
+
+@keyframes share-count-pop {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .magnetic-share-container {
+    display: none;
+  }
+  
+  .magnetic-share-mobile-trigger {
+    display: flex;
+  }
+  
+  .magnetic-share-sheet,
+  .magnetic-share-overlay {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .magnetic-share-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Print */
+@media print {
+  .magnetic-share-container,
+  .magnetic-share-mobile-trigger,
+  .magnetic-share-sheet,
+  .magnetic-share-overlay {
+    display: none !important;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .magnetic-share-btn,
+  .magnetic-share-toggle,
+  .magnetic-share-menu {
+    transition: none;
+  }
+  
+  .pulse-ring {
+    animation: none;
+  }
+}
