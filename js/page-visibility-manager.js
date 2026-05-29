@@ -1,22 +1,33 @@
 /**
- * PAGE VISIBILITY MANAGER - v44 Fortune 500
- * Intelligently pauses/resumes animations and heavy operations when tab is hidden
- * Saves battery life and improves performance
+ * v73.2: PAGE VISIBILITY & PERFORMANCE MANAGER
+ * Fortune 500 Quality Resource Management
  */
 
 class PageVisibilityManager {
-  constructor() {
-    this.isVisible = !document.hidden;
-    this.isActive = true;
-    this.pausedAnimations = new Map();
-    this.pausedIntervals = new Map();
-    this.pausedTimeouts = new Map();
-    this.observers = new Set();
-    this.frameId = null;
-    this.stats = {
-      timeHidden: 0,
-      animationsPaused: 0,
-      batterySaved: 0
+  constructor(options = {}) {
+    this.options = {
+      pauseVideos: true,
+      pauseAnimations: true,
+      reduceFpsWhenHidden: true,
+      hiddenFps: 1,
+      resumeDelay: 100,
+      ...options
+    };
+    
+    this.isVisible = true;
+    this.isFocused = true;
+    this.pausedElements = new Set();
+    this.intervals = new Map();
+    this.timeouts = new Set();
+    this.lowPowerMode = false;
+    
+    // Performance metrics
+    this.metrics = {
+      hiddenTime: 0,
+      visibleTime: 0,
+      lastVisibilityChange: Date.now(),
+      frameDrops: 0,
+      activeIntervals: 0
     };
     
     this.init();
@@ -24,537 +35,355 @@ class PageVisibilityManager {
   
   init() {
     this.bindEvents();
-    this.overrideNativeAPIs();
-    this.initIntersectionObserver();
-    this.initBatteryOptimization();
-    this.startStatsTracking();
-    
-    console.log('🔋 Page Visibility Manager: Initialized');
+    this.setupBatteryMonitoring();
+    this.setupPerformanceObserver();
   }
   
   bindEvents() {
-    // Visibility change
-    document.addEventListener('visibilitychange', () => this.handleVisibilityChange());
+    // Page visibility
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        this.onHide();
+      } else {
+        this.onShow();
+      }
+    });
     
-    // Window focus/blur
-    window.addEventListener('blur', () => this.handleBlur());
-    window.addEventListener('focus', () => this.handleFocus());
-    
-    // Page lifecycle events (if supported)
-    if ('onfreeze' in document) {
-      document.addEventListener('freeze', () => this.handleFreeze());
-      document.addEventListener('resume', () => this.handleResume());
-    }
+    // Window focus
+    window.addEventListener('blur', () => this.onBlur());
+    window.addEventListener('focus', () => this.onFocus());
     
     // Before unload
-    window.addEventListener('beforeunload', () => this.handleBeforeUnload());
-  }
-  
-  handleVisibilityChange() {
-    this.isVisible = !document.hidden;
+    window.addEventListener('beforeunload', () => this.onUnload());
     
-    if (this.isVisible) {
-      this.resume();
-      console.log('👁️ Page Visibility Manager: Tab became visible');
-    } else {
-      this.pause();
-      console.log('👁️ Page Visibility Manager: Tab hidden, pausing operations');
+    // Device orientation (mobile)
+    if ('ondeviceorientationabsolute' in window) {
+      window.addEventListener('deviceorientationabsolute', (e) => {
+        this.handleOrientation(e);
+      });
     }
+  }
+  
+  onHide() {
+    this.isVisible = false;
+    this.metrics.lastVisibilityChange = Date.now();
     
-    this.notifyObservers('visibility', this.isVisible);
-  }
-  
-  handleBlur() {
-    this.isActive = false;
-    // Don't pause immediately on blur - tab might still be visible
-    setTimeout(() => {
-      if (!this.isActive && this.isVisible) {
-        this.reduceFrameRate();
-      }
-    }, 5000);
-  }
-  
-  handleFocus() {
-    this.isActive = true;
-    this.restoreFrameRate();
-  }
-  
-  handleFreeze() {
-    console.log('❄️ Page Visibility Manager: Page frozen by browser');
-    this.pause(true);
-  }
-  
-  handleResume() {
-    console.log('🔄 Page Visibility Manager: Page resumed');
-    this.resume(true);
-  }
-  
-  handleBeforeUnload() {
-    this.dispose();
-  }
-  
-  pause(aggressive = false) {
-    const startTime = performance.now();
+    // Pause videos
+    if (this.options.pauseVideos) {
+      document.querySelectorAll('video').forEach(video => {
+        if (!video.paused) {
+          video.pause();
+          this.pausedElements.add(video);
+        }
+      });
+    }
     
     // Pause CSS animations
-    this.pauseCSSAnimations();
-    
-    // Pause WebGL/Canvas animations
-    this.pauseCanvasAnimations();
-    
-    // Pause video playback
-    this.pauseVideos();
-    
-    // Pause heavy JavaScript animations
-    this.pauseJSAnimations();
-    
-    // Pause requestAnimationFrame loops
-    this.pauseRAF();
-    
-    // Reduce timer frequency
-    this.pauseTimers(aggressive);
-    
-    // Pause observers
-    this.pauseObservers();
-    
-    // Stop network polling
-    this.pauseNetworkActivity();
-    
-    if (aggressive) {
-      // Clear non-critical caches
-      this.clearNonCriticalCaches();
-    }
-    
-    this.stats.animationsPaused++;
-    console.log(`⏸️ Page Visibility Manager: Paused in ${Math.round(performance.now() - startTime)}ms`);
-  }
-  
-  resume(force = false) {
-    const startTime = performance.now();
-    
-    // Resume CSS animations
-    this.resumeCSSAnimations();
-    
-    // Resume Canvas animations
-    this.resumeCanvasAnimations();
-    
-    // Resume videos if they were playing
-    this.resumeVideos();
-    
-    // Resume JS animations
-    this.resumeJSAnimations();
-    
-    // Resume RAF
-    this.resumeRAF();
-    
-    // Resume timers
-    this.resumeTimers();
-    
-    // Resume observers
-    this.resumeObservers();
-    
-    // Resume network activity
-    this.resumeNetworkActivity();
-    
-    console.log(`▶️ Page Visibility Manager: Resumed in ${Math.round(performance.now() - startTime)}ms`);
-  }
-  
-  // CSS Animation Management
-  pauseCSSAnimations() {
-    const animatedElements = document.querySelectorAll([
-      '[class*="animate"]',
-      '[class*="marquee"]',
-      '[class*="pulse"]',
-      '[class*="float"]',
-      '.aurora-background',
-      '.neural-network-bg',
-      '.hero-typewriter'
-    ].join(', '));
-    
-    animatedElements.forEach(el => {
-      const computedStyle = window.getComputedStyle(el);
-      if (computedStyle.animationPlayState === 'running') {
-        this.pausedAnimations.set(el, {
-          animationPlayState: 'running',
-          transitionProperty: computedStyle.transitionProperty
-        });
+    if (this.options.pauseAnimations) {
+      document.querySelectorAll('.animating, [data-animating]').forEach(el => {
         el.style.animationPlayState = 'paused';
-      }
-    });
-  }
-  
-  resumeCSSAnimations() {
-    this.pausedAnimations.forEach((state, el) => {
-      el.style.animationPlayState = 'running';
-    });
-    this.pausedAnimations.clear();
-  }
-  
-  // Canvas/WebGL Animation Management
-  pauseCanvasAnimations() {
-    const canvases = document.querySelectorAll('canvas');
-    canvases.forEach(canvas => {
-      if (canvas.dataset.animating === 'true') {
-        canvas.dataset.wasAnimating = 'true';
-        canvas.dataset.animating = 'false';
-      }
-    });
-  }
-  
-  resumeCanvasAnimations() {
-    const canvases = document.querySelectorAll('canvas[data-was-animating="true"]');
-    canvases.forEach(canvas => {
-      canvas.dataset.animating = 'true';
-      canvas.dataset.wasAnimating = 'false';
-    });
-  }
-  
-  // Video Management
-  pauseVideos() {
-    const videos = document.querySelectorAll('video');
-    videos.forEach(video => {
-      if (!video.paused) {
-        video.dataset.wasPlaying = 'true';
-        video.pause();
-      }
-    });
-  }
-  
-  resumeVideos() {
-    const videos = document.querySelectorAll('video[data-was-playing="true"]');
-    videos.forEach(video => {
-      video.play().catch(() => {}); // Ignore autoplay restrictions
-      video.removeAttribute('data-was-playing');
-    });
-  }
-  
-  // JavaScript Animation Management
-  pauseJSAnimations() {
-    // Pause GSAP/Tween animations if present
-    if (window.gsap && window.gsap.globalTimeline) {
-      window.gsap.globalTimeline.pause();
-    }
-    
-    // Pause custom animation libraries
-    document.dispatchEvent(new CustomEvent('visibility:pause'));
-  }
-  
-  resumeJSAnimations() {
-    if (window.gsap && window.gsap.globalTimeline) {
-      window.gsap.globalTimeline.resume();
-    }
-    
-    document.dispatchEvent(new CustomEvent('visibility:resume'));
-  }
-  
-  // RequestAnimationFrame Management
-  pauseRAF() {
-    if (this.frameId) {
-      cancelAnimationFrame(this.frameId);
-      this.frameId = null;
-    }
-  }
-  
-  resumeRAF() {
-    // RAF will be restarted by individual components listening to visibility events
-  }
-  
-  // Timer Management
-  pauseTimers(aggressive) {
-    // Store original setInterval
-    if (!window._originalSetInterval) {
-      window._originalSetInterval = window.setInterval;
-      window.setInterval = this.createWrappedInterval.bind(this);
-    }
-    
-    if (!window._originalSetTimeout) {
-      window._originalSetTimeout = window.setTimeout;
-      window.setTimeout = this.createWrappedTimeout.bind(this);
-    }
-    
-    // Reduce frequency of existing intervals when hidden
-    if (aggressive) {
-      this.pausedIntervals.forEach((info, id) => {
-        window._originalClearInterval(id);
+        this.pausedElements.add(el);
       });
     }
-  }
-  
-  resumeTimers() {
-    // Timers will be recreated as needed
-  }
-  
-  createWrappedInterval(callback, delay, ...args) {
-    const id = window._originalSetInterval(() => {
-      if (!document.hidden || delay <= 1000) {
-        callback(...args);
-      }
-    }, delay);
     
-    this.pausedIntervals.set(id, { callback, delay, args });
-    return id;
-  }
-  
-  createWrappedTimeout(callback, delay, ...args) {
-    const id = window._originalSetTimeout(() => {
-      callback(...args);
-      this.pausedTimeouts.delete(id);
-    }, delay);
-    
-    this.pausedTimeouts.set(id, { callback, delay, args });
-    return id;
-  }
-  
-  // Observer Management
-  pauseObservers() {
-    this.observers.forEach(observer => {
-      try {
-        observer.disconnect();
-      } catch (e) {}
-    });
-  }
-  
-  resumeObservers() {
-    this.initIntersectionObserver();
-  }
-  
-  // Network Activity Management
-  pauseNetworkActivity() {
-    // Pause real-time updates
-    document.dispatchEvent(new CustomEvent('network:pause'));
-    
-    // Reduce fetch frequency
-    if (window.EventSource) {
-      const eventSources = document.querySelectorAll('[data-eventsource]');
-      eventSources.forEach(source => {
-        if (source._eventSource) {
-          source._eventSource.close();
-        }
-      });
+    // Reduce RAF frequency
+    if (this.options.reduceFpsWhenHidden) {
+      this.throttleRAF();
     }
-  }
-  
-  resumeNetworkActivity() {
-    document.dispatchEvent(new CustomEvent('network:resume'));
-  }
-  
-  // Cache Management
-  clearNonCriticalCaches() {
-    // Clear image caches that aren't currently visible
-    const images = document.querySelectorAll('img[data-src]:not([data-loaded])');
-    images.forEach(img => {
-      img.removeAttribute('src');
-    });
-  }
-  
-  // Frame Rate Management
-  reduceFrameRate() {
-    document.body.style.setProperty('--animation-play-state', 'paused');
-  }
-  
-  restoreFrameRate() {
-    document.body.style.removeProperty('--animation-play-state');
-  }
-  
-  // Override Native APIs for consistent behavior
-  overrideNativeAPIs() {
-    // Wrap requestAnimationFrame
-    const originalRAF = window.requestAnimationFrame;
-    window.requestAnimationFrame = (callback) => {
-      if (document.hidden) {
-        // Defer until visible
-        return setTimeout(() => {
-          if (!document.hidden) {
-            originalRAF(callback);
-          }
-        }, 100);
-      }
-      return originalRAF(callback);
-    };
     
-    // Store references for cleanup
-    window._originalRequestAnimationFrame = originalRAF;
+    // Dispatch custom event
+    window.dispatchEvent(new CustomEvent('visibility:hidden'));
+    
+    console.log('[PageVisibility] Paused for background');
   }
   
-  // Intersection Observer for off-screen elements
-  initIntersectionObserver() {
-    if (!('IntersectionObserver' in window)) return;
+  onShow() {
+    const hiddenDuration = Date.now() - this.metrics.lastVisibilityChange;
+    this.metrics.hiddenTime += hiddenDuration;
+    this.isVisible = true;
     
-    this.intersectionObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        const el = entry.target;
-        
-        if (entry.isIntersecting) {
-          el.dataset.inViewport = 'true';
-          // Resume animations for visible elements
-          if (el.style.animationPlayState === 'paused') {
-            el.style.animationPlayState = 'running';
-          }
+    // Resume videos after a short delay to avoid flash
+    setTimeout(() => {
+      this.pausedElements.forEach(el => {
+        if (el.tagName === 'VIDEO') {
+          el.play().catch(() => {});
         } else {
-          el.dataset.inViewport = 'false';
-          // Pause animations for off-screen elements
-          if (!document.hidden && el.dataset.alwaysAnimate !== 'true') {
-            el.style.animationPlayState = 'paused';
-          }
+          el.style.animationPlayState = 'running';
         }
       });
-    }, {
-      root: null,
-      rootMargin: '50px',
-      threshold: 0
-    });
+      this.pausedElements.clear();
+    }, this.options.resumeDelay);
     
-    // Observe animated elements
-    const animatedElements = document.querySelectorAll([
-      '.marquee-track',
-      '.floating-stats',
-      '.counter-gold',
-      '.aurora-background',
-      '[class*="animate"]'
-    ].join(', '));
+    // Restore RAF
+    this.restoreRAF();
     
-    animatedElements.forEach(el => {
-      this.intersectionObserver.observe(el);
-    });
+    // Dispatch custom event
+    window.dispatchEvent(new CustomEvent('visibility:visible', {
+      detail: { hiddenDuration }
+    }));
+    
+    console.log('[PageVisibility] Resumed after', hiddenDuration, 'ms');
   }
   
-  // Battery Optimization
-  initBatteryOptimization() {
+  onBlur() {
+    this.isFocused = false;
+    window.dispatchEvent(new CustomEvent('window:blur'));
+  }
+  
+  onFocus() {
+    this.isFocused = true;
+    this.metrics.visibleTime += Date.now() - this.metrics.lastVisibilityChange;
+    window.dispatchEvent(new CustomEvent('window:focus'));
+  }
+  
+  onUnload() {
+    // Cleanup
+    this.intervals.forEach((id) => clearInterval(id));
+    this.timeouts.forEach((id) => clearTimeout(id));
+  }
+  
+  // Battery monitoring for power saving
+  async setupBatteryMonitoring() {
     if ('getBattery' in navigator) {
-      navigator.getBattery().then(battery => {
-        this.battery = battery;
+      try {
+        const battery = await navigator.getBattery();
         
-        battery.addEventListener('levelchange', () => this.handleBatteryChange());
-        battery.addEventListener('chargingchange', () => this.handleBatteryChange());
+        const updateBatteryStatus = () => {
+          this.lowPowerMode = battery.level < 0.2 || !battery.charging;
+          
+          if (this.lowPowerMode) {
+            this.enableLowPowerMode();
+          }
+          
+          window.dispatchEvent(new CustomEvent('battery:change', {
+            detail: {
+              level: battery.level,
+              charging: battery.charging,
+              lowPower: this.lowPowerMode
+            }
+          }));
+        };
         
-        this.handleBatteryChange();
-      });
-    }
-  }
-  
-  handleBatteryChange() {
-    if (!this.battery) return;
-    
-    const isLowBattery = this.battery.level < 0.2 && !this.battery.charging;
-    
-    if (isLowBattery) {
-      document.body.classList.add('low-battery-mode');
-      this.applyBatteryOptimizations();
-    } else {
-      document.body.classList.remove('low-battery-mode');
-      this.removeBatteryOptimizations();
-    }
-  }
-  
-  applyBatteryOptimizations() {
-    // Disable non-essential animations
-    document.documentElement.style.setProperty('--disable-animations', '1');
-    
-    // Reduce polling frequency
-    this.stopNonCriticalTimers();
-    
-    console.log('🔋 Battery optimization enabled');
-  }
-  
-  removeBatteryOptimizations() {
-    document.documentElement.style.removeProperty('--disable-animations');
-    console.log('🔋 Battery optimization disabled');
-  }
-  
-  stopNonCriticalTimers() {
-    // Clear non-critical intervals
-    this.pausedIntervals.forEach((info, id) => {
-      if (info.delay < 5000) { // Non-critical = less frequent than 5 seconds
-        window._originalClearInterval(id);
+        battery.addEventListener('levelchange', updateBatteryStatus);
+        battery.addEventListener('chargingchange', updateBatteryStatus);
+        updateBatteryStatus();
+      } catch (e) {
+        console.log('Battery API not available');
       }
+    }
+  }
+  
+  enableLowPowerMode() {
+    // Reduce animations
+    document.body.classList.add('low-power-mode');
+    
+    // Disable heavy effects
+    document.querySelectorAll('[data-heavy-effect]').forEach(el => {
+      el.style.display = 'none';
     });
+    
+    console.log('[PageVisibility] Low power mode enabled');
   }
   
-  // Stats Tracking
-  startStatsTracking() {
-    setInterval(() => {
-      if (document.hidden) {
-        this.stats.timeHidden += 1;
-        this.stats.batterySaved += this.estimateBatterySavings();
+  // Performance monitoring
+  setupPerformanceObserver() {
+    if ('PerformanceObserver' in window) {
+      // Long task observer
+      try {
+        const longTaskObserver = new PerformanceObserver((list) => {
+          for (const entry of list.getEntries()) {
+            console.warn('[Performance] Long task detected:', entry.duration, 'ms');
+            this.metrics.frameDrops++;
+            
+            window.dispatchEvent(new CustomEvent('performance:longtask', {
+              detail: { duration: entry.duration }
+            }));
+          }
+        });
+        longTaskObserver.observe({ entryTypes: ['longtask'] });
+      } catch (e) {
+        // Long task observer not supported
       }
-    }, 1000);
+      
+      // Layout shift observer
+      try {
+        const layoutObserver = new PerformanceObserver((list) => {
+          let cls = 0;
+          for (const entry of list.getEntries()) {
+            if (!entry.hadRecentInput) {
+              cls += entry.value;
+            }
+          }
+          
+          if (cls > 0.1) {
+            console.warn('[Performance] High CLS detected:', cls);
+          }
+        });
+        layoutObserver.observe({ entryTypes: ['layout-shift'] });
+      } catch (e) {
+        // Layout shift observer not supported
+      }
+    }
   }
   
-  estimateBatterySavings() {
-    // Rough estimate based on typical animation CPU usage
-    return this.pausedAnimations.size * 0.5; // mWh per second
+  // Smart RAF throttling
+  throttleRAF() {
+    if (this._originalRAF) return;
+    
+    this._originalRAF = window.requestAnimationFrame;
+    this._rafCallbacks = new Map();
+    this._rafId = 0;
+    
+    window.requestAnimationFrame = (callback) => {
+      const id = ++this._rafId;
+      this._rafCallbacks.set(id, callback);
+      return id;
+    };
+    
+    // Run at reduced frame rate
+    this._throttledLoop = setInterval(() => {
+      this._rafCallbacks.forEach((callback, id) => {
+        callback(performance.now());
+      });
+      this._rafCallbacks.clear();
+    }, 1000 / this.options.hiddenFps);
   }
   
-  getStats() {
+  restoreRAF() {
+    if (!this._originalRAF) return;
+    
+    clearInterval(this._throttledLoop);
+    window.requestAnimationFrame = this._originalRAF;
+    
+    // Execute any pending callbacks
+    this._rafCallbacks?.forEach((callback) => {
+      this._originalRAF(callback);
+    });
+    
+    this._originalRAF = null;
+    this._rafCallbacks = null;
+  }
+  
+  // Smart interval management
+  createSmartInterval(callback, delay, options = {}) {
+    const id = Symbol('interval');
+    let lastRun = 0;
+    
+    const wrappedCallback = () => {
+      const now = Date.now();
+      
+      // Skip if page is hidden and option is set
+      if (!this.isVisible && options.pauseWhenHidden) {
+        lastRun = now;
+        return;
+      }
+      
+      // Adjust for missed time when hidden
+      if (options.catchUp && lastRun > 0) {
+        const missed = now - lastRun - delay;
+        if (missed > delay) {
+          callback(missed);
+        }
+      }
+      
+      lastRun = now;
+      callback();
+    };
+    
+    const intervalId = setInterval(wrappedCallback, delay);
+    this.intervals.set(id, intervalId);
+    this.metrics.activeIntervals++;
+    
     return {
-      ...this.stats,
-      currentState: {
-        isVisible: this.isVisible,
-        isActive: this.isActive,
-        animationsPaused: this.pausedAnimations.size
+      id,
+      clear: () => this.clearSmartInterval(id)
+    };
+  }
+  
+  clearSmartInterval(id) {
+    const intervalId = this.intervals.get(id);
+    if (intervalId) {
+      clearInterval(intervalId);
+      this.intervals.delete(id);
+      this.metrics.activeIntervals--;
+    }
+  }
+  
+  // Visibility-aware timeout
+  setSmartTimeout(callback, delay, options = {}) {
+    const startTime = Date.now();
+    let elapsedHidden = 0;
+    
+    const check = () => {
+      if (!this.isVisible) {
+        elapsedHidden += 100;
+        setTimeout(check, 100);
+        return;
+      }
+      
+      const elapsed = Date.now() - startTime - elapsedHidden;
+      
+      if (elapsed >= delay) {
+        callback();
+      } else {
+        setTimeout(check, Math.min(100, delay - elapsed));
+      }
+    };
+    
+    const timeoutId = setTimeout(check, delay);
+    this.timeouts.add(timeoutId);
+    
+    return {
+      clear: () => {
+        clearTimeout(timeoutId);
+        this.timeouts.delete(timeoutId);
       }
     };
   }
   
-  // Observer Pattern for Components
-  subscribe(callback) {
-    this.observers.add(callback);
-    return () => this.observers.delete(callback);
-  }
-  
-  notifyObservers(type, data) {
-    this.observers.forEach(callback => {
-      try {
-        callback(type, data);
-      } catch (e) {
-        console.error('Error in visibility observer:', e);
+  // Device orientation handling
+  handleOrientation(event) {
+    // Pause heavy effects when device is moving rapidly (likely in pocket)
+    if (event.alpha && event.beta && event.gamma) {
+      const movement = Math.abs(event.alpha) + Math.abs(event.beta) + Math.abs(event.gamma);
+      
+      if (movement > 100) {
+        document.body.classList.add('device-in-motion');
+      } else {
+        document.body.classList.remove('device-in-motion');
       }
-    });
+    }
   }
   
   // Public API
-  onVisibilityChange(callback) {
-    return this.subscribe((type, data) => {
-      if (type === 'visibility') {
-        callback(data);
-      }
-    });
+  getMetrics() {
+    return {
+      ...this.metrics,
+      isVisible: this.isVisible,
+      isFocused: this.isFocused,
+      lowPowerMode: this.lowPowerMode
+    };
   }
   
-  onPause(callback) {
-    document.addEventListener('visibility:pause', callback);
-    return () => document.removeEventListener('visibility:pause', callback);
-  }
-  
-  onResume(callback) {
-    document.addEventListener('visibility:resume', callback);
-    return () => document.removeEventListener('visibility:resume', callback);
-  }
-  
-  isPageVisible() {
-    return this.isVisible;
-  }
-  
-  isPageActive() {
-    return this.isActive;
-  }
-  
-  dispose() {
-    this.resume();
-    this.observers.clear();
-    
-    if (this.intersectionObserver) {
-      this.intersectionObserver.disconnect();
+  whenVisible(callback) {
+    if (this.isVisible) {
+      callback();
+    } else {
+      const handler = () => {
+        callback();
+        window.removeEventListener('visibility:visible', handler);
+      };
+      window.addEventListener('visibility:visible', handler);
     }
-    
-    console.log('🧹 Page Visibility Manager: Disposed');
   }
 }
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-  window.pageVisibilityManager = new PageVisibilityManager();
+  window.visibilityManager = new PageVisibilityManager();
 });
 
-// Expose to global for debugging
-window.PageVisibilityManager = PageVisibilityManager;
+// Export
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = PageVisibilityManager;
+}

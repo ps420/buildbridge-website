@@ -1,0 +1,441 @@
+/* ========================================
+   v73.0: SCROLL-LINKED ANIMATIONS SYSTEM
+   Fortune 500 Quality Scroll-Driven Effects
+   ======================================== */
+
+/* Base Scroll Animation Container */
+.scroll-animation-container {
+  position: relative;
+}
+
+/* Progress-Based Animations */
+[data-scroll-animate] {
+  --scroll-progress: 0;
+  --scroll-start: 0;
+  --scroll-end: 1;
+  
+  animation-play-state: paused;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  animation-timing-function: linear;
+  animation-delay: calc(var(--scroll-progress) * -1s);
+}
+
+/* Scroll Fade Up */
+@keyframes scroll-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+[data-scroll-animate="fade-up"] {
+  animation-name: scroll-fade-up;
+}
+
+/* Scroll Fade Scale */
+@keyframes scroll-fade-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+[data-scroll-animate="fade-scale"] {
+  animation-name: scroll-fade-scale;
+}
+
+/* Scroll Slide from Left */
+@keyframes scroll-slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+[data-scroll-animate="slide-left"] {
+  animation-name: scroll-slide-left;
+}
+
+/* Scroll Slide from Right */
+@keyframes scroll-slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+[data-scroll-animate="slide-right"] {
+  animation-name: scroll-slide-right;
+}
+
+/* Scroll Rotate In */
+@keyframes scroll-rotate-in {
+  from {
+    opacity: 0;
+    transform: rotate(-15deg) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+  }
+}
+
+[data-scroll-animate="rotate-in"] {
+  animation-name: scroll-rotate-in;
+}
+
+/* Scroll Blur In */
+@keyframes scroll-blur-in {
+  from {
+    opacity: 0;
+    filter: blur(20px);
+    transform: scale(1.1);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+  }
+}
+
+[data-scroll-animate="blur-in"] {
+  animation-name: scroll-blur-in;
+}
+
+/* Scroll Clip Reveal */
+@keyframes scroll-clip-reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+[data-scroll-animate="clip-reveal"] {
+  animation-name: scroll-clip-reveal;
+}
+
+/* Scroll Character Reveal */
+@keyframes scroll-char-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(100%) rotateX(-90deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
+}
+
+[data-scroll-animate="char-reveal"] {
+  animation-name: scroll-char-reveal;
+  perspective: 1000px;
+}
+
+/* Parallax Scroll Effects */
+[data-parallax] {
+  will-change: transform;
+  transform: translateY(calc(var(--parallax-offset, 0) * var(--parallax-speed, 0.5)));
+}
+
+[data-parallax-speed="slow"] {
+  --parallax-speed: 0.3;
+}
+
+[data-parallax-speed="medium"] {
+  --parallax-speed: 0.5;
+}
+
+[data-parallax-speed="fast"] {
+  --parallax-speed: 0.8;
+}
+
+/* Stagger Children Animation */
+[data-scroll-stagger] > * {
+  --stagger-delay: calc(var(--stagger-index, 0) * var(--stagger-amount, 0.1s));
+  animation-delay: calc(var(--scroll-progress) * -1s + var(--stagger-delay));
+}
+
+/* Scroll Progress Indicator Line */
+.scroll-progress-line {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100vh;
+  background: linear-gradient(
+    180deg,
+    var(--chrome) 0%,
+    var(--slate) var(--scroll-percent, 0%),
+    transparent var(--scroll-percent, 0%)
+  );
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.scroll-progress-line:hover {
+  opacity: 1;
+}
+
+/* Section Reveal Markers */
+.scroll-section-marker {
+  position: absolute;
+  left: 20px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.2);
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.scroll-section-marker:hover,
+.scroll-section-marker.active {
+  background: var(--chrome);
+  border-color: var(--slate);
+  transform: scale(1.2);
+}
+
+/* Scroll-Linked Background Transform */
+.scroll-bg-transform {
+  --bg-scale: calc(1 + var(--scroll-progress) * 0.2);
+  --bg-rotate: calc(var(--scroll-progress) * 5deg);
+  
+  transform: scale(var(--bg-scale)) rotate(var(--bg-rotate));
+  transition: transform 0.1s linear;
+}
+
+/* Scroll-Linked Text Effects */
+.scroll-text-reveal {
+  background: linear-gradient(
+    90deg,
+    var(--white) calc(var(--scroll-progress) * 100%),
+    rgba(245, 247, 250, 0.2) calc(var(--scroll-progress) * 100%)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Scroll-Linked Image Reveal */
+.scroll-image-reveal {
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-image-reveal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--black);
+  transform: translateY(calc((1 - var(--scroll-progress)) * 100%));
+  transition: transform 0.1s linear;
+}
+
+.scroll-image-reveal.revealed::after {
+  transform: translateY(100%);
+}
+
+/* Velocity-Based Skew */
+[data-velocity-skew] {
+  --skew-amount: calc(var(--scroll-velocity, 0) * var(--skew-multiplier, 0.5deg));
+  transform: skewY(var(--skew-amount));
+  transition: transform 0.15s ease-out;
+}
+
+/* Smooth Scroll Snap Points */
+.scroll-snap-container {
+  scroll-snap-type: y proximity;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.scroll-snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  min-height: 100vh;
+}
+
+/* Intersection Observer Animations */
+.io-animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.io-animate.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.io-animate.in-view.delay-1 { transition-delay: 0.1s; }
+.io-animate.in-view.delay-2 { transition-delay: 0.2s; }
+.io-animate.in-view.delay-3 { transition-delay: 0.3s; }
+.io-animate.in-view.delay-4 { transition-delay: 0.4s; }
+.io-animate.in-view.delay-5 { transition-delay: 0.5s; }
+
+/* 3D Scroll Perspective */
+.scroll-perspective-container {
+  perspective: 1000px;
+  perspective-origin: center;
+}
+
+.scroll-3d-element {
+  --rotate-x: calc(var(--scroll-progress) * var(--max-rotate, 10deg));
+  transform: rotateX(var(--rotate-x));
+  transform-style: preserve-3d;
+  transition: transform 0.1s linear;
+}
+
+/* Scroll-Based Opacity Layers */
+.scroll-opacity-layer {
+  --layer-opacity: calc(1 - var(--scroll-progress) * var(--fade-speed, 1));
+  opacity: max(0, min(1, var(--layer-opacity)));
+}
+
+/* Horizontal Scroll Section */
+.horizontal-scroll-container {
+  position: relative;
+  height: 300vh;
+}
+
+.horizontal-scroll-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.horizontal-scroll-track {
+  display: flex;
+  gap: 60px;
+  padding: 0 10vw;
+  will-change: transform;
+  transform: translateX(calc(var(--scroll-progress) * var(--scroll-distance, -100%)));
+}
+
+/* Pin Scroll Section */
+.pin-scroll-section {
+  position: relative;
+}
+
+.pin-scroll-content {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Morphing SVG on Scroll */
+.scroll-morph-svg {
+  --morph-progress: var(--scroll-progress);
+}
+
+.scroll-morph-svg path {
+  transition: d 0.3s ease;
+}
+
+/* Reading Progress Bar */
+.reading-progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(201, 206, 214, 0.1);
+  z-index: 9999;
+}
+
+.reading-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--chrome), var(--slate));
+  width: calc(var(--scroll-percent) * 1%);
+  transition: width 0.1s linear;
+  box-shadow: 0 0 10px var(--chrome);
+}
+
+/* Section Counter */
+.section-counter {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--slate);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-counter-current {
+  font-size: 24px;
+  color: var(--chrome);
+}
+
+.section-counter-divider {
+  width: 40px;
+  height: 1px;
+  background: rgba(201, 206, 214, 0.3);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  [data-scroll-animate],
+  [data-parallax],
+  .io-animate {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
+  
+  .scroll-bg-transform,
+  .scroll-3d-element {
+    transform: none !important;
+  }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .scroll-progress-line {
+    width: 2px;
+  }
+  
+  .section-counter {
+    bottom: 20px;
+    right: 20px;
+    font-size: 12px;
+  }
+  
+  .section-counter-current {
+    font-size: 18px;
+  }
+}
