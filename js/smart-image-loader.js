@@ -1,350 +1,431 @@
-/**
- * v58.0: Smart Image Loader
- * Fortune 500 - Progressive image loading with blur-up and intersection observer
- */
+/* ============================================
+   v70.0: SMART IMAGE LOADER
+   Progressive Loading with Blur-up & LQIP
+   ============================================ */
 
 class SmartImageLoader {
   constructor(options = {}) {
     this.options = {
-      rootMargin: '50px 0px',
-      threshold: 0.01,
-      blurAmount: 20,
-      transitionDuration: 500,
-      enableBlurUp: true,
-      enableSkeleton: true,
-      preloadBuffer: 2,
+      rootMargin: options.rootMargin || '50px',
+      threshold: options.threshold || 0.01,
+      enableLqip: options.enableLqip !== false,
+      enableBlurUp: options.enableBlurUp !== false,
+      enableSkeleton: options.enableSkeleton !== false,
+      transitionDelay: options.transitionDelay || 100,
       ...options
     };
     
     this.observer = null;
-    this.imageQueue = [];
-    this.loadedImages = new Set();
-    this.isWebPSupported = false;
+    this.imageCache = new Map();
+    this.loadingQueue = [];
+    this.maxConcurrent = 3;
+    this.currentlyLoading = 0;
     
-    this.init();
-  }
-  
-  async init() {
-    await this.checkWebPSupport();
-    this.setupObserver();
-    this.findImages();
-    this.bindEvents();
-    
-    console.log('🖼️ SmartImageLoader v58.0 initialized');
-  }
-  
-  async checkWebPSupport() {
-    return new Promise((resolve) => {
-      const webP = new Image();
-      webP.onload = () => {
-        this.isWebPSupported = true;
-        document.body.classList.add('webp-support');
-        resolve(true);
-      };
-      webP.onerror = () => {
-        document.body.classList.add('no-webp-support');
-        resolve(false);
-      };
-      webP.src = 'data:image/webp;base64,UklGRhoAAABXRUJQVlA4TA0AAAAvAAAAEAcQERGIiP4HAA==';
-    });
-  }
-  
-  setupObserver() {
-    this.observer = new IntersectionObserver(
-      (entries) => this.handleIntersection(entries),
-      {
-        rootMargin: this.options.rootMargin,
-        threshold: this.options.threshold
-      }
-    );
-  }
-  
-  findImages() {
-    // Find all lazy images
-    const lazyImages = document.querySelectorAll('[data-lazy], [data-src]');
-    
-    lazyImages.forEach(img => {
-      // Skip already processed
-      if (img.dataset.smartImage) return;
-      
-      img.dataset.smartImage = 'true';
-      
-      // Create wrapper if needed
-      if (!img.parentElement.classList.contains('smart-image-container')) {
-        this.wrapImage(img);
-      }
-      
-      this.observer.observe(img);
-    });
-    
-    // Find progressive images
-    const progressiveImages = document.querySelectorAll('.progressive-image');
-    progressiveImages.forEach(container => {
-      this.setupProgressiveImage(container);
-    });
-  }
-  
-  wrapImage(img) {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'smart-image-container';
-    
-    if (this.options.enableSkeleton) {
-      const skeleton = document.createElement('div');
-      skeleton.className = 'skeleton-loader';
-      wrapper.appendChild(skeleton);
-    }
-    
-    img.parentNode.insertBefore(wrapper, img);
-    wrapper.appendChild(img);
-  }
-  
-  setupProgressiveImage(container) {
-    const fullImg = container.querySelector('.full');
-    if (!fullImg) return;
-    
-    const hqSrc = fullImg.dataset.src || fullImg.src;
-    
-    // Load high quality image
-    this.loadImage(hqSrc).then(() => {
-      if (fullImg.tagName === 'IMG') {
-        fullImg.src = hqSrc;
-      }
-      container.classList.add('loaded');
-    });
-  }
-  
-  handleIntersection(entries) {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        this.loadImageElement(entry.target);
-        this.observer.unobserve(entry.target);
-      }
-    });
-  }
-  
-  async loadImageElement(img) {
-    const src = img.dataset.src || img.dataset.lazy;
-    const srcset = img.dataset.srcset;
-    const sizes = img.dataset.sizes;
-    
-    if (!src) return;
-    
-    try {
-      // Add loading class
-      img.classList.add('image-loading');
-      
-      // Blur-up effect
-      if (this.options.enableBlurUp && img.dataset.lqip) {
-        await this.loadWithBlurUp(img, src);
-      } else {
-        await this.loadImage(src);
-        img.src = src;
-      }
-      
-      // Set srcset if available
-      if (srcset) {
-        img.srcset = srcset;
-      }
-      
-      if (sizes) {
-        img.sizes = sizes;
-      }
-      
-      // Mark as loaded
-      img.classList.add('loaded', 'lazy-loaded');
-      img.classList.remove('image-loading');
-      this.loadedImages.add(img);
-      
-      // Remove wrapper skeleton
-      const container = img.closest('.smart-image-container');
-      if (container) {
-        const skeleton = container.querySelector('.skeleton-loader');
-        if (skeleton) {
-          skeleton.style.opacity = '0';
-          setTimeout(() => skeleton.remove(), 300);
-        }
-      }
-      
-      // Trigger event
-      img.dispatchEvent(new CustomEvent('imageLoaded', { detail: { img, src } }));
-      
-    } catch (error) {
-      console.warn('Failed to load image:', src, error);
-      img.classList.add('image-error');
-    }
-  }
-  
-  async loadWithBlurUp(img, src) {
-    const lqip = img.dataset.lqip;
-    
-    // Create dual-layer setup
-    const wrapper = img.closest('.smart-image-container') || img.parentElement;
-    wrapper.classList.add('smart-image');
-    
-    // Set LQIP as background/preview
-    const preview = document.createElement('div');
-    preview.className = 'lqip';
-    preview.style.backgroundImage = `url(${lqip})`;
-    preview.style.backgroundSize = 'cover';
-    preview.style.backgroundPosition = 'center';
-    
-    // Prepare high quality image
-    img.classList.add('hq-image');
-    
-    wrapper.insertBefore(preview, img);
-    
-    // Load high quality
-    await this.loadImage(src);
-    img.src = src;
-    
-    // Trigger transition
-    requestAnimationFrame(() => {
-      wrapper.classList.add('loaded');
-    });
-  }
-  
-  loadImage(src) {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      
-      img.onload = () => resolve(img);
-      img.onerror = reject;
-      
-      // Handle cached images
-      if (img.complete) {
-        resolve(img);
-      } else {
-        img.src = src;
-      }
-    });
-  }
-  
-  bindEvents() {
-    // Refresh on dynamic content
-    const observer = new MutationObserver(() => {
-      this.findImages();
-    });
-    
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-    
-    // Handle window resize for art direction
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        this.handleResize();
-      }, 250);
-    }, { passive: true });
-  }
-  
-  handleResize() {
-    // Update srcset/sizes if needed
-    const responsiveImages = document.querySelectorAll('[data-sizes="auto"]');
-    responsiveImages.forEach(img => {
-      img.sizes = Math.ceil(img.getBoundingClientRect().width) + 'px';
-    });
-  }
-  
-  // Public API
-  refresh() {
-    this.findImages();
-  }
-  
-  preload(urls) {
-    urls.forEach(url => {
-      const img = new Image();
-      img.src = url;
-    });
-  }
-  
-  getLoadedCount() {
-    return this.loadedImages.size;
-  }
-  
-  destroy() {
-    if (this.observer) {
-      this.observer.disconnect();
-    }
-  }
-}
-
-// Gallery Progressive Loader
-class GalleryLoader {
-  constructor(selector = '.gallery-grid, .masonry-grid') {
-    this.containers = document.querySelectorAll(selector);
     this.init();
   }
   
   init() {
-    this.containers.forEach(container => {
-      const items = container.querySelectorAll('.gallery-item, .masonry-item');
-      
-      items.forEach((item, index) => {
-        item.style.transitionDelay = `${index * 100}ms`;
-        
-        const img = item.querySelector('img');
-        if (img) {
-          img.addEventListener('load', () => {
-            img.classList.add('loaded');
-            item.classList.add('loaded');
-          });
-          
-          // Trigger load if cached
-          if (img.complete) {
-            img.classList.add('loaded');
-            item.classList.add('loaded');
-          }
+    this.createObserver();
+    this.processImages();
+    this.processBackgroundImages();
+  }
+  
+  createObserver() {
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.loadImage(entry.target);
+          this.observer.unobserve(entry.target);
         }
       });
+    }, {
+      rootMargin: this.options.rootMargin,
+      threshold: this.options.threshold
     });
   }
-}
-
-// LQIP Generator (for build-time use)
-class LQIPGenerator {
-  static async generate(src, options = {}) {
-    const { width = 20, blur = 20 } = options;
+  
+  processImages() {
+    // Find all images with data-src
+    document.querySelectorAll('img[data-src]').forEach(img => {
+      this.prepareImage(img);
+    });
     
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        
-        canvas.width = width;
-        canvas.height = (img.height / img.width) * width;
-        
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        
-        resolve(canvas.toDataURL('image/jpeg', 0.1));
-      };
-      
+    // Find all images with data-lazy
+    document.querySelectorAll('img[data-lazy="true"]').forEach(img => {
+      this.prepareImage(img);
+    });
+  }
+  
+  prepareImage(img) {
+    const container = this.createContainer(img);
+    
+    // Add skeleton if enabled
+    if (this.options.enableSkeleton) {
+      this.addSkeleton(container);
+    }
+    
+    // Add LQIP if there's a data-lqip attribute
+    if (this.options.enableLqip && img.dataset.lqip) {
+      this.addLqip(container, img.dataset.lqip);
+    }
+    
+    // Prepare image
+    img.classList.add('blur-up-image');
+    if (!img.classList.contains('blur-up-image') && 
+        !img.classList.contains('fade-in-image') &&
+        !img.classList.contains('zoom-in-image') &&
+        !img.classList.contains('slide-up-image')) {
+      img.classList.add('blur-up-image');
+    }
+    
+    // Observe
+    this.observer.observe(container);
+  }
+  
+  createContainer(img) {
+    // Check if already wrapped
+    if (img.parentElement?.classList?.contains('lazy-image-container')) {
+      return img.parentElement;
+    }
+    
+    const container = document.createElement('div');
+    container.className = 'lazy-image-container';
+    
+    // Transfer aspect ratio if specified
+    if (img.dataset.aspect) {
+      container.dataset.aspect = img.dataset.aspect;
+    }
+    
+    // Check for natural dimensions
+    if (img.width && img.height) {
+      const ratio = img.height / img.width;
+      if (!container.dataset.aspect) {
+        // Set inline aspect ratio
+        container.style.aspectRatio = `${img.width} / ${img.height}`;
+      }
+    }
+    
+    // Wrap image
+    img.parentNode.insertBefore(container, img);
+    container.appendChild(img);
+    
+    // Add loading indicator if it's a large image
+    const sizeAttr = img.dataset.size || 'normal';
+    if (sizeAttr === 'large' || img.dataset.progress === 'true') {
+      this.addLoadingIndicator(container);
+    }
+    
+    return container;
+  }
+  
+  addSkeleton(container) {
+    const skeleton = document.createElement('div');
+    skeleton.className = 'lazy-image-skeleton';
+    container.appendChild(skeleton);
+    container.dataset.skeleton = 'true';
+  }
+  
+  addLqip(container, lqipUrl) {
+    const lqip = document.createElement('div');
+    lqip.className = 'lqip-placeholder';
+    lqip.style.backgroundImage = `url(${lqipUrl})`;
+    container.appendChild(lqip);
+  }
+  
+  addLoadingIndicator(container) {
+    const indicator = document.createElement('div');
+    indicator.className = 'image-loading-indicator';
+    indicator.innerHTML = '<div class="image-loading-progress"></div>';
+    container.appendChild(indicator);
+    container.classList.add('loading');
+  }
+  
+  loadImage(container) {
+    const img = container.querySelector('img');
+    if (!img) return;
+    
+    const src = img.dataset.src || img.dataset.srcset || img.src;
+    if (!src || src === img.src) {
+      this.onImageLoaded(container, img);
+      return;
+    }
+    
+    // Check cache
+    if (this.imageCache.has(src)) {
+      this.onImageLoaded(container, img, src);
+      return;
+    }
+    
+    // Add to queue
+    this.loadingQueue.push({ container, img, src });
+    this.processQueue();
+  }
+  
+  processQueue() {
+    while (this.currentlyLoading < this.maxConcurrent && this.loadingQueue.length > 0) {
+      const { container, img, src } = this.loadingQueue.shift();
+      this.loadImageSrc(container, img, src);
+    }
+  }
+  
+  loadImageSrc(container, img, src) {
+    this.currentlyLoading++;
+    
+    const tempImg = new Image();
+    const startTime = performance.now();
+    
+    tempImg.onload = () => {
+      this.currentlyLoading--;
+      this.imageCache.set(src, true);
+      this.onImageLoaded(container, img, src, startTime);
+      this.processQueue();
+    };
+    
+    tempImg.onerror = () => {
+      this.currentlyLoading--;
+      this.onImageError(container, img);
+      this.processQueue();
+    };
+    
+    tempImg.src = src;
+  }
+  
+  onImageLoaded(container, img, src, startTime) {
+    // Update src if provided
+    if (src && img.src !== src) {
       img.src = src;
+    }
+    
+    // Remove data attributes
+    img.removeAttribute('data-src');
+    img.removeAttribute('data-lqip');
+    img.removeAttribute('data-lazy');
+    
+    // Wait for actual load event on the DOM element
+    if (!img.complete) {
+      img.addEventListener('load', () => this.revealImage(container, img), { once: true });
+    } else {
+      this.revealImage(container, img);
+    }
+  }
+  
+  revealImage(container, img) {
+    // Small delay for smoother transition
+    setTimeout(() => {
+      // Remove skeleton
+      const skeleton = container.querySelector('.lazy-image-skeleton');
+      if (skeleton) {
+        skeleton.style.opacity = '0';
+        setTimeout(() => skeleton.remove(), 300);
+      }
+      
+      // Remove loading state
+      container.classList.remove('loading');
+      
+      // Trigger image transition
+      img.classList.add('loaded');
+      
+      // Add loaded class to container
+      container.classList.add('loaded');
+      
+      // Dispatch event
+      container.dispatchEvent(new CustomEvent('imageLoaded', { 
+        detail: { img, container } 
+      }));
+      
+      // Check for caption fade-in
+      const caption = container.querySelector('.lazy-image-caption');
+      if (caption) {
+        caption.style.transform = 'translateY(0)';
+      }
+    }, this.options.transitionDelay);
+  }
+  
+  onImageError(container, img) {
+    container.classList.remove('loading');
+    
+    // Check for existing error state
+    let errorEl = container.querySelector('.lazy-image-error');
+    
+    if (!errorEl) {
+      errorEl = document.createElement('div');
+      errorEl.className = 'lazy-image-error';
+      errorEl.innerHTML = `
+        <div class="lazy-image-error-icon">⚠️</div>
+        <div class="lazy-image-error-text">Failed to load image</div>
+        <button class="lazy-image-error-retry">Retry</button>
+      `;
+      container.appendChild(errorEl);
+      
+      // Retry button
+      errorEl.querySelector('.lazy-image-error-retry').addEventListener('click', () => {
+        errorEl.classList.remove('visible');
+        const src = img.dataset.src;
+        if (src) {
+          this.loadImageSrc(container, img, src);
+        }
+      });
+    }
+    
+    errorEl.classList.add('visible');
+    
+    // Remove skeleton
+    const skeleton = container.querySelector('.lazy-image-skeleton');
+    if (skeleton) skeleton.remove();
+  }
+  
+  // ============================================
+  // BACKGROUND IMAGE LOADING
+  // ============================================
+  processBackgroundImages() {
+    document.querySelectorAll('[data-bg-src]').forEach(el => {
+      this.prepareBackgroundImage(el);
+    });
+  }
+  
+  prepareBackgroundImage(el) {
+    el.classList.add('lazy-bg');
+    this.observer.observe(el);
+  }
+  
+  loadBackgroundImage(el) {
+    const src = el.dataset.bgSrc;
+    if (!src) return;
+    
+    const img = new Image();
+    img.onload = () => {
+      el.style.backgroundImage = `url(${src})`;
+      el.classList.add('loaded');
+      el.removeAttribute('data-bg-src');
+    };
+    img.src = src;
+  }
+  
+  // ============================================
+  // PREFETCH IMAGES
+  // ============================================
+  prefetchImages(selectors) {
+    const images = document.querySelectorAll(selectors);
+    images.forEach(img => {
+      const src = img.dataset.src;
+      if (src && !this.imageCache.has(src)) {
+        const prefetchImg = new Image();
+        prefetchImg.src = src;
+        this.imageCache.set(src, true);
+      }
+    });
+  }
+  
+  // ============================================
+  // REFRESH OBSERVER
+  // ============================================
+  refresh() {
+    this.processImages();
+    this.processBackgroundImages();
+  }
+  
+  // ============================================
+  // DESTROY
+  // ============================================
+  destroy() {
+    if (this.observer) {
+      this.observer.disconnect();
+    }
+    this.imageCache.clear();
+  }
+}
+
+// ============================================
+// PICTURE ELEMENT LAZY LOADING
+// ============================================
+class PictureLazyLoader {
+  constructor() {
+    this.init();
+  }
+  
+  init() {
+    document.querySelectorAll('picture[data-lazy]').forEach(picture => {
+      const sources = picture.querySelectorAll('source[data-srcset]');
+      const img = picture.querySelector('img[data-src]');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            // Load sources
+            sources.forEach(source => {
+              source.srcset = source.dataset.srcset;
+              source.removeAttribute('data-srcset');
+            });
+            
+            // Load image
+            if (img && img.dataset.src) {
+              img.src = img.dataset.src;
+              img.removeAttribute('data-src');
+            }
+            
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '50px' });
+      
+      observer.observe(picture);
     });
   }
 }
 
-// Initialize on DOM ready
+// ============================================
+// NATIVE LAZY LOADING FALLBACK
+// ============================================
+class NativeLazyLoader {
+  constructor() {
+    this.supportsNativeLazy = 'loading' in HTMLImageElement.prototype;
+    this.init();
+  }
+  
+  init() {
+    if (this.supportsNativeLazy) {
+      // Use native lazy loading for supported browsers
+      document.querySelectorAll('img[data-lazy="native"]').forEach(img => {
+        img.loading = 'lazy';
+        if (img.dataset.src) {
+          img.src = img.dataset.src;
+          img.removeAttribute('data-src');
+        }
+      });
+    }
+  }
+}
+
+// ============================================
+// AUTO-INITIALIZE
+// ============================================
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize smart image loader
   window.smartImageLoader = new SmartImageLoader({
-    rootMargin: '100px 0px',
+    rootMargin: '100px',
+    threshold: 0.01,
+    enableLqip: true,
     enableBlurUp: true,
     enableSkeleton: true
   });
   
-  window.galleryLoader = new GalleryLoader();
+  // Initialize picture lazy loader
+  window.pictureLazyLoader = new PictureLazyLoader();
+  
+  // Initialize native lazy loader
+  window.nativeLazyLoader = new NativeLazyLoader();
+  
+  // Expose global refresh function
+  window.refreshLazyImages = () => {
+    window.smartImageLoader.refresh();
+  };
 });
 
 // Export for module usage
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { 
-    SmartImageLoader, 
-    GalleryLoader, 
-    LQIPGenerator 
+  module.exports = {
+    SmartImageLoader,
+    PictureLazyLoader,
+    NativeLazyLoader
   };
 }

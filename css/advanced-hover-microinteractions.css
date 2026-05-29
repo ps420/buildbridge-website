@@ -1,0 +1,696 @@
+/* ============================================
+   v69.0: ADVANCED HOVER MICRO-INTERACTIONS
+   Fortune 500 Quality Hover Effects
+   ============================================ */
+
+/* ============================================
+   MAGNETIC BUTTON ENHANCEMENTS
+   ============================================ */
+.magnetic-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.magnetic-btn::before {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  z-index: -1;
+}
+
+.magnetic-btn .btn-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-btn:hover .btn-content {
+  transform: translateY(-2px);
+}
+
+.magnetic-btn:active .btn-content {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Magnetic ripple effect */
+.magnetic-btn .magnetic-ripple {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.magnetic-btn .magnetic-ripple::after {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: 50%;
+  left: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-btn:hover .magnetic-ripple::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* ============================================
+   UNDERLINE REVEAL ANIMATIONS
+   ============================================ */
+.underline-reveal {
+  position: relative;
+  display: inline-block;
+}
+
+.underline-reveal::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.underline-reveal:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.underline-reveal--center::after {
+  transform-origin: center;
+}
+
+.underline-reveal--center:hover::after {
+  transform-origin: center;
+}
+
+.underline-reveal--double::before,
+.underline-reveal--double::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+}
+
+.underline-reveal--double::before {
+  bottom: -5px;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+}
+
+.underline-reveal--double::after {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.underline-reveal--double:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.underline-reveal--double:hover::after {
+  transform: scaleX(1);
+  transform-origin: right;
+}
+
+/* ============================================
+   IMAGE HOVER ZOOM & PAN
+   ============================================ */
+.hover-zoom {
+  overflow: hidden;
+}
+
+.hover-zoom img {
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.hover-zoom:hover img {
+  transform: scale(1.1);
+}
+
+.hover-zoom--slow img {
+  transition-duration: 1.2s;
+}
+
+.hover-zoom--fast img {
+  transition-duration: 0.4s;
+}
+
+/* Image pan on hover */
+.hover-pan {
+  overflow: hidden;
+  position: relative;
+}
+
+.hover-pan img {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.hover-pan:hover img {
+  transform: scale(1.2);
+}
+
+.hover-pan-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================================
+   CARD LIFT & SHADOW EFFECTS
+   ============================================ */
+.hover-lift {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, box-shadow;
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.hover-lift--subtle:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.hover-lift--dramatic:hover {
+  transform: translateY(-16px) scale(1.02);
+  box-shadow: 
+    0 30px 60px rgba(0, 0, 0, 0.4),
+    0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   BORDER GLOW EFFECTS
+   ============================================ */
+.hover-glow {
+  position: relative;
+}
+
+.hover-glow::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(
+    135deg,
+    rgba(201, 206, 214, 0.3),
+    transparent 50%,
+    rgba(201, 206, 214, 0.1)
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.hover-glow:hover::before {
+  opacity: 1;
+}
+
+.hover-glow-animated::before {
+  background: linear-gradient(
+    var(--glow-angle, 135deg),
+    rgba(201, 206, 214, 0.5),
+    transparent 50%,
+    rgba(201, 206, 214, 0.2)
+  );
+  animation: glow-rotate 3s linear infinite;
+}
+
+@keyframes glow-rotate {
+  to {
+    --glow-angle: 495deg;
+  }
+}
+
+@property --glow-angle {
+  syntax: '<angle>';
+  initial-value: 135deg;
+  inherits: false;
+}
+
+/* ============================================
+   ICON SWAP ON HOVER
+   ============================================ */
+.icon-swap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+}
+
+.icon-swap .icon-default,
+.icon-swap .icon-hover {
+  position: absolute;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.icon-swap .icon-hover {
+  transform: translateY(100%);
+}
+
+.icon-swap:hover .icon-default {
+  transform: translateY(-100%);
+}
+
+.icon-swap:hover .icon-hover {
+  transform: translateY(0);
+}
+
+/* ============================================
+   TEXT REVEAL ON HOVER
+   ============================================ */
+.text-reveal-hover {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.text-reveal-hover .text-original,
+.text-reveal-hover .text-revealed {
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.text-reveal-hover .text-revealed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateY(100%);
+}
+
+.text-reveal-hover:hover .text-original {
+  transform: translateY(-100%);
+}
+
+.text-reveal-hover:hover .text-revealed {
+  transform: translateY(0);
+}
+
+/* ============================================
+   SHINE SWEEP EFFECT
+   ============================================ */
+.hover-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.6s ease;
+}
+
+.hover-shine:hover::before {
+  left: 150%;
+}
+
+/* ============================================
+   SCALE & ROTATE COMBO
+   ============================================ */
+.hover-scale-rotate {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hover-scale-rotate:hover {
+  transform: scale(1.05) rotate(2deg);
+}
+
+/* ============================================
+   BLUR ON HOVER (FOCUS EFFECT)
+   ============================================ */
+.hover-blur-siblings {
+  transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+.hover-blur-container:hover .hover-blur-siblings:not(:hover) {
+  opacity: 0.6;
+  filter: blur(2px);
+}
+
+/* ============================================
+   ARROW SLIDE ON HOVER
+   ============================================ */
+.arrow-slide {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.arrow-slide .arrow {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.arrow-slide:hover .arrow {
+  transform: translateX(5px);
+}
+
+.arrow-slide--back:hover .arrow {
+  transform: translateX(-5px);
+}
+
+/* Arrow loop animation */
+.arrow-loop .arrow {
+  transition: transform 0.2s ease;
+}
+
+.arrow-loop:hover .arrow {
+  animation: arrow-loop 0.6s ease infinite;
+}
+
+@keyframes arrow-loop {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(10px);
+    opacity: 0;
+  }
+  51% {
+    transform: translateX(-10px);
+  }
+}
+
+/* ============================================
+   BACKGROUND EXPAND EFFECT
+   ============================================ */
+.hover-bg-expand {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.hover-bg-expand::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--hover-bg, rgba(201, 206, 214, 0.1));
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
+}
+
+.hover-bg-expand:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.hover-bg-expand--center::before {
+  transform-origin: center;
+}
+
+.hover-bg-expand--center:hover::before {
+  transform: scaleX(1);
+}
+
+/* ============================================
+   CORNER REVEAL EFFECT
+   ============================================ */
+.corner-reveal {
+  position: relative;
+  overflow: hidden;
+}
+
+.corner-reveal::before,
+.corner-reveal::after {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 2px solid rgba(201, 206, 214, 0.3);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+}
+
+.corner-reveal::before {
+  top: 10px;
+  left: 10px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.corner-reveal::after {
+  bottom: 10px;
+  right: 10px;
+  border-left: none;
+  border-top: none;
+}
+
+.corner-reveal:hover::before,
+.corner-reveal:hover::after {
+  width: calc(100% - 20px);
+  height: calc(100% - 20px);
+  opacity: 1;
+}
+
+/* ============================================
+   3D FLIP CARD HOVER
+   ============================================ */
+.hover-flip-3d {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.hover-flip-3d-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+}
+
+.hover-flip-3d:hover .hover-flip-3d-inner {
+  transform: rotateY(180deg);
+}
+
+.hover-flip-3d-front,
+.hover-flip-3d-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.hover-flip-3d-back {
+  transform: rotateY(180deg);
+}
+
+/* ============================================
+   PULSE ON HOVER
+   ============================================ */
+.hover-pulse:hover {
+  animation: pulse-hover 1s ease infinite;
+}
+
+@keyframes pulse-hover {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* ============================================
+   BOUNCE EFFECT
+   ============================================ */
+.hover-bounce:hover {
+  animation: bounce-hover 0.6s ease;
+}
+
+@keyframes bounce-hover {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-10px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(-5px);
+  }
+}
+
+/* ============================================
+   ROTATE ON HOVER
+   ============================================ */
+.hover-rotate:hover {
+  animation: rotate-hover 0.6s ease;
+}
+
+@keyframes rotate-hover {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hover-rotate--subtle:hover {
+  transform: rotate(5deg);
+}
+
+/* ============================================
+   SHAKE EFFECT (ERROR STATES)
+   ============================================ */
+.hover-shake:hover {
+  animation: shake-hover 0.5s ease;
+}
+
+@keyframes shake-hover {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+/* ============================================
+   GLITCH TEXT EFFECT
+   ============================================ */
+.hover-glitch {
+  position: relative;
+}
+
+.hover-glitch:hover {
+  animation: glitch 0.3s ease;
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+    text-shadow: none;
+  }
+  20% {
+    transform: translate(-2px, 2px);
+    text-shadow: 2px -2px rgba(255, 0, 0, 0.5);
+  }
+  40% {
+    transform: translate(2px, -2px);
+    text-shadow: -2px 2px rgba(0, 255, 255, 0.5);
+  }
+  60% {
+    transform: translate(-2px, -2px);
+    text-shadow: 2px 2px rgba(255, 0, 0, 0.5);
+  }
+  80% {
+    transform: translate(2px, 2px);
+    text-shadow: -2px -2px rgba(0, 255, 255, 0.5);
+  }
+  100% {
+    transform: translate(0);
+    text-shadow: none;
+  }
+}
+
+/* ============================================
+   CURSOR FOLLOW EFFECT CONTAINER
+   ============================================ */
+.cursor-follow-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.cursor-follow-container .cursor-follower {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(201, 206, 214, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+}
+
+.cursor-follow-container:hover .cursor-follower {
+  opacity: 1;
+}
+
+/* ============================================
+   STAGGERED CHILD ANIMATION ON HOVER
+   ============================================ */
+.stagger-children > * {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.stagger-children:hover > *:nth-child(1) { transition-delay: 0ms; }
+.stagger-children:hover > *:nth-child(2) { transition-delay: 50ms; }
+.stagger-children:hover > *:nth-child(3) { transition-delay: 100ms; }
+.stagger-children:hover > *:nth-child(4) { transition-delay: 150ms; }
+.stagger-children:hover > *:nth-child(5) { transition-delay: 200ms; }
+.stagger-children:hover > *:nth-child(6) { transition-delay: 250ms; }
+
+/* ============================================
+   DOTTED BORDER ANIMATION
+   ============================================ */
+.hover-dotted-border {
+  position: relative;
+}
+
+.hover-dotted-border::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border: 2px dashed transparent;
+  border-radius: inherit;
+  transition: border-color 0.3s ease;
+}
+
+.hover-dotted-border:hover::before {
+  border-color: rgba(201, 206, 214, 0.3);
+  animation: dash-move 1s linear infinite;
+}
+
+@keyframes dash-move {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
