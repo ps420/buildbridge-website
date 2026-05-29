@@ -1,0 +1,334 @@
+/* ========================================
+   BUILD BRIDGE - VIRTUAL SCROLL SYSTEM
+   Performance-Optimized List Rendering v91.0
+   ======================================== */
+
+.virtual-scroll-container {
+  position: relative;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.virtual-scroll-container.smooth {
+  scroll-behavior: smooth;
+}
+
+.virtual-scroll-viewport {
+  position: relative;
+  width: 100%;
+}
+
+.virtual-scroll-content {
+  position: relative;
+}
+
+/* Virtual list items */
+.virtual-scroll-item {
+  position: absolute;
+  left: 0;
+  right: 0;
+  will-change: transform;
+  contain: layout style paint;
+}
+
+.virtual-scroll-item.visible {
+  visibility: visible;
+}
+
+.virtual-scroll-item.hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Item placeholder for measurable height */
+.virtual-scroll-placeholder {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  pointer-events: none;
+}
+
+/* Sticky headers */
+.virtual-scroll-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: inherit;
+}
+
+/* Infinite scroll trigger */
+.virtual-scroll-trigger {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 100px;
+  pointer-events: none;
+}
+
+.virtual-scroll-trigger.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Loading spinner */
+.virtual-scroll-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(201, 206, 214, 0.2);
+  border-top-color: #C9CED6;
+  border-radius: 50%;
+  animation: virtualScrollSpin 0.8s linear infinite;
+}
+
+@keyframes virtualScrollSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Empty state */
+.virtual-scroll-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.virtual-scroll-empty-icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.virtual-scroll-empty-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin-bottom: 8px;
+}
+
+.virtual-scroll-empty-message {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9375rem;
+  color: rgba(201, 206, 214, 0.6);
+}
+
+/* Error state */
+.virtual-scroll-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.virtual-scroll-error-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+  color: #f44336;
+}
+
+.virtual-scroll-error-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin-bottom: 8px;
+}
+
+.virtual-scroll-error-message {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.875rem;
+  color: rgba(201, 206, 214, 0.6);
+  margin-bottom: 20px;
+}
+
+.virtual-scroll-retry-btn {
+  padding: 12px 24px;
+  background: rgba(201, 206, 214, 0.1);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.875rem;
+  color: #C9CED6;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.virtual-scroll-retry-btn:hover {
+  background: rgba(201, 206, 214, 0.2);
+}
+
+/* Scrollbar styling */
+.virtual-scroll-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.virtual-scroll-container::-webkit-scrollbar-track {
+  background: rgba(201, 206, 214, 0.05);
+  border-radius: 4px;
+}
+
+.virtual-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(201, 206, 214, 0.2);
+  border-radius: 4px;
+}
+
+.virtual-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 206, 214, 0.3);
+}
+
+/* Selection mode */
+.virtual-scroll-item.selectable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.virtual-scroll-item.selected {
+  background: rgba(201, 206, 214, 0.1);
+  border-left: 3px solid #C9CED6;
+}
+
+.virtual-scroll-item.selectable:hover {
+  background: rgba(201, 206, 214, 0.05);
+}
+
+/* Drag and drop mode */
+.virtual-scroll-item.draggable {
+  cursor: grab;
+}
+
+.virtual-scroll-item.draggable:active {
+  cursor: grabbing;
+}
+
+.virtual-scroll-item.dragging {
+  opacity: 0.5;
+  z-index: 100;
+}
+
+.virtual-scroll-item.drop-target {
+  border-top: 2px solid #C9CED6;
+}
+
+/* Grid mode */
+.virtual-scroll-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.virtual-scroll-grid .virtual-scroll-item {
+  position: relative;
+}
+
+/* Horizontal scroll */
+.virtual-scroll-container.horizontal {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.virtual-scroll-container.horizontal .virtual-scroll-item {
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Momentum scroll indicator */
+.virtual-scroll-momentum-indicator {
+  position: absolute;
+  right: 8px;
+  top: 0;
+  width: 4px;
+  background: rgba(201, 206, 214, 0.3);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.virtual-scroll-container.scrolling .virtual-scroll-momentum-indicator {
+  opacity: 1;
+}
+
+/* Focus management */
+.virtual-scroll-item:focus-visible {
+  outline: 2px solid #C9CED6;
+  outline-offset: -2px;
+}
+
+/* Performance optimization hint */
+.virtual-scroll-item[data-index] {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 100px;
+}
+
+/* Animation for new items */
+@keyframes virtualScrollItemEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.virtual-scroll-item.animate-in {
+  animation: virtualScrollItemEnter 0.3s ease forwards;
+}
+
+/* Recycle pool indicator (debug mode) */
+.virtual-scroll-debug .virtual-scroll-item {
+  position: relative;
+}
+
+.virtual-scroll-debug .virtual-scroll-item::after {
+  content: attr(data-index);
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 2px 6px;
+  background: rgba(201, 206, 214, 0.2);
+  border-radius: 4px;
+  font-family: 'Monaco', monospace;
+  font-size: 0.625rem;
+  color: rgba(201, 206, 214, 0.8);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .virtual-scroll-item {
+    will-change: auto;
+  }
+  
+  .virtual-scroll-item.animate-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .virtual-scroll-container {
+    scroll-behavior: auto;
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .virtual-scroll-container::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  .virtual-scroll-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}

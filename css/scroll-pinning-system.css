@@ -1,0 +1,547 @@
+/* ========================================
+   BUILD BRIDGE - SCROLL PINNING SYSTEM
+   Fortune 500 Pinned Scroll Sections v88.0
+   ======================================== */
+
+/* Base pinned section */
+.pinned-section {
+  position: relative;
+  width: 100%;
+}
+
+.pinned-container {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Pinned content wrapper */
+.pinned-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding: 80px 40px;
+}
+
+@media (max-width: 768px) {
+  .pinned-content {
+    padding: 60px 20px;
+    flex-direction: column;
+  }
+}
+
+/* Spacer for scroll distance */
+.pinned-spacer {
+  height: 300vh; /* Creates scroll distance for the pinned section */
+  position: relative;
+}
+
+.pinned-spacer.short {
+  height: 200vh;
+}
+
+.pinned-spacer.long {
+  height: 400vh;
+}
+
+/* Progress indicator for pinned sections */
+.pinned-progress {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 100;
+}
+
+.pinned-progress-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.3);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.pinned-progress-dot.active {
+  background: #C9CED6;
+  transform: scale(1.5);
+}
+
+.pinned-progress-line {
+  position: absolute;
+  bottom: 44px;
+  left: 40px;
+  right: 40px;
+  height: 2px;
+  background: rgba(201, 206, 214, 0.2);
+  border-radius: 1px;
+  z-index: 99;
+}
+
+.pinned-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #C9CED6, #8A9199);
+  border-radius: 1px;
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+/* Stacked cards pinning */
+.stacked-cards-section {
+  position: relative;
+}
+
+.stacked-cards-container {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+}
+
+.stacked-card {
+  position: absolute;
+  width: 80%;
+  max-width: 800px;
+  background: rgba(32, 35, 39, 0.9);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 24px;
+  padding: 48px;
+  transform-style: preserve-3d;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity;
+}
+
+.stacked-card.active {
+  transform: translateZ(0) scale(1);
+  opacity: 1;
+}
+
+.stacked-card.prev {
+  transform: translateZ(-100px) translateY(-20px) scale(0.9);
+  opacity: 0.5;
+  filter: blur(4px);
+}
+
+.stacked-card.next {
+  transform: translateZ(-100px) translateY(100%) scale(0.9);
+  opacity: 0;
+}
+
+/* Horizontal scroll pinning */
+.horizontal-scroll-section {
+  position: relative;
+}
+
+.horizontal-scroll-container {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.horizontal-scroll-track {
+  display: flex;
+  gap: 40px;
+  padding: 0 40px;
+  will-change: transform;
+}
+
+.horizontal-scroll-item {
+  flex-shrink: 0;
+  width: 60vw;
+  max-width: 800px;
+  height: 70vh;
+  background: rgba(32, 35, 39, 0.9);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 48px;
+}
+
+@media (max-width: 768px) {
+  .horizontal-scroll-item {
+    width: 85vw;
+    padding: 32px;
+  }
+}
+
+/* Image sequence pinning */
+.image-sequence-section {
+  position: relative;
+}
+
+.image-sequence-container {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.image-sequence-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-sequence-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 60px;
+  background: linear-gradient(to top, rgba(15, 15, 18, 0.95) 0%, transparent 50%);
+}
+
+.image-sequence-text {
+  max-width: 600px;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.6s ease;
+}
+
+.image-sequence-text.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Split screen pinning */
+.split-pin-section {
+  position: relative;
+}
+
+.split-pin-container {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+}
+
+.split-pin-left,
+.split-pin-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px;
+}
+
+.split-pin-left {
+  background: #0f0f12;
+}
+
+.split-pin-right {
+  background: rgba(32, 35, 39, 0.5);
+}
+
+@media (max-width: 1024px) {
+  .split-pin-container {
+    flex-direction: column;
+  }
+  
+  .split-pin-left,
+  .split-pin-right {
+    padding: 40px;
+  }
+}
+
+/* Morphing shapes pinning */
+.morph-section {
+  position: relative;
+}
+
+.morph-container {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.morph-shape {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: linear-gradient(135deg, #C9CED6, #8A9199);
+  opacity: 0.1;
+  will-change: transform, border-radius;
+  transition: all 0.5s ease;
+}
+
+.morph-shape:nth-child(1) {
+  animation: morphFloat1 20s ease-in-out infinite;
+}
+
+.morph-shape:nth-child(2) {
+  animation: morphFloat2 25s ease-in-out infinite;
+  animation-delay: -5s;
+}
+
+.morph-shape:nth-child(3) {
+  animation: morphFloat3 30s ease-in-out infinite;
+  animation-delay: -10s;
+}
+
+@keyframes morphFloat1 {
+  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: rotate(0deg); }
+  50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; transform: rotate(180deg); }
+}
+
+@keyframes morphFloat2 {
+  0%, 100% { border-radius: 40% 60% 60% 40% / 70% 30% 70% 30%; transform: rotate(0deg); }
+  50% { border-radius: 60% 40% 30% 70% / 30% 70% 30% 70%; transform: rotate(-180deg); }
+}
+
+@keyframes morphFloat3 {
+  0%, 100% { border-radius: 50% 50% 20% 80% / 25% 80% 20% 75%; transform: rotate(0deg); }
+  50% { border-radius: 20% 80% 50% 50% / 80% 20% 75% 25%; transform: rotate(360deg); }
+}
+
+/* Text reveal pinning */
+.text-reveal-section {
+  position: relative;
+}
+
+.text-reveal-container {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+}
+
+.text-reveal-content {
+  max-width: 900px;
+  text-align: center;
+}
+
+.text-reveal-line {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 700;
+  color: #F5F7FA;
+  line-height: 1.3;
+  opacity: 0.2;
+  transform: translateY(20px);
+  transition: all 0.5s ease;
+}
+
+.text-reveal-line.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.text-reveal-line.highlight {
+  color: #C9CED6;
+}
+
+/* Number count-up pinning */
+.number-count-section {
+  position: relative;
+}
+
+.number-count-container {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.number-count-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 60px;
+  max-width: 800px;
+}
+
+@media (max-width: 768px) {
+  .number-count-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+.number-count-item {
+  text-align: center;
+}
+
+.number-count-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(4rem, 10vw, 8rem);
+  font-weight: 800;
+  color: #C9CED6;
+  line-height: 1;
+  background: linear-gradient(135deg, #C9CED6, #8A9199);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.number-count-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.125rem;
+  color: rgba(201, 206, 214, 0.7);
+  margin-top: 16px;
+}
+
+/* Video pinned section */
+.video-pinned-section {
+  position: relative;
+}
+
+.video-pinned-container {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.video-pinned-element {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.video-pinned-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px;
+  background: rgba(15, 15, 18, 0.4);
+}
+
+/* Navigation dots for pinned sections */
+.pinned-nav {
+  position: fixed;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 1000;
+}
+
+@media (max-width: 768px) {
+  .pinned-nav {
+    right: 20px;
+    gap: 12px;
+  }
+}
+
+.pinned-nav-item {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.3);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.pinned-nav-item:hover {
+  background: rgba(201, 206, 214, 0.5);
+  transform: scale(1.2);
+}
+
+.pinned-nav-item.active {
+  background: #C9CED6;
+  border-color: rgba(201, 206, 214, 0.3);
+  transform: scale(1.3);
+}
+
+.pinned-nav-tooltip {
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: 16px;
+  background: rgba(15, 15, 18, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8125rem;
+  color: #C9CED6;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.pinned-nav-item:hover .pinned-nav-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .pinned-container,
+  .stacked-cards-container,
+  .horizontal-scroll-container,
+  .image-sequence-container,
+  .split-pin-container,
+  .morph-container,
+  .text-reveal-container,
+  .number-count-container,
+  .video-pinned-container {
+    position: relative;
+    height: auto;
+  }
+  
+  .pinned-spacer {
+    height: auto;
+  }
+  
+  .stacked-card {
+    position: relative;
+    transform: none !important;
+    opacity: 1 !important;
+    margin-bottom: 40px;
+  }
+  
+  .horizontal-scroll-track {
+    flex-direction: column;
+    transform: none !important;
+  }
+  
+  .horizontal-scroll-item {
+    width: 100%;
+    height: auto;
+    margin-bottom: 40px;
+  }
+}

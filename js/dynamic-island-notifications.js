@@ -1,369 +1,494 @@
 /**
  * BuildBridge Dynamic Island Notifications
- * iOS 17 Style Notification System - v79.0
- * Fortune 500 Quality Alert System
+ * iOS-Style Floating Alert System v90.0
  */
 
-(function() {
-  'use strict';
+class DynamicIsland {
+  constructor(options = {}) {
+    this.options = {
+      defaultDuration: 4000,
+      maxNotifications: 3,
+      position: 'top',
+      ...options
+    };
+    
+    this.notifications = [];
+    this.container = null;
+    
+    this.init();
+  }
   
-  class DynamicIslandSystem {
-    constructor() {
-      this.container = null;
-      this.notifications = [];
-      this.maxStacked = 3;
-      this.defaultDuration = 5000;
-      this.init();
-    }
+  init() {
+    this.createContainer();
+  }
+  
+  createContainer() {
+    this.container = document.createElement('div');
+    this.container.className = 'dynamic-island-container';
+    this.container.setAttribute('role', 'region');
+    this.container.setAttribute('aria-label', 'Notifications');
+    document.body.appendChild(this.container);
+  }
+  
+  /**
+   * Show a compact notification
+   */
+  show(options) {
+    const {
+      title,
+      message,
+      type = 'info',
+      icon,
+      duration = this.options.defaultDuration,
+      actions = [],
+      expandable = false,
+      onExpand,
+      onDismiss
+    } = options;
     
-    init() {
-      this.createContainer();
-      this.bindEvents();
-      
-      // Expose global API
-      window.DynamicIsland = this;
-      
-      console.log('🏝️ Dynamic Island Notifications initialized');
-    }
+    const island = document.createElement('div');
+    island.className = 'dynamic-island compact';
+    island.setAttribute('role', 'alert');
     
-    createContainer() {
-      this.container = document.createElement('div');
-      this.container.className = 'dynamic-island-container';
-      this.container.setAttribute('role', 'region');
-      this.container.setAttribute('aria-label', 'Notifications');
-      document.body.appendChild(this.container);
-    }
+    // Icon based on type
+    const iconMap = {
+      success: '✓',
+      error: '✕',
+      warning: '⚠',
+      info: 'ℹ'
+    };
     
-    bindEvents() {
-      // Handle keyboard dismissal
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          this.dismissAll();
-        }
-      });
-      
-      // Pause on hover
-      this.container.addEventListener('mouseenter', () => {
-        this.pauseAll();
-      });
-      
-      this.container.addEventListener('mouseleave', () => {
-        this.resumeAll();
-      });
-    }
+    island.innerHTML = `
+      <div class="dynamic-island-icon ${type}">
+        ${icon || iconMap[type] || '•'}
+      </div>
+      <div class="dynamic-island-content">
+        <div class="dynamic-island-title">${this.escapeHtml(title)}</div>
+        ${message ? `<div class="dynamic-island-message">${this.escapeHtml(message)}</div>` : ''}
+      </div>
+      ${actions.length ? `
+        <div class="dynamic-island-actions">
+          ${actions.map(action => `
+            <button class="dynamic-island-action ${action.primary ? 'primary' : ''}" data-action="${action.id}">
+              ${this.escapeHtml(action.label)}
+            </button>
+          `).join('')}
+        </div>
+      ` : ''}
+      <button class="dynamic-island-close" aria-label="Dismiss notification">✕</button>
+      <div class="dynamic-island-progress">
+        <div class="dynamic-island-progress-bar"></div>
+      </div>
+    `;
     
-    show(options = {}) {
-      const config = {
-        type: 'info',
-        title: 'Notification',
-        message: '',
-        duration: this.defaultDuration,
-        expandable: false,
-        details: '',
-        actions: [],
-        priority: 'normal', // normal, urgent, priority
-        showProgress: true,
-        onDismiss: null,
-        onAction: null,
-        ...options
-      };
-      
-      const island = this.createIsland(config);
-      this.container.appendChild(island);
-      
-      // Trigger animation
+    this.container.appendChild(island);
+    
+    // Trigger reflow for animation
+    requestAnimationFrame(() => {
+      island.classList.add('visible');
+    });
+    
+    // Progress bar animation
+    const progressBar = island.querySelector('.dynamic-island-progress-bar');
+    if (progressBar && duration > 0) {
+      progressBar.style.transition = `transform ${duration}ms linear`;
       requestAnimationFrame(() => {
-        island.classList.add('active');
-        this.updateStackPositions();
+        progressBar.style.transform = 'scaleX(0)';
       });
-      
-      // Auto dismiss
-      let dismissTimer;
-      if (config.duration > 0) {
-        dismissTimer = setTimeout(() => {
+    }
+    
+    // Action handlers
+    const actionButtons = island.querySelectorAll('.dynamic-island-action');
+    actionButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const actionId = btn.dataset.action;
+        const action = actions.find(a => a.id === actionId);
+        if (action && action.handler) {
+          action.handler();
+        }
+        this.dismiss(island);
+      });
+    });
+    
+    // Expand on click (if expandable)
+    if (expandable) {
+      island.style.cursor = 'pointer';
+      island.addEventListener('click', (e) => {
+        if (e.target.closest('.dynamic-island-action') || e.target.closest('.dynamic-island-close')) return;
+        this.expand(island, options);
+        if (onExpand) onExpand();
+      });
+    }
+    
+    // Close button
+    const closeBtn = island.querySelector('.dynamic-island-close');
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.dismiss(island);
+    });
+    
+    // Auto dismiss
+    let dismissTimeout;
+    if (duration > 0) {
+      dismissTimeout = setTimeout(() => {
+        this.dismiss(island);
+      }, duration);
+    }
+    
+    // Pause on hover
+    island.addEventListener('mouseenter', () => {
+      if (dismissTimeout) clearTimeout(dismissTimeout);
+      if (progressBar) progressBar.style.transition = 'none';
+    });
+    
+    island.addEventListener('mouseleave', () => {
+      if (duration > 0) {
+        dismissTimeout = setTimeout(() => {
           this.dismiss(island);
-        }, config.duration);
-        
-        island._dismissTimer = dismissTimer;
-      }
-      
-      // Store reference
-      const notification = {
-        element: island,
-        config,
-        createdAt: Date.now(),
-        dismissTimer
-      };
-      
-      this.notifications.push(notification);
-      
-      // Limit stacked notifications
-      if (this.notifications.length > this.maxStacked) {
-        const oldest = this.notifications[0];
-        this.dismiss(oldest.element);
-      }
-      
-      return {
-        dismiss: () => this.dismiss(island),
-        update: (newOptions) => this.update(island, newOptions),
-        expand: () => this.expand(island),
-        collapse: () => this.collapse(island)
-      };
-    }
-    
-    createIsland(config) {
-      const island = document.createElement('div');
-      island.className = `dynamic-island ${config.priority}`;
-      island.setAttribute('role', 'alert');
-      island.setAttribute('aria-live', config.priority === 'urgent' ? 'assertive' : 'polite');
-      
-      // Icon based on type
-      const icons = {
-        success: '✓',
-        error: '✕',
-        warning: '⚠',
-        info: 'ℹ',
-        message: '💬'
-      };
-      
-      island.innerHTML = `
-        <div class="dynamic-island-icon ${config.type}">
-          ${icons[config.type] || icons.info}
-        </div>
-        <div class="dynamic-island-content">
-          <h4 class="dynamic-island-title">${this.escapeHtml(config.title)}</h4>
-          <p class="dynamic-island-message">${this.escapeHtml(config.message)}</p>
-        </div>
-        ${config.actions.length > 0 ? `
-          <div class="dynamic-island-actions">
-            ${config.actions.map((action, i) => `
-              <button class="dynamic-island-action ${action.primary ? 'primary' : ''}" 
-                      data-action="${i}" aria-label="${action.label}">
-                ${action.icon || action.label}
-              </button>
-            `).join('')}
-          </div>
-        ` : ''}
-        <button class="dynamic-island-close" aria-label="Dismiss notification">✕</button>
-        ${config.showProgress && config.duration > 0 ? `
-          <div class="dynamic-island-progress">
-            <div class="dynamic-island-progress-bar" style="--duration: ${config.duration}ms"></div>
-          </div>
-        ` : ''}
-        ${config.expandable && config.details ? `
-          <div class="dynamic-island-details">
-            <p class="dynamic-island-details-text">${this.escapeHtml(config.details)}</p>
-            <div class="dynamic-island-details-actions">
-              ${config.actions.map(action => `
-                <button class="dynamic-island-btn ${action.primary ? 'primary' : 'secondary'}" data-action-full>
-                  ${action.label}
-                </button>
-              `).join('')}
-            </div>
-          </div>
-        ` : ''}
-      `;
-      
-      // Bind events
-      const closeBtn = island.querySelector('.dynamic-island-close');
-      closeBtn.addEventListener('click', () => this.dismiss(island));
-      
-      // Action buttons
-      island.querySelectorAll('.dynamic-island-action, [data-action-full]').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const actionIndex = btn.dataset.action;
-          if (actionIndex !== undefined && config.actions[actionIndex]) {
-            const action = config.actions[actionIndex];
-            if (action.onClick) action.onClick();
-            if (action.dismiss !== false) this.dismiss(island);
-          }
-          if (config.onAction) config.onAction(btn);
-        });
-      });
-      
-      // Expand on click
-      if (config.expandable) {
-        island.addEventListener('click', (e) => {
-          if (!e.target.closest('.dynamic-island-action') && 
-              !e.target.closest('.dynamic-island-close')) {
-            this.toggleExpand(island);
-          }
-        });
-      }
-      
-      return island;
-    }
-    
-    dismiss(island) {
-      if (!island || island._dismissing) return;
-      island._dismissing = true;
-      
-      // Clear timer
-      if (island._dismissTimer) {
-        clearTimeout(island._dismissTimer);
-      }
-      
-      // Remove from array
-      this.notifications = this.notifications.filter(n => n.element !== island);
-      
-      // Animate out
-      island.classList.remove('active');
-      island.style.opacity = '0';
-      island.style.transform = 'scale(0.8) translateY(-20px)';
-      
-      setTimeout(() => {
-        island.remove();
-        this.updateStackPositions();
-        
-        // Call callback
-        const notification = this.notifications.find(n => n.element === island);
-        if (notification?.config?.onDismiss) {
-          notification.config.onDismiss();
-        }
-      }, 300);
-    }
-    
-    dismissAll() {
-      [...this.notifications].forEach(n => this.dismiss(n.element));
-    }
-    
-    update(island, newOptions) {
-      const notification = this.notifications.find(n => n.element === island);
-      if (!notification) return;
-      
-      notification.config = { ...notification.config, ...newOptions };
-      
-      // Update content
-      if (newOptions.title) {
-        island.querySelector('.dynamic-island-title').textContent = newOptions.title;
-      }
-      if (newOptions.message) {
-        island.querySelector('.dynamic-island-message').textContent = newOptions.message;
-      }
-    }
-    
-    expand(island) {
-      island.classList.add('expanded');
-    }
-    
-    collapse(island) {
-      island.classList.remove('expanded');
-    }
-    
-    toggleExpand(island) {
-      island.classList.toggle('expanded');
-    }
-    
-    updateStackPositions() {
-      this.notifications.slice(0, this.maxStacked).forEach((notification, index) => {
-        const island = notification.element;
-        island.classList.remove('stacked-1', 'stacked-2', 'stacked-3');
-        
-        if (index > 0) {
-          island.classList.add(`stacked-${index}`);
-        }
-      });
-    }
-    
-    pauseAll() {
-      this.notifications.forEach(n => {
-        if (n.element._dismissTimer) {
-          clearTimeout(n.element._dismissTimer);
-          n.element._dismissTimer = null;
-        }
-        const progressBar = n.element.querySelector('.dynamic-island-progress-bar');
+        }, duration / 2);
         if (progressBar) {
-          progressBar.style.animationPlayState = 'paused';
+          progressBar.style.transition = `transform ${duration / 2}ms linear`;
+          progressBar.style.transform = 'scaleX(0)';
         }
-      });
+      }
+    });
+    
+    // Store notification reference
+    const notification = {
+      element: island,
+      timeout: dismissTimeout,
+      onDismiss
+    };
+    
+    this.notifications.push(notification);
+    
+    // Limit max notifications
+    if (this.notifications.length > this.options.maxNotifications) {
+      this.dismiss(this.notifications[0].element);
     }
     
-    resumeAll() {
-      this.notifications.forEach(n => {
-        const remaining = n.config.duration - (Date.now() - n.createdAt);
-        if (remaining > 0 && !n.element._dismissTimer) {
-          n.element._dismissTimer = setTimeout(() => {
-            this.dismiss(n.element);
-          }, remaining);
-        }
-        const progressBar = n.element.querySelector('.dynamic-island-progress-bar');
-        if (progressBar) {
-          progressBar.style.animationPlayState = 'running';
-        }
-      });
-    }
+    return notification;
+  }
+  
+  /**
+   * Expand a notification to show full content
+   */
+  expand(island, options) {
+    island.classList.remove('compact');
+    island.classList.add('expanded');
     
-    // Convenience methods
-    success(title, message, options = {}) {
-      return this.show({ type: 'success', title, message, ...options });
-    }
-    
-    error(title, message, options = {}) {
-      return this.show({ type: 'error', title, message, priority: 'urgent', duration: 8000, ...options });
-    }
-    
-    warning(title, message, options = {}) {
-      return this.show({ type: 'warning', title, message, priority: 'priority', ...options });
-    }
-    
-    info(title, message, options = {}) {
-      return this.show({ type: 'info', title, message, ...options });
-    }
-    
-    message(title, message, options = {}) {
-      return this.show({ type: 'message', title, message, ...options });
-    }
-    
-    liveActivity(title, status, visual, options = {}) {
-      const island = document.createElement('div');
-      island.className = 'dynamic-island live-activity active';
-      island.innerHTML = `
-        <div class="dynamic-island-icon info">${visual}</div>
-        <div class="dynamic-island-content">
-          <div class="live-activity-visual">${visual}</div>
-          <div class="live-activity-info">
-            <h4 class="dynamic-island-title">${this.escapeHtml(title)}</h4>
-            <span class="live-activity-status">${this.escapeHtml(status)}</span>
-          </div>
-        </div>
-        <button class="dynamic-island-close" aria-label="Dismiss">✕</button>
-      `;
-      
-      this.container.appendChild(island);
-      
-      return {
-        dismiss: () => this.dismiss(island),
-        update: (newTitle, newStatus) => {
-          island.querySelector('.dynamic-island-title').textContent = newTitle;
-          island.querySelector('.live-activity-status').textContent = newStatus;
-        }
-      };
-    }
-    
-    escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
+    // Update content if needed
+    if (options.expandedContent) {
+      const content = island.querySelector('.dynamic-island-content');
+      content.innerHTML = options.expandedContent;
     }
   }
   
-  // Initialize when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new DynamicIslandSystem());
-  } else {
-    new DynamicIslandSystem();
+  /**
+   * Collapse an expanded notification
+   */
+  collapse(island, options) {
+    island.classList.remove('expanded');
+    island.classList.add('compact');
   }
   
-  // Demo notifications on load (optional)
-  setTimeout(() => {
-    if (window.DynamicIsland && !window.location.hash.includes('no-demo')) {
-      window.DynamicIsland.success(
-        'Welcome to BuildBridge',
-        'Your construction journey starts here',
-        { duration: 4000 }
-      );
+  /**
+   * Dismiss a notification
+   */
+  dismiss(island) {
+    const index = this.notifications.findIndex(n => n.element === island);
+    if (index === -1) return;
+    
+    const notification = this.notifications[index];
+    
+    if (notification.timeout) {
+      clearTimeout(notification.timeout);
     }
-  }, 2000);
+    
+    island.classList.remove('visible');
+    island.style.transform = 'translateY(-20px) scale(0.9)';
+    island.style.opacity = '0';
+    
+    setTimeout(() => {
+      island.remove();
+      this.notifications.splice(index, 1);
+      
+      if (notification.onDismiss) {
+        notification.onDismiss();
+      }
+    }, 400);
+  }
   
-})();
+  /**
+   * Show a media player notification
+   */
+  showMedia(options) {
+    const {
+      title,
+      artist,
+      cover,
+      isPlaying = false,
+      duration = 0,
+      currentTime = 0
+    } = options;
+    
+    const island = document.createElement('div');
+    island.className = 'dynamic-island media';
+    
+    island.innerHTML = `
+      <div class="dynamic-island-media-cover">
+        ${cover ? `<img src="${cover}" alt="${title}">` : '🎵'}
+      </div>
+      <div class="dynamic-island-media-info">
+        <div class="dynamic-island-media-title">${this.escapeHtml(title)}</div>
+        <div class="dynamic-island-media-artist">${this.escapeHtml(artist)}</div>
+      </div>
+      <div class="dynamic-island-media-controls">
+        <button class="dynamic-island-media-btn" aria-label="Previous">⏮</button>
+        <button class="dynamic-island-media-btn play" aria-label="${isPlaying ? 'Pause' : 'Play'}">
+          ${isPlaying ? '⏸' : '▶'}
+        </button>
+        <button class="dynamic-island-media-btn" aria-label="Next">⏭</button>
+      </div>
+    `;
+    
+    this.container.appendChild(island);
+    
+    requestAnimationFrame(() => {
+      island.classList.add('visible');
+    });
+    
+    return island;
+  }
+  
+  /**
+   * Show an incoming call notification
+   */
+  showCall(options) {
+    const {
+      name,
+      avatar,
+      status = 'incoming',
+      onAccept,
+      onDecline
+    } = options;
+    
+    const island = document.createElement('div');
+    island.className = 'dynamic-island call';
+    
+    island.innerHTML = `
+      <div class="dynamic-island-call-avatar">
+        ${avatar ? `<img src="${avatar}" alt="${name}">` : '👤'}
+      </div>
+      <div class="dynamic-island-call-info">
+        <div class="dynamic-island-call-name">${this.escapeHtml(name)}</div>
+        <div class="dynamic-island-call-status">${status === 'incoming' ? 'Incoming Call...' : 'Calling...'}</div>
+      </div>
+      <div class="dynamic-island-call-actions">
+        <button class="dynamic-island-call-btn decline" aria-label="Decline">📞</button>
+        <button class="dynamic-island-call-btn accept" aria-label="Accept">📞</button>
+      </div>
+    `;
+    
+    this.container.appendChild(island);
+    
+    requestAnimationFrame(() => {
+      island.classList.add('visible');
+    });
+    
+    // Button handlers
+    island.querySelector('.decline').addEventListener('click', () => {
+      this.dismiss(island);
+      if (onDecline) onDecline();
+    });
+    
+    island.querySelector('.accept').addEventListener('click', () => {
+      this.dismiss(island);
+      if (onAccept) onAccept();
+    });
+    
+    return island;
+  }
+  
+  /**
+   * Show a biometric/Face ID notification
+   */
+  showBiometric(status = 'scanning') {
+    const statusText = {
+      scanning: 'Face ID',
+      success: 'Unlocked',
+      failed: 'Try Again'
+    };
+    
+    const island = document.createElement('div');
+    island.className = 'dynamic-island biometric';
+    
+    island.innerHTML = `
+      <div class="dynamic-island-biometric-lock">🔒</div>
+      <div class="dynamic-island-biometric-text">${statusText[status]}</div>
+    `;
+    
+    this.container.appendChild(island);
+    
+    requestAnimationFrame(() => {
+      island.classList.add('visible');
+    });
+    
+    // Auto dismiss for success/failed
+    if (status !== 'scanning') {
+      setTimeout(() => this.dismiss(island), 1500);
+    }
+    
+    return island;
+  }
+  
+  /**
+   * Show a live activity notification
+   */
+  showLiveActivity(options) {
+    const { title, stats = [] } = options;
+    
+    const island = document.createElement('div');
+    island.className = 'dynamic-island live';
+    
+    island.innerHTML = `
+      <div class="dynamic-island-live-header">
+        <div class="dynamic-island-live-indicator"></div>
+        <div class="dynamic-island-live-title">${this.escapeHtml(title)}</div>
+      </div>
+      <div class="dynamic-island-live-content">
+        ${stats.map(stat => `
+          <div class="dynamic-island-live-stat">
+            <div class="dynamic-island-live-value">${stat.value}</div>
+            <div class="dynamic-island-live-label">${this.escapeHtml(stat.label)}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    
+    this.container.appendChild(island);
+    
+    requestAnimationFrame(() => {
+      island.classList.add('visible');
+    });
+    
+    return island;
+  }
+  
+  /**
+   * Update an existing notification
+   */
+  update(island, updates) {
+    if (updates.title) {
+      const titleEl = island.querySelector('.dynamic-island-title');
+      if (titleEl) titleEl.textContent = updates.title;
+    }
+    
+    if (updates.message) {
+      const msgEl = island.querySelector('.dynamic-island-message');
+      if (msgEl) msgEl.textContent = updates.message;
+    }
+    
+    if (updates.progress !== undefined) {
+      const progressBar = island.querySelector('.dynamic-island-progress-bar');
+      if (progressBar) {
+        progressBar.style.transition = 'none';
+        progressBar.style.transform = `scaleX(${1 - updates.progress})`;
+      }
+    }
+  }
+  
+  /**
+   * Clear all notifications
+   */
+  clear() {
+    this.notifications.forEach(n => {
+      if (n.timeout) clearTimeout(n.timeout);
+      n.element.remove();
+    });
+    this.notifications = [];
+  }
+  
+  escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+}
+
+// Convenience methods for common notification types
+const DynamicIslandAPI = {
+  instance: null,
+  
+  init() {
+    if (!this.instance) {
+      this.instance = new DynamicIsland();
+    }
+    return this.instance;
+  },
+  
+  success(title, message, options = {}) {
+    return this.init().show({
+      title,
+      message,
+      type: 'success',
+      ...options
+    });
+  },
+  
+  error(title, message, options = {}) {
+    return this.init().show({
+      title,
+      message,
+      type: 'error',
+      duration: 6000,
+      ...options
+    });
+  },
+  
+  warning(title, message, options = {}) {
+    return this.init().show({
+      title,
+      message,
+      type: 'warning',
+      ...options
+    });
+  },
+  
+  info(title, message, options = {}) {
+    return this.init().show({
+      title,
+      message,
+      type: 'info',
+      ...options
+    });
+  },
+  
+  media(options) {
+    return this.init().showMedia(options);
+  },
+  
+  call(options) {
+    return this.init().showCall(options);
+  },
+  
+  biometric(status) {
+    return this.init().showBiometric(status);
+  },
+  
+  liveActivity(options) {
+    return this.init().showLiveActivity(options);
+  }
+};
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  window.DynamicIsland = DynamicIslandAPI;
+  DynamicIslandAPI.init();
+});
+
+// Export for module use
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { DynamicIsland, DynamicIslandAPI };
+}

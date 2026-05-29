@@ -1,0 +1,515 @@
+/* ========================================
+   V87.0: SCROLL-DRIVEN ANIMATION TIMELINE
+   Modern CSS Scroll-Timeline & View-Timeline API
+   Fortune 500 Professional Scroll-Linked Animations
+   ======================================== */
+
+/* Base scroll-timeline setup */
+@supports (animation-timeline: scroll()) {
+  /* Scroll progress bar using scroll-timeline */
+  .scroll-progress-native {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--chrome), var(--white), var(--chrome));
+    background-size: 200% 100%;
+    transform-origin: left;
+    z-index: 10001;
+    animation: scroll-progress-grow linear;
+    animation-timeline: scroll(root);
+  }
+
+  @keyframes scroll-progress-grow {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  /* Section reveal animations using view-timeline */
+  .view-reveal {
+    animation: view-reveal-animation linear both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 40%;
+  }
+
+  @keyframes view-reveal-animation {
+    from {
+      opacity: 0;
+      transform: translateY(60px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* Staggered view reveals */
+  .view-reveal-stagger-1 { animation-range: entry 10% cover 35%; }
+  .view-reveal-stagger-2 { animation-range: entry 15% cover 40%; }
+  .view-reveal-stagger-3 { animation-range: entry 20% cover 45%; }
+  .view-reveal-stagger-4 { animation-range: entry 25% cover 50%; }
+
+  /* Fade in from left */
+  .view-reveal-left {
+    animation: view-reveal-left-animation linear both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 40%;
+  }
+
+  @keyframes view-reveal-left-animation {
+    from {
+      opacity: 0;
+      transform: translateX(-80px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Fade in from right */
+  .view-reveal-right {
+    animation: view-reveal-right-animation linear both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 40%;
+  }
+
+  @keyframes view-reveal-right-animation {
+    from {
+      opacity: 0;
+      transform: translateX(80px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Scale reveal effect */
+  .view-reveal-scale {
+    animation: view-reveal-scale-animation linear both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 30%;
+  }
+
+  @keyframes view-reveal-scale-animation {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Blur reveal effect */
+  .view-reveal-blur {
+    animation: view-reveal-blur-animation linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 30%;
+  }
+
+  @keyframes view-reveal-blur-animation {
+    from {
+      opacity: 0;
+      filter: blur(20px);
+      transform: scale(1.1);
+    }
+    to {
+      opacity: 1;
+      filter: blur(0);
+      transform: scale(1);
+    }
+  }
+
+  /* Clip-path reveal */
+  .view-reveal-clip {
+    animation: view-reveal-clip-animation linear both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 50%;
+  }
+
+  @keyframes view-reveal-clip-animation {
+    from {
+      clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+      opacity: 0;
+    }
+    to {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      opacity: 1;
+    }
+  }
+
+  /* Circle clip reveal */
+  .view-reveal-circle {
+    animation: view-reveal-circle-animation linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 40%;
+  }
+
+  @keyframes view-reveal-circle-animation {
+    from {
+      clip-path: circle(0% at 50% 50%);
+      opacity: 0;
+    }
+    to {
+      clip-path: circle(100% at 50% 50%);
+      opacity: 1;
+    }
+  }
+
+  /* Text character reveal */
+  .char-reveal .char {
+    display: inline-block;
+    animation: char-reveal-animation linear both;
+    animation-timeline: view();
+    animation-range: entry 20% cover 50%;
+  }
+
+  @keyframes char-reveal-animation {
+    from {
+      opacity: 0;
+      transform: translateY(100%) rotate(10deg);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) rotate(0);
+    }
+  }
+
+  /* Counter animation using scroll */
+  .scroll-counter {
+    --count: 0;
+    animation: scroll-counter-animation linear both;
+    animation-timeline: view();
+    animation-range: entry 30% cover 60%;
+  }
+
+  @keyframes scroll-counter-animation {
+    from { --count: 0; }
+    to { --count: var(--target, 100); }
+  }
+
+  /* Parallax layers using scroll-timeline */
+  .parallax-slow {
+    animation: parallax-slow-animation linear;
+    animation-timeline: scroll(root);
+  }
+
+  @keyframes parallax-slow-animation {
+    from { transform: translateY(0); }
+    to { transform: translateY(-100px); }
+  }
+
+  .parallax-fast {
+    animation: parallax-fast-animation linear;
+    animation-timeline: scroll(root);
+  }
+
+  @keyframes parallax-fast-animation {
+    from { transform: translateY(0); }
+    to { transform: translateY(-200px); }
+  }
+
+  /* Rotation on scroll */
+  .scroll-rotate {
+    animation: scroll-rotate-animation linear;
+    animation-timeline: scroll(root);
+  }
+
+  @keyframes scroll-rotate-animation {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Horizontal scroll sections */
+  .horizontal-scroll-container {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-timeline: --horizontal-scroll inline;
+  }
+
+  .horizontal-scroll-item {
+    scroll-snap-align: center;
+    animation: horizontal-scroll-focus linear;
+    animation-timeline: view(inline);
+  }
+
+  @keyframes horizontal-scroll-focus {
+    0%, 100% { transform: scale(0.9); opacity: 0.5; }
+    50% { transform: scale(1); opacity: 1; }
+  }
+
+  /* Exit animations */
+  .view-exit {
+    animation: view-exit-animation linear both;
+    animation-timeline: view();
+    animation-range: exit -20% exit 50%;
+  }
+
+  @keyframes view-exit-animation {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+  }
+
+  /* Section-based scroll animations */
+  .section-tracker {
+    position: fixed;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .section-tracker-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(201, 206, 214, 0.3);
+    border: 1px solid rgba(201, 206, 214, 0.2);
+    transition: all 0.3s ease;
+    animation: section-dot-active linear both;
+    animation-timeline: --section-timeline;
+  }
+
+  @keyframes section-dot-active {
+    0%, 100% {
+      background: rgba(201, 206, 214, 0.3);
+      transform: scale(1);
+    }
+    50% {
+      background: var(--white);
+      transform: scale(1.5);
+    }
+  }
+}
+
+/* Fallback for browsers without scroll-timeline support */
+@supports not (animation-timeline: scroll()) {
+  .scroll-progress-native {
+    display: none;
+  }
+
+  .view-reveal,
+  .view-reveal-left,
+  .view-reveal-right,
+  .view-reveal-scale,
+  .view-reveal-blur,
+  .view-reveal-clip,
+  .view-reveal-circle {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    clip-path: none;
+  }
+}
+
+/* ========================================
+   SCROLL-TRIGGERED LINE DRAWING
+   ======================================== */
+
+.svg-line-draw {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+}
+
+@supports (animation-timeline: scroll()) {
+  .svg-line-draw {
+    animation: line-draw-animation linear both;
+    animation-timeline: view();
+    animation-range: entry 0% exit 100%;
+  }
+
+  @keyframes line-draw-animation {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+}
+
+/* ========================================
+   SCROLL-LINKED TYPOGRAPHY
+   ======================================== */
+
+.scroll-text-weight {
+  font-variation-settings: 'wght' 400;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-text-weight {
+    animation: text-weight-animation linear;
+    animation-timeline: scroll(root);
+  }
+
+  @keyframes text-weight-animation {
+    from { font-variation-settings: 'wght' 400; }
+    to { font-variation-settings: 'wght' 800; }
+  }
+}
+
+/* ========================================
+   PINNED SECTIONS WITH SCROLL ANIMATION
+   ======================================== */
+
+.pinned-section {
+  height: 300vh;
+  position: relative;
+}
+
+.pinned-content {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@supports (animation-timeline: view()) {
+  .pinned-progress-bar {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 2px;
+    background: rgba(201, 206, 214, 0.2);
+    overflow: hidden;
+  }
+
+  .pinned-progress-fill {
+    height: 100%;
+    background: var(--chrome);
+    transform-origin: left;
+    animation: pinned-progress-animation linear;
+    animation-timeline: view();
+  }
+
+  @keyframes pinned-progress-animation {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+}
+
+/* ========================================
+   SCROLL-BASED COLOR TRANSITIONS
+   ======================================== */
+
+.scroll-color-shift {
+  transition: background-color 0.3s ease;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-color-shift-hero {
+    animation: color-shift-hero linear;
+    animation-timeline: scroll(root);
+  }
+
+  @keyframes color-shift-hero {
+    0% { background-color: #0f0f10; }
+    50% { background-color: #1a1a22; }
+    100% { background-color: #0f0f10; }
+  }
+}
+
+/* ========================================
+   PROGRESSIVE IMAGE REVEAL ON SCROLL
+   ======================================== */
+
+.scroll-image-reveal {
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-image-reveal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--black);
+  transform-origin: bottom;
+}
+
+@supports (animation-timeline: view()) {
+  .scroll-image-reveal::after {
+    animation: image-reveal-animation linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 50%;
+  }
+
+  @keyframes image-reveal-animation {
+    from { transform: scaleY(1); }
+    to { transform: scaleY(0); }
+  }
+
+  .scroll-image-reveal img {
+    animation: image-zoom-animation linear;
+    animation-timeline: view();
+    animation-range: entry 0% exit 100%;
+  }
+
+  @keyframes image-zoom-animation {
+    from { transform: scale(1.2); }
+    to { transform: scale(1); }
+  }
+}
+
+/* ========================================
+   SCROLL-TRIGGERED GRID ANIMATIONS
+   ======================================== */
+
+.stagger-grid > * {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+@supports (animation-timeline: view()) {
+  .stagger-grid > * {
+    animation: stagger-grid-item linear both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 40%;
+  }
+
+  .stagger-grid > *:nth-child(1) { animation-delay: 0s; }
+  .stagger-grid > *:nth-child(2) { animation-delay: 0.1s; }
+  .stagger-grid > *:nth-child(3) { animation-delay: 0.2s; }
+  .stagger-grid > *:nth-child(4) { animation-delay: 0.3s; }
+  .stagger-grid > *:nth-child(5) { animation-delay: 0.4s; }
+  .stagger-grid > *:nth-child(6) { animation-delay: 0.5s; }
+
+  @keyframes stagger-grid-item {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* ========================================
+   REDUCED MOTION SUPPORT
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  @supports (animation-timeline: scroll()) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

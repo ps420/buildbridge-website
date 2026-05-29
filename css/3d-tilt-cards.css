@@ -1,0 +1,211 @@
+/* ========================================
+   V87.2: 3D TILT CARDS WITH GLARE
+   Professional Card Hover Interactions
+   ======================================== */
+
+/* Base tilt card styles */
+.tilt-card-3d,
+[data-tilt] {
+  transform-style: preserve-3d;
+  transform-perspective: 1000px;
+  will-change: transform;
+  position: relative;
+}
+
+/* Card glare overlay */
+.card-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  border-radius: inherit;
+  z-index: 10;
+  mix-blend-mode: overlay;
+}
+
+/* Content depth layers */
+.tilt-card-3d .card-content,
+[data-tilt] .card-content {
+  transform: translateZ(20px);
+  transform-style: preserve-3d;
+}
+
+.tilt-card-3d .service-icon,
+[data-tilt] .service-icon,
+.tilt-card-3d .card-icon,
+[data-tilt] .card-icon {
+  transform: translateZ(40px);
+  transform-style: preserve-3d;
+}
+
+.tilt-card-3d h3,
+[data-tilt] h3,
+.tilt-card-3d .card-title,
+[data-tilt] .card-title {
+  transform: translateZ(30px);
+  transform-style: preserve-3d;
+}
+
+.tilt-card-3d p,
+[data-tilt] p,
+.tilt-card-3d .card-text,
+[data-tilt] .card-text {
+  transform: translateZ(10px);
+  transform-style: preserve-3d;
+}
+
+/* Enhanced border glow on hover */
+.tilt-card-3d::before,
+[data-tilt]::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(
+    135deg,
+    rgba(201, 206, 214, 0.3) 0%,
+    rgba(201, 206, 214, 0) 50%,
+    rgba(201, 206, 214, 0.3) 100%
+  );
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tilt-card-3d:hover::before,
+[data-tilt]:hover::before {
+  opacity: 1;
+}
+
+/* Shadow enhancement on hover */
+.tilt-card-3d:hover,
+[data-tilt]:hover {
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(201, 206, 214, 0.1);
+}
+
+/* Magnetic elements within cards */
+[data-magnetic] {
+  transition: transform 0.15s ease-out;
+}
+
+/* Card edge highlight */
+.tilt-card-3d::after,
+[data-tilt]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(201, 206, 214, 0.1) 0%,
+    transparent 50%,
+    rgba(201, 206, 214, 0.1) 100%
+  ) border-box;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.tilt-card-3d:hover::after,
+[data-tilt]:hover::after {
+  opacity: 1;
+}
+
+/* Floating elements */
+.tilt-float {
+  animation: tilt-float 6s ease-in-out infinite;
+}
+
+@keyframes tilt-float {
+  0%, 100% { transform: translateY(0) translateZ(20px); }
+  50% { transform: translateY(-10px) translateZ(20px); }
+}
+
+/* Shadow depth layers */
+.card-shadow-l1 {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-shadow-l2 {
+  box-shadow: 
+    0 10px 15px rgba(0, 0, 0, 0.1),
+    0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.card-shadow-l3 {
+  box-shadow: 
+    0 20px 25px rgba(0, 0, 0, 0.15),
+    0 10px 10px rgba(0, 0, 0, 0.04);
+}
+
+/* Perspective container */
+.perspective-container {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+/* Card flip variant */
+.tilt-flip-card {
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.tilt-flip-card:hover {
+  transform: rotateY(180deg);
+}
+
+.tilt-flip-card .card-front,
+.tilt-flip-card .card-back {
+  backface-visibility: hidden;
+  position: absolute;
+  inset: 0;
+}
+
+.tilt-flip-card .card-back {
+  transform: rotateY(180deg);
+}
+
+/* Disable on mobile for performance */
+@media (pointer: coarse) {
+  .tilt-card-3d,
+  [data-tilt] {
+    transform: none !important;
+  }
+  
+  .tilt-card-3d .card-content,
+  [data-tilt] .card-content,
+  .tilt-card-3d .service-icon,
+  [data-tilt] .service-icon,
+  .tilt-card-3d h3,
+  [data-tilt] h3 {
+    transform: none !important;
+  }
+  
+  .card-glare {
+    display: none;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .tilt-card-3d,
+  [data-tilt],
+  .tilt-card-3d .card-content,
+  [data-tilt] .card-content,
+  [data-magnetic] {
+    transition: none !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  
+  .card-glare {
+    display: none;
+  }
+}

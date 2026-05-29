@@ -1,270 +1,304 @@
 /**
- * v44.3: Interactive Data Visualization
- * Animated charts for statistics with scroll-triggered animations
+ * Interactive Data Visualization v87.1 - Fortune 500 Animated Charts
+ * Animated statistical displays with counter rings, charts, and progress bars
  */
 
 (function() {
   'use strict';
 
-  class InteractiveDataViz {
-    constructor(element, options = {}) {
-      this.element = element;
-      this.type = element.dataset.chartType || 'circular';
-      this.options = {
-        threshold: 0.3,
-        animationDuration: 1500,
-        ...options
-      };
-
-      this.isAnimated = false;
-      this.init();
-    }
+  const InteractiveDataViz = {
+    counters: [],
+    observer: null,
 
     init() {
-      this.observe();
-    }
+      this.setupObserver();
+      this.initCounterRings();
+      this.initDoughnutCharts();
+      this.initBarCharts();
+      this.initAnimatedCounters();
+      this.initProgressBars();
+      this.bindEvents();
+      
+      console.log('📊 Interactive Data Visualization initialized');
+    },
 
-    observe() {
-      const observer = new IntersectionObserver((entries) => {
+    setupObserver() {
+      this.observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-          if (entry.isIntersecting && !this.isAnimated) {
-            this.animate();
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            this.animateElement(entry.target);
           }
         });
-      }, { threshold: this.options.threshold });
+      }, { threshold: 0.3 });
+    },
 
-      observer.observe(this.element);
-    }
+    animateElement(element) {
+      // Animated counters
+      const counters = element.querySelectorAll('.counter, [data-counter]');
+      counters.forEach(counter => this.animateCounter(counter));
 
-    animate() {
-      this.isAnimated = true;
-      this.element.classList.add('animated');
+      // Counter rings
+      const ring = element.querySelector('.counter-ring');
+      if (ring) this.animateRing(ring);
 
-      switch (this.type) {
-        case 'circular':
-          this.animateCircular();
-          break;
-        case 'linear':
-          this.animateLinear();
-          break;
-        case 'bar':
-          this.animateBar();
-          break;
-        case 'line':
-          this.animateLine();
-          break;
-        case 'donut':
-          this.animateDonut();
-          break;
-        case 'counter':
-          this.animateCounter();
-          break;
-      }
-    }
+      // Progress bars
+      const progressBars = element.querySelectorAll('.progress-viz');
+      progressBars.forEach(bar => this.animateProgress(bar));
 
-    animateCircular() {
-      const progress = this.element.dataset.progress || 75;
-      this.element.style.setProperty('--progress', progress);
+      // Bar charts
+      const barChart = element.querySelector('.bar-chart');
+      if (barChart) this.animateBarChart(barChart);
 
-      // Animate the number
-      const numberEl = this.element.querySelector('.circular-chart-number');
-      if (numberEl) {
-        this.animateNumber(numberEl, 0, parseInt(progress), 1500, '%');
-      }
-    }
+      // Doughnut charts
+      const doughnut = element.querySelector('.doughnut-chart');
+      if (doughnut) this.animateDoughnut(doughnut);
+    },
 
-    animateLinear() {
-      const bars = this.element.querySelectorAll('.linear-chart-fill');
-      bars.forEach((bar, index) => {
-        const value = bar.dataset.value || Math.random() * 100;
-        setTimeout(() => {
-          bar.style.width = `${value}%`;
-        }, index * 100);
-      });
-    }
-
-    animateBar() {
-      const bars = this.element.querySelectorAll('.bar-chart-bar');
-      bars.forEach((bar, index) => {
-        const height = bar.dataset.height || Math.random() * 100;
-        setTimeout(() => {
-          bar.style.setProperty('--bar-height', `${height}%`);
-        }, index * 100);
-      });
-    }
-
-    animateLine() {
-      const path = this.element.querySelector('.line-chart-path');
-      const area = this.element.querySelector('.line-chart-area');
-      const points = this.element.querySelectorAll('.line-chart-point');
-
-      if (path) path.classList.add('animated');
-      if (area) setTimeout(() => area.classList.add('animated'), 500);
-
-      points.forEach((point, index) => {
-        setTimeout(() => {
-          point.classList.add('animated');
-        }, 200 + index * 100);
-      });
-    }
-
-    animateDonut() {
-      const segments = this.element.querySelectorAll('.donut-segment');
-      segments.forEach(segment => {
-        const value = segment.dataset.value || 25;
-        const circumference = 2 * Math.PI * 80; // radius = 80
-        const offset = circumference - (value / 100) * circumference;
-        segment.style.strokeDasharray = `${circumference} ${circumference}`;
-        segment.style.strokeDashoffset = circumference;
+    // Counter Ring Animation
+    initCounterRings() {
+      document.querySelectorAll('.counter-ring').forEach(ring => {
+        this.observer.observe(ring);
         
+        // Create SVG if not exists
+        if (!ring.querySelector('svg')) {
+          this.createRingSVG(ring);
+        }
+      });
+    },
+
+    createRingSVG(ring) {
+      const size = ring.offsetWidth || 200;
+      const radius = (size - 16) / 2;
+      const circumference = 2 * Math.PI * radius;
+      
+      const targetValue = parseInt(ring.dataset.value) || 75;
+      const targetOffset = circumference - (targetValue / 100) * circumference;
+
+      ring.innerHTML = `
+        <svg class="counter-ring-svg" viewBox="0 0 ${size} ${size}">
+          <defs>
+            <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#d4a853;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#c49a4c;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <circle class="counter-ring-bg" cx="${size/2}" cy="${size/2}" r="${radius}"></circle>
+          <circle class="counter-ring-progress" cx="${size/2}" cy="${size/2}" r="${radius}"
+                  style="--ring-offset: ${targetOffset}px; stroke-dasharray: ${circumference}; stroke-dashoffset: ${circumference}"></circle>
+        </svg>
+        <div class="counter-ring-content">
+          <div class="counter-ring-value" data-target="${targetValue}" data-suffix="%">0</div>
+          <div class="counter-ring-label">${ring.dataset.label || 'Complete'}</div>
+        </div>
+      `;
+    },
+
+    animateRing(ring) {
+      const progress = ring.querySelector('.counter-ring-progress');
+      const value = ring.querySelector('.counter-ring-value');
+      const target = parseInt(value.dataset.target) || 75;
+      
+      // Animate ring
+      setTimeout(() => {
+        progress.style.strokeDashoffset = progress.style.getPropertyValue('--ring-offset');
+      }, 100);
+
+      // Animate number
+      this.countUp(value, 0, target, 2000, '%');
+    },
+
+    // Doughnut Chart
+    initDoughnutCharts() {
+      document.querySelectorAll('.doughnut-chart').forEach(chart => {
+        this.createDoughnutChart(chart);
+        this.observer.observe(chart);
+      });
+    },
+
+    createDoughnutChart(chart) {
+      const data = JSON.parse(chart.dataset.chart || '[{"value": 40, "color": "#d4a853"}, {"value": 30, "color": "#8b7355"}, {"value": 30, "color": "#5c4a3d"}]');
+      const size = 280;
+      const radius = 100;
+      const center = size / 2;
+      const circumference = 2 * Math.PI * radius;
+
+      let svgContent = `<svg class="doughnut-chart-svg" viewBox="0 0 ${size} ${size}">`;
+      let currentOffset = 0;
+
+      data.forEach((segment, i) => {
+        const segmentLength = (segment.value / 100) * circumference;
+        const dashArray = `${segmentLength} ${circumference - segmentLength}`;
+        
+        svgContent += `
+          <circle class="doughnut-segment" cx="${center}" cy="${center}" r="${radius}"
+                  fill="none" stroke="${segment.color}" stroke-width="40"
+                  stroke-dasharray="0 ${circumference}"
+                  data-target-array="${dashArray}"
+                  data-index="${i}"
+                  style="transform-origin: center;"></circle>
+        `;
+        currentOffset += segmentLength;
+      });
+
+      svgContent += '</svg>';
+      
+      // Add legend
+      let legendHTML = '<div class="doughnut-legend">';
+      data.forEach((item, i) => {
+        legendHTML += `
+          <div class="doughnut-legend-item" data-index="${i}">
+            <div class="doughnut-legend-color" style="background: ${item.color}"></div>
+            <span class="doughnut-legend-text">${item.label || `Item ${i + 1}`} (${item.value}%)</span>
+          </div>
+        `;
+      });
+      legendHTML += '</div>';
+
+      chart.insertAdjacentHTML('beforeend', svgContent + legendHTML);
+    },
+
+    animateDoughnut(chart) {
+      const segments = chart.querySelectorAll('.doughnut-segment');
+      
+      segments.forEach((segment, i) => {
         setTimeout(() => {
-          segment.style.strokeDashoffset = offset;
-        }, 100);
+          segment.style.strokeDasharray = segment.dataset.targetArray;
+        }, i * 200);
       });
-    }
+    },
 
-    animateCounter() {
-      const counters = this.element.querySelectorAll('[data-count]');
-      counters.forEach(counter => {
-        const target = parseInt(counter.dataset.count);
-        const suffix = counter.dataset.suffix || '';
-        this.animateNumber(counter, 0, target, 2000, suffix);
+    // Bar Chart
+    initBarCharts() {
+      document.querySelectorAll('.bar-chart').forEach(chart => {
+        this.observer.observe(chart);
       });
-    }
+    },
 
-    animateNumber(element, start, end, duration, suffix = '') {
-      const range = end - start;
+    animateBarChart(chart) {
+      const bars = chart.querySelectorAll('.bar-chart-bar');
+      
+      bars.forEach((bar, i) => {
+        setTimeout(() => {
+          bar.style.setProperty('--bar-height', bar.dataset.height || '0.7');
+        }, i * 150);
+      });
+    },
+
+    // Animated Counters
+    initAnimatedCounters() {
+      document.querySelectorAll('[data-counter]').forEach(counter => {
+        this.observer.observe(counter.closest('.stats-viz-card, section') || counter);
+      });
+    },
+
+    animateCounter(counter) {
+      const target = parseInt(counter.dataset.counter) || parseInt(counter.dataset.target) || 0;
+      const prefix = counter.dataset.prefix || '';
+      const suffix = counter.dataset.suffix || '';
+      const duration = parseInt(counter.dataset.duration) || 2000;
+
+      this.countUp(counter, 0, target, duration, suffix, prefix);
+    },
+
+    countUp(element, start, end, duration, suffix = '', prefix = '') {
       const startTime = performance.now();
-
+      
       const update = (currentTime) => {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
         
         // Easing function
         const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-        const current = Math.floor(start + range * easeOutQuart);
+        const current = Math.floor(start + (end - start) * easeOutQuart);
         
-        element.textContent = current + suffix;
-
+        element.textContent = prefix + current.toLocaleString() + suffix;
+        element.classList.add('counting');
+        
         if (progress < 1) {
           requestAnimationFrame(update);
+        } else {
+          element.textContent = prefix + end.toLocaleString() + suffix;
+          element.classList.remove('counting');
         }
       };
-
+      
       requestAnimationFrame(update);
-    }
+    },
 
-    // Static method to create a chart
-    static create(type, container, data, options = {}) {
-      const chart = document.createElement('div');
-      chart.className = `chart-card chart-${type}`;
-      chart.dataset.chartType = type;
-
-      switch (type) {
-        case 'circular':
-          chart.innerHTML = InteractiveDataViz.createCircularChart(data, options);
-          break;
-        case 'bar':
-          chart.innerHTML = InteractiveDataViz.createBarChart(data, options);
-          break;
-        case 'line':
-          chart.innerHTML = InteractiveDataViz.createLineChart(data, options);
-          break;
-      }
-
-      container.appendChild(chart);
-      return new InteractiveDataViz(chart, options);
-    }
-
-    static createCircularChart(data, options) {
-      const progress = data.progress || 75;
-      return `
-        <svg viewBox="0 0 140 140" class="circular-chart" data-progress="${progress}">
-          <defs>
-            <linearGradient id="chart-gradient-1" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" style="stop-color:#C9CED6;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#F5F7FA;stop-opacity:1" />
-            </linearGradient>
-          </defs>
-          <circle class="chart-bg" cx="70" cy="70" r="60"/>
-          <circle class="chart-progress" cx="70" cy="70" r="60"/>
-        </svg>
-        <div class="circular-chart-value">
-          <div class="circular-chart-number">0</div>
-          <div class="circular-chart-label">${data.label || 'Completion'}</div>
-        </div>
-      `;
-    }
-
-    static createBarChart(data, options) {
-      const items = data.items || [{ label: 'A', value: 60 }, { label: 'B', value: 80 }];
-      const maxValue = Math.max(...items.map(i => i.value));
-
-      return `
-        <div class="bar-chart">
-          ${items.map(item => `
-            <div class="bar-chart-column">
-              <div class="bar-chart-bar-wrapper">
-                <div class="bar-chart-bar" data-height="${(item.value / maxValue) * 100}">
-                  <span class="bar-chart-value">${item.value}</span>
-                </div>
-              </div>
-              <span class="bar-chart-label">${item.label}</span>
-            </div>
-          `).join('')}
-        </div>
-      `;
-    }
-
-    static createLineChart(data, options) {
-      const points = data.points || [10, 30, 50, 40, 60, 80, 70];
-      const width = 400;
-      const height = 160;
-      const padding = 20;
-      
-      const maxValue = Math.max(...points);
-      const minValue = Math.min(...points);
-      const range = maxValue - minValue || 1;
-      
-      const xStep = (width - padding * 2) / (points.length - 1);
-      const yScale = (height - padding * 2) / range;
-      
-      const pathPoints = points.map((val, i) => {
-        const x = padding + i * xStep;
-        const y = height - padding - (val - minValue) * yScale;
-        return `${x},${y}`;
+    // Progress Bars
+    initProgressBars() {
+      document.querySelectorAll('.progress-viz').forEach(bar => {
+        this.observer.observe(bar);
       });
+    },
+
+    animateProgress(bar) {
+      const fill = bar.querySelector('.progress-viz-fill');
+      const value = bar.dataset.progress || fill.dataset.progress || 0;
       
-      const pathD = `M ${pathPoints.join(' L ')}`;
-      const areaD = `${pathD} L ${width - padding},${height} L ${padding},${height} Z`;
+      setTimeout(() => {
+        fill.style.setProperty('--progress-width', value + '%');
+      }, 200);
+    },
 
-      return `
-        <div class="line-chart" data-chart-type="line">
-          <svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="chart-gradient-line" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:#C9CED6;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#F5F7FA;stop-opacity:1" />
-              </linearGradient>
-              <linearGradient id="chart-gradient-area" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" style="stop-color:#C9CED6;stop-opacity:0.3" />
-                <stop offset="100%" style="stop-color:#C9CED6;stop-opacity:0" />
-              </linearGradient>
-            </defs>
-            <path class="line-chart-area" d="${areaD}" />
-            <path class="line-chart-path" d="${pathD}" />
-            ${pathPoints.map((p, i) => `<circle class="line-chart-point" cx="${p.split(',')[0]}" cy="${p.split(',')[1]}" />`).join('')}
-          </svg>
-        </div>
-      `;
-    }
+    // Stats Viz Cards
+    initStatsViz() {
+      document.querySelectorAll('.stats-viz-card').forEach(card => {
+        this.observer.observe(card);
+      });
+    },
 
-    // Initialize all charts on page
-    static init(selector = '.chart-card', options = {}) {
-      const charts = document.querySelectorAll(selector);
-      return Array.from(charts).map(chart => new InteractiveDataViz(chart, options));
+    bindEvents() {
+      // Hover effects for charts
+      document.querySelectorAll('.doughnut-legend-item').forEach(item => {
+        item.addEventListener('mouseenter', () => {
+          const index = item.dataset.index;
+          const segment = document.querySelector(`.doughnut-segment[data-index="${index}"]`);
+          if (segment) {
+            segment.style.transform = 'scale(1.05)';
+            segment.style.filter = 'brightness(1.2)';
+          }
+        });
+
+        item.addEventListener('mouseleave', () => {
+          const index = item.dataset.index;
+          const segment = document.querySelector(`.doughnut-segment[data-index="${index}"]`);
+          if (segment) {
+            segment.style.transform = 'scale(1)';
+            segment.style.filter = 'none';
+          }
+        });
+      });
+
+      // Responsive handling
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          document.querySelectorAll('.counter-ring').forEach(ring => {
+            this.createRingSVG(ring);
+          });
+        }, 250);
+      });
+    },
+
+    // Public API
+    refresh() {
+      document.querySelectorAll('.revealed').forEach(el => el.classList.remove('revealed'));
+      this.init();
+    },
+
+    updateValue(selector, newValue) {
+      const element = document.querySelector(selector);
+      if (element) {
+        const current = parseInt(element.textContent.replace(/[^0-9]/g, '')) || 0;
+        const suffix = element.dataset.suffix || '';
+        const prefix = element.dataset.prefix || '';
+        this.countUp(element, current, newValue, 1000, suffix, prefix);
+      }
     }
-  }
+  };
 
   // Auto-initialize
   if (document.readyState === 'loading') {
@@ -273,6 +307,5 @@
     InteractiveDataViz.init();
   }
 
-  // Expose globally
   window.InteractiveDataViz = InteractiveDataViz;
 })();

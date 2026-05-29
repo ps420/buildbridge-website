@@ -1,0 +1,80 @@
+/* ========================================
+   V87.1: PARTICLE CONSTELLATION BACKGROUND
+   Interactive Canvas Particle System Styles
+   ======================================== */
+
+.particle-constellation-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: all;
+  overflow: hidden;
+}
+
+.particle-constellation-bg canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Alternative: Section-specific particle background */
+.section-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.section-particles canvas {
+  width: 100%;
+  height: 100%;
+  opacity: 0.6;
+}
+
+/* Hero-specific particle overlay */
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-particles canvas {
+  width: 100%;
+  height: 100%;
+  opacity: 0.4;
+}
+
+/* Card-specific mini particle effect */
+.card-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.card-particles canvas {
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .particle-constellation-bg,
+  .section-particles,
+  .hero-particles,
+  .card-particles {
+    display: none;
+  }
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .particle-constellation-bg canvas,
+  .section-particles canvas,
+  .hero-particles canvas {
+    opacity: 0.5;
+  }
+}

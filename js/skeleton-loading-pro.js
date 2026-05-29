@@ -1,303 +1,202 @@
 /**
- * Skeleton Loading Pro - v39.0
- * Fortune 500 Professional Loading States
- * Features: Auto skeleton generation, progressive loading, image placeholders
+ * V87.4: SKELETON LOADING STATES PRO
+ * Professional Loading Placeholder System
+ * Fortune 500 Quality Loading Experience
  */
 
-class SkeletonLoadingPro {
-  constructor(options = {}) {
+class SkeletonLoaderPro {
+  constructor(container, options = {}) {
+    this.container = container;
     this.options = {
-      autoSkeleton: true,
-      lazyImages: true,
-      minDisplayTime: 800,
-      fadeOutDuration: 400,
+      type: options.type || 'card',
+      count: options.count || 1,
+      animation: options.animation || 'shimmer',
+      theme: options.theme || 'dark',
+      contentLoaded: options.contentLoaded || false,
       ...options
     };
     
-    this.loadingStates = new Map();
-    this.observers = new Map();
-    this.imageLoaders = new Map();
-    
+    this.skeletons = [];
     this.init();
   }
   
   init() {
-    if (this.options.autoSkeleton) {
-      this.scanAndSkeleton();
-    }
-    
-    if (this.options.lazyImages) {
-      this.initLazyImages();
-    }
-    
-    this.bindEvents();
-    console.log('[Skeleton Loading Pro] Initialized');
+    this.createSkeletons();
   }
   
-  scanAndSkeleton() {
-    // Find elements with data-skeleton attribute
-    document.querySelectorAll('[data-skeleton]').forEach(element => {
-      const type = element.dataset.skeleton;
-      this.createSkeleton(element, type);
-    });
-    
-    // Auto-skeleton common patterns
-    this.autoSkeletonSections();
-  }
-  
-  autoSkeletonSections() {
-    // Hero section skeleton
-    const hero = document.querySelector('.hero');
-    if (hero && !hero.dataset.skeletonInitialized) {
-      this.createHeroSkeleton(hero);
+  createSkeletons() {
+    for (let i = 0; i < this.options.count; i++) {
+      const skeleton = this.createSkeletonElement();
+      this.container.appendChild(skeleton);
+      this.skeletons.push(skeleton);
     }
     
-    // Services grid skeleton
-    const services = document.querySelector('.services-grid');
-    if (services && !services.dataset.skeletonInitialized) {
-      this.createServicesSkeleton(services);
-    }
-    
-    // Projects grid skeleton
-    const projects = document.querySelector('.projects-grid');
-    if (projects && !projects.dataset.skeletonInitialized) {
-      this.createProjectsSkeleton(projects);
-    }
-    
-    // Team grid skeleton
-    const team = document.querySelector('.team-grid');
-    if (team && !team.dataset.skeletonInitialized) {
-      this.createTeamSkeleton(team);
+    if (this.options.contentLoaded) {
+      this.hide();
     }
   }
   
-  createSkeleton(container, type) {
-    const skeletonId = 'skeleton-' + Math.random().toString(36).substr(2, 9);
-    container.dataset.skeletonId = skeletonId;
+  createSkeletonElement() {
+    const wrapper = document.createElement('div');
+    wrapper.className = `skeleton-pro skeleton-${this.options.type} skeleton-${this.options.theme}`;
+    wrapper.setAttribute('role', 'status');
+    wrapper.setAttribute('aria-label', 'Loading content');
+    wrapper.setAttribute('aria-live', 'polite');
     
-    let skeletonHTML = '';
-    
-    switch (type) {
+    switch (this.options.type) {
       case 'card':
-        skeletonHTML = this.getCardSkeleton();
-        break;
-      case 'service':
-        skeletonHTML = this.getServiceCardSkeleton();
-        break;
-      case 'project':
-        skeletonHTML = this.getProjectCardSkeleton();
-        break;
-      case 'team':
-        skeletonHTML = this.getTeamCardSkeleton();
-        break;
-      case 'hero':
-        skeletonHTML = this.getHeroSkeleton();
-        break;
-      case 'stats':
-        skeletonHTML = this.getStatsSkeleton();
+        wrapper.innerHTML = this.getCardSkeleton();
         break;
       case 'text':
-        skeletonHTML = this.getTextSkeleton();
+        wrapper.innerHTML = this.getTextSkeleton();
+        break;
+      case 'image':
+        wrapper.innerHTML = this.getImageSkeleton();
+        break;
+      case 'list':
+        wrapper.innerHTML = this.getListSkeleton();
+        break;
+      case 'table':
+        wrapper.innerHTML = this.getTableSkeleton();
+        break;
+      case 'profile':
+        wrapper.innerHTML = this.getProfileSkeleton();
+        break;
+      case 'article':
+        wrapper.innerHTML = this.getArticleSkeleton();
+        break;
+      case 'stats':
+        wrapper.innerHTML = this.getStatsSkeleton();
+        break;
+      case 'gallery':
+        wrapper.innerHTML = this.getGallerySkeleton();
+        break;
+      case 'custom':
+        wrapper.innerHTML = this.options.customTemplate || '';
         break;
       default:
-        skeletonHTML = this.getCardSkeleton();
+        wrapper.innerHTML = this.getCardSkeleton();
     }
     
-    const wrapper = document.createElement('div');
-    wrapper.className = 'skeleton-loading-enter';
-    wrapper.innerHTML = skeletonHTML;
-    
-    // Store original content
-    const originalContent = container.innerHTML;
-    container.dataset.originalContent = btoa(originalContent);
-    
-    // Insert skeleton
-    container.innerHTML = '';
-    container.appendChild(wrapper);
-    container.dataset.skeletonInitialized = 'true';
-    
-    // Store loading state
-    this.loadingStates.set(skeletonId, {
-      container: container,
-      wrapper: wrapper,
-      startTime: Date.now(),
-      loaded: false
-    });
-    
-    return skeletonId;
+    return wrapper;
   }
   
-  removeSkeleton(skeletonId) {
-    const state = this.loadingStates.get(skeletonId);
-    if (!state) return;
-    
-    const elapsed = Date.now() - state.startTime;
-    const remaining = Math.max(0, this.options.minDisplayTime - elapsed);
-    
-    setTimeout(() => {
-      // Add fade-out class
-      state.wrapper.classList.add('skeleton-loaded');
-      
-      setTimeout(() => {
-        // Restore original content with reveal animation
-        const originalContent = atob(state.container.dataset.originalContent);
-        state.container.innerHTML = originalContent;
-        
-        // Add reveal animation to children
-        const children = state.container.children;
-        Array.from(children).forEach((child, i) => {
-          child.classList.add('content-reveal');
-          child.style.transitionDelay = `${i * 100}ms`;
-        });
-        
-        // Trigger reveal
-        requestAnimationFrame(() => {
-          Array.from(children).forEach(child => {
-            child.classList.add('is-visible');
-          });
-        });
-        
-        this.loadingStates.delete(skeletonId);
-      }, this.options.fadeOutDuration);
-      
-    }, remaining);
-  }
-  
-  initLazyImages() {
-    const images = document.querySelectorAll('img[data-lazy]');
-    
-    const imageObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          this.loadImage(entry.target);
-          imageObserver.unobserve(entry.target);
-        }
-      });
-    }, {
-      rootMargin: '50px 0px'
-    });
-    
-    images.forEach(img => {
-      // Create skeleton placeholder
-      const placeholder = document.createElement('div');
-      placeholder.className = 'skeleton skeleton-image skeleton-image-landscape';
-      placeholder.style.position = 'absolute';
-      placeholder.style.inset = '0';
-      
-      img.parentElement.style.position = 'relative';
-      img.parentElement.insertBefore(placeholder, img);
-      img.style.opacity = '0';
-      img.style.transition = 'opacity 0.5s ease';
-      
-      this.imageLoaders.set(img, placeholder);
-      imageObserver.observe(img);
-    });
-  }
-  
-  loadImage(img) {
-    const placeholder = this.imageLoaders.get(img);
-    const src = img.dataset.lazy;
-    
-    // Create new image for preloading
-    const preloadImg = new Image();
-    
-    preloadImg.onload = () => {
-      img.src = src;
-      img.removeAttribute('data-lazy');
-      
-      // Fade in image and remove skeleton
-      requestAnimationFrame(() => {
-        img.style.opacity = '1';
-        if (placeholder) {
-          placeholder.classList.add('skeleton-loaded');
-          setTimeout(() => placeholder.remove(), 400);
-        }
-      });
-      
-      this.imageLoaders.delete(img);
-    };
-    
-    preloadImg.onerror = () => {
-      // Show error state
-      if (placeholder) {
-        placeholder.style.background = 'rgba(201, 206, 214, 0.1)';
-        placeholder.innerHTML = '<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:rgba(201,206,214,0.4);font-size:24px;">⚠️</span>';
-      }
-    };
-    
-    preloadImg.src = src;
-  }
-  
-  // Skeleton Templates
   getCardSkeleton() {
     return `
-      <div class="skeleton-card">
-        <div class="skeleton-card__header">
-          <div class="skeleton skeleton--avatar"></div>
-          <div style="flex:1">
-            <div class="skeleton skeleton--title" style="width:60%"></div>
-            <div class="skeleton skeleton--text" style="width:40%"></div>
+      <div class="skeleton-header">
+        <div class="skeleton-avatar"></div>
+        <div class="skeleton-title-group">
+          <div class="skeleton-line skeleton-line-short"></div>
+          <div class="skeleton-line skeleton-line-xs"></div>
+        </div>
+      </div>
+      <div class="skeleton-media"></div>
+      <div class="skeleton-content">
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line skeleton-line-medium"></div>
+      </div>
+      <div class="skeleton-${this.options.animation}"></div>
+    `;
+  }
+  
+  getTextSkeleton() {
+    return `
+      <div class="skeleton-content skeleton-text-only">
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line skeleton-line-medium"></div>
+        <div class="skeleton-line skeleton-line-short"></div>
+      </div>
+      <div class="skeleton-${this.options.animation}"></div>
+    `;
+  }
+  
+  getImageSkeleton() {
+    return `
+      <div class="skeleton-media skeleton-media-square">
+        <div class="skeleton-image-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
+          </svg>
+        </div>
+      </div>
+      <div class="skeleton-${this.options.animation}"></div>
+    `;
+  }
+  
+  getListSkeleton() {
+    return `
+      <div class="skeleton-list">
+        ${Array(5).fill(0).map(() => `
+          <div class="skeleton-list-item">
+            <div class="skeleton-avatar skeleton-avatar-sm"></div>
+            <div class="skeleton-line-group">
+              <div class="skeleton-line skeleton-line-short"></div>
+              <div class="skeleton-line skeleton-line-xs"></div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="skeleton-${this.options.animation}"></div>
+    `;
+  }
+  
+  getTableSkeleton() {
+    return `
+      <div class="skeleton-table">
+        <div class="skeleton-table-header">
+          ${Array(4).fill(0).map(() => `
+            <div class="skeleton-line skeleton-line-short"></div>
+          `).join('')}
+        </div>
+        ${Array(5).fill(0).map(() => `
+          <div class="skeleton-table-row">
+            ${Array(4).fill(0).map(() => `
+              <div class="skeleton-line"></div>
+            `).join('')}
+          </div>
+        `).join('')}
+      </div>
+      <div class="skeleton-${this.options.animation}"></div>
+    `;
+  }
+  
+  getProfileSkeleton() {
+    return `
+      <div class="skeleton-profile">
+        <div class="skeleton-cover"></div>
+        <div class="skeleton-profile-content">
+          <div class="skeleton-avatar skeleton-avatar-lg"></div>
+          <div class="skeleton-profile-info">
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line skeleton-line-medium"></div>
+            <div class="skeleton-line skeleton-line-short"></div>
           </div>
         </div>
-        <div class="skeleton-card__content">
-          <div class="skeleton skeleton--paragraph"></div>
-          <div class="skeleton skeleton--paragraph"></div>
-          <div class="skeleton skeleton--paragraph"></div>
-        </div>
-        <div class="skeleton-card__footer">
-          <div class="skeleton skeleton--button-small"></div>
-          <div class="skeleton skeleton--badge"></div>
-        </div>
       </div>
+      <div class="skeleton-${this.options.animation}"></div>
     `;
   }
   
-  getServiceCardSkeleton() {
+  getArticleSkeleton() {
     return `
-      <div class="skeleton-service-card">
-        <div class="skeleton skeleton-service-card__icon"></div>
-        <div class="skeleton skeleton-service-card__title"></div>
-        <div class="skeleton skeleton-service-card__text"></div>
-        <div class="skeleton skeleton-service-card__text" style="width:80%"></div>
-        <div class="skeleton skeleton-service-card__text" style="width:60%"></div>
-      </div>
-    `;
-  }
-  
-  getProjectCardSkeleton() {
-    return `
-      <div class="skeleton-project-card">
-        <div class="skeleton skeleton-project-card__image"></div>
-        <div class="skeleton-project-card__content">
-          <div class="skeleton skeleton-project-card__title"></div>
-          <div class="skeleton skeleton-project-card__subtitle"></div>
+      <div class="skeleton-article">
+        <div class="skeleton-media skeleton-media-wide"></div>
+        <div class="skeleton-content">
+          <div class="skeleton-line skeleton-line-lg"></div>
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line skeleton-line-medium"></div>
+          <div class="skeleton-gap"></div>
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line skeleton-line-short"></div>
         </div>
       </div>
-    `;
-  }
-  
-  getTeamCardSkeleton() {
-    return `
-      <div class="skeleton-team-card">
-        <div class="skeleton skeleton-team-card__avatar"></div>
-        <div class="skeleton skeleton-team-card__name"></div>
-        <div class="skeleton skeleton-team-card__role"></div>
-      </div>
-    `;
-  }
-  
-  getHeroSkeleton() {
-    return `
-      <div class="skeleton-hero">
-        <div class="skeleton-hero__content">
-          <div class="skeleton skeleton--badge" style="margin-bottom:16px"></div>
-          <div class="skeleton skeleton--heading"></div>
-          <div class="skeleton skeleton--paragraph"></div>
-          <div class="skeleton skeleton--paragraph" style="width:90%"></div>
-          <div class="skeleton skeleton--button" style="margin-top:24px"></div>
-        </div>
-        <div class="skeleton skeleton-hero__image"></div>
-      </div>
+      <div class="skeleton-${this.options.animation}"></div>
     `;
   }
   
@@ -305,97 +204,220 @@ class SkeletonLoadingPro {
     return `
       <div class="skeleton-stats">
         ${Array(4).fill(0).map(() => `
-          <div class="skeleton-stat">
-            <div class="skeleton skeleton-stat__number"></div>
-            <div class="skeleton skeleton-stat__label"></div>
+          <div class="skeleton-stat-item">
+            <div class="skeleton-circle"></div>
+            <div class="skeleton-line skeleton-line-short"></div>
+            <div class="skeleton-line skeleton-line-xs"></div>
           </div>
         `).join('')}
       </div>
+      <div class="skeleton-${this.options.animation}"></div>
     `;
   }
   
-  getTextSkeleton() {
+  getGallerySkeleton() {
     return `
-      <div class="skeleton-text">
-        <div class="skeleton skeleton--title"></div>
-        <div class="skeleton skeleton--paragraph"></div>
-        <div class="skeleton skeleton--paragraph"></div>
-        <div class="skeleton skeleton--paragraph"></div>
-        <div class="skeleton skeleton--paragraph" style="width:70%"></div>
+      <div class="skeleton-gallery">
+        <div class="skeleton-gallery-main skeleton-media"></div>
+        <div class="skeleton-gallery-thumbs">
+          ${Array(4).fill(0).map(() => `
+            <div class="skeleton-media skeleton-media-sm"></div>
+          `).join('')}
+        </div>
+      </div>
+      <div class="skeleton-${this.options.animation}"></div>
+    `;
+  }
+  
+  show() {
+    this.skeletons.forEach(skeleton => {
+      skeleton.style.display = 'block';
+      skeleton.classList.remove('skeleton-fade-out');
+    });
+  }
+  
+  hide() {
+    this.skeletons.forEach(skeleton => {
+      skeleton.classList.add('skeleton-fade-out');
+      setTimeout(() => {
+        skeleton.style.display = 'none';
+      }, 300);
+    });
+  }
+  
+  destroy() {
+    this.skeletons.forEach(skeleton => {
+      skeleton.remove();
+    });
+    this.skeletons = [];
+  }
+  
+  // Static method for quick initialization
+  static load(containerSelector, options = {}) {
+    const container = document.querySelector(containerSelector);
+    if (!container) return null;
+    return new SkeletonLoaderPro(container, options);
+  }
+}
+
+// ========================================
+// IMAGE LOADING WITH SKELETON
+// ========================================
+
+class SkeletonImageLoader {
+  constructor(img, options = {}) {
+    this.img = img;
+    this.options = {
+      backgroundColor: options.backgroundColor || '#1a1a22',
+      animation: options.animation || 'shimmer',
+      theme: options.theme || 'dark',
+      ...options
+    };
+    
+    this.wrapper = null;
+    this.skeleton = null;
+    
+    this.init();
+  }
+  
+  init() {
+    // Wrap image
+    this.wrapper = document.createElement('div');
+    this.wrapper.className = 'skeleton-image-wrapper';
+    this.wrapper.style.cssText = `
+      position: relative;
+      background: ${this.options.backgroundColor};
+      overflow: hidden;
+    `;
+    
+    this.img.parentNode.insertBefore(this.wrapper, this.img);
+    this.wrapper.appendChild(this.img);
+    
+    // Create skeleton
+    this.skeleton = document.createElement('div');
+    this.skeleton.className = `skeleton-pro skeleton-image-placeholder skeleton-${this.options.theme}`;
+    this.skeleton.innerHTML = `<div class="skeleton-${this.options.animation}"></div>`;
+    
+    this.wrapper.appendChild(this.skeleton);
+    
+    // Hide image initially
+    this.img.style.opacity = '0';
+    this.img.style.transition = 'opacity 0.3s ease';
+    
+    // Listen for image load
+    if (this.img.complete) {
+      this.onImageLoad();
+    } else {
+      this.img.addEventListener('load', () => this.onImageLoad());
+      this.img.addEventListener('error', () => this.onImageError());
+    }
+  }
+  
+  onImageLoad() {
+    this.skeleton.classList.add('skeleton-fade-out');
+    this.img.style.opacity = '1';
+    
+    setTimeout(() => {
+      this.skeleton.remove();
+    }, 300);
+  }
+  
+  onImageError() {
+    this.skeleton.innerHTML = `
+      <div class="skeleton-error">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span>Failed to load</span>
       </div>
     `;
+    this.skeleton.classList.add('skeleton-error-state');
+  }
+}
+
+// ========================================
+// PROGRESSIVE LOADING MANAGER
+// ========================================
+
+class ProgressiveLoader {
+  constructor() {
+    this.observer = null;
+    this.pendingImages = new Set();
+    this.init();
   }
   
-  // Public API
-  showLoading(selector, type = 'card') {
-    const elements = document.querySelectorAll(selector);
-    const ids = [];
-    
-    elements.forEach(el => {
-      const id = this.createSkeleton(el, type);
-      ids.push(id);
-    });
-    
-    return ids;
-  }
-  
-  hideLoading(ids) {
-    if (Array.isArray(ids)) {
-      ids.forEach(id => this.removeSkeleton(id));
-    } else {
-      this.removeSkeleton(ids);
-    }
-  }
-  
-  showGlobalLoading() {
-    const overlay = document.createElement('div');
-    overlay.className = 'skeleton-overlay';
-    overlay.id = 'global-skeleton-loading';
-    overlay.innerHTML = '<div class="skeleton-overlay__spinner"></div>';
-    document.body.appendChild(overlay);
-    
-    document.body.style.overflow = 'hidden';
-  }
-  
-  hideGlobalLoading() {
-    const overlay = document.getElementById('global-skeleton-loading');
-    if (overlay) {
-      overlay.style.opacity = '0';
-      setTimeout(() => {
-        overlay.remove();
-        document.body.style.overflow = '';
-      }, 300);
-    }
-  }
-  
-  bindEvents() {
-    // Handle page load
-    window.addEventListener('load', () => {
-      // Auto-remove skeletons after load
-      this.loadingStates.forEach((state, id) => {
-        this.removeSkeleton(id);
+  init() {
+    // Intersection Observer for lazy loading
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.loadImage(entry.target);
+          this.observer.unobserve(entry.target);
+        }
       });
+    }, {
+      rootMargin: '50px 0px',
+      threshold: 0.01
     });
     
-    // Handle AJAX content
-    document.addEventListener('contentLoaded', (e) => {
-      if (e.detail && e.detail.selector) {
-        this.scanAndSkeleton();
-      }
+    // Observe all images with data-src
+    document.querySelectorAll('img[data-src]').forEach(img => {
+      this.observer.observe(img);
     });
+  }
+  
+  loadImage(img) {
+    const src = img.dataset.src;
+    if (!src) return;
+    
+    // Create skeleton loader
+    const loader = new SkeletonImageLoader(img, {
+      animation: img.dataset.skeletonAnimation || 'shimmer',
+      theme: img.dataset.skeletonTheme || 'dark'
+    });
+    
+    // Set src to load image
+    img.src = src;
+    img.removeAttribute('data-src');
   }
 }
 
-// Initialize when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    window.skeletonLoader = new SkeletonLoadingPro();
+// ========================================
+// AUTO-INITIALIZATION
+// ========================================
+
+function initSkeletonLoadingPro() {
+  // Initialize progressive loader
+  window.progressiveLoader = new ProgressiveLoader();
+  
+  // Auto-initialize skeleton containers
+  document.querySelectorAll('[data-skeleton]').forEach(container => {
+    const options = {
+      type: container.dataset.skeleton || 'card',
+      count: parseInt(container.dataset.skeletonCount) || 1,
+      animation: container.dataset.skeletonAnimation || 'shimmer',
+      theme: container.dataset.skeletonTheme || 'dark'
+    };
+    
+    container._skeletonLoader = new SkeletonLoaderPro(container, options);
   });
-} else {
-  window.skeletonLoader = new SkeletonLoadingPro();
+  
+  // Auto-initialize skeleton images
+  document.querySelectorAll('img[data-skeleton-load]').forEach(img => {
+    new SkeletonImageLoader(img);
+  });
 }
 
-// Export for module use
+// Initialize on DOM ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initSkeletonLoadingPro);
+} else {
+  initSkeletonLoadingPro();
+}
+
+// Export
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = SkeletonLoadingPro;
+  module.exports = { SkeletonLoaderPro, SkeletonImageLoader, ProgressiveLoader };
 }
