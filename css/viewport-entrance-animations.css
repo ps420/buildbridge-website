@@ -1,0 +1,361 @@
+/* ========================================
+   ADVANCED VIEWPORT ENTRANCE ANIMATIONS
+   v98.0: Fortune 500 Scroll-Triggered Reveals
+   Sophisticated animation presets with IntersectionObserver
+======================================== */
+
+/* Animation base classes */
+.vp-animate {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.vp-animate.vp-animated {
+  opacity: 1;
+}
+
+/* -------------------------------------------------
+   FADE ANIMATIONS
+------------------------------------------------- */
+.vp-fade-up {
+  transform: translateY(40px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vp-fade-up.vp-animated {
+  transform: translateY(0);
+}
+
+.vp-fade-down {
+  transform: translateY(-40px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vp-fade-down.vp-animated {
+  transform: translateY(0);
+}
+
+.vp-fade-left {
+  transform: translateX(40px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vp-fade-left.vp-animated {
+  transform: translateX(0);
+}
+
+.vp-fade-right {
+  transform: translateX(-40px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vp-fade-right.vp-animated {
+  transform: translateX(0);
+}
+
+/* -------------------------------------------------
+   SCALE ANIMATIONS
+------------------------------------------------- */
+.vp-scale-in {
+  transform: scale(0.9);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vp-scale-in.vp-animated {
+  transform: scale(1);
+}
+
+.vp-scale-up {
+  transform: scale(0.8) translateY(30px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vp-scale-up.vp-animated {
+  transform: scale(1) translateY(0);
+}
+
+/* -------------------------------------------------
+   ROTATE ANIMATIONS
+------------------------------------------------- */
+.vp-rotate-in {
+  transform: rotate(-5deg) scale(0.95);
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vp-rotate-in.vp-animated {
+  transform: rotate(0) scale(1);
+}
+
+.vp-flip-x {
+  transform: perspective(1000px) rotateX(-90deg);
+  opacity: 0;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: center bottom;
+}
+
+.vp-flip-x.vp-animated {
+  transform: perspective(1000px) rotateX(0);
+}
+
+.vp-flip-y {
+  transform: perspective(1000px) rotateY(-90deg);
+  opacity: 0;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: right center;
+}
+
+.vp-flip-y.vp-animated {
+  transform: perspective(1000px) rotateY(0);
+}
+
+/* -------------------------------------------------
+   BLUR ANIMATIONS
+------------------------------------------------- */
+.vp-blur-in {
+  filter: blur(20px);
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vp-blur-in.vp-animated {
+  filter: blur(0);
+}
+
+/* -------------------------------------------------
+   CLIP PATH ANIMATIONS
+------------------------------------------------- */
+.vp-clip-reveal {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.vp-clip-reveal.vp-animated {
+  clip-path: inset(0 0 0 0);
+}
+
+.vp-clip-circle {
+  clip-path: circle(0% at 50% 50%);
+  transition: clip-path 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vp-clip-circle.vp-animated {
+  clip-path: circle(100% at 50% 50%);
+}
+
+.vp-clip-diagonal {
+  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  transition: clip-path 0.9s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.vp-clip-diagonal.vp-animated {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* -------------------------------------------------
+   MASK ANIMATIONS
+------------------------------------------------- */
+.vp-mask-reveal {
+  position: relative;
+  overflow: hidden;
+}
+
+.vp-mask-reveal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  transform: translateY(0);
+  transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.vp-mask-reveal.vp-animated::after {
+  transform: translateY(100%);
+}
+
+/* -------------------------------------------------
+   STAGGER GROUPS
+------------------------------------------------- */
+.vp-stagger-group {
+  contain: layout style;
+}
+
+.vp-stagger-group .vp-stagger-item {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vp-stagger-group.vp-animated .vp-stagger-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delays */
+.vp-stagger-group.vp-animated .vp-stagger-item:nth-child(1) { transition-delay: 0ms; }
+.vp-stagger-group.vp-animated .vp-stagger-item:nth-child(2) { transition-delay: 80ms; }
+.vp-stagger-group.vp-animated .vp-stagger-item:nth-child(3) { transition-delay: 160ms; }
+.vp-stagger-group.vp-animated .vp-stagger-item:nth-child(4) { transition-delay: 240ms; }
+.vp-stagger-group.vp-animated .vp-stagger-item:nth-child(5) { transition-delay: 320ms; }
+.vp-stagger-group.vp-animated .vp-stagger-item:nth-child(6) { transition-delay: 400ms; }
+.vp-stagger-group.vp-animated .vp-stagger-item:nth-child(7) { transition-delay: 480ms; }
+.vp-stagger-group.vp-animated .vp-stagger-item:nth-child(8) { transition-delay: 560ms; }
+
+/* -------------------------------------------------
+   SPECIAL EFFECTS
+------------------------------------------------- */
+/* Typewriter reveal */
+.vp-typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid var(--accent-primary, #c9ced6);
+  width: 0;
+  animation: none;
+}
+
+.vp-typewriter.vp-animated {
+  animation: typewriter 0.8s steps(40, end) forwards,
+             blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: var(--accent-primary, #c9ced6); }
+}
+
+/* Slide from side with elastic */
+.vp-elastic-right {
+  transform: translateX(-100px);
+  opacity: 0;
+  transition: opacity 0.6s ease,
+              transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.vp-elastic-right.vp-animated {
+  transform: translateX(0);
+}
+
+/* Reveal with shadow */
+.vp-shadow-reveal {
+  transform: translateY(40px);
+  opacity: 0;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vp-shadow-reveal.vp-animated {
+  transform: translateY(0);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+/* -------------------------------------------------
+   DELAY UTILITIES
+------------------------------------------------- */
+.vp-delay-100 { transition-delay: 100ms; }
+.vp-delay-200 { transition-delay: 200ms; }
+.vp-delay-300 { transition-delay: 300ms; }
+.vp-delay-400 { transition-delay: 400ms; }
+.vp-delay-500 { transition-delay: 500ms; }
+.vp-delay-600 { transition-delay: 600ms; }
+.vp-delay-700 { transition-delay: 700ms; }
+.vp-delay-800 { transition-delay: 800ms; }
+
+/* -------------------------------------------------
+   DURATION UTILITIES
+------------------------------------------------- */
+.vp-duration-fast { transition-duration: 0.3s; }
+.vp-duration-normal { transition-duration: 0.6s; }
+.vp-duration-slow { transition-duration: 1s; }
+.vp-duration-slower { transition-duration: 1.4s; }
+
+/* -------------------------------------------------
+   EASING UTILITIES
+------------------------------------------------- */
+.vp-ease-smooth { transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+.vp-ease-bounce { transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+.vp-ease-dramatic { transition-timing-function: cubic-bezier(0.77, 0, 0.175, 1); }
+
+/* -------------------------------------------------
+   SCROLL PROGRESS ANIMATIONS
+------------------------------------------------- */
+.vp-scroll-fade {
+  opacity: calc(1 - var(--scroll-progress, 0));
+  transform: translateY(calc(var(--scroll-progress, 0) * -50px));
+  transition: none;
+}
+
+.vp-scroll-scale {
+  transform: scale(calc(1 - var(--scroll-progress, 0) * 0.2));
+  opacity: calc(1 - var(--scroll-progress, 0) * 0.5);
+  transition: none;
+}
+
+/* -------------------------------------------------
+   PARALLAX LAYERS
+------------------------------------------------- */
+.vp-parallax-slow {
+  transform: translateY(calc(var(--scroll-offset, 0) * 0.1));
+  transition: none;
+}
+
+.vp-parallax-medium {
+  transform: translateY(calc(var(--scroll-offset, 0) * 0.2));
+  transition: none;
+}
+
+.vp-parallax-fast {
+  transform: translateY(calc(var(--scroll-offset, 0) * 0.3));
+  transition: none;
+}
+
+/* -------------------------------------------------
+   REDUCED MOTION
+------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .vp-animate,
+  .vp-fade-up,
+  .vp-fade-down,
+  .vp-fade-left,
+  .vp-fade-right,
+  .vp-scale-in,
+  .vp-scale-up,
+  .vp-rotate-in,
+  .vp-flip-x,
+  .vp-flip-y,
+  .vp-blur-in,
+  .vp-clip-reveal,
+  .vp-clip-circle,
+  .vp-clip-diagonal,
+  .vp-stagger-group .vp-stagger-item {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    clip-path: none;
+    transition: none;
+    animation: none;
+  }
+  
+  .vp-typewriter {
+    width: auto;
+    border-right: none;
+    white-space: normal;
+  }
+}

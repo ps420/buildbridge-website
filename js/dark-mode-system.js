@@ -1,272 +1,239 @@
 /**
- * v47.0: DARK MODE SYSTEM - Fortune 500 Professional
- * Comprehensive theme management with smooth transitions
+ * Fortune 500 Dark Mode Toggle System
+ * v97.0: Comprehensive Light/Dark Theme Management
+ * Features: System preference detection, persistent state, smooth transitions
  */
 
-class DarkModeSystem {
+class DarkModeManager {
   constructor() {
-    this.currentTheme = 'light';
+    this.STORAGE_KEY = 'buildbridge-theme';
+    this.currentTheme = 'dark'; // Default to dark (BuildBridge brand)
     this.systemPreference = null;
-    this.toggleButton = null;
-    this.transitionOverlay = null;
+    this.mediaQuery = null;
+    this.toggleButtons = [];
     
     this.init();
   }
-
+  
   init() {
-    // Check for saved preference or system preference
-    this.loadTheme();
+    // Detect system preference
+    this.detectSystemPreference();
     
-    // Create toggle button
-    this.createToggleButton();
+    // Load saved preference
+    this.loadSavedTheme();
     
-    // Create transition overlay
-    this.createTransitionOverlay();
+    // Apply theme immediately (before DOM ready to prevent flash)
+    this.applyTheme(this.currentTheme, false);
+    
+    // Setup when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => this.setup());
+    } else {
+      this.setup();
+    }
+    
+    console.log(`✨ DarkModeManager initialized (${this.currentTheme})`);
+  }
+  
+  detectSystemPreference() {
+    this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    this.systemPreference = this.mediaQuery.matches ? 'dark' : 'light';
     
     // Listen for system preference changes
-    this.listenForSystemChanges();
-    
-    // Add keyboard shortcut (Cmd/Ctrl + Shift + L)
-    this.addKeyboardShortcut();
-    
-    // Announce theme to screen readers
-    this.announceTheme();
-  }
-
-  loadTheme() {
-    const savedTheme = localStorage.getItem('buildbridge-theme');
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (savedTheme) {
-      this.currentTheme = savedTheme;
-    } else if (systemPrefersDark) {
-      this.currentTheme = 'dark';
-    }
-    
-    this.applyTheme(this.currentTheme, false);
-  }
-
-  applyTheme(theme, animate = true) {
-    this.currentTheme = theme;
-    
-    // Disable transitions temporarily to prevent flash
-    document.body.classList.add('no-theme-transition');
-    
-    // Apply theme
-    document.documentElement.setAttribute('data-theme', theme);
-    
-    // Re-enable transitions
-    setTimeout(() => {
-      document.body.classList.remove('no-theme-transition');
-    }, 100);
-    
-    // Update toggle button if exists
-    if (this.toggleButton) {
-      this.updateToggleButton(theme);
-    }
-    
-    // Store preference
-    localStorage.setItem('buildbridge-theme', theme);
-    
-    // Dispatch custom event
-    window.dispatchEvent(new CustomEvent('themechange', { 
-      detail: { theme, previousTheme: theme === 'dark' ? 'light' : 'dark' }
-    }));
-    
-    // Announce to screen readers
-    this.announceTheme();
-  }
-
-  toggleTheme(e) {
-    const newTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
-    
-    // Animate theme transition
-    this.animateThemeTransition(e, newTheme);
-  }
-
-  animateThemeTransition(e, newTheme) {
-    // If click event provided, use circular reveal
-    if (e && e.clientX && e.clientY) {
-      this.circularRevealTransition(e.clientX, e.clientY, newTheme);
-    } else {
-      // Fall back to fade transition
-      this.fadeTransition(newTheme);
-    }
-  }
-
-  circularRevealTransition(x, y, newTheme) {
-    const circle = document.createElement('div');
-    circle.className = 'theme-reveal-circle';
-    circle.style.left = `${x}px`;
-    circle.style.top = `${y}px`;
-    circle.style.width = '100vmax';
-    circle.style.height = '100vmax';
-    circle.style.marginLeft = '-50vmax';
-    circle.style.marginTop = '-50vmax';
-    
-    document.body.appendChild(circle);
-    
-    // Trigger animation
-    requestAnimationFrame(() => {
-      circle.classList.add('expanding');
-      
-      // Apply theme mid-animation
-      setTimeout(() => {
-        this.applyTheme(newTheme);
-      }, 200);
-      
-      // Clean up after animation
-      setTimeout(() => {
-        circle.remove();
-      }, 600);
-    });
-  }
-
-  fadeTransition(newTheme) {
-    if (this.transitionOverlay) {
-      this.transitionOverlay.classList.add('active');
-      
-      setTimeout(() => {
-        this.applyTheme(newTheme);
-        
-        setTimeout(() => {
-          this.transitionOverlay.classList.remove('active');
-        }, 300);
-      }, 300);
-    } else {
-      this.applyTheme(newTheme);
-    }
-  }
-
-  createToggleButton() {
-    // Check if button already exists
-    if (document.querySelector('.dark-mode-toggle')) return;
-    
-    const button = document.createElement('button');
-    button.className = 'dark-mode-toggle';
-    button.setAttribute('aria-label', 'Toggle dark mode');
-    button.setAttribute('title', 'Toggle dark mode (⌘/Ctrl + Shift + L)');
-    button.innerHTML = `
-      <svg class="toggle-icon toggle-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="5"/>
-        <line x1="12" y1="1" x2="12" y2="3"/>
-        <line x1="12" y1="21" x2="12" y2="23"/>
-        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-        <line x1="1" y1="12" x2="3" y2="12"/>
-        <line x1="21" y1="12" x2="23" y2="12"/>
-        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-      </svg>
-      <svg class="toggle-icon toggle-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-      </svg>
-    `;
-    
-    button.addEventListener('click', (e) => this.toggleTheme(e));
-    
-    document.body.appendChild(button);
-    this.toggleButton = button;
-    
-    // Update initial state
-    this.updateToggleButton(this.currentTheme);
-  }
-
-  updateToggleButton(theme) {
-    if (!this.toggleButton) return;
-    
-    this.toggleButton.setAttribute('aria-label', 
-      theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
-    );
-  }
-
-  createTransitionOverlay() {
-    const overlay = document.createElement('div');
-    overlay.className = 'theme-transition-overlay';
-    document.body.appendChild(overlay);
-    this.transitionOverlay = overlay;
-  }
-
-  listenForSystemChanges() {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    
-    mediaQuery.addEventListener('change', (e) => {
+    this.mediaQuery.addEventListener('change', (e) => {
       this.systemPreference = e.matches ? 'dark' : 'light';
       
-      // Only auto-switch if user hasn't manually set preference
-      const savedTheme = localStorage.getItem('buildbridge-theme');
-      if (!savedTheme) {
-        this.applyTheme(this.systemPreference);
+      // Only auto-switch if no user preference is saved
+      if (!localStorage.getItem(this.STORAGE_KEY)) {
+        this.setTheme(this.systemPreference);
       }
     });
   }
-
-  addKeyboardShortcut() {
-    document.addEventListener('keydown', (e) => {
-      // Cmd/Ctrl + Shift + L
-      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'L') {
-        e.preventDefault();
-        this.toggleTheme();
+  
+  loadSavedTheme() {
+    try {
+      const saved = localStorage.getItem(this.STORAGE_KEY);
+      if (saved && ['light', 'dark', 'auto'].includes(saved)) {
+        this.currentTheme = saved === 'auto' ? this.systemPreference : saved;
+      } else {
+        // No saved preference, use system or default
+        this.currentTheme = this.systemPreference || 'dark';
       }
-    });
+    } catch (e) {
+      console.warn('Could not access localStorage:', e);
+      this.currentTheme = 'dark';
+    }
   }
-
-  announceTheme() {
-    // Create or update live region for screen readers
-    let announcer = document.getElementById('theme-announcer');
+  
+  setup() {
+    this.findToggleButtons();
+    this.createDefaultToggle();
+    this.bindEvents();
     
-    if (!announcer) {
-      announcer = document.createElement('div');
-      announcer.id = 'theme-announcer';
-      announcer.setAttribute('role', 'status');
-      announcer.setAttribute('aria-live', 'polite');
-      announcer.setAttribute('aria-atomic', 'true');
-      announcer.className = 'sr-only';
-      announcer.style.cssText = `
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
-      `;
-      document.body.appendChild(announcer);
+    // Add loaded class after initial setup
+    requestAnimationFrame(() => {
+      document.body.classList.remove('theme-transitioning');
+    });
+  }
+  
+  findToggleButtons() {
+    this.toggleButtons = document.querySelectorAll(
+      '[data-theme-toggle], .dark-mode-toggle, .dark-mode-icon-toggle'
+    );
+    
+    this.toggleButtons.forEach(btn => {
+      this.updateToggleState(btn);
+    });
+  }
+  
+  createDefaultToggle() {
+    // Only create if none exist in navigation
+    if (this.toggleButtons.length > 0) return;
+    
+    const nav = document.querySelector('.nav, header, nav');
+    if (!nav) return;
+    
+    const toggle = document.createElement('button');
+    toggle.className = 'dark-mode-icon-toggle';
+    toggle.setAttribute('data-theme-toggle', '');
+    toggle.setAttribute('aria-label', 'Toggle dark mode');
+    toggle.innerHTML = this.getToggleIcon();
+    
+    nav.appendChild(toggle);
+    this.toggleButtons = [toggle];
+    this.updateToggleState(toggle);
+  }
+  
+  getToggleIcon() {
+    return `
+      <span class="icon">
+        <span class="icon-sun">☀️</span>
+        <span class="icon-moon" style="display: none;">🌙</span>
+      </span>
+    `;
+  }
+  
+  bindEvents() {
+    // Theme toggle clicks
+    document.addEventListener('click', (e) => {
+      const toggle = e.target.closest('[data-theme-toggle], .dark-mode-toggle, .dark-mode-icon-toggle');
+      if (toggle) {
+        e.preventDefault();
+        this.toggle();
+      }
+    });
+    
+    // Keyboard shortcut: Ctrl/Cmd + Shift + L
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'L') {
+        e.preventDefault();
+        this.toggle();
+      }
+    });
+  }
+  
+  toggle() {
+    const newTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
+    this.setTheme(newTheme);
+  }
+  
+  setTheme(theme, save = true) {
+    if (theme === this.currentTheme) return;
+    
+    // Enable transitions after first render
+    document.body.classList.add('theme-transitioning');
+    
+    this.currentTheme = theme;
+    this.applyTheme(theme, true);
+    
+    if (save) {
+      this.saveTheme(theme);
     }
     
-    announcer.textContent = `Switched to ${this.currentTheme} mode`;
+    // Update all toggle buttons
+    this.toggleButtons.forEach(btn => this.updateToggleState(btn));
+    
+    // Dispatch event for other components
+    window.dispatchEvent(new CustomEvent('themechange', {
+      detail: { theme: this.currentTheme }
+    }));
+    
+    // Remove transition lock after animation
+    setTimeout(() => {
+      document.body.classList.remove('theme-transitioning');
+    }, 350);
+    
+    console.log(`Theme changed to: ${theme}`);
   }
-
-  // Public API
-  getTheme() {
+  
+  applyTheme(theme, animate = true) {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.body.setAttribute('data-theme', theme);
+    
+    // Update meta theme-color for mobile browsers
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) {
+      metaThemeColor.setAttribute('content', theme === 'dark' ? '#0f0f10' : '#ffffff');
+    }
+  }
+  
+  saveTheme(theme) {
+    try {
+      localStorage.setItem(this.STORAGE_KEY, theme);
+    } catch (e) {
+      console.warn('Could not save theme preference:', e);
+    }
+  }
+  
+  updateToggleState(button) {
+    const isDark = this.currentTheme === 'dark';
+    button.classList.toggle('active', isDark);
+    button.setAttribute('aria-pressed', isDark);
+    
+    // Update icon if using icon toggle
+    const sunIcon = button.querySelector('.icon-sun, .toggle-icon-sun');
+    const moonIcon = button.querySelector('.icon-moon, .toggle-icon-moon');
+    
+    if (sunIcon && moonIcon) {
+      sunIcon.style.display = isDark ? 'none' : 'inline';
+      moonIcon.style.display = isDark ? 'inline' : 'none';
+    }
+    
+    // Update toggle label if present
+    const label = button.querySelector('.dark-mode-switch-label');
+    if (label) {
+      label.textContent = isDark ? 'Dark' : 'Light';
+    }
+  }
+  
+  getCurrentTheme() {
     return this.currentTheme;
   }
-
-  setTheme(theme) {
-    if (theme === 'dark' || theme === 'light') {
-      this.applyTheme(theme);
-    }
+  
+  isDark() {
+    return this.currentTheme === 'dark';
   }
-
-  resetToSystemPreference() {
-    localStorage.removeItem('buildbridge-theme');
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    this.applyTheme(systemPrefersDark ? 'dark' : 'light');
+  
+  // Helper for components that need theme awareness
+  onThemeChange(callback) {
+    window.addEventListener('themechange', (e) => {
+      callback(e.detail.theme);
+    });
+    
+    // Call immediately with current theme
+    callback(this.currentTheme);
   }
 }
 
-// Initialize when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    window.darkModeSystem = new DarkModeSystem();
-  });
-} else {
-  window.darkModeSystem = new DarkModeSystem();
-}
+// Initialize theme manager
+window.themeManager = new DarkModeManager();
 
-// Export for module usage
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = DarkModeSystem;
-}
+// Prevent flash of wrong theme (FOUT)
+(function() {
+  const saved = localStorage.getItem('buildbridge-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const theme = saved || (prefersDark ? 'dark' : 'light');
+  
+  document.documentElement.setAttribute('data-theme', theme);
+  document.documentElement.classList.add('theme-transitioning');
+})();

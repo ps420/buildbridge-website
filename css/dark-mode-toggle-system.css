@@ -1,0 +1,340 @@
+/* ========================================
+   FORTUNE 500 DARK MODE TOGGLE SYSTEM
+   v97.0: Comprehensive Light/Dark Theme Switcher
+   Smooth transitions, system preference detection, persistent state
+======================================== */
+
+/* CSS Custom Properties for theming */
+:root {
+  /* Light theme (default) */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  --text-primary: #0f0f10;
+  --text-secondary: #495057;
+  --text-muted: #6c757d;
+  --accent-primary: #3d5a80;
+  --accent-secondary: #c9ced6;
+  --border-color: #dee2e6;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --card-bg: #ffffff;
+  --nav-bg: rgba(255, 255, 255, 0.95);
+  --hero-gradient: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  --glow-color: rgba(61, 90, 128, 0.3);
+  
+  /* Toggle button colors */
+  --toggle-bg: #e9ecef;
+  --toggle-knob: #ffffff;
+  --toggle-icon-sun: #f39c12;
+  --toggle-icon-moon: #6c757d;
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+  --bg-primary: #0f0f10;
+  --bg-secondary: #1a1a22;
+  --bg-tertiary: #2a2a35;
+  --text-primary: #c9ced6;
+  --text-secondary: #a0a8b3;
+  --text-muted: #6c757d;
+  --accent-primary: #c9ced6;
+  --accent-secondary: #3d5a80;
+  --border-color: rgba(201, 206, 214, 0.1);
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --card-bg: #1a1a22;
+  --nav-bg: rgba(15, 15, 18, 0.95);
+  --hero-gradient: linear-gradient(135deg, #0f0f12 0%, #1a1a22 100%);
+  --glow-color: rgba(201, 206, 214, 0.2);
+  
+  --toggle-bg: #2a2a35;
+  --toggle-knob: #3d5a80;
+  --toggle-icon-sun: #6c757d;
+  --toggle-icon-moon: #c9ced6;
+}
+
+/* Smooth theme transitions */
+*, *::before, *::after {
+  transition: background-color 0.3s ease,
+              color 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+/* Disable transitions during page load */
+.theme-transitioning *,
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+  transition: none !important;
+}
+
+/* Dark Mode Toggle Button Styles */
+.dark-mode-toggle {
+  position: relative;
+  width: 60px;
+  height: 32px;
+  background: var(--toggle-bg);
+  border-radius: 50px;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease;
+}
+
+.dark-mode-toggle:hover {
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15),
+              0 0 0 3px var(--glow-color);
+}
+
+.dark-mode-toggle:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+.dark-mode-toggle-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 26px;
+  height: 26px;
+  background: var(--toggle-knob);
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dark-mode-toggle.active .dark-mode-toggle-knob {
+  transform: translateX(28px);
+}
+
+/* Toggle icons */
+.toggle-icon {
+  position: absolute;
+  font-size: 14px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toggle-icon-sun {
+  color: var(--toggle-icon-sun);
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.toggle-icon-moon {
+  color: var(--toggle-icon-moon);
+  opacity: 0;
+  transform: scale(0.5) rotate(-90deg);
+}
+
+.dark-mode-toggle.active .toggle-icon-sun {
+  opacity: 0;
+  transform: scale(0.5) rotate(90deg);
+}
+
+.dark-mode-toggle.active .toggle-icon-moon {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+/* Alternative: Icon-only toggle */
+.dark-mode-icon-toggle {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.dark-mode-icon-toggle:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.dark-mode-icon-toggle:active {
+  transform: translateY(0);
+}
+
+.dark-mode-icon-toggle .icon {
+  transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.dark-mode-icon-toggle.active .icon {
+  transform: rotate(360deg);
+}
+
+/* Alternative: Switch with labels */
+.dark-mode-switch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dark-mode-switch:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--glow-color);
+}
+
+.dark-mode-switch-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+.dark-mode-switch.active .dark-mode-switch-label {
+  color: var(--accent-primary);
+}
+
+/* Theme indicator in nav */
+.nav-theme-indicator {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+/* Body background transition */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Section backgrounds */
+.section-bg {
+  background-color: var(--bg-secondary);
+}
+
+.section-bg-alt {
+  background-color: var(--bg-tertiary);
+}
+
+/* Card theming */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px var(--shadow-color);
+}
+
+/* Navigation theming */
+.nav {
+  background: var(--nav-bg);
+  backdrop-filter: blur(20px);
+}
+
+.nav a {
+  color: var(--text-secondary);
+}
+
+.nav a.active,
+.nav a:hover {
+  color: var(--accent-primary);
+}
+
+/* Hero section theming */
+.hero {
+  background: var(--hero-gradient);
+}
+
+/* Button theming */
+.btn {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+.btn.ghost {
+  background: transparent;
+  color: var(--accent-primary);
+  border: 2px solid var(--accent-primary);
+}
+
+.btn.ghost:hover {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+/* Service cards theming */
+.service-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+}
+
+.service-card:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 10px 30px var(--shadow-color);
+}
+
+/* Project cards theming */
+.project-card {
+  background: var(--card-bg);
+}
+
+/* Timeline theming */
+.timeline-node {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+.timeline-content {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+}
+
+/* Marquee theming */
+.marquee-track {
+  opacity: var(--text-muted);
+}
+
+/* Footer theming */
+.footer {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+}
+
+/* Form elements theming */
+input, textarea, select {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--glow-color);
+}
+
+/* Accent glow effect */
+.accent-glow {
+  box-shadow: 0 0 20px var(--glow-color);
+}
+
+/* Theme awareness for existing components */
+.bg-gradient {
+  background: var(--hero-gradient);
+}
+
+/* Disable transitions preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+  }
+}

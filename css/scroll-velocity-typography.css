@@ -1,346 +1,219 @@
 /* ========================================
-   v84.0: SCROLL-VELOCITY TYPOGRAPHY
-   Fortune 500 Kinetic Text System
-   ======================================== */
+   SCROLL VELOCITY TYPOGRAPHY SYSTEM
+   v95.0: Fortune 500 Scroll-Driven Text Effects
+   Responds to scroll speed with dynamic transformations
+======================================== */
 
-/* Base velocity-reactive text */
+/* Base velocity-responsive typography */
 .velocity-text {
-  --skew-x: 0deg;
-  --skew-y: 0deg;
-  --scale-x: 1;
-  --scale-y: 1;
-  --translate-y: 0px;
-  --letter-spacing: 0em;
-  --opacity: 1;
-  
-  transform: 
-    skewX(var(--skew-x)) 
-    skewY(var(--skew-y))
-    scaleX(var(--scale-x))
-    scaleY(var(--scale-y))
-    translateY(var(--translate-y));
-  letter-spacing: var(--letter-spacing);
-  opacity: var(--opacity);
-  will-change: transform, letter-spacing, opacity;
-  transition: transform 0.1s linear, letter-spacing 0.1s linear, opacity 0.15s ease;
+  transition: transform 0.15s ease-out, letter-spacing 0.15s ease-out;
+  will-change: transform, letter-spacing;
 }
 
-/* Velocity intensity modifiers */
-[data-velocity-intensity="subtle"] {
-  --max-skew: 2deg;
-  --max-stretch: 1.02;
-  --max-compress: 0.98;
-  --max-spacing: 0.02em;
+/* Scroll velocity states - applied via JS */
+.velocity-text.scrolling-up {
+  transform: skewY(-2deg) translateY(2px);
+  letter-spacing: 0.02em;
 }
 
-[data-velocity-intensity="normal"] {
-  --max-skew: 5deg;
-  --max-stretch: 1.05;
-  --max-compress: 0.95;
-  --max-spacing: 0.05em;
+.velocity-text.scrolling-down {
+  transform: skewY(2deg) translateY(-2px);
+  letter-spacing: 0.02em;
 }
 
-[data-velocity-intensity="dramatic"] {
-  --max-skew: 10deg;
-  --max-stretch: 1.12;
-  --max-compress: 0.88;
-  --max-spacing: 0.1em;
+.velocity-text.scrolling-fast {
+  transform: skewY(4deg) scaleY(0.98);
+  letter-spacing: 0.05em;
+  opacity: 0.9;
 }
 
-/* Directional velocity text */
-.velocity-text-up {
-  transform-origin: bottom center;
-}
-
-.velocity-text-down {
-  transform-origin: top center;
-}
-
-/* Staggered letter animation container */
-.velocity-letter-container {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: bottom;
-}
-
-.velocity-letter-container .letter {
-  display: inline-block;
-  transform: translateY(100%);
-  opacity: 0;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.4s ease;
-}
-
-.velocity-letter-container.revealed .letter {
-  transform: translateY(0);
+.velocity-text.scrolling-slow {
+  transform: skewY(0deg) scaleY(1);
+  letter-spacing: normal;
   opacity: 1;
 }
 
-/* Word-level velocity reveal */
-.velocity-word-container {
-  display: inline;
-  overflow: hidden;
-}
-
-.velocity-word-container .word {
-  display: inline-block;
-  transform: translateY(20px);
-  opacity: 0;
-  filter: blur(4px);
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.4s ease,
-              filter 0.5s ease;
-}
-
-.velocity-word-container.revealed .word {
-  transform: translateY(0);
-  opacity: 1;
-  filter: blur(0);
-}
-
-/* Line-level velocity reveal */
-.velocity-line {
-  overflow: hidden;
-  display: block;
-}
-
-.velocity-line-inner {
-  display: block;
-  transform: translateY(100%);
-  opacity: 0;
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.5s ease;
-}
-
-.velocity-line.revealed .velocity-line-inner {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-/* Character-split velocity text */
-.char-split-velocity {
-  display: inline-block;
-}
-
-.char-split-velocity .char {
-  display: inline-block;
-  will-change: transform;
-  transition: transform 0.1s linear;
-}
-
-/* Scroll-linked character spacing */
-.scroll-spacing-text {
-  --base-spacing: -0.02em;
-  --scroll-spacing: 0em;
-  letter-spacing: calc(var(--base-spacing) + var(--scroll-spacing));
-  transition: letter-spacing 0.1s linear;
-}
-
-/* Weight-shifting text (if variable font available) */
-.weight-shift-text {
-  font-variation-settings: 'wght' var(--font-weight, 400);
-  transition: font-variation-settings 0.1s linear;
-}
-
-/* Overflow/reveal text effect */
-.overflow-reveal-text {
-  position: relative;
-  display: inline-block;
-}
-
-.overflow-reveal-text::after {
-  content: attr(data-text);
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: #C9CED6;
-  clip-path: inset(100% 0 0 0);
-  transition: clip-path 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.overflow-reveal-text:hover::after {
-  clip-path: inset(0 0 0 0);
-}
-
-/* Velocity blur effect */
-.velocity-blur-text {
-  --blur-amount: 0px;
-  filter: blur(var(--blur-amount));
-  transition: filter 0.1s linear;
-}
-
-/* Smooth scroll snap text sections */
-.scroll-snap-text-section {
-  scroll-snap-type: y proximity;
-}
-
-.scroll-snap-text-item {
-  scroll-snap-align: center;
-}
-
-/* Kinetic headline styles */
-.kinetic-headline {
-  font-family: 'Montserrat', sans-serif;
+/* Hero text with velocity effect */
+.hero-velocity-text {
+  font-size: clamp(2.5rem, 6vw, 5rem);
   font-weight: 800;
-  font-size: clamp(2.5rem, 8vw, 6rem);
-  line-height: 1.05;
-  color: #F5F7FA;
+  line-height: 1.1;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, filter, opacity;
 }
 
-.kinetic-headline .line {
-  display: block;
-  overflow: hidden;
+.hero-velocity-text.velocity-high {
+  transform: scale(1.02) translateX(10px);
+  filter: blur(0.5px);
+  opacity: 0.95;
 }
 
-.kinetic-headline .line-inner {
-  display: block;
-  transform: translateY(100%);
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+.hero-velocity-text.velocity-medium {
+  transform: scale(1.01) translateX(5px);
+  filter: blur(0.2px);
+  opacity: 0.98;
 }
 
-.kinetic-headline.revealed .line-inner {
-  transform: translateY(0);
-}
-
-/* Scramble-reveal hybrid */
-.scramble-velocity {
-  position: relative;
-  display: inline-block;
-}
-
-.scramble-velocity .scramble-text {
-  opacity: 0;
-}
-
-.scramble-velocity .scramble-reveal {
-  position: absolute;
-  inset: 0;
+.hero-velocity-text.velocity-low {
+  transform: scale(1) translateX(0);
+  filter: blur(0);
   opacity: 1;
 }
 
-/* Perspective 3D text plane */
-.perspective-text-plane {
-  perspective: 1000px;
-  transform-style: preserve-3d;
+/* Section headers with velocity response */
+.section-velocity-header {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
 }
 
-.perspective-text {
-  --rotate-x: 0deg;
-  --rotate-y: 0deg;
-  --translate-z: 0px;
-  transform: 
-    rotateX(var(--rotate-x))
-    rotateY(var(--rotate-y))
-    translateZ(var(--translate-z));
-  transform-style: preserve-3d;
-  transition: transform 0.1s linear;
+.section-velocityHeader.scrolling {
+  transform: translateY(calc(var(--scroll-velocity, 0) * 0.5px));
+  opacity: calc(1 - abs(var(--scroll-velocity, 0)) * 0.002);
 }
 
-/* Gradient shift on scroll */
-.gradient-shift-text {
+/* Character-level velocity animation */
+.velocity-char {
+  display: inline-block;
+  transition: transform 0.1s ease-out;
+  will-change: transform;
+}
+
+.velocity-char:nth-child(odd) {
+  --char-offset: 1;
+}
+
+.velocity-char:nth-child(even) {
+  --char-offset: -1;
+}
+
+.scrolling-fast .velocity-char {
+  transform: translateY(calc(var(--scroll-velocity, 0) * var(--char-offset) * 0.3px));
+}
+
+/* Word-level velocity animation */
+.velocity-word {
+  display: inline-block;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.2s ease;
+  will-change: transform, opacity;
+}
+
+.velocity-word:hover {
+  transform: translateY(-3px);
+}
+
+.scrolling .velocity-word {
+  transform: translateY(calc(var(--word-index, 0) * var(--scroll-velocity, 0) * 0.1px));
+}
+
+/* Line-level velocity animation */
+.velocity-line {
+  display: block;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              letter-spacing 0.25s ease;
+  will-change: transform, letter-spacing;
+}
+
+.scrolling-down .velocity-line {
+  transform: translateX(calc(var(--scroll-velocity, 0) * 0.2px));
+  letter-spacing: calc(0.01em + var(--scroll-velocity, 0) * 0.001em);
+}
+
+.scrolling-up .velocity-line {
+  transform: translateX(calc(var(--scroll-velocity, 0) * -0.2px));
+  letter-spacing: calc(0.01em - var(--scroll-velocity, 0) * 0.001em);
+}
+
+/* Velocity-responsive gradient text */
+.velocity-gradient-text {
   background: linear-gradient(
     135deg,
-    #F5F7FA 0%,
-    #C9CED6 25%,
-    #F5F7FA 50%,
-    #C9CED6 75%,
-    #F5F7FA 100%
-  );
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  --gradient-pos: 0%;
-  background-position: var(--gradient-pos) 50%;
-  transition: background-position 0.1s linear;
-}
-
-/* Masked text reveal */
-.masked-text-reveal {
-  background: linear-gradient(
-    to right,
-    #F5F7FA 50%,
-    rgba(245, 247, 250, 0.2) 50%
+    #c9ced6 0%,
+    #ffffff 50%,
+    #c9ced6 100%
   );
   background-size: 200% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  --mask-position: 100%;
-  background-position: var(--mask-position) 0;
-  transition: background-position 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-position 0.3s ease;
+  will-change: background-position;
 }
 
-.masked-text-reveal.revealed {
-  --mask-position: 0%;
+.scrolling-fast .velocity-gradient-text {
+  background-position: calc(50% + var(--scroll-velocity, 0) * 1%) 50%;
 }
 
-/* Text shadow depth on scroll */
-.depth-shadow-text {
-  --shadow-depth: 0px;
-  --shadow-opacity: 0;
-  text-shadow: 
-    calc(var(--shadow-depth) * 0.5) calc(var(--shadow-depth) * 0.5) calc(var(--shadow-depth)) 
-    rgba(0, 0, 0, var(--shadow-opacity));
-  transition: text-shadow 0.1s linear;
+/* Kinetic text with physics */
+.kinetic-velocity-text {
+  font-weight: 800;
+  transition: all 0.15s ease-out;
+  will-change: transform, font-weight;
 }
 
-/* Opacity cascade text */
-.opacity-cascade {
-  --base-opacity: 0.3;
-  --full-opacity: 1;
+.kinetic-velocity-text.scrolling {
+  font-weight: calc(800 + min(abs(var(--scroll-velocity, 0)) * 2, 100));
+  transform: translateX(calc(var(--scroll-velocity, 0) * 0.1px));
 }
 
-.opacity-cascade .cascade-item {
-  opacity: var(--base-opacity);
-  transition: opacity 0.4s ease;
+/* Velocity blur effect for fast scrolling */
+.velocity-blur-container {
+  position: relative;
 }
 
-.opacity-cascade:hover .cascade-item,
-.opacity-cascade.active .cascade-item {
-  opacity: var(--full-opacity);
+.velocity-blur-container.scrolling-fast::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(calc(var(--scroll-velocity, 0) * 0.01px));
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* Parallax text layers */
+.velocity-parallax-layer {
+  transition: transform 0.1s linear;
+  will-change: transform;
+}
+
+.velocity-parallax-layer-1 {
+  transform: translateY(calc(var(--scroll-velocity, 0) * 0.1px));
+}
+
+.velocity-parallax-layer-2 {
+  transform: translateY(calc(var(--scroll-velocity, 0) * 0.2px));
+}
+
+.velocity-parallax-layer-3 {
+  transform: translateY(calc(var(--scroll-velocity, 0) * 0.3px));
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .kinetic-headline {
-    font-size: clamp(1.8rem, 10vw, 3.5rem);
-  }
-  
-  [data-velocity-intensity="dramatic"] {
-    --max-skew: 5deg;
-    --max-stretch: 1.06;
-    --max-compress: 0.94;
+  .velocity-text,
+  .hero-velocity-text,
+  .section-velocity-header {
+    /* Disable velocity effects on mobile for performance */
+    transform: none !important;
+    letter-spacing: normal !important;
+    filter: none !important;
   }
 }
 
-/* Reduced motion */
+/* Reduce motion preference */
 @media (prefers-reduced-motion: reduce) {
   .velocity-text,
-  .velocity-letter-container .letter,
-  .velocity-word-container .word,
-  .velocity-line-inner,
-  .char-split-velocity .char,
-  .scroll-spacing-text,
-  .velocity-blur-text,
-  .perspective-text,
-  .gradient-shift-text,
-  .masked-text-reveal,
-  .depth-shadow-text {
-    transform: none !important;
-    filter: none !important;
-    letter-spacing: normal !important;
-    font-variation-settings: normal !important;
-    opacity: 1 !important;
+  .hero-velocity-text,
+  .section-velocity-header,
+  .velocity-char,
+  .velocity-word,
+  .velocity-line,
+  .velocity-gradient-text,
+  .kinetic-velocity-text,
+  .velocity-parallax-layer {
     transition: none !important;
-  }
-  
-  .kinetic-headline .line-inner,
-  .velocity-letter-container .letter,
-  .velocity-word-container .word,
-  .velocity-line-inner {
-    transform: translateY(0) !important;
-    opacity: 1 !important;
-    filter: none !important;
+    transform: none !important;
+    animation: none !important;
   }
 }
