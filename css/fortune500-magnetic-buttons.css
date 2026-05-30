@@ -1,0 +1,411 @@
+/* ========================================
+   v125.0: FORTUNE 500 MAGNETIC BUTTON SYSTEM
+   Professional Interactive Button Effects
+======================================== */
+
+/* Base Magnetic Button */
+.magnetic-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--black);
+  background: var(--chrome);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    transparent 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.magnetic-btn:hover::before {
+  opacity: 1;
+}
+
+/* Magnetic Effect Container */
+.magnetic-wrap {
+  display: inline-block;
+  position: relative;
+}
+
+/* Button Variants */
+.magnetic-btn.primary {
+  background: linear-gradient(135deg, var(--chrome), var(--white));
+  color: var(--black);
+  box-shadow: 
+    0 4px 20px rgba(201, 206, 214, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.magnetic-btn.secondary {
+  background: transparent;
+  color: var(--white);
+  border: 2px solid rgba(201, 206, 214, 0.3);
+}
+
+.magnetic-btn.secondary:hover {
+  border-color: var(--chrome);
+  background: rgba(201, 206, 214, 0.05);
+}
+
+.magnetic-btn.ghost {
+  background: transparent;
+  color: var(--slate);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+}
+
+.magnetic-btn.ghost:hover {
+  color: var(--white);
+  border-color: rgba(201, 206, 214, 0.3);
+  background: rgba(201, 206, 214, 0.05);
+}
+
+.magnetic-btn.chrome-glow {
+  background: var(--chrome);
+  box-shadow: 
+    0 0 20px rgba(201, 206, 214, 0.3),
+    0 0 40px rgba(201, 206, 214, 0.15);
+}
+
+.magnetic-btn.chrome-glow:hover {
+  box-shadow: 
+    0 0 30px rgba(201, 206, 214, 0.5),
+    0 0 60px rgba(201, 206, 214, 0.25);
+}
+
+/* Size Variants */
+.magnetic-btn.small {
+  padding: 12px 24px;
+  font-size: 12px;
+  border-radius: 8px;
+}
+
+.magnetic-btn.large {
+  padding: 20px 40px;
+  font-size: 16px;
+  border-radius: 14px;
+}
+
+.magnetic-btn.xl {
+  padding: 24px 48px;
+  font-size: 18px;
+  border-radius: 16px;
+}
+
+/* Icon Button */
+.magnetic-btn.icon-only {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: 12px;
+}
+
+.magnetic-btn.icon-only.small {
+  width: 40px;
+  height: 40px;
+}
+
+.magnetic-btn.icon-only.large {
+  width: 56px;
+  height: 56px;
+}
+
+.magnetic-btn.icon-only.rounded {
+  border-radius: 50%;
+}
+
+/* Button with Icon */
+.magnetic-btn.with-icon {
+  gap: 12px;
+}
+
+.magnetic-btn.with-icon svg,
+.magnetic-btn.with-icon img {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+
+.magnetic-btn.with-icon:hover svg,
+.magnetic-btn.with-icon:hover img {
+  transform: translateX(4px);
+}
+
+/* Ripple Effect */
+.magnetic-btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(0);
+  animation: ripple-effect 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple-effect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Shine Effect */
+.magnetic-btn .shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+  pointer-events: none;
+}
+
+.magnetic-btn:hover .shine {
+  left: 150%;
+}
+
+/* Click Animation */
+.magnetic-btn.clicking {
+  transform: scale(0.96) !important;
+}
+
+/* Loading State */
+.magnetic-btn.loading {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.magnetic-btn.loading .btn-text {
+  opacity: 0;
+}
+
+.magnetic-btn.loading::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: btn-spin 0.8s linear infinite;
+}
+
+@keyframes btn-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Success State */
+.magnetic-btn.success {
+  background: #22c55e;
+  color: white;
+}
+
+.magnetic-btn.success::after {
+  content: '✓';
+  position: absolute;
+  font-size: 20px;
+  animation: check-pop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes check-pop {
+  from {
+    transform: scale(0) rotate(-45deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+/* Magnetic Links (for nav items) */
+.magnetic-link {
+  position: relative;
+  display: inline-block;
+  padding: 8px 16px;
+  color: var(--slate);
+  text-decoration: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.magnetic-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--chrome);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateX(-50%);
+}
+
+.magnetic-link:hover {
+  color: var(--white);
+}
+
+.magnetic-link:hover::after {
+  width: 100%;
+}
+
+.magnetic-link.active {
+  color: var(--chrome);
+}
+
+.magnetic-link.active::after {
+  width: 100%;
+}
+
+/* Magnetic Social Buttons */
+.magnetic-social {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.1);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--slate);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.magnetic-social:hover {
+  background: var(--chrome);
+  color: var(--black);
+  transform: scale(1.1);
+  border-color: var(--chrome);
+}
+
+.magnetic-social svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Floating Action Button */
+.magnetic-fab {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--chrome), var(--white));
+  border: none;
+  color: var(--black);
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 
+    0 10px 40px rgba(201, 206, 214, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 
+    0 15px 50px rgba(201, 206, 214, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+.magnetic-fab.expanded {
+  width: auto;
+  height: auto;
+  padding: 16px 24px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Button Group */
+.magnetic-btn-group {
+  display: flex;
+  gap: 0;
+}
+
+.magnetic-btn-group .magnetic-btn {
+  border-radius: 0;
+}
+
+.magnetic-btn-group .magnetic-btn:first-child {
+  border-radius: 12px 0 0 12px;
+}
+
+.magnetic-btn-group .magnetic-btn:last-child {
+  border-radius: 0 12px 12px 0;
+}
+
+.magnetic-btn-group .magnetic-btn:not(:last-child) {
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Split Button */
+.magnetic-btn-split {
+  display: flex;
+  padding: 0;
+  overflow: hidden;
+}
+
+.magnetic-btn-split .split-main {
+  padding: 16px 24px;
+}
+
+.magnetic-btn-split .split-toggle {
+  padding: 16px 12px;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .magnetic-btn,
+  .magnetic-link,
+  .magnetic-social,
+  .magnetic-fab {
+    transition: none;
+  }
+  
+  .magnetic-btn:hover,
+  .magnetic-btn.clicking {
+    transform: none;
+  }
+  
+  .ripple,
+  .shine {
+    display: none;
+  }
+}
