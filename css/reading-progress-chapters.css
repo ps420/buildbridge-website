@@ -1,0 +1,345 @@
+/* ==========================================================================
+   Reading Progress with Chapter Markers - v108.0
+   Fortune 500 Professional Reading Experience
+   ========================================================================== */
+
+:root {
+  --rp-chapter-width: 4px;
+  --rp-chapter-gap: 8px;
+  --rp-marker-size: 12px;
+  --rp-active-scale: 1.5;
+  --rp-transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --rp-gold: #c9a45c;
+  --rp-gold-light: rgba(201, 164, 92, 0.3);
+  --rp-bg: rgba(15, 15, 16, 0.8);
+}
+
+/* Main Reading Progress Container */
+.reading-progress-chapters {
+  position: fixed;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rp-chapter-gap);
+  padding: 20px 10px;
+  background: var(--rp-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reading-progress-chapters.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.reading-progress-chapters:hover {
+  background: rgba(15, 15, 16, 0.95);
+  transform: translateY(-50%) scale(1.05);
+}
+
+/* Chapter Marker */
+.chapter-marker {
+  position: relative;
+  width: var(--rp-marker-size);
+  height: var(--rp-marker-size);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: var(--rp-transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chapter-marker::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  transition: var(--rp-transition);
+}
+
+.chapter-marker::after {
+  content: attr(data-label);
+  position: absolute;
+  right: calc(100% + 15px);
+  top: 50%;
+  transform: translateY(-50%) translateX(10px);
+  background: rgba(15, 15, 16, 0.95);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.chapter-marker:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Completed Chapter */
+.chapter-marker.completed {
+  background: var(--rp-gold);
+  transform: scale(0.8);
+}
+
+.chapter-marker.completed::before {
+  border-color: var(--rp-gold-light);
+}
+
+/* Active Chapter */
+.chapter-marker.active {
+  background: var(--rp-gold);
+  transform: scale(var(--rp-active-scale));
+  box-shadow: 0 0 20px rgba(201, 164, 92, 0.5);
+}
+
+.chapter-marker.active::before {
+  border-color: var(--rp-gold);
+  animation: chapter-pulse 2s ease-in-out infinite;
+}
+
+@keyframes chapter-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Current Section Indicator Line */
+.chapter-progress-line {
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  bottom: 20px;
+  width: var(--rp-chapter-width);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  transform: translateX(-50%);
+  overflow: hidden;
+}
+
+.chapter-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0%;
+  background: linear-gradient(180deg, var(--rp-gold) 0%, rgba(201, 164, 92, 0.3) 100%);
+  border-radius: 2px;
+  transition: height 0.1s linear;
+}
+
+/* Chapter Tooltip Arrow */
+.chapter-marker::after::before {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 6px 0 6px 6px;
+  border-style: solid;
+  border-color: transparent transparent transparent rgba(15, 15, 16, 0.95);
+}
+
+/* Compact Mode for Smaller Screens */
+@media (max-width: 1200px) {
+  .reading-progress-chapters {
+    right: 15px;
+    padding: 15px 8px;
+    gap: 6px;
+  }
+  
+  .chapter-marker {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .chapter-marker::after {
+    font-size: 11px;
+    padding: 6px 12px;
+    right: calc(100% + 10px);
+  }
+}
+
+/* Mobile - Bottom Progress Bar Instead */
+@media (max-width: 768px) {
+  .reading-progress-chapters {
+    display: none;
+  }
+  
+  .mobile-reading-progress {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 999;
+  }
+  
+  .mobile-reading-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--rp-gold), #e8c880);
+    width: 0%;
+    transition: width 0.1s linear;
+    box-shadow: 0 0 10px rgba(201, 164, 92, 0.5);
+  }
+  
+  /* Chapter Labels on Mobile */
+  .mobile-chapter-labels {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 15, 16, 0.95);
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 12px;
+    color: #fff;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 998;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .mobile-chapter-labels.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .mobile-chapter-labels .chapter-number {
+    width: 24px;
+    height: 24px;
+    background: var(--rp-gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #0f0f10;
+  }
+}
+
+/* Section Counter */
+.reading-section-counter {
+  position: fixed;
+  right: 30px;
+  top: 30px;
+  background: var(--rp-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 12px 20px;
+  border-radius: 30px;
+  font-size: 13px;
+  color: #fff;
+  z-index: 999;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reading-section-counter.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.reading-section-counter .current {
+  color: var(--rp-gold);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.reading-section-counter .separator {
+  opacity: 0.5;
+}
+
+.reading-section-counter .total {
+  opacity: 0.7;
+}
+
+/* Hide on mobile */
+@media (max-width: 768px) {
+  .reading-section-counter {
+    right: 15px;
+    top: 15px;
+    padding: 8px 15px;
+    font-size: 12px;
+  }
+  
+  .reading-section-counter .current {
+    font-size: 14px;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .reading-progress-chapters,
+  .reading-section-counter,
+  .mobile-chapter-labels {
+    background: rgba(15, 15, 16, 0.9);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .chapter-marker,
+  .chapter-marker::before,
+  .chapter-marker::after,
+  .reading-progress-chapters {
+    transition: none;
+  }
+  
+  .chapter-marker.active::before {
+    animation: none;
+  }
+}
+
+/* Focus Styles for Accessibility */
+.chapter-marker:focus-visible {
+  outline: 2px solid var(--rp-gold);
+  outline-offset: 4px;
+}
+
+/* Print Styles */
+@media print {
+  .reading-progress-chapters,
+  .reading-section-counter,
+  .mobile-reading-progress,
+  .mobile-chapter-labels {
+    display: none !important;
+  }
+}
