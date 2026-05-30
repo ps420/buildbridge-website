@@ -1,0 +1,400 @@
+/* ========================================
+   v90.0: ADVANCED TEXT MASK REVEAL V2
+   Sophisticated text reveal animations
+======================================== */
+
+/* Base Text Mask Container */
+.text-mask-container {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.text-mask-reveal {
+  display: inline-block;
+  background-size: 0% 100%;
+  background-repeat: no-repeat;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: background-size 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.text-mask-reveal.revealed {
+  background-size: 100% 100%;
+}
+
+.text-mask-reveal.gradient-gold {
+  background-image: linear-gradient(90deg, var(--chrome), var(--gold));
+}
+
+.text-mask-reveal.gradient-white {
+  background-image: linear-gradient(90deg, var(--white), var(--slate));
+}
+
+/* Clip Path Text Reveal */
+.text-clip-reveal {
+  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.text-clip-reveal.revealed {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.text-clip-reveal-reverse {
+  clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+  transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.text-clip-reveal-reverse.revealed {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Diagonal Text Clip */
+.text-clip-diagonal {
+  clip-path: polygon(0 100%, 0 100%, 0 100%);
+  transition: clip-path 0.9s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.text-clip-diagonal.revealed {
+  clip-path: polygon(0 0, 200% 0, 0 200%);
+}
+
+/* Character-by-Character Wave Reveal */
+.char-wave-reveal {
+  display: inline-flex;
+  overflow: hidden;
+}
+
+.char-wave-reveal .char {
+  display: inline-block;
+  transform: translateY(100%) rotate(10deg);
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.char-wave-reveal.revealed .char {
+  transform: translateY(0) rotate(0);
+  opacity: 1;
+}
+
+/* Word-by-Word Stagger */
+.word-stagger-reveal {
+  overflow: hidden;
+  display: inline;
+}
+
+.word-stagger-reveal .word {
+  display: inline-block;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.word-stagger-reveal.revealed .word {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Line-by-Line Reveal */
+.line-reveal-container {
+  overflow: hidden;
+}
+
+.line-reveal {
+  transform: translateY(100%);
+  opacity: 0;
+  transition: all 0.7s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.line-reveal.revealed {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Typewriter with Cursor */
+.typewriter-text {
+  display: inline;
+  position: relative;
+}
+
+.typewriter-text::after {
+  content: '|';
+  animation: typewriter-blink 1s steps(1) infinite;
+  color: var(--chrome);
+  margin-left: 2px;
+}
+
+.typewriter-text.typing-complete::after {
+  animation: none;
+  opacity: 0;
+}
+
+@keyframes typewriter-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Scramble Text Effect v2 */
+.text-scramble-v2 {
+  position: relative;
+  display: inline-block;
+}
+
+.text-scramble-v2::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--chrome);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.text-scramble-v2.revealed::before {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Highlight Brush Effect */
+.text-highlight-brush {
+  position: relative;
+  display: inline;
+}
+
+.text-highlight-brush::after {
+  content: '';
+  position: absolute;
+  left: -4px;
+  right: -4px;
+  bottom: 0;
+  height: 30%;
+  background: linear-gradient(90deg, var(--chrome), var(--gold));
+  opacity: 0.3;
+  z-index: -1;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+  border-radius: 2px;
+}
+
+.text-highlight-brush.revealed::after {
+  transform: scaleX(1);
+}
+
+/* Underline Draw Effect */
+.text-underline-draw {
+  position: relative;
+  display: inline-block;
+}
+
+.text-underline-draw::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 2px;
+  background: var(--chrome);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.text-underline-draw.revealed::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Letter Spacing Reveal */
+.text-spacing-reveal {
+  letter-spacing: 0.5em;
+  opacity: 0;
+  filter: blur(10px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.text-spacing-reveal.revealed {
+  letter-spacing: normal;
+  opacity: 1;
+  filter: blur(0);
+}
+
+/* 3D Text Flip */
+.text-3d-flip {
+  perspective: 1000px;
+  display: inline-block;
+}
+
+.text-3d-flip-inner {
+  transform-style: preserve-3d;
+  transform: rotateX(-90deg);
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.text-3d-flip.revealed .text-3d-flip-inner {
+  transform: rotateX(0);
+  opacity: 1;
+}
+
+/* Glitch Text Effect */
+.text-glitch {
+  position: relative;
+  display: inline-block;
+}
+
+.text-glitch::before,
+.text-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.text-glitch.revealed::before {
+  animation: glitch-1 0.3s ease-out forwards;
+  color: #ff0040;
+  z-index: -1;
+}
+
+.text-glitch.revealed::after {
+  animation: glitch-2 0.3s ease-out 0.1s forwards;
+  color: #00ff9f;
+  z-index: -2;
+}
+
+@keyframes glitch-1 {
+  0% { opacity: 1; transform: translate(0); }
+  20% { transform: translate(-3px, 3px); }
+  40% { transform: translate(3px, -3px); }
+  60% { transform: translate(-3px, -3px); }
+  80% { transform: translate(3px, 3px); }
+  100% { opacity: 0; transform: translate(0); }
+}
+
+@keyframes glitch-2 {
+  0% { opacity: 1; transform: translate(0); }
+  20% { transform: translate(3px, -3px); }
+  40% { transform: translate(-3px, 3px); }
+  60% { transform: translate(3px, 3px); }
+  80% { transform: translate(-3px, -3px); }
+  100% { opacity: 0; transform: translate(0); }
+}
+
+/* Neon Glow Text */
+.text-neon-glow {
+  color: var(--white);
+  text-shadow: 
+    0 0 5px rgba(201, 169, 106, 0.5),
+    0 0 10px rgba(201, 169, 106, 0.3),
+    0 0 20px rgba(201, 169, 106, 0.2);
+  opacity: 0;
+  transition: all 0.8s ease;
+}
+
+.text-neon-glow.revealed {
+  opacity: 1;
+  animation: neon-pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes neon-pulse {
+  from {
+    text-shadow: 
+      0 0 5px rgba(201, 169, 106, 0.5),
+      0 0 10px rgba(201, 169, 106, 0.3),
+      0 0 20px rgba(201, 169, 106, 0.2);
+  }
+  to {
+    text-shadow: 
+      0 0 10px rgba(201, 169, 106, 0.8),
+      0 0 20px rgba(201, 169, 106, 0.5),
+      0 0 40px rgba(201, 169, 106, 0.3),
+      0 0 80px rgba(201, 169, 106, 0.1);
+  }
+}
+
+/* Wave Text Animation */
+.text-wave-animated {
+  display: inline-block;
+}
+
+.text-wave-animated .wave-char {
+  display: inline-block;
+  animation: wave-bounce 1s ease-in-out infinite;
+}
+
+@keyframes wave-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Gradient Text Animation */
+.gradient-text-animated-v2 {
+  background: linear-gradient(
+    90deg,
+    var(--chrome) 0%,
+    var(--gold) 25%,
+    var(--chrome) 50%,
+    var(--gold) 75%,
+    var(--chrome) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-flow 3s linear infinite;
+}
+
+@keyframes gradient-flow {
+  to { background-position: 200% center; }
+}
+
+/* Split Line Reveal */
+.split-line-reveal {
+  overflow: hidden;
+  display: block;
+}
+
+.split-line-reveal .line-inner {
+  display: block;
+  transform: translateY(100%);
+  transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.split-line-reveal.revealed .line-inner {
+  transform: translateY(0);
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .text-mask-reveal,
+  .text-clip-reveal,
+  .text-clip-reveal-reverse,
+  .text-clip-diagonal,
+  .char-wave-reveal .char,
+  .word-stagger-reveal .word,
+  .line-reveal,
+  .text-scramble-v2::before,
+  .text-highlight-brush::after,
+  .text-underline-draw::after,
+  .text-spacing-reveal,
+  .text-3d-flip-inner,
+  .text-neon-glow,
+  .split-line-reveal .line-inner {
+    transition: none;
+    transform: none;
+    opacity: 1;
+    clip-path: none;
+    filter: none;
+    animation: none;
+  }
+}

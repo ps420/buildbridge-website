@@ -1,0 +1,527 @@
+/* ========================================
+   v90.0: SMOOTH SCROLL INDICATOR
+   Context-aware scroll progress and navigation
+======================================== */
+
+/* Primary Scroll Progress - Top Bar */
+.scroll-progress-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 10000;
+  background: rgba(201, 206, 214, 0.1);
+}
+
+.scroll-progress-bar-top {
+  height: 100%;
+  background: linear-gradient(90deg, var(--chrome), var(--gold), var(--chrome));
+  background-size: 200% 100%;
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 0.1s linear;
+  animation: gradient-shift 3s linear infinite;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* Circular Scroll Progress */
+.scroll-progress-circle {
+  position: fixed;
+  right: 30px;
+  bottom: 100px;
+  z-index: 1000;
+}
+
+.scroll-progress-circle svg {
+  transform: rotate(-90deg);
+  width: 60px;
+  height: 60px;
+}
+
+.scroll-progress-circle-bg {
+  fill: none;
+  stroke: rgba(201, 206, 214, 0.1);
+  stroke-width: 2;
+}
+
+.scroll-progress-circle-fill {
+  fill: none;
+  stroke: var(--chrome);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 176;
+  stroke-dashoffset: 176;
+  transition: stroke-dashoffset 0.1s linear;
+}
+
+.scroll-progress-percentage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--chrome);
+}
+
+/* Section-Aware Scroll Progress */
+.section-scroll-aware {
+  position: fixed;
+  left: 30px;
+  bottom: 30px;
+  z-index: 1000;
+  background: rgba(15, 15, 16, 0.9);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.3s ease;
+}
+
+.section-scroll-aware.hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+}
+
+.section-aware-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.section-aware-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--slate);
+}
+
+.section-aware-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.section-aware-progress {
+  width: 120px;
+  height: 4px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.section-aware-progress-bar {
+  height: 100%;
+  background: var(--chrome);
+  border-radius: 2px;
+  transition: width 0.1s linear;
+}
+
+/* Reading Progress Indicator */
+.reading-progress-widget {
+  position: fixed;
+  left: 30px;
+  bottom: 30px;
+  z-index: 1000;
+  background: rgba(15, 15, 16, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  width: 280px;
+  transition: all 0.3s ease;
+}
+
+.reading-progress-widget.minimized {
+  width: auto;
+  padding: 16px;
+}
+
+.reading-progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.reading-progress-widget.minimized .reading-progress-header {
+  margin-bottom: 0;
+}
+
+.reading-progress-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--white);
+  margin: 0;
+}
+
+.reading-progress-toggle {
+  background: none;
+  border: none;
+  color: var(--slate);
+  cursor: pointer;
+  padding: 4px;
+  font-size: 12px;
+  transition: all 0.3s ease;
+}
+
+.reading-progress-toggle:hover {
+  color: var(--white);
+}
+
+.reading-progress-widget.minimized .reading-progress-content {
+  display: none;
+}
+
+.reading-progress-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.reading-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.reading-stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--slate);
+}
+
+.reading-stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--chrome);
+}
+
+.reading-progress-bar-container {
+  margin-bottom: 12px;
+}
+
+.reading-progress-bar {
+  height: 6px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.reading-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--chrome), var(--gold));
+  border-radius: 3px;
+  transition: width 0.2s ease;
+}
+
+.reading-progress-text {
+  font-size: 12px;
+  color: var(--slate);
+  text-align: center;
+}
+
+/* Scroll Direction Indicator */
+.scroll-direction-indicator {
+  position: fixed;
+  right: 30px;
+  bottom: 50%;
+  transform: translateY(50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.scroll-dir-arrow {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 15, 16, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 50%;
+  color: var(--slate);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.5;
+}
+
+.scroll-dir-arrow:hover {
+  opacity: 1;
+  color: var(--white);
+  background: rgba(201, 169, 106, 0.2);
+  border-color: var(--chrome);
+}
+
+.scroll-dir-arrow.active {
+  opacity: 1;
+  color: var(--chrome);
+}
+
+/* Velocity-Based Scroll Effects */
+.velocity-scroll-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  z-index: 10000;
+  overflow: hidden;
+}
+
+.velocity-scroll-indicator::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--scroll-velocity, 0%);
+  background: linear-gradient(90deg, transparent, var(--chrome), transparent);
+  opacity: 0.8;
+  transition: width 0.1s linear;
+}
+
+/* Smooth Scroll Navigation Arrows */
+.scroll-nav-arrows {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.scroll-nav-arrow {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 15, 16, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 50%;
+  color: var(--white);
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0.7;
+}
+
+.scroll-nav-arrow:hover {
+  opacity: 1;
+  background: var(--chrome);
+  border-color: var(--chrome);
+  color: var(--black);
+  transform: scale(1.1);
+}
+
+.scroll-nav-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.scroll-nav-arrow:disabled:hover {
+  background: rgba(15, 15, 16, 0.9);
+  border-color: rgba(201, 206, 214, 0.1);
+  color: var(--white);
+  transform: none;
+}
+
+/* Page Transition Progress */
+.page-transition-progress {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.page-transition-progress.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.page-transition-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(201, 169, 106, 0.2);
+  border-top-color: var(--chrome);
+  border-radius: 50%;
+  animation: page-spin 1s linear infinite;
+}
+
+@keyframes page-spin {
+  to { transform: rotate(360deg); }
+}
+
+.page-transition-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--chrome);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Scroll Snap Indicator */
+.scroll-snap-indicator {
+  position: fixed;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  gap: 10px;
+}
+
+.snap-indicator-dot {
+  width: 40px;
+  height: 4px;
+  background: rgba(201, 206, 214, 0.2);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.snap-indicator-dot:hover {
+  background: rgba(201, 206, 214, 0.4);
+}
+
+.snap-indicator-dot.active {
+  background: var(--chrome);
+  width: 60px;
+}
+
+/* Scroll-to-Top with Progress */
+.scroll-top-progress {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  width: 56px;
+  height: 56px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: rgba(15, 15, 16, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+}
+
+.scroll-top-progress.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.scroll-top-progress:hover {
+  background: var(--chrome);
+  border-color: var(--chrome);
+  transform: scale(1.1);
+}
+
+.scroll-top-progress svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotate(-90deg);
+}
+
+.scroll-top-progress-circle {
+  fill: none;
+  stroke: rgba(201, 169, 106, 0.2);
+  stroke-width: 2;
+}
+
+.scroll-top-progress-fill {
+  fill: none;
+  stroke: var(--chrome);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 164;
+  stroke-dashoffset: 164;
+  transition: stroke-dashoffset 0.1s linear;
+}
+
+.scroll-top-progress:hover .scroll-top-progress-fill {
+  stroke: var(--black);
+}
+
+.scroll-top-progress-icon {
+  font-size: 20px;
+  color: var(--white);
+  transition: color 0.3s ease;
+}
+
+.scroll-top-progress:hover .scroll-top-progress-icon {
+  color: var(--black);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .scroll-progress-circle,
+  .section-scroll-aware,
+  .reading-progress-widget,
+  .scroll-direction-indicator,
+  .scroll-top-progress {
+    display: none;
+  }
+  
+  .scroll-nav-arrows {
+    right: 16px;
+    bottom: 16px;
+  }
+  
+  .scroll-nav-arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress-bar-top,
+  .scroll-progress-circle-fill,
+  .section-aware-progress-bar,
+  .reading-progress-bar-fill,
+  .scroll-top-progress-fill {
+    transition: none;
+  }
+  
+  .page-transition-spinner {
+    animation: none;
+  }
+}

@@ -1,0 +1,137 @@
+/* v91.0: Smart Typewriter Hero Effect - Fortune 500 Professional Text Animation */
+
+.smart-typewriter-container {
+  position: relative;
+  display: inline-block;
+}
+
+.smart-typewriter-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #F5F7FA;
+}
+
+.smart-typewriter-cursor {
+  display: inline-block;
+  width: 3px;
+  height: 1em;
+  background: linear-gradient(180deg, #C9CED6, #F5F7FA);
+  margin-left: 4px;
+  animation: typewriter-blink 1s step-end infinite;
+  vertical-align: baseline;
+  border-radius: 2px;
+}
+
+@keyframes typewriter-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.smart-typewriter-cursor.typing {
+  animation: none;
+  opacity: 1;
+}
+
+.smart-typewriter-cursor.blinking {
+  animation: typewriter-blink 1s step-end infinite;
+}
+
+/* Text scramble effect overlay */
+.typewriter-scramble-char {
+  display: inline-block;
+  transition: all 0.1s ease;
+}
+
+.typewriter-scramble-char.scrambling {
+  color: #C9CED6;
+  transform: scale(1.1);
+}
+
+/* Cursor glow effect */
+.smart-typewriter-cursor.glow {
+  box-shadow: 
+    0 0 10px rgba(201, 206, 214, 0.5),
+    0 0 20px rgba(201, 206, 214, 0.3),
+    0 0 30px rgba(201, 206, 214, 0.1);
+}
+
+/* Multiple line typewriter support */
+.smart-typewriter-multiline .typewriter-line {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.smart-typewriter-multiline .typewriter-line.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.smart-typewriter-multiline .typewriter-line.typing {
+  border-right: 3px solid #C9CED6;
+  animation: typing-caret 0.75s step-end infinite;
+}
+
+@keyframes typing-caret {
+  0%, 100% { border-color: transparent; }
+  50% { border-color: #C9CED6; }
+}
+
+/* Gradient text typewriter */
+.smart-typewriter-gradient {
+  background: linear-gradient(135deg, #F5F7FA 0%, #C9CED6 50%, #F5F7FA 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 3s linear infinite;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Typewriter with word highlight */
+.typewriter-word {
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.typewriter-word.highlight {
+  color: #C9CED6;
+  text-shadow: 0 0 20px rgba(201, 206, 214, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .smart-typewriter-cursor {
+    width: 2px;
+  }
+  
+  .smart-typewriter-multiline .typewriter-line {
+    white-space: normal;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .smart-typewriter-cursor {
+    animation: none;
+    opacity: 1;
+  }
+  
+  .smart-typewriter-multiline .typewriter-line {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  
+  .typewriter-scramble-char.scrambling {
+    transform: none;
+  }
+}

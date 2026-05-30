@@ -1,0 +1,347 @@
+/* ========================================
+   v90.0: SECTION PROGRESS INDICATORS
+   Individual progress bars for each major section
+======================================== */
+
+.section-progress-tracker {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 12px;
+  background: rgba(15, 15, 16, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 30px;
+  border: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.section-progress-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.section-progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.section-progress-dot::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.section-progress-item.active .section-progress-dot {
+  background: var(--chrome);
+  transform: scale(1.3);
+}
+
+.section-progress-item.active .section-progress-dot::before {
+  border-color: var(--chrome);
+}
+
+.section-progress-item.viewed .section-progress-dot {
+  background: rgba(201, 169, 106, 0.5);
+}
+
+.section-progress-item:hover .section-progress-dot {
+  background: var(--white);
+}
+
+.section-progress-label {
+  position: absolute;
+  left: 24px;
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.section-progress-item:hover .section-progress-label,
+.section-progress-item.active .section-progress-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.section-progress-item.active .section-progress-label {
+  color: var(--chrome);
+}
+
+/* Section Progress Bar - Top of each section */
+.section-scroll-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(201, 206, 214, 0.1);
+  z-index: 10;
+  overflow: hidden;
+}
+
+.section-scroll-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--chrome), var(--gold));
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 0.1s linear;
+}
+
+/* Individual Section Progress Rings */
+.section-progress-ring-container {
+  position: fixed;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section-progress-ring {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.section-progress-ring:hover {
+  transform: scale(1.1);
+}
+
+.section-progress-ring svg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.section-progress-ring-bg {
+  fill: none;
+  stroke: rgba(201, 206, 214, 0.1);
+  stroke-width: 2;
+}
+
+.section-progress-ring-fill {
+  fill: none;
+  stroke: var(--chrome);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 126;
+  stroke-dashoffset: 126;
+  transition: stroke-dashoffset 0.1s linear;
+}
+
+.section-progress-ring-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.section-progress-ring:hover .section-progress-ring-icon,
+.section-progress-ring.active .section-progress-ring-icon {
+  opacity: 1;
+}
+
+.section-progress-ring-label {
+  position: absolute;
+  right: 54px;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--slate);
+  background: rgba(15, 15, 16, 0.9);
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.section-progress-ring:hover .section-progress-ring-label {
+  opacity: 1;
+  transform: translateY(-50%) translateX(-10px);
+}
+
+/* Minimal Section Indicators */
+.section-dots-minimal {
+  position: fixed;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section-dot-minimal {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.2);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+}
+
+.section-dot-minimal::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.section-dot-minimal:hover,
+.section-dot-minimal.active {
+  background: var(--chrome);
+  transform: scale(1.5);
+}
+
+.section-dot-minimal.active::after {
+  border-color: var(--chrome);
+}
+
+.section-dot-minimal.completed {
+  background: rgba(201, 169, 106, 0.6);
+}
+
+/* Horizontal Progress Steps */
+.progress-steps-horizontal {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 40px 0;
+  position: relative;
+}
+
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.progress-step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.1);
+  border: 2px solid rgba(201, 206, 214, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--slate);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-step.active .progress-step-number,
+.progress-step.completed .progress-step-number {
+  background: var(--chrome);
+  border-color: var(--chrome);
+  color: var(--black);
+}
+
+.progress-step-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color 0.3s ease;
+}
+
+.progress-step.active .progress-step-label {
+  color: var(--chrome);
+}
+
+.progress-step-connector {
+  flex: 1;
+  height: 2px;
+  background: rgba(201, 206, 214, 0.1);
+  position: relative;
+  margin: 0 -20px;
+  z-index: 0;
+}
+
+.progress-step-connector-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--chrome);
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .section-progress-tracker {
+    bottom: 20px;
+    top: auto;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    flex-direction: row;
+    padding: 12px 20px;
+    border-radius: 30px;
+  }
+  
+  .section-progress-label {
+    display: none;
+  }
+  
+  .section-progress-ring-container {
+    display: none;
+  }
+  
+  .section-dots-minimal {
+    bottom: 20px;
+    top: auto;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    flex-direction: row;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .section-progress-ring-fill,
+  .section-scroll-progress-bar {
+    transition: none;
+  }
+}

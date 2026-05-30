@@ -1,383 +1,505 @@
 /**
- * Focus Mode System v87.2 - Fortune 500 Distraction-Free Reading
- * Immersive reading experience with customization options
+ * Reading Focus Mode System
+ * Fortune 500 Quality Distraction-Free Reading
+ * v91.0: Intelligent focus mode with progress tracking and customization
  */
 
-(function() {
-  'use strict';
-
-  const FocusModeSystem = {
-    isActive: false,
-    originalContent: null,
-    readingStartTime: null,
-    scrollProgress: 0,
-    settings: {
-      fontSize: 'medium',
-      theme: 'dark',
-      lineFocus: false
-    },
-
-    init() {
-      this.createToggle();
-      this.createOverlay();
-      this.bindEvents();
-      this.checkFocusableContent();
+class FocusModeSystem {
+  constructor() {
+    this.isActive = false;
+    this.currentContainer = null;
+    this.fontSize = 100; // percentage
+    this.theme = 'dark';
+    this.lineWidth = 'medium';
+    this.readingProgress = 0;
+    this.scrollListener = null;
+    this.paragraphObserver = null;
+    
+    this.init();
+  }
+  
+  init() {
+    this.createToggleButton();
+    this.createControls();
+    this.createProgressBar();
+    this.createInfoPanel();
+    this.bindEvents();
+    this.loadSettings();
+  }
+  
+  createToggleButton() {
+    const button = document.createElement('button');
+    button.className = 'focus-mode-toggle';
+    button.setAttribute('aria-label', 'Toggle focus mode');
+    button.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"/>
+        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+      </svg>
+      <span class="focus-mode-tooltip">Focus Mode (F)</span>
+    `;
+    
+    button.addEventListener('click', () => this.toggle());
+    document.body.appendChild(button);
+    this.toggleButton = button;
+  }
+  
+  createControls() {
+    const controls = document.createElement('div');
+    controls.className = 'focus-mode-controls';
+    controls.innerHTML = `
+      <!-- Font Size -->
+      <div class="focus-mode-controls-section">
+        <span class="focus-mode-control-label">Size</span>
+        <div class="focus-mode-font-size">
+          <button class="focus-mode-btn" data-action="font-decrease" aria-label="Decrease font size">A-</button>
+          <button class="focus-mode-btn" data-action="font-increase" aria-label="Increase font size">A+</button>
+        </div>
+      </div>
       
-      console.log('🎯 Focus Mode System initialized');
-    },
-
-    createToggle() {
-      const toggle = document.createElement('button');
-      toggle.className = 'focus-mode-toggle';
-      toggle.setAttribute('aria-label', 'Enter focus mode for distraction-free reading');
-      toggle.setAttribute('title', 'Focus Mode');
-      toggle.innerHTML = '👁️';
+      <!-- Theme -->
+      <div class="focus-mode-controls-section">
+        <span class="focus-mode-control-label">Theme</span>
+        <div class="focus-mode-themes">
+          <button class="focus-mode-theme focus-mode-theme-dark active" data-theme="dark" aria-label="Dark theme"></button>
+          <button class="focus-mode-theme focus-mode-theme-light" data-theme="light" aria-label="Light theme"></button>
+          <button class="focus-mode-theme focus-mode-theme-sepia" data-theme="sepia" aria-label="Sepia theme"></button>
+        </div>
+      </div>
       
-      toggle.addEventListener('click', () => this.toggle());
-      
-      document.body.appendChild(toggle);
-      this.toggle = toggle;
-    },
-
-    createOverlay() {
-      const overlay = document.createElement('div');
-      overlay.className = 'focus-mode-overlay';
-      overlay.id = 'focusModeOverlay';
-      overlay.setAttribute('aria-hidden', 'true');
-      
-      overlay.innerHTML = `
-        <div class="focus-mode-toolbar">
-          <div class="focus-mode-title">Focus Mode</div>
-          <div class="focus-mode-controls">
-            <button class="focus-mode-btn" data-action="font-decrease" title="Decrease font size">A-</button>
-            <button class="focus-mode-btn" data-action="font-increase" title="Increase font size">A+</button>
-            <button class="focus-mode-btn" data-action="theme" title="Toggle theme">🎨</button>
-            <button class="focus-mode-btn" data-action="line-focus" title="Toggle line focus">📖</button>
-            <button class="focus-mode-btn exit" data-action="exit">
-              <span>✕</span>
-              <span>Exit</span>
-            </button>
+      <!-- Line Width -->
+      <div class="focus-mode-controls-section">
+        <span class="focus-mode-control-label">Width</span>
+        <div class="focus-mode-width">
+          <div class="focus-mode-width-option focus-mode-width-narrow" data-width="narrow" aria-label="Narrow width">
+            <div class="focus-mode-width-bar">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+          <div class="focus-mode-width-option focus-mode-width-medium active" data-width="medium" aria-label="Medium width">
+            <div class="focus-mode-width-bar">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+          <div class="focus-mode-width-option focus-mode-width-wide" data-width="wide" aria-label="Wide width">
+            <div class="focus-mode-width-bar">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
           </div>
         </div>
-        <div class="focus-mode-progress">
-          <div class="focus-mode-progress-fill"></div>
+      </div>
+      
+      <!-- Exit -->
+      <button class="focus-mode-exit" data-action="exit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+        Exit
+      </button>
+    `;
+    
+    document.body.appendChild(controls);
+    this.controls = controls;
+    
+    // Bind control events
+    controls.querySelector('[data-action="font-decrease"]').addEventListener('click', () => this.adjustFontSize(-10));
+    controls.querySelector('[data-action="font-increase"]').addEventListener('click', () => this.adjustFontSize(10));
+    controls.querySelector('[data-action="exit"]').addEventListener('click', () => this.deactivate());
+    
+    // Theme buttons
+    controls.querySelectorAll('.focus-mode-theme').forEach(btn => {
+      btn.addEventListener('click', () => this.setTheme(btn.dataset.theme));
+    });
+    
+    // Width options
+    controls.querySelectorAll('.focus-mode-width-option').forEach(option => {
+      option.addEventListener('click', () => this.setLineWidth(option.dataset.width));
+    });
+  }
+  
+  createProgressBar() {
+    const progress = document.createElement('div');
+    progress.className = 'focus-mode-progress';
+    progress.innerHTML = '<div class="focus-mode-progress-bar"></div>';
+    document.body.appendChild(progress);
+    this.progressBar = progress.querySelector('.focus-mode-progress-bar');
+  }
+  
+  createInfoPanel() {
+    const info = document.createElement('div');
+    info.className = 'focus-mode-info';
+    info.innerHTML = `
+      <div class="focus-mode-info-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+        </svg>
+        Reading Stats
+      </div>
+      <div class="focus-mode-info-stats">
+        <div class="focus-mode-stat">
+          <div class="focus-mode-stat-value" id="focusWordCount">0</div>
+          <div class="focus-mode-stat-label">Words</div>
         </div>
-        <div class="focus-mode-content"></div>
-        <div class="focus-mode-reading-time">
-          <span>⏱️</span>
-          <span><span class="time-remaining">--</span> min remaining</span>
+        <div class="focus-mode-stat">
+          <div class="focus-mode-stat-value" id="focusProgress">0%</div>
+          <div class="focus-mode-stat-label">Progress</div>
         </div>
-        <div class="focus-mode-line-highlight"></div>
-      `;
-      
-      document.body.appendChild(overlay);
-      this.overlay = overlay;
-      this.content = overlay.querySelector('.focus-mode-content');
-      this.progressFill = overlay.querySelector('.focus-mode-progress-fill');
-      this.timeRemaining = overlay.querySelector('.time-remaining');
-      this.toolbar = overlay.querySelector('.focus-mode-toolbar');
-    },
-
-    toggle() {
-      if (this.isActive) {
-        this.exit();
-      } else {
-        this.enter();
-      }
-    },
-
-    enter() {
-      const article = this.findMainContent();
-      if (!article) return;
-
-      this.isActive = true;
-      this.readingStartTime = Date.now();
-      this.originalContent = article.innerHTML;
-      
-      // Clone content
-      this.content.innerHTML = article.innerHTML;
-      
-      // Add title if available
-      const h1 = document.querySelector('h1');
-      if (h1 && !this.content.querySelector('h1')) {
-        this.content.insertAdjacentHTML('afterbegin', `<h1>${h1.textContent}</h1>`);
-      }
-      
-      // Calculate reading time
-      const text = this.content.textContent;
-      const wordCount = text.trim().split(/\s+/).length;
-      const readingTime = Math.ceil(wordCount / 200);
-      this.timeRemaining.textContent = readingTime;
-      
-      // Show overlay
-      this.overlay.classList.add('active');
-      this.overlay.setAttribute('aria-hidden', 'false');
-      this.toggle.classList.add('active');
-      
-      // Apply settings
-      this.applySettings();
-      
-      // Lock body scroll
-      document.body.style.overflow = 'hidden';
-      
-      // Update toolbar title
-      const title = document.querySelector('h1');
-      if (title) {
-        this.toolbar.querySelector('.focus-mode-title').textContent = title.textContent;
-      }
-      
-      // Start tracking
-      this.startTracking();
-      
-      // Dispatch event
-      window.dispatchEvent(new CustomEvent('focusModeEntered'));
-      
-      // Accessibility announcement
-      this.announce('Focus mode activated. Use controls at top to customize or exit.');
-    },
-
-    exit() {
-      this.isActive = false;
-      
-      this.overlay.classList.add('exiting');
-      
-      setTimeout(() => {
-        this.overlay.classList.remove('active', 'exiting');
-        this.overlay.setAttribute('aria-hidden', 'true');
-        this.content.innerHTML = '';
-      }, 300);
-      
-      this.toggle.classList.remove('active');
-      document.body.style.overflow = '';
-      
-      this.stopTracking();
-      
-      window.dispatchEvent(new CustomEvent('focusModeExited'));
-      this.announce('Exited focus mode');
-    },
-
-    findMainContent() {
-      // Try to find main content area
-      const selectors = [
-        'article',
-        'main',
-        '[role="main"]',
-        '.section',
-        '#main-content',
-        '.content'
-      ];
-      
-      for (const selector of selectors) {
-        const el = document.querySelector(selector);
-        if (el && el.textContent.length > 500) {
-          return el;
-        }
-      }
-      
-      // Fallback to body content
-      return document.querySelector('body');
-    },
-
-    checkFocusableContent() {
-      // Show toggle only on pages with significant content
-      const content = this.findMainContent();
-      if (content && content.textContent.length > 1000) {
-        setTimeout(() => {
-          this.toggle.classList.add('visible');
-        }, 1000);
-      }
-    },
-
-    applySettings() {
-      this.content.className = `focus-mode-content focus-mode-font-${this.settings.fontSize}`;
-      this.overlay.className = `focus-mode-overlay focus-mode-${this.settings.theme}`;
-      
-      if (this.settings.lineFocus) {
-        this.overlay.classList.add('line-focus');
-      }
-    },
-
-    startTracking() {
-      this.overlay.addEventListener('scroll', this.onScroll.bind(this), { passive: true });
-      this.onScroll();
-      
-      // Update reading time every minute
-      this.readingInterval = setInterval(() => this.updateReadingTime(), 60000);
-    },
-
-    stopTracking() {
-      this.overlay.removeEventListener('scroll', this.onScroll.bind(this));
-      clearInterval(this.readingInterval);
-    },
-
-    onScroll() {
-      const scrollTop = this.overlay.scrollTop;
-      const scrollHeight = this.overlay.scrollHeight - this.overlay.clientHeight;
-      const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
-      
-      this.scrollProgress = progress;
-      this.progressFill.style.width = `${progress}%`;
-      
-      // Update toolbar shadow
-      if (scrollTop > 50) {
-        this.toolbar.classList.add('scrolled');
-      } else {
-        this.toolbar.classList.remove('scrolled');
-      }
-      
-      // Update line focus position
-      if (this.settings.lineFocus) {
-        const highlight = this.overlay.querySelector('.focus-mode-line-highlight');
-        const viewportCenter = this.overlay.clientHeight / 2;
-        highlight.style.top = `${scrollTop + viewportCenter - 24}px`;
-      }
-      
-      // Update reading time
-      const remaining = Math.max(0, Math.ceil(this.calculateRemainingTime()));
-      this.timeRemaining.textContent = remaining;
-    },
-
-    calculateRemainingTime() {
-      const text = this.content.textContent;
-      const wordCount = text.trim().split(/\s+/).length;
-      const totalTime = wordCount / 200; // 200 wpm
-      const remainingRatio = 1 - (this.scrollProgress / 100);
-      return totalTime * remainingRatio;
-    },
-
-    updateReadingTime() {
-      const remaining = Math.max(0, Math.ceil(this.calculateRemainingTime()));
-      this.timeRemaining.textContent = remaining;
-    },
-
-    bindEvents() {
-      // Toolbar controls
-      this.overlay.addEventListener('click', (e) => {
-        const btn = e.target.closest('[data-action]');
-        if (!btn) return;
-        
-        const action = btn.dataset.action;
-        
-        switch(action) {
-          case 'exit':
-            this.exit();
-            break;
-          case 'font-increase':
-            this.changeFontSize(1);
-            break;
-          case 'font-decrease':
-            this.changeFontSize(-1);
-            break;
-          case 'theme':
-            this.toggleTheme();
-            break;
-          case 'line-focus':
-            this.toggleLineFocus();
-            break;
-        }
-      });
-
-      // Keyboard shortcuts
-      document.addEventListener('keydown', (e) => {
-        if (!this.isActive) {
-          // Quick enter with F9
-          if (e.key === 'F9') {
-            e.preventDefault();
-            this.enter();
-          }
+      </div>
+      <div class="focus-mode-reading-time">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
+        </svg>
+        <span id="focusReadingTime">2 min read</span>
+      </div>
+    `;
+    
+    document.body.appendChild(info);
+    this.infoPanel = info;
+    this.wordCountEl = info.querySelector('#focusWordCount');
+    this.progressEl = info.querySelector('#focusProgress');
+    this.readingTimeEl = info.querySelector('#focusReadingTime');
+  }
+  
+  bindEvents() {
+    // Keyboard shortcut
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'f' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        const active = document.activeElement;
+        if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) {
           return;
         }
+        e.preventDefault();
+        this.toggle();
+      }
+      
+      if (e.key === 'Escape' && this.isActive) {
+        this.deactivate();
+      }
+    });
+    
+    // Detect scrollable content areas
+    this.detectContentAreas();
+  }
+  
+  detectContentAreas() {
+    // Find main content sections that could be focusable
+    const sections = document.querySelectorAll('section, article, .section, .content');
+    sections.forEach(section => {
+      const textContent = section.textContent || '';
+      const wordCount = textContent.trim().split(/\s+/).length;
+      
+      // Only make sections focusable if they have substantial content
+      if (wordCount > 100) {
+        section.classList.add('potential-focus-container');
         
-        switch(e.key) {
-          case 'Escape':
-            this.exit();
-            break;
-          case '+':
-          case '=':
-            if (e.ctrlKey || e.metaKey) {
-              e.preventDefault();
-              this.changeFontSize(1);
-            }
-            break;
-          case '-':
-            if (e.ctrlKey || e.metaKey) {
-              e.preventDefault();
-              this.changeFontSize(-1);
-            }
-            break;
-          case 't':
-            if (e.ctrlKey || e.metaKey) {
-              e.preventDefault();
-              this.toggleTheme();
-            }
-            break;
-        }
-      });
-
-      // Hide toggle when reaching footer
-      const footerObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            this.toggle.classList.remove('visible');
-          } else {
-            this.checkFocusableContent();
+        // Add double-click to focus
+        section.addEventListener('dblclick', (e) => {
+          if (!this.isActive) {
+            this.activate(section);
           }
         });
-      }, { threshold: 0.1 });
-
-      const footer = document.querySelector('footer, .footer');
-      if (footer) {
-        footerObserver.observe(footer);
       }
-    },
-
-    changeFontSize(direction) {
-      const sizes = ['small', 'medium', 'large', 'xl'];
-      const currentIndex = sizes.indexOf(this.settings.fontSize);
-      const newIndex = Math.max(0, Math.min(sizes.length - 1, currentIndex + direction));
-      
-      this.settings.fontSize = sizes[newIndex];
-      this.applySettings();
-      
-      this.announce(`Font size set to ${this.settings.fontSize}`);
-    },
-
-    toggleTheme() {
-      this.settings.theme = this.settings.theme === 'dark' ? 'sepia' : 'dark';
-      this.applySettings();
-      
-      this.announce(`Theme set to ${this.settings.theme}`);
-    },
-
-    toggleLineFocus() {
-      this.settings.lineFocus = !this.settings.lineFocus;
-      this.applySettings();
-      
-      if (this.settings.lineFocus) {
-        this.onScroll(); // Position highlight
-      }
-      
-      this.announce(`Line focus ${this.settings.lineFocus ? 'enabled' : 'disabled'}`);
-    },
-
-    announce(message) {
-      const announcer = document.createElement('div');
-      announcer.setAttribute('role', 'status');
-      announcer.setAttribute('aria-live', 'polite');
-      announcer.className = 'sr-only';
-      announcer.textContent = message;
-      
-      document.body.appendChild(announcer);
-      setTimeout(() => announcer.remove(), 1000);
-    }
-  };
-
-  // Auto-initialize
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => FocusModeSystem.init());
-  } else {
-    FocusModeSystem.init();
+    });
   }
+  
+  toggle() {
+    if (this.isActive) {
+      this.deactivate();
+    } else {
+      // Find the most suitable content container
+      const container = this.findBestContainer();
+      this.activate(container);
+    }
+  }
+  
+  findBestContainer() {
+    // Try to find the current section in viewport
+    const sections = document.querySelectorAll('.potential-focus-container, section, article');
+    const viewportCenter = window.scrollY + window.innerHeight / 2;
+    
+    let bestContainer = null;
+    let bestDistance = Infinity;
+    
+    sections.forEach(section => {
+      const rect = section.getBoundingClientRect();
+      const sectionCenter = window.scrollY + rect.top + rect.height / 2;
+      const distance = Math.abs(sectionCenter - viewportCenter);
+      
+      if (rect.height > 200 && distance < bestDistance) {
+        bestDistance = distance;
+        bestContainer = section;
+      }
+    });
+    
+    // Fallback to main content or hero
+    return bestContainer || 
+           document.querySelector('#main-content') || 
+           document.querySelector('.hero') ||
+           document.querySelector('main') ||
+           document.body;
+  }
+  
+  activate(container) {
+    if (!container) return;
+    
+    this.currentContainer = container;
+    this.isActive = true;
+    
+    // Add classes
+    document.body.classList.add('focus-mode', 'active');
+    container.classList.add('focus-container', 'active');
+    this.toggleButton.classList.add('active');
+    
+    // Calculate reading stats
+    this.calculateStats();
+    
+    // Start progress tracking
+    this.startProgressTracking();
+    
+    // Apply current settings
+    this.applySettings();
+    
+    // Add paragraph indicators
+    this.addParagraphIndicators();
+    
+    // Store reference
+    this.updateParagraphObserver();
+    
+    // Show toast
+    if (window.showToast) {
+      window.showToast('Focus mode enabled. Press ESC to exit.', 'info');
+    }
+    
+    // Save state
+    localStorage.setItem('focusModeActive', 'true');
+  }
+  
+  deactivate() {
+    this.isActive = false;
+    
+    // Remove classes
+    document.body.classList.remove('focus-mode', 'active', 'focus-mode-light', 'focus-mode-sepia');
+    
+    if (this.currentContainer) {
+      this.currentContainer.classList.remove('focus-container', 'active');
+      this.removeParagraphIndicators();
+    }
+    
+    this.toggleButton.classList.remove('active');
+    
+    // Stop progress tracking
+    this.stopProgressTracking();
+    
+    // Disconnect observer
+    if (this.paragraphObserver) {
+      this.paragraphObserver.disconnect();
+      this.paragraphObserver = null;
+    }
+    
+    // Reset styles
+    if (this.currentContainer) {
+      this.currentContainer.style.fontSize = '';
+      this.currentContainer.style.maxWidth = '';
+      this.currentContainer.style.margin = '';
+    }
+    
+    this.currentContainer = null;
+    
+    // Remove saved state
+    localStorage.removeItem('focusModeActive');
+  }
+  
+  calculateStats() {
+    if (!this.currentContainer) return;
+    
+    const text = this.currentContainer.textContent || '';
+    const words = text.trim().split(/\s+/).length;
+    const minutes = Math.ceil(words / 200); // Average reading speed
+    
+    if (this.wordCountEl) this.wordCountEl.textContent = words.toLocaleString();
+    if (this.readingTimeEl) this.readingTimeEl.textContent = `${minutes} min read`;
+  }
+  
+  startProgressTracking() {
+    if (!this.currentContainer) return;
+    
+    this.scrollListener = () => {
+      const container = this.currentContainer;
+      const rect = container.getBoundingClientRect();
+      const containerHeight = container.offsetHeight;
+      const viewportHeight = window.innerHeight;
+      
+      // Calculate how much of the container has been scrolled through
+      const scrollTop = -rect.top;
+      const scrollableHeight = containerHeight - viewportHeight;
+      
+      let progress = 0;
+      if (scrollableHeight > 0) {
+        progress = Math.max(0, Math.min(100, (scrollTop / scrollableHeight) * 100));
+      }
+      
+      this.readingProgress = Math.round(progress);
+      
+      if (this.progressBar) {
+        this.progressBar.style.width = `${this.readingProgress}%`;
+      }
+      
+      if (this.progressEl) {
+        this.progressEl.textContent = `${this.readingProgress}%`;
+      }
+    };
+    
+    window.addEventListener('scroll', this.scrollListener, { passive: true });
+    this.scrollListener(); // Initial call
+  }
+  
+  stopProgressTracking() {
+    if (this.scrollListener) {
+      window.removeEventListener('scroll', this.scrollListener);
+      this.scrollListener = null;
+    }
+    
+    this.readingProgress = 0;
+    if (this.progressBar) this.progressBar.style.width = '0%';
+  }
+  
+  addParagraphIndicators() {
+    if (!this.currentContainer) return;
+    
+    const paragraphs = this.currentContainer.querySelectorAll('p');
+    paragraphs.forEach((p, i) => {
+      p.style.position = 'relative';
+      
+      // Add indicator
+      const indicator = document.createElement('span');
+      indicator.className = 'focus-paragraph-indicator';
+      indicator.dataset.index = i;
+      p.appendChild(indicator);
+    });
+  }
+  
+  removeParagraphIndicators() {
+    if (!this.currentContainer) return;
+    
+    const indicators = this.currentContainer.querySelectorAll('.focus-paragraph-indicator');
+    indicators.forEach(ind => ind.remove());
+    
+    const currentParagraphs = this.currentContainer.querySelectorAll('.current-paragraph');
+    currentParagraphs.forEach(p => p.classList.remove('current-paragraph'));
+  }
+  
+  updateParagraphObserver() {
+    if (!this.currentContainer) return;
+    
+    const paragraphs = this.currentContainer.querySelectorAll('p');
+    
+    this.paragraphObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+          // Remove current from others
+          paragraphs.forEach(p => p.classList.remove('current-paragraph'));
+          // Add to current
+          entry.target.classList.add('current-paragraph');
+        }
+      });
+    }, {
+      root: null,
+      rootMargin: '-30% 0px -50% 0px',
+      threshold: [0, 0.5, 1]
+    });
+    
+    paragraphs.forEach(p => this.paragraphObserver.observe(p));
+  }
+  
+  adjustFontSize(delta) {
+    this.fontSize = Math.max(80, Math.min(150, this.fontSize + delta));
+    this.applyFontSize();
+    this.saveSettings();
+  }
+  
+  applyFontSize() {
+    if (this.currentContainer) {
+      this.currentContainer.style.fontSize = `${this.fontSize}%`;
+    }
+  }
+  
+  setTheme(theme) {
+    this.theme = theme;
+    
+    // Update button states
+    this.controls.querySelectorAll('.focus-mode-theme').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.theme === theme);
+    });
+    
+    // Apply theme classes
+    document.body.classList.remove('focus-mode-light', 'focus-mode-sepia');
+    if (theme !== 'dark') {
+      document.body.classList.add(`focus-mode-${theme}`);
+    }
+    
+    this.saveSettings();
+  }
+  
+  setLineWidth(width) {
+    this.lineWidth = width;
+    
+    // Update UI
+    this.controls.querySelectorAll('.focus-mode-width-option').forEach(opt => {
+      opt.classList.toggle('active', opt.dataset.width === width);
+    });
+    
+    // Apply width
+    if (this.currentContainer) {
+      const widths = {
+        narrow: '600px',
+        medium: '800px',
+        wide: '1000px'
+      };
+      this.currentContainer.style.maxWidth = widths[width];
+      this.currentContainer.style.margin = '0 auto';
+    }
+    
+    this.saveSettings();
+  }
+  
+  applySettings() {
+    this.applyFontSize();
+    this.setTheme(this.theme);
+    this.setLineWidth(this.lineWidth);
+  }
+  
+  saveSettings() {
+    localStorage.setItem('focusModeSettings', JSON.stringify({
+      fontSize: this.fontSize,
+      theme: this.theme,
+      lineWidth: this.lineWidth
+    }));
+  }
+  
+  loadSettings() {
+    const saved = localStorage.getItem('focusModeSettings');
+    if (saved) {
+      const settings = JSON.parse(saved);
+      this.fontSize = settings.fontSize || 100;
+      this.theme = settings.theme || 'dark';
+      this.lineWidth = settings.lineWidth || 'medium';
+    }
+  }
+}
 
-  window.FocusModeSystem = FocusModeSystem;
-})();
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => new FocusModeSystem());
+} else {
+  new FocusModeSystem();
+}
+
+export default FocusModeSystem;

@@ -1,0 +1,328 @@
+/* v92.0: Advanced Scroll Progress Rings - Fortune 500 Circular Progress Indicators */
+
+.scroll-progress-rings-container {
+  position: fixed;
+  top: 50%;
+  right: 30px;
+  transform: translateY(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background: rgba(15, 15, 16, 0.8);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  transition: all 0.3s ease;
+}
+
+.scroll-progress-rings-container:hover {
+  background: rgba(15, 15, 16, 0.95);
+  border-color: rgba(201, 206, 214, 0.2);
+}
+
+.scroll-progress-rings-container.minimized {
+  padding: 15px;
+  gap: 15px;
+}
+
+.scroll-progress-rings-container.minimized .progress-ring-label {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.progress-ring-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.progress-ring-item:hover {
+  transform: translateX(-5px);
+}
+
+.progress-ring-item.active .progress-ring-svg circle.progress {
+  stroke: #C9CED6;
+  filter: drop-shadow(0 0 8px rgba(201, 206, 214, 0.6));
+}
+
+.progress-ring-item.active .progress-ring-label {
+  color: #F5F7FA;
+}
+
+.progress-ring-svg {
+  width: 50px;
+  height: 50px;
+  transform: rotate(-90deg);
+  flex-shrink: 0;
+}
+
+.progress-ring-svg circle {
+  fill: none;
+  stroke-width: 3;
+  transition: all 0.3s ease;
+}
+
+.progress-ring-svg circle.track {
+  stroke: rgba(201, 206, 214, 0.1);
+}
+
+.progress-ring-svg circle.progress {
+  stroke: rgba(201, 206, 214, 0.6);
+  stroke-linecap: round;
+  stroke-dasharray: 138.23; /* 2 * PI * 22 */
+  stroke-dashoffset: 138.23;
+  transition: stroke-dashoffset 0.1s linear;
+}
+
+.progress-ring-item:hover .progress-ring-svg circle.progress {
+  stroke: rgba(201, 206, 214, 0.8);
+}
+
+.progress-ring-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(201, 206, 214, 0.7);
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.progress-ring-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #C9CED6;
+  margin-left: 5px;
+}
+
+/* Section indicator dots */
+.progress-ring-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.3);
+  position: absolute;
+  right: -4px;
+  transition: all 0.3s ease;
+}
+
+.progress-ring-item.active .progress-ring-dot {
+  background: #C9CED6;
+  box-shadow: 0 0 10px rgba(201, 206, 214, 0.5);
+}
+
+/* Multiple ring sizes */
+.progress-ring-svg.small {
+  width: 40px;
+  height: 40px;
+}
+
+.progress-ring-svg.small circle.progress {
+  stroke-dasharray: 110.58; /* 2 * PI * 17.6 */
+  stroke-dashoffset: 110.58;
+}
+
+.progress-ring-svg.large {
+  width: 60px;
+  height: 60px;
+}
+
+.progress-ring-svg.large circle.progress {
+  stroke-dasharray: 165.88; /* 2 * PI * 26.4 */
+  stroke-dashoffset: 165.88;
+}
+
+/* Stats rings variant */
+.stats-rings-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  padding: 60px 20px;
+}
+
+.stats-ring {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.stats-ring-svg {
+  width: 150px;
+  height: 150px;
+  transform: rotate(-90deg);
+}
+
+.stats-ring-svg circle {
+  fill: none;
+  stroke-width: 8;
+}
+
+.stats-ring-svg circle.track {
+  stroke: rgba(201, 206, 214, 0.1);
+}
+
+.stats-ring-svg circle.progress {
+  stroke: url(#statsGradient);
+  stroke-linecap: round;
+  stroke-dasharray: 408.41; /* 2 * PI * 65 */
+  stroke-dashoffset: 408.41;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stats-ring-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.stats-ring-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #F5F7FA;
+  line-height: 1;
+}
+
+.stats-ring-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: rgba(201, 206, 214, 0.7);
+  margin-top: 5px;
+}
+
+.stats-ring-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #C9CED6;
+}
+
+/* Animated gradient for stats rings */
+@keyframes ring-gradient-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.stats-ring.animated .stats-ring-svg {
+  animation: ring-gradient-rotate 20s linear infinite;
+}
+
+.stats-ring.animated .stats-ring-content {
+  animation: counter-rotate 20s linear infinite;
+}
+
+@keyframes counter-rotate {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(-360deg); }
+}
+
+/* Glow effect on completed rings */
+.progress-ring-item.completed .progress-ring-svg circle.progress {
+  stroke: #C9CED6;
+  filter: drop-shadow(0 0 10px rgba(201, 206, 214, 0.8));
+}
+
+/* Pulse animation for current section */
+@keyframes ring-pulse {
+  0%, 100% { 
+    stroke-width: 3;
+    filter: drop-shadow(0 0 5px rgba(201, 206, 214, 0.5));
+  }
+  50% { 
+    stroke-width: 4;
+    filter: drop-shadow(0 0 15px rgba(201, 206, 214, 0.8));
+  }
+}
+
+.progress-ring-item.current .progress-ring-svg circle.progress {
+  animation: ring-pulse 2s ease-in-out infinite;
+}
+
+/* Mobile responsive */
+@media (max-width: 1024px) {
+  .scroll-progress-rings-container {
+    right: 15px;
+    padding: 15px;
+    gap: 15px;
+  }
+  
+  .progress-ring-svg {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .progress-ring-svg circle.progress {
+    stroke-dasharray: 110.58;
+    stroke-dashoffset: 110.58;
+  }
+  
+  .progress-ring-label {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 768px) {
+  .scroll-progress-rings-container {
+    position: fixed;
+    top: auto;
+    bottom: 20px;
+    right: 50%;
+    transform: translateX(50%);
+    flex-direction: row;
+    padding: 12px 20px;
+    gap: 20px;
+  }
+  
+  .progress-ring-item {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .progress-ring-label {
+    font-size: 10px;
+  }
+  
+  .stats-rings-container {
+    gap: 30px;
+  }
+  
+  .stats-ring-svg {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .stats-ring-svg circle.progress {
+    stroke-dasharray: 326.73;
+    stroke-dashoffset: 326.73;
+  }
+  
+  .stats-ring-value {
+    font-size: 24px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .progress-ring-svg circle.progress {
+    transition: none;
+  }
+  
+  .stats-ring.animated .stats-ring-svg,
+  .stats-ring.animated .stats-ring-content {
+    animation: none;
+  }
+  
+  .progress-ring-item.current .progress-ring-svg circle.progress {
+    animation: none;
+  }
+}

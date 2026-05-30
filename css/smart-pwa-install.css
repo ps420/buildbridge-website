@@ -1,0 +1,436 @@
+/**
+ * Smart PWA Install Experience
+ * Fortune 500 Quality Custom Install Prompt
+ * v91.0: Native app-like installation flow
+ */
+
+/* Install Prompt Container */
+.pwa-install-prompt {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(150%);
+  background: rgba(15, 15, 16, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 20px;
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(201, 206, 214, 0.05);
+  z-index: 99999;
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 420px;
+  width: calc(100% - 48px);
+}
+
+.pwa-install-prompt.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.pwa-install-prompt.hide {
+  transform: translateX(-50%) translateY(150%);
+  opacity: 0;
+}
+
+/* App Icon */
+.pwa-install-icon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #C9CED6 0%, #9A9A9A 100%);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  animation: appIconPulse 3s ease-in-out infinite;
+}
+
+@keyframes appIconPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.pwa-install-icon img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.pwa-install-icon-fallback {
+  font-size: 28px;
+}
+
+/* Content */
+.pwa-install-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.pwa-install-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin: 0 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pwa-install-title::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #22C55E;
+  border-radius: 50%;
+  animation: pulseGreen 2s ease-in-out infinite;
+}
+
+@keyframes pulseGreen {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.2); }
+}
+
+.pwa-install-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: rgba(201, 206, 214, 0.7);
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+
+/* Benefits */
+.pwa-install-benefits {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pwa-install-benefit {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: rgba(201, 206, 214, 0.6);
+}
+
+.pwa-install-benefit svg {
+  width: 12px;
+  height: 12px;
+  color: #22C55E;
+}
+
+/* Actions */
+.pwa-install-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pwa-install-btn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.pwa-install-btn-primary {
+  background: linear-gradient(135deg, #C9CED6 0%, #9A9A9A 100%);
+  color: #0f0f10;
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.pwa-install-btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.pwa-install-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(201, 206, 214, 0.2);
+}
+
+.pwa-install-btn-primary:hover::before {
+  opacity: 1;
+}
+
+.pwa-install-btn-primary:active {
+  transform: translateY(0);
+}
+
+.pwa-install-btn-secondary {
+  background: transparent;
+  color: rgba(201, 206, 214, 0.7);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+}
+
+.pwa-install-btn-secondary:hover {
+  background: rgba(201, 206, 214, 0.1);
+  color: #F5F7FA;
+}
+
+/* Progress Bar for Install */
+.pwa-install-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 0 0 20px 20px;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.pwa-install-prompt.installing .pwa-install-progress {
+  opacity: 1;
+}
+
+.pwa-install-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #C9CED6, #F5F7FA);
+  width: 0%;
+  transition: width 0.3s ease;
+  animation: progressShimmer 2s linear infinite;
+}
+
+@keyframes progressShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Close Button */
+.pwa-install-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  background: rgba(201, 206, 214, 0.1);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: rgba(201, 206, 214, 0.5);
+  transition: all 0.2s ease;
+}
+
+.pwa-install-close:hover {
+  background: rgba(201, 206, 214, 0.2);
+  color: #F5F7FA;
+}
+
+.pwa-install-close svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Success State */
+.pwa-install-success {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(150%);
+  background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+  padding: 16px 24px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 10px 30px rgba(34, 197, 94, 0.3);
+  z-index: 99999;
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pwa-install-success.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.pwa-install-success-icon {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: checkmarkPop 0.5s ease;
+}
+
+@keyframes checkmarkPop {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.pwa-install-success-icon svg {
+  width: 18px;
+  height: 18px;
+  color: white;
+}
+
+.pwa-install-success-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 480px) {
+  .pwa-install-prompt {
+    bottom: 16px;
+    padding: 20px;
+    gap: 16px;
+    border-radius: 16px;
+  }
+  
+  .pwa-install-icon {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .pwa-install-title {
+    font-size: 15px;
+  }
+  
+  .pwa-install-benefits {
+    display: none;
+  }
+  
+  .pwa-install-actions {
+    flex-direction: row;
+  }
+  
+  .pwa-install-btn {
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+}
+
+/* iOS Safari Specific - Show manual install instructions */
+.pwa-install-ios-hint {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(150%);
+  background: #0f0f10;
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 20px;
+  padding: 24px;
+  max-width: 340px;
+  width: calc(100% - 48px);
+  z-index: 99999;
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pwa-install-ios-hint.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.pwa-install-ios-arrow {
+  position: absolute;
+  bottom: -10px;
+  right: 40px;
+  width: 20px;
+  height: 20px;
+  background: #0f0f10;
+  border-right: 1px solid rgba(201, 206, 214, 0.15);
+  border-bottom: 1px solid rgba(201, 206, 214, 0.15);
+  transform: rotate(45deg);
+}
+
+.pwa-install-ios-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #F5F7FA;
+}
+
+.pwa-install-ios-step:last-child {
+  margin-bottom: 0;
+}
+
+.pwa-install-ios-icon {
+  width: 32px;
+  height: 32px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .pwa-install-prompt,
+  .pwa-install-success,
+  .pwa-install-ios-hint {
+    transition: opacity 0.2s ease;
+  }
+  
+  .pwa-install-icon {
+    animation: none;
+  }
+}
+
+/* Dark mode is default, but support light mode preference */
+@media (prefers-color-scheme: light) {
+  .pwa-install-prompt {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .pwa-install-title {
+    color: #0f0f10;
+  }
+  
+  .pwa-install-subtitle {
+    color: rgba(0, 0, 0, 0.6);
+  }
+  
+  .pwa-install-benefit {
+    color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .pwa-install-btn-secondary {
+    color: rgba(0, 0, 0, 0.6);
+    border-color: rgba(0, 0, 0, 0.15);
+  }
+  
+  .pwa-install-btn-secondary:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #0f0f10;
+  }
+}
