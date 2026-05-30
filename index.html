@@ -2052,14 +2052,169 @@
     </div>
   </section>
 
-  <!-- v29.0: Interactive Cost Estimator Widget (Fortune 500 Professional) -->
+  <!-- v100.0: Interactive Construction Cost Estimator (Fortune 500 Professional) -->
   <section id="cost-estimator" class="section cost-estimator-section" data-section="CostEstimator" data-nav-label="Get Quote">
     <div class="section-header reveal-section">
       <p class="eyebrow">Instant Quote</p>
       <h2 class="scramble-text kinetic-text">Project Cost Estimator</h2>
-      <p>Get an accurate project estimate in seconds. Adjust parameters and see real-time pricing updates.</p>
+      <p>Get an accurate project estimate in seconds. Adjust parameters and see real-time pricing updates based on South African market rates.</p>
     </div>
-    <div class="cost-estimator-container"></div>
+    <div class="cost-estimator-container">
+      <!-- Calculator Form -->
+      <div class="cost-calculator">
+        <div class="calculator-header">
+          <h3>Project Calculator</h3>
+          <p>Answer a few questions to receive your personalized cost estimate.</p>
+        </div>
+        
+        <!-- Step Indicator -->
+        <div class="step-indicator">
+          <div class="step-dot active" data-step="1"></div>
+          <div class="step-dot" data-step="2"></div>
+          <div class="step-dot" data-step="3"></div>
+          <div class="step-dot" data-step="4"></div>
+        </div>
+        
+        <!-- Form Steps -->
+        <div class="calculator-form">
+          <!-- Step 1: Project Type -->
+          <div class="form-step active" data-step="1">
+            <div class="form-group">
+              <label>What type of project are you planning?</label>
+              <div class="project-type-grid">
+                <div class="project-type-card" data-type="residential">
+                  <span class="icon">🏠</span>
+                  <h4>Residential</h4>
+                  <p>House, apartment, or villa</p>
+                </div>
+                <div class="project-type-card" data-type="commercial">
+                  <span class="icon">🏢</span>
+                  <h4>Commercial</h4>
+                  <p>Office, retail, or mixed-use</p>
+                </div>
+                <div class="project-type-card" data-type="renovation">
+                  <span class="icon">🔨</span>
+                  <h4>Renovation</h4>
+                  <p>Remodeling or upgrades</p>
+                </div>
+                <div class="project-type-card" data-type="industrial">
+                  <span class="icon">🏭</span>
+                  <h4>Industrial</h4>
+                  <p>Warehouse or factory</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Step 2: Project Size -->
+          <div class="form-step" data-step="2">
+            <div class="form-group">
+              <label>What is the approximate size?</label>
+              <div class="size-slider-container">
+                <input type="range" class="size-slider" min="50" max="10000" value="100" step="50">
+                <div class="size-labels">
+                  <span>50m²</span>
+                  <span>5,000m²</span>
+                  <span>10,000m²</span>
+                </div>
+                <div class="size-value-display">
+                  <span class="value">100</span>
+                  <span class="unit">m²</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Step 3: Quality Level -->
+          <div class="form-step" data-step="3">
+            <div class="form-group">
+              <label>What quality level are you targeting?</label>
+              <div class="quality-selector">
+                <div class="quality-option" data-quality="basic">
+                  <h5>Basic</h5>
+                  <div class="price-range">R8k-12k/m²</div>
+                  <p>Standard finishes, functional design</p>
+                </div>
+                <div class="quality-option" data-quality="standard">
+                  <h5>Standard</h5>
+                  <div class="price-range">R12k-18k/m²</div>
+                  <p>Good quality, modern amenities</p>
+                </div>
+                <div class="quality-option" data-quality="premium">
+                  <h5>Premium</h5>
+                  <div class="price-range">R18k-25k/m²</div>
+                  <p>High-end finishes, premium features</p>
+                </div>
+                <div class="quality-option" data-quality="luxury">
+                  <h5>Luxury</h5>
+                  <div class="price-range">R25k-40k/m²</div>
+                  <p>Bespoke design, luxury materials</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Step 4: Location & Timeline -->
+          <div class="form-step" data-step="4">
+            <div class="form-group">
+              <label for="estimator-location">Where is your project located?</label>
+              <select id="estimator-location" class="form-control">
+                <option value="">Select location...</option>
+                <option value="Cape Town">Cape Town</option>
+                <option value="Johannesburg">Johannesburg</option>
+                <option value="Pretoria">Pretoria</option>
+                <option value="Durban">Durban</option>
+                <option value="Port Elizabeth">Port Elizabeth</option>
+                <option value="Bloemfontein">Bloemfontein</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>How flexible is your timeline?</label>
+              <div style="display: flex; gap: 12px; margin-top: 16px;">
+                <label style="flex: 1; padding: 16px; background: rgba(15, 15, 16, 0.6); border: 1px solid rgba(201, 206, 214, 0.1); border-radius: 8px; cursor: pointer; text-align: center;">
+                  <input type="radio" name="timeline" value="flexible" style="margin-bottom: 8px;">
+                  <div style="font-size: 13px; font-weight: 600;">Flexible</div>
+                  <div style="font-size: 11px; color: var(--slate);">Save 5%</div>
+                </label>
+                <label style="flex: 1; padding: 16px; background: rgba(15, 15, 16, 0.6); border: 1px solid rgba(201, 206, 214, 0.1); border-radius: 8px; cursor: pointer; text-align: center;">
+                  <input type="radio" name="timeline" value="standard" checked style="margin-bottom: 8px;">
+                  <div style="font-size: 13px; font-weight: 600;">Standard</div>
+                  <div style="font-size: 11px; color: var(--slate);">Standard rate</div>
+                </label>
+                <label style="flex: 1; padding: 16px; background: rgba(15, 15, 16, 0.6); border: 1px solid rgba(201, 206, 214, 0.1); border-radius: 8px; cursor: pointer; text-align: center;">
+                  <input type="radio" name="timeline" value="urgent" style="margin-bottom: 8px;">
+                  <div style="font-size: 13px; font-weight: 600;">Urgent</div>
+                  <div style="font-size: 11px; color: var(--slate);">+15%</div>
+                </label>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Navigation -->
+          <div class="form-navigation">
+            <button type="button" class="nav-btn prev" style="display: none;">Back</button>
+            <button type="button" class="nav-btn next">Continue</button>
+            <button type="button" class="nav-btn calculate" style="display: none;">Calculate Estimate</button>
+          </div>
+        </div>
+        
+        <!-- Loading State -->
+        <div class="calculator-loading">
+          <div class="loading-spinner"></div>
+          <p>Calculating your estimate...</p>
+        </div>
+      </div>
+      
+      <!-- Results Panel -->
+      <div class="cost-results">
+        <div class="results-empty">
+          <div class="icon">📊</div>
+          <h4>Your Estimate</h4>
+          <p>Complete the calculator to see your personalized project estimate with detailed breakdown.</p>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- v29.0: Video Background Section with Parallax -->
@@ -2741,6 +2896,394 @@
       <div class="timeline-step-dot" data-step="1" role="button" tabindex="0" aria-label="Go to step 2"></div>
       <div class="timeline-step-dot" data-step="2" role="button" tabindex="0" aria-label="Go to step 3"></div>
       <div class="timeline-step-dot" data-step="3" role="button" tabindex="0" aria-label="Go to step 4"></div>
+    </div>
+  </section>
+
+  <!-- v101.0: Interactive Project Timeline Visualizer - Fortune 500 Project Phase Display -->
+  <section id="project-timeline-visualizer" class="section project-timeline-section" data-section="ProjectTimelineVisualizer" data-nav-label="Project Timeline">
+    <div class="timeline-container">
+      <div class="timeline-header">
+        <p class="eyebrow">Project Journey</p>
+        <h2 class="scramble-text kinetic-text">Visualize Your Build</h2>
+        <p>Explore typical timelines for different project types. Click on phases to see detailed breakdowns of each stage.</p>
+      </div>
+      
+      <!-- Project Type Tabs -->
+      <div class="project-type-tabs">
+        <button class="timeline-tab active" data-project="residential">Residential</button>
+        <button class="timeline-tab" data-project="commercial">Commercial</button>
+        <button class="timeline-tab" data-project="renovation">Renovation</button>
+        <button class="timeline-tab" data-project="industrial">Industrial</button>
+      </div>
+      
+      <!-- Timeline Display -->
+      <div class="timeline-display">
+        <!-- Main Track with Nodes -->
+        <div class="timeline-track-container">
+          <div class="timeline-track">
+            <div class="timeline-progress-line" style="width: 0%;"></div>
+            
+            <div class="timeline-node active" data-phase="1">
+              <div class="node-marker">
+                <span class="node-icon">🔍</span>
+                <span class="node-number">1</span>
+              </div>
+              <div class="node-label">Discovery</div>
+              <div class="node-duration">1-2 weeks</div>
+            </div>
+            
+            <div class="timeline-node" data-phase="2">
+              <div class="node-marker">
+                <span class="node-icon">📐</span>
+                <span class="node-number">2</span>
+              </div>
+              <div class="node-label">Design</div>
+              <div class="node-duration">2-4 weeks</div>
+            </div>
+            
+            <div class="timeline-node" data-phase="3">
+              <div class="node-marker">
+                <span class="node-icon">📋</span>
+                <span class="node-number">3</span>
+              </div>
+              <div class="node-label">Planning</div>
+              <div class="node-duration">3-6 weeks</div>
+            </div>
+            
+            <div class="timeline-node" data-phase="4">
+              <div class="node-marker">
+                <span class="node-icon">🏗️</span>
+                <span class="node-number">4</span>
+              </div>
+              <div class="node-label">Construction</div>
+              <div class="node-duration">3-12 months</div>
+            </div>
+            
+            <div class="timeline-node" data-phase="5">
+              <div class="node-marker">
+                <span class="node-icon">✅</span>
+                <span class="node-number">5</span>
+              </div>
+              <div class="node-label">Handover</div>
+              <div class="node-duration">1-2 weeks</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Phase Detail Cards -->
+        <div class="timeline-phases-container">
+          <div class="phase-card active" data-phase="1">
+            <div class="phase-header">
+              <div class="phase-icon">🔍</div>
+              <div class="phase-title-group">
+                <h3>Discovery & Consultation</h3>
+                <div class="duration">⏱️ 1-2 weeks</div>
+              </div>
+            </div>
+            <p class="phase-description">Initial consultation to understand your vision, requirements, budget, and timeline constraints.</p>
+            <ul class="phase-tasks">
+              <li><span class="task-check">✓</span> Initial consultation & requirements gathering</li>
+              <li><span class="task-check">✓</span> Site assessment & feasibility study</li>
+              <li><span class="task-check">✓</span> Budget planning & preliminary cost estimation</li>
+              <li><span class="task-check">✓</span> Project scope definition & goal alignment</li>
+            </ul>
+          </div>
+          
+          <div class="phase-card" data-phase="2">
+            <div class="phase-header">
+              <div class="phase-icon">📐</div>
+              <div class="phase-title-group">
+                <h3>Design Development</h3>
+                <div class="duration">⏱️ 2-4 weeks</div>
+              </div>
+            </div>
+            <p class="phase-description">Architectural and engineering designs developed, materials selected, and approvals prepared.</p>
+            <ul class="phase-tasks">
+              <li><span class="task-check">✓</span> Conceptual architectural drawings</li>
+              <li><span class="task-check">✓</span> Structural engineering plans</li>
+              <li><span class="task-check">✓</span> Material selection & specifications</li>
+              <li><span class="task-check">✓</span> Regulatory approval documents</li>
+            </ul>
+          </div>
+          
+          <div class="phase-card" data-phase="3">
+            <div class="phase-header">
+              <div class="phase-icon">📋</div>
+              <div class="phase-title-group">
+                <h3>Planning & Procurement</h3>
+                <div class="duration">⏱️ 3-6 weeks</div>
+              </div>
+            </div>
+            <p class="phase-description">Contractor selection, tender process, permits acquired, and project schedule finalized.</p>
+            <ul class="phase-tasks">
+              <li><span class="task-check">✓</span> Contractor vetting & tender process</li>
+              <li><span class="task-check">✓</span> Building permit applications</li>
+              <li><span class="task-check">✓</span> Detailed project scheduling</li>
+              <li><span class="task-check">✓</span> Material procurement & logistics</li>
+            </ul>
+          </div>
+          
+          <div class="phase-card" data-phase="4">
+            <div class="phase-header">
+              <div class="phase-icon">🏗️</div>
+              <div class="phase-title-group">
+                <h3>Construction Phase</h3>
+                <div class="duration">⏱️ 3-12 months</div>
+              </div>
+            </div>
+            <p class="phase-description">The main build execution with quality control, progress tracking, and milestone inspections.</p>
+            <ul class="phase-tasks">
+              <li><span class="task-check">✓</span> Site preparation & foundation work</li>
+              <li><span class="task-check">✓</span> Structural construction & framing</li>
+              <li><span class="task-check">✓</span> MEP installations & finishing</li>
+              <li><span class="task-check">✓</span> Quality inspections & snagging</li>
+            </ul>
+          </div>
+          
+          <div class="phase-card" data-phase="5">
+            <div class="phase-header">
+              <div class="phase-icon">✅</div>
+              <div class="phase-title-group">
+                <h3>Completion & Handover</h3>
+                <div class="duration">⏱️ 1-2 weeks</div>
+              </div>
+            </div>
+            <p class="phase-description">Final inspections, documentation, warranties provided, and keys handed over to client.</p>
+            <ul class="phase-tasks">
+              <li><span class="task-check">✓</span> Final inspections & compliance checks</li>
+              <li><span class="task-check">✓</span> Defect resolution & touch-ups</li>
+              <li><span class="task-check">✓</span> Documentation & warranty handover</li>
+              <li><span class="task-check">✓</span> Key handover & project closure</li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Timeline Legend -->
+        <div class="timeline-legend">
+          <div class="legend-item">
+            <div class="legend-dot planning"></div>
+            <span>Planning Phase</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot construction"></div>
+            <span>Construction Phase</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot completion"></div>
+            <span>Completion Phase</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- v102.0: Site Inspection Scheduler - Fortune 500 Quality Booking Widget -->
+  <section id="site-inspection-scheduler" class="section inspection-scheduler-section" data-section="SiteInspection" data-nav-label="Book Inspection">
+    <div class="scheduler-container">
+      <!-- Left: Info Panel -->
+      <div class="scheduler-info">
+        <p class="eyebrow">Schedule a Visit</p>
+        <h2 class="scramble-text kinetic-text">Book Your Site Inspection</h2>
+        <p>Choose a convenient time for our team to assess your property and discuss your construction plans in detail.</p>
+        
+        <ul class="scheduler-benefits">
+          <li>
+            <div class="benefit-icon">📍</div>
+            <div class="benefit-text">
+              <h4>On-Site Assessment</h4>
+              <p>Professional evaluation of your property</p>
+            </div>
+          </li>
+          <li>
+            <div class="benefit-icon">💡</div>
+            <div class="benefit-text">
+              <h4>Expert Advice</h4>
+              <p>Get tailored recommendations</p>
+            </div>
+          </li>
+          <li>
+            <div class="benefit-icon">📝</div>
+            <div class="benefit-text">
+              <h4>Detailed Report</h4>
+              <p>Receive a comprehensive assessment</p>
+            </div>
+          </li>
+        </ul>
+        
+        <div class="scheduler-contact">
+          <h4>Prefer to call?</h4>
+          <a href="tel:+27661200064" class="contact-method">
+            <span class="icon">📞</span>
+            <div class="details">
+              <div class="label">Phone</div>
+              <div class="value">+27 66 120 0064</div>
+            </div>
+          </a>
+          <a href="https://wa.me/27661200064" class="contact-method" target="_blank">
+            <span class="icon">💬</span>
+            <div class="details">
+              <div class="label">WhatsApp</div>
+              <div class="value">+27 66 120 0064</div>
+            </div>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Right: Calendar Panel -->
+      <div class="scheduler-calendar">
+        <!-- Calendar Header -->
+        <div class="calendar-header">
+          <h3>Select Date & Time</h3>
+          <div class="month-navigation">
+            <button class="nav-arrow prev-month">‹</button>
+            <button class="nav-arrow next-month">›</button>
+          </div>
+        </div>
+        
+        <!-- Weekday Headers -->
+        <div class="calendar-grid">
+          <div class="weekday-headers">
+            <div class="weekday-header">Sun</div>
+            <div class="weekday-header">Mon</div>
+            <div class="weekday-header">Tue</div>
+            <div class="weekday-header">Wed</div>
+            <div class="weekday-header">Thu</div>
+            <div class="weekday-header">Fri</div>
+            <div class="weekday-header">Sat</div>
+          </div>
+          
+          <!-- Days Grid (populated by JS) -->
+          <div class="days-grid" id="schedulerDaysGrid"></div>
+        </div>
+        
+        <!-- Calendar Legend -->
+        <div class="calendar-legend">
+          <div class="legend-item">
+            <div class="legend-dot available"></div>
+            <span>Available</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot limited"></div>
+            <span>Limited</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot unavailable"></div>
+            <span>Unavailable</span>
+          </div>
+        </div>
+        
+        <!-- Time Slots -->
+        <div class="time-slots-container" id="timeSlotsContainer" style="display: none;">
+          <div class="time-slots-header">
+            <h4>Available Times</h4>
+            <span class="selected-date-display" id="selectedDateDisplay"></span>
+          </div>
+          <div class="time-slots-grid" id="timeSlotsGrid">
+            <button class="time-slot" data-time="09:00">
+              <span class="time">09:00</span>
+              <span class="period">AM</span>
+            </button>
+            <button class="time-slot" data-time="10:00">
+              <span class="time">10:00</span>
+              <span class="period">AM</span>
+            </button>
+            <button class="time-slot" data-time="11:00">
+              <span class="time">11:00</span>
+              <span class="period">AM</span>
+            </button>
+            <button class="time-slot" data-time="13:00">
+              <span class="time">13:00</span>
+              <span class="period">PM</span>
+            </button>
+            <button class="time-slot" data-time="14:00">
+              <span class="time">14:00</span>
+              <span class="period">PM</span>
+            </button>
+            <button class="time-slot" data-time="15:00">
+              <span class="time">15:00</span>
+              <span class="period">PM</span>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Booking Form -->
+        <div class="booking-form-container" id="bookingFormContainer">
+          <h4>Complete Your Booking</h4>
+          
+          <div class="project-type-selector">
+            <div class="project-type-option" data-type="residential">
+              <span class="icon">🏠</span>
+              <span class="label">Residential</span>
+            </div>
+            <div class="project-type-option" data-type="commercial">
+              <span class="icon">🏢</span>
+              <span class="label">Commercial</span>
+            </div>
+            <div class="project-type-option" data-type="renovation">
+              <span class="icon">🔨</span>
+              <span class="label">Renovation</span>
+            </div>
+            <div class="project-type-option" data-type="industrial">
+              <span class="icon">🏭</span>
+              <span class="label">Industrial</span>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="scheduler-form-group">
+              <label for="bookingName">Your Name</label>
+              <input type="text" id="bookingName" placeholder="John Smith" required>
+            </div>
+            <div class="scheduler-form-group">
+              <label for="bookingPhone">Phone Number</label>
+              <input type="tel" id="bookingPhone" placeholder="+27 66 123 4567" required>
+            </div>
+          </div>
+          
+          <div class="scheduler-form-group">
+            <label for="bookingEmail">Email Address</label>
+            <input type="email" id="bookingEmail" placeholder="john@example.com" required>
+          </div>
+          
+          <div class="scheduler-form-group">
+            <label for="bookingAddress">Property Address</label>
+            <input type="text" id="bookingAddress" placeholder="123 Main Street, Cape Town" required>
+          </div>
+          
+          <div class="scheduler-form-group">
+            <label for="bookingNotes">Additional Notes</label>
+            <textarea id="bookingNotes" placeholder="Any specific requirements or questions..."></textarea>
+          </div>
+          
+          <button type="button" class="booking-submit" id="confirmBookingBtn">
+            Confirm Booking
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Booking Success Modal -->
+    <div class="booking-success" id="bookingSuccessModal">
+      <div class="success-content">
+        <div class="success-icon">✓</div>
+        <h3>Booking Confirmed!</h3>
+        <p>We've received your site inspection request. Our team will arrive at the scheduled time.</p>
+        <div class="success-details">
+          <div class="success-detail-row">
+            <span class="label">Date</span>
+            <span class="value" id="successDate">-</span>
+          </div>
+          <div class="success-detail-row">
+            <span class="label">Time</span>
+            <span class="value" id="successTime">-</span>
+          </div>
+          <div class="success-detail-row">
+            <span class="label">Address</span>
+            <span class="value" id="successAddress">-</span>
+          </div>
+        </div>
+        <button class="success-close" id="closeSuccessModal">Done</button>
+      </div>
     </div>
   </section>
 
@@ -4234,7 +4777,21 @@
     
     // Log v95.0-99.0 features loaded
     console.log('🚀 BuildBridge Fortune 500 v95.0-99.0 loaded: Scroll Velocity Typography, WebGL Fluid Mesh, Dark Mode Toggle, Viewport Entrance Animations, Scroll-Linked Video System');
+    
+    // Log v100.0-102.0 features loaded
+    console.log('💰 BuildBridge Fortune 500 v100.0 loaded: Construction Cost Estimator (Multi-Step Calculator, Real-Time Pricing, South African Market Rates)');
+    console.log('📅 BuildBridge Fortune 500 v101.0 loaded: Project Timeline Visualizer (Interactive Phase Display, Project Type Tabs, Timeline Tracking)');
+    console.log('📆 BuildBridge Fortune 500 v102.0 loaded: Site Inspection Scheduler (Calendar Booking, Time Slot Selection, Booking Management)');
   </script>
+  
+  <!-- v100.0: Construction Cost Estimator -->
+  <script src="js/construction-cost-estimator.js"></script>
+  
+  <!-- v101.0: Project Timeline Visualizer -->
+  <script src="js/project-timeline-visualizer.js"></script>
+  
+  <!-- v102.0: Site Inspection Scheduler -->
+  <script src="js/site-inspection-scheduler.js"></script>
   
 </body>
 </html>
