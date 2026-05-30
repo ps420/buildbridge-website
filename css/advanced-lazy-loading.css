@@ -1,0 +1,307 @@
+/* ========================================
+   ADVANCED LAZY LOADING - v137.3
+   Blur-up Image Loading with Skeleton States
+   ======================================== */
+
+/* Base lazy image styles */
+.lazy-image-container {
+  position: relative;
+  overflow: hidden;
+  background: var(--gun);
+}
+
+.lazy-image {
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.lazy-image.loaded {
+  opacity: 1;
+}
+
+/* Blur-up loading state */
+.lazy-image-blur {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(20px);
+  transform: scale(1.1);
+  transition: opacity 0.5s ease, filter 0.5s ease;
+  opacity: 1;
+}
+
+.lazy-image-blur.loaded {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Skeleton loading state */
+.lazy-skeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    var(--gun) 25%,
+    rgba(201, 206, 214, 0.1) 50%,
+    var(--gun) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.lazy-skeleton.loaded {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: none;
+}
+
+/* Placeholder color (dominant color) */
+.lazy-placeholder {
+  position: absolute;
+  inset: 0;
+  background-color: var(--gun);
+  transition: opacity 0.3s ease;
+}
+
+.lazy-placeholder.loaded {
+  opacity: 0;
+}
+
+/* Loading progress indicator */
+.lazy-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(201, 206, 214, 0.1);
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.lazy-image-container.loading .lazy-progress {
+  opacity: 1;
+}
+
+.lazy-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--chrome), var(--white));
+  width: 0;
+  transition: width 0.2s ease;
+  animation: progress-indeterminate 1.5s infinite ease-in-out;
+}
+
+@keyframes progress-indeterminate {
+  0% { width: 0; transform: translateX(-100%); }
+  50% { width: 50%; }
+  100% { width: 100%; transform: translateX(100%); }
+}
+
+/* Image loaded states with reveal effects */
+.lazy-image-container.reveal-fade .lazy-image {
+  transform: scale(1.02);
+}
+
+.lazy-image-container.reveal-fade .lazy-image.loaded {
+  transform: scale(1);
+}
+
+.lazy-image-container.reveal-zoom .lazy-image {
+  transform: scale(1.1);
+}
+
+.lazy-image-container.reveal-zoom .lazy-image.loaded {
+  transform: scale(1);
+}
+
+.lazy-image-container.reveal-slide-up .lazy-image {
+  transform: translateY(20px);
+}
+
+.lazy-image-container.reveal-slide-up .lazy-image.loaded {
+  transform: translateY(0);
+}
+
+/* Aspect ratio support */
+.lazy-image-container[data-ratio] {
+  aspect-ratio: attr(data-ratio);
+}
+
+.lazy-image-container.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+.lazy-image-container.aspect-video {
+  aspect-ratio: 16 / 9;
+}
+
+.lazy-image-container.aspect-portrait {
+  aspect-ratio: 3 / 4;
+}
+
+.lazy-image-container.aspect-hero {
+  aspect-ratio: 21 / 9;
+}
+
+/* Object fit variants */
+.lazy-image-container.fit-cover .lazy-image,
+.lazy-image-container.fit-cover .lazy-image-blur {
+  object-fit: cover;
+}
+
+.lazy-image-container.fit-contain .lazy-image,
+.lazy-image-container.fit-contain .lazy-image-blur {
+  object-fit: contain;
+}
+
+/* Error state */
+.lazy-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--gun);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.lazy-image-container.error .lazy-error {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lazy-error-icon {
+  width: 48px;
+  height: 48px;
+  color: var(--slate);
+  margin-bottom: 12px;
+}
+
+.lazy-error-text {
+  color: var(--slate);
+  font-size: 13px;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.lazy-retry-btn {
+  margin-top: 16px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid var(--slate);
+  color: var(--chrome);
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.lazy-retry-btn:hover {
+  background: var(--white);
+  border-color: var(--white);
+  color: var(--black);
+}
+
+/* Low quality image placeholder (LQIP) */
+.lazy-lqip {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(10px) saturate(1.2);
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+.lazy-lqip.loaded {
+  opacity: 0;
+}
+
+/* Responsive images */
+.lazy-image-container picture {
+  display: contents;
+}
+
+.lazy-image-container picture source {
+  display: none;
+}
+
+/* Gallery grid optimization */
+.lazy-gallery {
+  display: grid;
+  gap: 16px;
+}
+
+.lazy-gallery .lazy-image-container {
+  border-radius: 8px;
+}
+
+/* Priority loading */
+.lazy-image[data-priority="high"] {
+  opacity: 1;
+}
+
+.lazy-image[data-priority="high"] + .lazy-skeleton,
+.lazy-image[data-priority="high"] + .lazy-image-blur {
+  display: none;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .lazy-image,
+  .lazy-image-blur,
+  .lazy-skeleton,
+  .lazy-placeholder {
+    transition: none;
+    animation: none;
+  }
+
+  .lazy-image {
+    opacity: 1;
+  }
+
+  .lazy-image-blur,
+  .lazy-skeleton.loaded {
+    opacity: 0;
+  }
+}
+
+/* Print styles */
+@media print {
+  .lazy-image-container {
+    background: transparent !important;
+  }
+
+  .lazy-skeleton,
+  .lazy-image-blur,
+  .lazy-lqip,
+  .lazy-placeholder,
+  .lazy-progress {
+    display: none !important;
+  }
+
+  .lazy-image {
+    opacity: 1 !important;
+  }
+}
+
+/* Performance: GPU acceleration for animated elements */
+.lazy-image,
+.lazy-image-blur {
+  will-change: transform, opacity;
+}
+
+.lazy-image.loaded,
+.lazy-image-blur.loaded {
+  will-change: auto;
+}

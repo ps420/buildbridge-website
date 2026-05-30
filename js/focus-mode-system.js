@@ -1,505 +1,416 @@
 /**
- * Reading Focus Mode System
- * Fortune 500 Quality Distraction-Free Reading
- * v91.0: Intelligent focus mode with progress tracking and customization
+ * Focus Mode System - v137.2
+ * Distraction-free reading experience
+ * Fortune 500 Professional UX
  */
 
 class FocusModeSystem {
-  constructor() {
+  constructor(options = {}) {
+    this.options = {
+      showToggle: options.showToggle !== false,
+      showTriggers: options.showTriggers !== false,
+      animationDuration: options.animationDuration || 400,
+      ...options
+    };
+
     this.isActive = false;
-    this.currentContainer = null;
-    this.fontSize = 100; // percentage
+    this.currentSection = null;
+    this.fontSize = 'medium';
     this.theme = 'dark';
-    this.lineWidth = 'medium';
     this.readingProgress = 0;
-    this.scrollListener = null;
-    this.paragraphObserver = null;
-    
+
+    this.elements = {
+      toggle: null,
+      overlay: null,
+      section: null,
+      toolbar: null,
+      progressBar: null
+    };
+
     this.init();
   }
-  
+
   init() {
-    this.createToggleButton();
-    this.createControls();
-    this.createProgressBar();
-    this.createInfoPanel();
+    if (this.options.showToggle) {
+      this.createToggle();
+    }
+    this.createOverlay();
+    this.createSection();
+    this.createToolbar();
     this.bindEvents();
-    this.loadSettings();
+
+    if (this.options.showTriggers) {
+      this.addSectionTriggers();
+    }
   }
-  
-  createToggleButton() {
-    const button = document.createElement('button');
-    button.className = 'focus-mode-toggle';
-    button.setAttribute('aria-label', 'Toggle focus mode');
-    button.innerHTML = `
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="5"/>
-        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+
+  createToggle() {
+    this.elements.toggle = document.createElement('button');
+    this.elements.toggle.className = 'focus-mode-toggle';
+    this.elements.toggle.setAttribute('aria-label', 'Enter focus mode');
+    this.elements.toggle.setAttribute('title', 'Focus Mode (F)');
+    this.elements.toggle.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
       </svg>
       <span class="focus-mode-tooltip">Focus Mode (F)</span>
     `;
-    
-    button.addEventListener('click', () => this.toggle());
-    document.body.appendChild(button);
-    this.toggleButton = button;
+    document.body.appendChild(this.elements.toggle);
   }
-  
-  createControls() {
-    const controls = document.createElement('div');
-    controls.className = 'focus-mode-controls';
-    controls.innerHTML = `
-      <!-- Font Size -->
-      <div class="focus-mode-controls-section">
-        <span class="focus-mode-control-label">Size</span>
-        <div class="focus-mode-font-size">
-          <button class="focus-mode-btn" data-action="font-decrease" aria-label="Decrease font size">A-</button>
-          <button class="focus-mode-btn" data-action="font-increase" aria-label="Increase font size">A+</button>
-        </div>
+
+  createOverlay() {
+    this.elements.overlay = document.createElement('div');
+    this.elements.overlay.className = 'focus-overlay';
+    this.elements.overlay.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(this.elements.overlay);
+  }
+
+  createSection() {
+    this.elements.section = document.createElement('div');
+    this.elements.section.className = 'focus-section';
+    this.elements.section.setAttribute('role', 'dialog');
+    this.elements.section.setAttribute('aria-modal', 'true');
+    this.elements.section.setAttribute('aria-labelledby', 'focus-section-title');
+    this.elements.section.setAttribute('tabindex', '-1');
+    
+    this.elements.section.innerHTML = `
+      <div class="focus-reading-progress">
+        <div class="focus-reading-progress-bar"></div>
       </div>
-      
-      <!-- Theme -->
-      <div class="focus-mode-controls-section">
-        <span class="focus-mode-control-label">Theme</span>
-        <div class="focus-mode-themes">
-          <button class="focus-mode-theme focus-mode-theme-dark active" data-theme="dark" aria-label="Dark theme"></button>
-          <button class="focus-mode-theme focus-mode-theme-light" data-theme="light" aria-label="Light theme"></button>
-          <button class="focus-mode-theme focus-mode-theme-sepia" data-theme="sepia" aria-label="Sepia theme"></button>
+      <div class="focus-section-header">
+        <div>
+          <h2 id="focus-section-title" class="focus-section-title">Focus Mode</h2>
+          <div class="focus-section-meta">Press ESC or click X to exit</div>
         </div>
+        <button class="focus-close-btn" aria-label="Close focus mode">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="24" height="24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
       </div>
-      
-      <!-- Line Width -->
-      <div class="focus-mode-controls-section">
-        <span class="focus-mode-control-label">Width</span>
-        <div class="focus-mode-width">
-          <div class="focus-mode-width-option focus-mode-width-narrow" data-width="narrow" aria-label="Narrow width">
-            <div class="focus-mode-width-bar">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </div>
-          <div class="focus-mode-width-option focus-mode-width-medium active" data-width="medium" aria-label="Medium width">
-            <div class="focus-mode-width-bar">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </div>
-          <div class="focus-mode-width-option focus-mode-width-wide" data-width="wide" aria-label="Wide width">
-            <div class="focus-mode-width-bar">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Exit -->
-      <button class="focus-mode-exit" data-action="exit">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 6L6 18M6 6l12 12"/>
+      <div class="focus-section-content"></div>
+    `;
+
+    document.body.appendChild(this.elements.section);
+
+    this.elements.progressBar = this.elements.section.querySelector('.focus-reading-progress-bar');
+    this.elements.sectionContent = this.elements.section.querySelector('.focus-section-content');
+    this.elements.sectionTitle = this.elements.section.querySelector('.focus-section-title');
+    this.elements.closeBtn = this.elements.section.querySelector('.focus-close-btn');
+  }
+
+  createToolbar() {
+    this.elements.toolbar = document.createElement('div');
+    this.elements.toolbar.className = 'focus-toolbar';
+    this.elements.toolbar.innerHTML = `
+      <button class="focus-toolbar-btn" data-action="font-small" aria-label="Small font size">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7" />
         </svg>
-        Exit
+      </button>
+      <button class="focus-toolbar-btn active" data-action="font-medium" aria-label="Medium font size">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+      <button class="focus-toolbar-btn" data-action="font-large" aria-label="Large font size">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+      <div class="focus-toolbar-divider"></div>
+      <button class="focus-toolbar-btn" data-action="theme-dark" aria-label="Dark theme">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      </button>
+      <button class="focus-toolbar-btn" data-action="theme-light" aria-label="Light theme">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+      </button>
+      <button class="focus-toolbar-btn" data-action="theme-sepia" aria-label="Sepia theme">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+      </button>
+      <div class="focus-toolbar-divider"></div>
+      <button class="focus-toolbar-btn" data-action="close" aria-label="Exit focus mode">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
       </button>
     `;
-    
-    document.body.appendChild(controls);
-    this.controls = controls;
-    
-    // Bind control events
-    controls.querySelector('[data-action="font-decrease"]').addEventListener('click', () => this.adjustFontSize(-10));
-    controls.querySelector('[data-action="font-increase"]').addEventListener('click', () => this.adjustFontSize(10));
-    controls.querySelector('[data-action="exit"]').addEventListener('click', () => this.deactivate());
-    
-    // Theme buttons
-    controls.querySelectorAll('.focus-mode-theme').forEach(btn => {
-      btn.addEventListener('click', () => this.setTheme(btn.dataset.theme));
-    });
-    
-    // Width options
-    controls.querySelectorAll('.focus-mode-width-option').forEach(option => {
-      option.addEventListener('click', () => this.setLineWidth(option.dataset.width));
-    });
+
+    document.body.appendChild(this.elements.toolbar);
   }
-  
-  createProgressBar() {
-    const progress = document.createElement('div');
-    progress.className = 'focus-mode-progress';
-    progress.innerHTML = '<div class="focus-mode-progress-bar"></div>';
-    document.body.appendChild(progress);
-    this.progressBar = progress.querySelector('.focus-mode-progress-bar');
-  }
-  
-  createInfoPanel() {
-    const info = document.createElement('div');
-    info.className = 'focus-mode-info';
-    info.innerHTML = `
-      <div class="focus-mode-info-title">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-        </svg>
-        Reading Stats
-      </div>
-      <div class="focus-mode-info-stats">
-        <div class="focus-mode-stat">
-          <div class="focus-mode-stat-value" id="focusWordCount">0</div>
-          <div class="focus-mode-stat-label">Words</div>
-        </div>
-        <div class="focus-mode-stat">
-          <div class="focus-mode-stat-value" id="focusProgress">0%</div>
-          <div class="focus-mode-stat-label">Progress</div>
-        </div>
-      </div>
-      <div class="focus-mode-reading-time">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M12 6v6l4 2"/>
-        </svg>
-        <span id="focusReadingTime">2 min read</span>
-      </div>
-    `;
-    
-    document.body.appendChild(info);
-    this.infoPanel = info;
-    this.wordCountEl = info.querySelector('#focusWordCount');
-    this.progressEl = info.querySelector('#focusProgress');
-    this.readingTimeEl = info.querySelector('#focusReadingTime');
-  }
-  
+
   bindEvents() {
-    // Keyboard shortcut
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'f' && !e.metaKey && !e.ctrlKey && !e.altKey) {
-        const active = document.activeElement;
-        if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) {
-          return;
-        }
-        e.preventDefault();
-        this.toggle();
+    // Toggle button
+    if (this.elements.toggle) {
+      this.elements.toggle.addEventListener('click', () => this.toggle());
+    }
+
+    // Close button
+    this.elements.closeBtn.addEventListener('click', () => this.deactivate());
+
+    // Overlay click
+    this.elements.overlay.addEventListener('click', () => this.deactivate());
+
+    // Toolbar buttons
+    this.elements.toolbar.addEventListener('click', (e) => {
+      const btn = e.target.closest('.focus-toolbar-btn');
+      if (btn) {
+        const action = btn.getAttribute('data-action');
+        this.handleToolbarAction(action, btn);
       }
-      
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      // F key to toggle
+      if (e.key === 'f' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const tagName = document.activeElement?.tagName;
+        if (tagName !== 'INPUT' && tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          this.toggle();
+        }
+      }
+
+      // ESC to close
       if (e.key === 'Escape' && this.isActive) {
         this.deactivate();
       }
     });
-    
-    // Detect scrollable content areas
-    this.detectContentAreas();
-  }
-  
-  detectContentAreas() {
-    // Find main content sections that could be focusable
-    const sections = document.querySelectorAll('section, article, .section, .content');
-    sections.forEach(section => {
-      const textContent = section.textContent || '';
-      const wordCount = textContent.trim().split(/\s+/).length;
-      
-      // Only make sections focusable if they have substantial content
-      if (wordCount > 100) {
-        section.classList.add('potential-focus-container');
-        
-        // Add double-click to focus
-        section.addEventListener('dblclick', (e) => {
-          if (!this.isActive) {
-            this.activate(section);
-          }
-        });
+
+    // Scroll progress
+    this.elements.section.addEventListener('scroll', () => {
+      this.updateReadingProgress();
+    });
+
+    // Prevent body scroll when focus mode is active
+    this.elements.section.addEventListener('wheel', (e) => {
+      const isScrollingUp = e.deltaY < 0;
+      const isScrollingDown = e.deltaY > 0;
+      const isAtTop = this.elements.section.scrollTop === 0;
+      const isAtBottom = this.elements.section.scrollTop + this.elements.section.clientHeight >= this.elements.section.scrollHeight - 1;
+
+      if ((isScrollingUp && isAtTop) || (isScrollingDown && isAtBottom)) {
+        e.preventDefault();
       }
+    }, { passive: false });
+  }
+
+  addSectionTriggers() {
+    // Find all major sections and add focus triggers
+    const sections = document.querySelectorAll('section[id]');
+    
+    sections.forEach(section => {
+      const trigger = document.createElement('button');
+      trigger.className = 'section-focus-trigger';
+      trigger.setAttribute('aria-label', `Enter focus mode for ${section.getAttribute('data-nav-label') || 'this section'}`);
+      trigger.setAttribute('title', 'Read in focus mode');
+      trigger.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+      `;
+
+      trigger.addEventListener('click', () => {
+        this.activateForSection(section);
+      });
+
+      // Position the section relatively if not already
+      if (getComputedStyle(section).position === 'static') {
+        section.style.position = 'relative';
+      }
+
+      section.appendChild(trigger);
     });
   }
-  
+
   toggle() {
     if (this.isActive) {
       this.deactivate();
     } else {
-      // Find the most suitable content container
-      const container = this.findBestContainer();
-      this.activate(container);
+      this.activateForCurrentView();
     }
   }
-  
-  findBestContainer() {
-    // Try to find the current section in viewport
-    const sections = document.querySelectorAll('.potential-focus-container, section, article');
-    const viewportCenter = window.scrollY + window.innerHeight / 2;
+
+  activateForCurrentView() {
+    // Extract main content
+    const mainContent = this.extractMainContent();
+    this.elements.sectionContent.innerHTML = mainContent;
+    this.elements.sectionTitle.textContent = document.title;
     
-    let bestContainer = null;
-    let bestDistance = Infinity;
+    this.activate();
+  }
+
+  activateForSection(section) {
+    const title = section.querySelector('h2')?.textContent || 
+                  section.getAttribute('data-nav-label') || 
+                  'Section Content';
     
+    const content = section.cloneNode(true);
+    
+    // Remove interactive elements
+    content.querySelectorAll('.section-focus-trigger, .btn, .actions, form').forEach(el => el.remove());
+    
+    this.elements.sectionContent.innerHTML = content.innerHTML;
+    this.elements.sectionTitle.textContent = title;
+    
+    this.activate();
+  }
+
+  extractMainContent() {
+    // Try to find main content area
+    const main = document.querySelector('main') || document.querySelector('#main-content');
+    if (main) {
+      return main.innerHTML;
+    }
+
+    // Fallback: extract from all sections
+    const sections = document.querySelectorAll('section');
+    let content = '';
     sections.forEach(section => {
-      const rect = section.getBoundingClientRect();
-      const sectionCenter = window.scrollY + rect.top + rect.height / 2;
-      const distance = Math.abs(sectionCenter - viewportCenter);
-      
-      if (rect.height > 200 && distance < bestDistance) {
-        bestDistance = distance;
-        bestContainer = section;
-      }
+      const clone = section.cloneNode(true);
+      clone.querySelectorAll('.section-focus-trigger, .btn.ghost').forEach(el => el.remove());
+      content += clone.innerHTML;
     });
-    
-    // Fallback to main content or hero
-    return bestContainer || 
-           document.querySelector('#main-content') || 
-           document.querySelector('.hero') ||
-           document.querySelector('main') ||
-           document.body;
+
+    return content;
   }
-  
-  activate(container) {
-    if (!container) return;
-    
-    this.currentContainer = container;
+
+  activate() {
     this.isActive = true;
+    document.body.classList.add('focus-mode-active');
     
-    // Add classes
-    document.body.classList.add('focus-mode', 'active');
-    container.classList.add('focus-container', 'active');
-    this.toggleButton.classList.add('active');
-    
-    // Calculate reading stats
-    this.calculateStats();
-    
-    // Start progress tracking
-    this.startProgressTracking();
-    
-    // Apply current settings
-    this.applySettings();
-    
-    // Add paragraph indicators
-    this.addParagraphIndicators();
-    
-    // Store reference
-    this.updateParagraphObserver();
-    
-    // Show toast
-    if (window.showToast) {
-      window.showToast('Focus mode enabled. Press ESC to exit.', 'info');
+    if (this.elements.toggle) {
+      this.elements.toggle.classList.add('active');
+      this.elements.toggle.setAttribute('aria-label', 'Exit focus mode');
     }
-    
-    // Save state
-    localStorage.setItem('focusModeActive', 'true');
+
+    // Focus the section for accessibility
+    setTimeout(() => {
+      this.elements.section.focus();
+    }, this.options.animationDuration);
+
+    // Dispatch event
+    window.dispatchEvent(new CustomEvent('focusmodeactivated'));
+
+    // Pause any background animations
+    document.body.classList.add('pause-animations');
   }
-  
+
   deactivate() {
     this.isActive = false;
+    document.body.classList.remove('focus-mode-active');
     
-    // Remove classes
-    document.body.classList.remove('focus-mode', 'active', 'focus-mode-light', 'focus-mode-sepia');
-    
-    if (this.currentContainer) {
-      this.currentContainer.classList.remove('focus-container', 'active');
-      this.removeParagraphIndicators();
+    if (this.elements.toggle) {
+      this.elements.toggle.classList.remove('active');
+      this.elements.toggle.setAttribute('aria-label', 'Enter focus mode');
     }
-    
-    this.toggleButton.classList.remove('active');
-    
-    // Stop progress tracking
-    this.stopProgressTracking();
-    
-    // Disconnect observer
-    if (this.paragraphObserver) {
-      this.paragraphObserver.disconnect();
-      this.paragraphObserver = null;
-    }
-    
-    // Reset styles
-    if (this.currentContainer) {
-      this.currentContainer.style.fontSize = '';
-      this.currentContainer.style.maxWidth = '';
-      this.currentContainer.style.margin = '';
-    }
-    
-    this.currentContainer = null;
-    
-    // Remove saved state
-    localStorage.removeItem('focusModeActive');
+
+    // Reset scroll
+    this.elements.section.scrollTop = 0;
+    this.updateReadingProgress();
+
+    // Dispatch event
+    window.dispatchEvent(new CustomEvent('focusmodedeactivated'));
+
+    // Resume animations
+    document.body.classList.remove('pause-animations');
   }
-  
-  calculateStats() {
-    if (!this.currentContainer) return;
-    
-    const text = this.currentContainer.textContent || '';
-    const words = text.trim().split(/\s+/).length;
-    const minutes = Math.ceil(words / 200); // Average reading speed
-    
-    if (this.wordCountEl) this.wordCountEl.textContent = words.toLocaleString();
-    if (this.readingTimeEl) this.readingTimeEl.textContent = `${minutes} min read`;
-  }
-  
-  startProgressTracking() {
-    if (!this.currentContainer) return;
-    
-    this.scrollListener = () => {
-      const container = this.currentContainer;
-      const rect = container.getBoundingClientRect();
-      const containerHeight = container.offsetHeight;
-      const viewportHeight = window.innerHeight;
-      
-      // Calculate how much of the container has been scrolled through
-      const scrollTop = -rect.top;
-      const scrollableHeight = containerHeight - viewportHeight;
-      
-      let progress = 0;
-      if (scrollableHeight > 0) {
-        progress = Math.max(0, Math.min(100, (scrollTop / scrollableHeight) * 100));
-      }
-      
-      this.readingProgress = Math.round(progress);
-      
-      if (this.progressBar) {
-        this.progressBar.style.width = `${this.readingProgress}%`;
-      }
-      
-      if (this.progressEl) {
-        this.progressEl.textContent = `${this.readingProgress}%`;
-      }
-    };
-    
-    window.addEventListener('scroll', this.scrollListener, { passive: true });
-    this.scrollListener(); // Initial call
-  }
-  
-  stopProgressTracking() {
-    if (this.scrollListener) {
-      window.removeEventListener('scroll', this.scrollListener);
-      this.scrollListener = null;
-    }
-    
-    this.readingProgress = 0;
-    if (this.progressBar) this.progressBar.style.width = '0%';
-  }
-  
-  addParagraphIndicators() {
-    if (!this.currentContainer) return;
-    
-    const paragraphs = this.currentContainer.querySelectorAll('p');
-    paragraphs.forEach((p, i) => {
-      p.style.position = 'relative';
-      
-      // Add indicator
-      const indicator = document.createElement('span');
-      indicator.className = 'focus-paragraph-indicator';
-      indicator.dataset.index = i;
-      p.appendChild(indicator);
-    });
-  }
-  
-  removeParagraphIndicators() {
-    if (!this.currentContainer) return;
-    
-    const indicators = this.currentContainer.querySelectorAll('.focus-paragraph-indicator');
-    indicators.forEach(ind => ind.remove());
-    
-    const currentParagraphs = this.currentContainer.querySelectorAll('.current-paragraph');
-    currentParagraphs.forEach(p => p.classList.remove('current-paragraph'));
-  }
-  
-  updateParagraphObserver() {
-    if (!this.currentContainer) return;
-    
-    const paragraphs = this.currentContainer.querySelectorAll('p');
-    
-    this.paragraphObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-          // Remove current from others
-          paragraphs.forEach(p => p.classList.remove('current-paragraph'));
-          // Add to current
-          entry.target.classList.add('current-paragraph');
-        }
-      });
-    }, {
-      root: null,
-      rootMargin: '-30% 0px -50% 0px',
-      threshold: [0, 0.5, 1]
-    });
-    
-    paragraphs.forEach(p => this.paragraphObserver.observe(p));
-  }
-  
-  adjustFontSize(delta) {
-    this.fontSize = Math.max(80, Math.min(150, this.fontSize + delta));
-    this.applyFontSize();
-    this.saveSettings();
-  }
-  
-  applyFontSize() {
-    if (this.currentContainer) {
-      this.currentContainer.style.fontSize = `${this.fontSize}%`;
+
+  handleToolbarAction(action, btn) {
+    switch (action) {
+      case 'font-small':
+      case 'font-medium':
+      case 'font-large':
+        this.setFontSize(action.replace('font-', ''));
+        this.updateActiveToolbarBtn(btn);
+        break;
+      case 'theme-dark':
+      case 'theme-light':
+      case 'theme-sepia':
+        this.setTheme(action.replace('theme-', ''));
+        this.updateActiveToolbarBtn(btn, 'theme');
+        break;
+      case 'close':
+        this.deactivate();
+        break;
     }
   }
-  
+
+  setFontSize(size) {
+    document.body.classList.remove('focus-font-small', 'focus-font-medium', 'focus-font-large');
+    document.body.classList.add(`focus-font-${size}`);
+    this.fontSize = size;
+    
+    // Save preference
+    localStorage.setItem('focusModeFontSize', size);
+  }
+
   setTheme(theme) {
+    document.body.classList.remove('focus-theme-dark', 'focus-theme-light', 'focus-theme-sepia');
+    document.body.classList.add(`focus-theme-${theme}`);
     this.theme = theme;
     
-    // Update button states
-    this.controls.querySelectorAll('.focus-mode-theme').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.theme === theme);
-    });
-    
-    // Apply theme classes
-    document.body.classList.remove('focus-mode-light', 'focus-mode-sepia');
-    if (theme !== 'dark') {
-      document.body.classList.add(`focus-mode-${theme}`);
+    // Save preference
+    localStorage.setItem('focusModeTheme', theme);
+  }
+
+  updateActiveToolbarBtn(activeBtn, group = null) {
+    if (group === 'theme') {
+      // For theme buttons, allow multiple selections (not applicable here, but good pattern)
+      this.elements.toolbar.querySelectorAll('[data-action^="theme-"]').forEach(btn => {
+        btn.classList.remove('active');
+      });
+    } else {
+      // For font size, only one active
+      this.elements.toolbar.querySelectorAll('[data-action^="font-"]').forEach(btn => {
+        btn.classList.remove('active');
+      });
     }
-    
-    this.saveSettings();
+    activeBtn.classList.add('active');
   }
-  
-  setLineWidth(width) {
-    this.lineWidth = width;
+
+  updateReadingProgress() {
+    if (!this.elements.section) return;
     
-    // Update UI
-    this.controls.querySelectorAll('.focus-mode-width-option').forEach(opt => {
-      opt.classList.toggle('active', opt.dataset.width === width);
-    });
+    const scrollTop = this.elements.section.scrollTop;
+    const scrollHeight = this.elements.section.scrollHeight - this.elements.section.clientHeight;
     
-    // Apply width
-    if (this.currentContainer) {
-      const widths = {
-        narrow: '600px',
-        medium: '800px',
-        wide: '1000px'
-      };
-      this.currentContainer.style.maxWidth = widths[width];
-      this.currentContainer.style.margin = '0 auto';
+    if (scrollHeight > 0) {
+      this.readingProgress = (scrollTop / scrollHeight) * 100;
+      this.elements.progressBar.style.width = `${this.readingProgress}%`;
     }
+  }
+
+  loadPreferences() {
+    const savedFontSize = localStorage.getItem('focusModeFontSize');
+    const savedTheme = localStorage.getItem('focusModeTheme');
     
-    this.saveSettings();
-  }
-  
-  applySettings() {
-    this.applyFontSize();
-    this.setTheme(this.theme);
-    this.setLineWidth(this.lineWidth);
-  }
-  
-  saveSettings() {
-    localStorage.setItem('focusModeSettings', JSON.stringify({
-      fontSize: this.fontSize,
-      theme: this.theme,
-      lineWidth: this.lineWidth
-    }));
-  }
-  
-  loadSettings() {
-    const saved = localStorage.getItem('focusModeSettings');
-    if (saved) {
-      const settings = JSON.parse(saved);
-      this.fontSize = settings.fontSize || 100;
-      this.theme = settings.theme || 'dark';
-      this.lineWidth = settings.lineWidth || 'medium';
+    if (savedFontSize) {
+      this.setFontSize(savedFontSize);
+    }
+    if (savedTheme) {
+      this.setTheme(savedTheme);
     }
   }
 }
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => new FocusModeSystem());
+  document.addEventListener('DOMContentLoaded', () => {
+    window.focusMode = new FocusModeSystem();
+  });
 } else {
-  new FocusModeSystem();
+  window.focusMode = new FocusModeSystem();
 }
 
-export default FocusModeSystem;
+// Export for module usage
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = FocusModeSystem;
+}

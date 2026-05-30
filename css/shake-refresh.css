@@ -1,0 +1,130 @@
+/* ========================================
+   SHAKE TO REFRESH - v137.4
+   Mobile Gesture for Page Refresh
+   ======================================== */
+
+/* Only show on mobile devices */
+.shake-refresh-indicator {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  background: var(--gun);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 16px;
+  padding: 30px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+.shake-refresh-indicator.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.shake-refresh-icon {
+  width: 48px;
+  height: 48px;
+  color: var(--chrome);
+  animation: shake-icon 0.5s ease-in-out infinite;
+}
+
+@keyframes shake-icon {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-15deg); }
+  75% { transform: rotate(15deg); }
+}
+
+.shake-refresh-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--white);
+  text-align: center;
+}
+
+.shake-refresh-progress {
+  width: 120px;
+  height: 3px;
+  background: rgba(201, 206, 214, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.shake-refresh-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--chrome), var(--white));
+  width: 0;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.shake-refresh-indicator.active .shake-refresh-progress-bar {
+  width: 100%;
+  transition: width 1s ease;
+}
+
+/* Success state */
+.shake-refresh-indicator.success {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.shake-refresh-indicator.success .shake-refresh-icon {
+  color: #22c55e;
+  animation: none;
+}
+
+.shake-refresh-indicator.success .shake-refresh-icon svg {
+  transform: scale(0);
+  animation: check-pop 0.4s ease forwards 0.2s;
+}
+
+@keyframes check-pop {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.shake-refresh-indicator.success .shake-refresh-text {
+  color: #22c55e;
+}
+
+/* Mobile detection - only show on touch devices */
+@media (hover: hover) and (pointer: fine) {
+  .shake-refresh-indicator {
+    display: none !important;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .shake-refresh-icon {
+    animation: none;
+  }
+  
+  .shake-refresh-indicator {
+    transition: none;
+  }
+}
+
+/* Haptic feedback classes */
+.shake-haptic {
+  animation: haptic-pulse 0.1s ease;
+}
+
+@keyframes haptic-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(0.98); }
+}

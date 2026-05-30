@@ -1,0 +1,674 @@
+/* ========================================
+   SMART PRINT STYLES - v137.0
+   Fortune 500 Professional Print Optimization
+   ======================================== */
+
+@media print {
+  /* Reset base styles */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide interactive/navigation elements */
+  .nav,
+  .mobile-menu-btn,
+  .floating-whatsapp,
+  .back-to-top,
+  .reading-progress,
+  .page-transition-overlay,
+  .floating-stats,
+  .marquee-section,
+  .smart-copy-widget,
+  .focus-mode-toggle,
+  .toast,
+  .lightbox,
+  .portfolio-lightbox,
+  .command-palette,
+  .smart-assistant-widget,
+  .live-chat-widget,
+  .notification-center,
+  .quick-actions-fab,
+  .offline-indicator,
+  .cookie-consent,
+  .announcement-bar,
+  .preloader,
+  .aurora-background,
+  .neural-network-bg,
+  .ambient-particle-network,
+  .custom-cursor,
+  .cursor-trail,
+  .scroll-progress-indicator,
+  .section-navigation-dots,
+  .drag-gallery-nav,
+  .drag-gallery-progress,
+  .drag-gallery-hint,
+  .showcase-3d-nav,
+  .showcase-3d-progress,
+  .project-map-pro-container,
+  .team-social,
+  .btn.ghost,
+  .demo-card-footer,
+  .portfolio-filters,
+  .portfolio-search-container,
+  .timeline-progress,
+  .animated-stat-progress,
+  .stat-particles {
+    display: none !important;
+  }
+
+  /* Optimize body for print */
+  body {
+    background: white !important;
+    color: #000 !important;
+    font-size: 12pt;
+    line-height: 1.4;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Remove all backgrounds and shadows */
+  .bg-gradient,
+  .orb,
+  body::before {
+    display: none !important;
+  }
+
+  /* Ensure sections stack properly */
+  section {
+    page-break-inside: avoid;
+    margin-bottom: 30pt;
+    padding: 20pt 0 !important;
+    background: transparent !important;
+    border: none !important;
+  }
+
+  /* Hero section print optimization */
+  .hero {
+    min-height: auto !important;
+    grid-template-columns: 1fr !important;
+    padding: 40pt 20pt !important;
+    page-break-after: avoid;
+  }
+
+  .hero-visual {
+    display: none !important;
+  }
+
+  .hero-copy {
+    text-align: center;
+  }
+
+  .hero-copy h1 {
+    font-size: 24pt !important;
+    color: #000 !important;
+    margin-bottom: 12pt;
+  }
+
+  .hero-copy p {
+    font-size: 12pt !important;
+    color: #333 !important;
+    max-width: none !important;
+  }
+
+  .hero-copy .actions {
+    display: none !important;
+  }
+
+  .eyebrow {
+    color: #666 !important;
+    font-size: 10pt !important;
+    justify-content: center;
+  }
+
+  .eyebrow::before,
+  .eyebrow::after {
+    background: #999 !important;
+  }
+
+  /* Typography adjustments */
+  h1, h2, h3, h4, h5, h6 {
+    color: #000 !important;
+    page-break-after: avoid;
+    page-break-inside: avoid;
+  }
+
+  h2 {
+    font-size: 18pt !important;
+    margin-bottom: 12pt;
+  }
+
+  h3 {
+    font-size: 14pt !important;
+    margin-bottom: 8pt;
+  }
+
+  p {
+    color: #333 !important;
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Section headers */
+  .section-header {
+    margin-bottom: 20pt;
+  }
+
+  .section-header p {
+    font-size: 11pt !important;
+  }
+
+  /* Trust bar */
+  .trust {
+    grid-template-columns: repeat(3, 1fr) !important;
+    border: 1px solid #ccc !important;
+    page-break-inside: avoid;
+  }
+
+  .trust div {
+    border-right: 1px solid #ccc !important;
+    padding: 15pt 10pt !important;
+  }
+
+  .trust div:last-child {
+    border-right: none !important;
+  }
+
+  .trust b {
+    color: #000 !important;
+    font-size: 10pt !important;
+  }
+
+  .trust p {
+    font-size: 9pt !important;
+    color: #666 !important;
+  }
+
+  /* Services grid */
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 15pt;
+  }
+
+  .service-card {
+    border: 1px solid #ccc !important;
+    padding: 15pt !important;
+    min-height: auto !important;
+    background: transparent !important;
+    page-break-inside: avoid;
+  }
+
+  .service-card::before,
+  .service-card::after {
+    display: none !important;
+  }
+
+  .service-icon {
+    border: 1px solid #999 !important;
+    width: 40pt !important;
+    height: 40pt !important;
+    font-size: 16pt !important;
+    margin-bottom: 10pt;
+  }
+
+  .service-card h3 {
+    font-size: 12pt !important;
+    margin-bottom: 6pt;
+  }
+
+  .service-card p {
+    font-size: 9pt !important;
+  }
+
+  /* Stats section */
+  .stats-section,
+  .animated-stats-section {
+    background: #f5f5f5 !important;
+    padding: 20pt !important;
+    page-break-inside: avoid;
+  }
+
+  .stats-grid,
+  .animated-stats-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 15pt;
+  }
+
+  .stat-item .number,
+  .animated-stat-number {
+    font-size: 20pt !important;
+    color: #000 !important;
+    -webkit-text-fill-color: #000 !important;
+    background: none !important;
+  }
+
+  .stat-item .label,
+  .animated-stat-label {
+    font-size: 8pt !important;
+    color: #666 !important;
+  }
+
+  .animated-stat-icon {
+    font-size: 20pt !important;
+    margin-bottom: 8pt;
+  }
+
+  /* Projects grid */
+  .projects-grid,
+  .masonry-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 15pt;
+  }
+
+  .project-card {
+    height: auto !important;
+    border: 1px solid #ccc !important;
+    page-break-inside: avoid;
+  }
+
+  .project-card img {
+    height: 120pt !important;
+    transform: none !important;
+  }
+
+  .project-overlay {
+    position: relative !important;
+    background: transparent !important;
+    padding: 10pt !important;
+  }
+
+  .project-overlay h3 {
+    font-size: 11pt !important;
+    transform: none !important;
+    opacity: 1 !important;
+    color: #000 !important;
+  }
+
+  .project-overlay p {
+    font-size: 9pt !important;
+    transform: none !important;
+    opacity: 1 !important;
+    color: #666 !important;
+  }
+
+  /* Drag gallery - hide */
+  .infinite-drag-gallery,
+  .masonry-portfolio-section {
+    display: none !important;
+  }
+
+  /* Before/After showcase */
+  .before-after-showcase {
+    display: block !important;
+    border: 1px solid #ccc !important;
+  }
+
+  .before-after-slider {
+    display: none !important;
+  }
+
+  .showcase-caption {
+    padding: 15pt !important;
+    text-align: center;
+  }
+
+  .showcase-caption h3 {
+    font-size: 12pt !important;
+  }
+
+  /* Process timeline */
+  .process-timeline {
+    padding-left: 0 !important;
+  }
+
+  .timeline-progress,
+  .timeline-node {
+    display: none !important;
+  }
+
+  .timeline-item {
+    display: block !important;
+    margin-bottom: 15pt;
+    padding-left: 0 !important;
+    page-break-inside: avoid;
+  }
+
+  .timeline-icon {
+    display: none !important;
+  }
+
+  .timeline-content h3 {
+    font-size: 12pt !important;
+    margin-bottom: 5pt;
+  }
+
+  .timeline-content p {
+    font-size: 10pt !important;
+  }
+
+  /* Team section */
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 15pt;
+  }
+
+  .team-card {
+    border: 1px solid #ccc !important;
+    page-break-inside: avoid;
+  }
+
+  .team-image-wrapper {
+    height: 100pt !important;
+  }
+
+  .team-info {
+    padding: 10pt !important;
+  }
+
+  .team-name {
+    font-size: 11pt !important;
+  }
+
+  .team-role {
+    font-size: 9pt !important;
+    color: #666 !important;
+  }
+
+  .team-stats {
+    grid-template-columns: repeat(4, 1fr) !important;
+    margin-top: 20pt;
+    padding-top: 15pt;
+    border-top: 1px solid #ccc !important;
+  }
+
+  .team-stat-count {
+    font-size: 16pt !important;
+    color: #000 !important;
+  }
+
+  .team-stat-label {
+    font-size: 7pt !important;
+  }
+
+  /* Showcase 3D - simplify */
+  .showcase-3d {
+    display: none !important;
+  }
+
+  /* Testimonials */
+  .testimonial-grid {
+    grid-template-columns: 1fr !important;
+    gap: 15pt;
+  }
+
+  .testimonial-card {
+    border: 1px solid #ccc !important;
+    padding: 15pt !important;
+    page-break-inside: avoid;
+  }
+
+  .testimonial-card::before {
+    display: none !important;
+  }
+
+  .testimonial-card p {
+    font-size: 10pt !important;
+    font-style: italic;
+  }
+
+  .author-avatar {
+    width: 30pt !important;
+    height: 30pt !important;
+    font-size: 10pt !important;
+  }
+
+  .author-info h4 {
+    font-size: 10pt !important;
+  }
+
+  .author-info span {
+    font-size: 8pt !important;
+  }
+
+  /* CTA Section */
+  .cta {
+    background: #f5f5f5 !important;
+    padding: 30pt 20pt !important;
+    page-break-inside: avoid;
+  }
+
+  .cta h2 {
+    font-size: 16pt !important;
+  }
+
+  .cta > p {
+    font-size: 10pt !important;
+  }
+
+  .cta .btn {
+    display: inline-block !important;
+    border: 1px solid #000 !important;
+    padding: 8pt 16pt !important;
+    font-size: 9pt !important;
+    color: #000 !important;
+    background: transparent !important;
+  }
+
+  .contact-info {
+    gap: 20pt;
+    margin-top: 20pt;
+  }
+
+  .contact-item {
+    gap: 8pt;
+  }
+
+  .contact-item .icon {
+    width: 25pt !important;
+    height: 25pt !important;
+    font-size: 12pt !important;
+    border: 1px solid #999 !important;
+  }
+
+  .contact-item span {
+    font-size: 9pt !important;
+  }
+
+  /* Footer */
+  footer {
+    background: #f5f5f5 !important;
+    padding: 20pt !important;
+    margin-top: 30pt;
+    border-top: 2px solid #000 !important;
+    page-break-inside: avoid;
+  }
+
+  .footer-grid {
+    grid-template-columns: 2fr 1fr 1fr !important;
+    gap: 20pt;
+    margin-bottom: 15pt;
+  }
+
+  .footer-brand p {
+    font-size: 9pt !important;
+  }
+
+  .footer-links h4 {
+    font-size: 10pt !important;
+    margin-bottom: 10pt;
+  }
+
+  .footer-links a {
+    font-size: 9pt !important;
+    color: #333 !important;
+  }
+
+  .footer-bottom {
+    padding-top: 10pt;
+    font-size: 8pt !important;
+  }
+
+  .social-links {
+    display: none !important;
+  }
+
+  /* Print header/footer */
+  @page {
+    margin: 15mm;
+    @top-center {
+      content: "BuildBridge - Construction Management";
+      font-size: 8pt;
+      color: #999;
+    }
+    @bottom-center {
+      content: "Page " counter(page) " of " counter(pages);
+      font-size: 8pt;
+      color: #999;
+    }
+  }
+
+  /* First page header */
+  @page :first {
+    @top-center {
+      content: none;
+    }
+  }
+
+  /* Links - show URLs */
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 8pt;
+    color: #666;
+    word-break: break-all;
+  }
+
+  /* But not for buttons and internal links */
+  a.btn::after,
+  a[href^="#"]::after,
+  a[href^="javascript"]::after {
+    content: none !important;
+  }
+
+  /* Utility classes */
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  /* Ensure images don't break layout */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  /* Tables */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th, td {
+    border: 1px solid #ccc;
+    padding: 6pt;
+    text-align: left;
+  }
+
+  th {
+    background: #f5f5f5 !important;
+  }
+
+  /* Lists */
+  ul, ol {
+    padding-left: 20pt;
+  }
+
+  li {
+    margin-bottom: 4pt;
+  }
+
+  /* Blockquotes */
+  blockquote {
+    border-left: 3pt solid #999;
+    padding-left: 10pt;
+    margin-left: 0;
+    font-style: italic;
+    color: #666 !important;
+  }
+
+  /* Gradient text fallback */
+  .gradient-text,
+  .holographic-text {
+    background: none !important;
+    -webkit-text-fill-color: #000 !important;
+    color: #000 !important;
+  }
+}
+
+/* Screen-only print button */
+@media screen {
+  .print-only {
+    display: none !important;
+  }
+
+  .smart-print-btn {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    width: 50px;
+    height: 50px;
+    background: var(--white);
+    border: 1px solid rgba(201, 206, 214, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 999;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .smart-print-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    background: var(--chrome);
+  }
+
+  .smart-print-btn svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--black);
+  }
+
+  .smart-print-tooltip {
+    position: absolute;
+    left: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--gun);
+    color: var(--white);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+  }
+
+  .smart-print-btn:hover .smart-print-tooltip {
+    opacity: 1;
+    visibility: visible;
+    left: 65px;
+  }
+
+  @media (max-width: 768px) {
+    .smart-print-btn {
+      display: none;
+    }
+  }
+}
