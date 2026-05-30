@@ -1,0 +1,338 @@
+/* v104.1: Smooth View Transitions API - Modern Page Transition System */
+
+/* View Transitions API Support */
+@supports (view-transition-name: none) {
+  /* Page Transition Container */
+  ::view-transition-old(root) {
+    animation: fade-out 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  ::view-transition-new(root) {
+    animation: fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  /* Slide transitions */
+  ::view-transition-old(slide-left) {
+    animation: slide-out-left 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  ::view-transition-new(slide-left) {
+    animation: slide-in-left 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  ::view-transition-old(slide-right) {
+    animation: slide-out-right 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  ::view-transition-new(slide-right) {
+    animation: slide-in-right 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  /* Scale transitions */
+  ::view-transition-old(zoom-in) {
+    animation: zoom-out 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  ::view-transition-new(zoom-in) {
+    animation: zoom-in-anim 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
+
+/* Fallback for browsers without View Transitions API */
+.view-transition-fallback {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-dark, #0f0f10);
+  z-index: 99999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.view-transition-fallback.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Transition Animations */
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-out-left {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out-right {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes zoom-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+@keyframes zoom-in-anim {
+  from {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Page Transition Navigation */
+.page-transition-nav {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 9998;
+  padding: 12px 20px;
+  background: rgba(15, 15, 16, 0.9);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 50px;
+  backdrop-filter: blur(20px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.page-transition-nav.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.page-transition-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  color: var(--text-secondary, #888);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.page-transition-btn:hover {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: var(--primary-gold, #d4af37);
+  color: var(--text-primary, #fff);
+}
+
+.page-transition-btn.prev::before {
+  content: '←';
+  font-size: 1.1rem;
+}
+
+.page-transition-btn.next::after {
+  content: '→';
+  font-size: 1.1rem;
+}
+
+.page-transition-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.page-transition-btn:disabled:hover {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Progress indicator */
+.page-transition-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-gold, #d4af37), #f4d03f);
+  z-index: 10000;
+  width: 0;
+  transition: width 0.1s linear;
+}
+
+.page-transition-progress.loading {
+  width: 70%;
+  transition: width 0.5s ease;
+}
+
+.page-transition-progress.complete {
+  width: 100%;
+  transition: width 0.2s ease;
+}
+
+/* Transition Indicators on Links */
+a[data-transition] {
+  position: relative;
+}
+
+a[data-transition]::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary-gold, #d4af37);
+  transition: width 0.3s ease;
+}
+
+a[data-transition]:hover::after {
+  width: 100%;
+}
+
+/* Loading State Overlay */
+.page-loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-dark, #0f0f10);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.page-loading-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.page-loading-content {
+  text-align: center;
+}
+
+.page-loading-logo {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 20px;
+  animation: pulse-scale 1.5s ease-in-out infinite;
+}
+
+.page-loading-text {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  color: var(--text-secondary, #888);
+  letter-spacing: 2px;
+}
+
+.page-loading-dots::after {
+  content: '';
+  animation: loading-dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes pulse-scale {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.7; }
+}
+
+@keyframes loading-dots {
+  0% { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75% { content: '...'; }
+  100% { content: ''; }
+}
+
+/* Content transition elements */
+[data-view-transition] {
+  view-transition-name: var(--transition-name, content);
+}
+
+/* Hero specific transitions */
+.hero[data-view-transition] {
+  --transition-name: hero;
+}
+
+/* Navigation transitions */
+.nav[data-view-transition] {
+  --transition-name: navigation;
+}
+
+/* Section reveal transitions */
+section[data-view-transition="reveal"] {
+  --transition-name: section;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+  
+  .page-transition-fallback {
+    transition: none;
+  }
+}
