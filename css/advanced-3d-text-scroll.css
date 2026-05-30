@@ -1,0 +1,320 @@
+/* =========================================
+   v126.0: Advanced 3D Text Scroll Effects
+   Fortune 500 Scroll-Driven Typography
+   ========================================= */
+
+.three-d-text-section {
+  position: relative;
+  min-height: 300vh;
+  overflow: hidden;
+  background: linear-gradient(180deg, #0f0f10 0%, #1a1a22 50%, #0f0f10 100%);
+}
+
+.three-d-text-container {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1500px;
+  perspective-origin: center center;
+}
+
+.three-d-text-camera {
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease-out;
+}
+
+.three-d-text-layer {
+  position: absolute;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+/* Layer 1 - Background (farthest) */
+.three-d-text-layer--1 {
+  font-size: clamp(80px, 15vw, 200px);
+  color: rgba(201, 206, 214, 0.03);
+  transform: translateZ(-300px) translateY(-150px);
+  text-shadow: 0 0 100px rgba(201, 206, 214, 0.1);
+}
+
+/* Layer 2 - Mid background */
+.three-d-text-layer--2 {
+  font-size: clamp(60px, 12vw, 160px);
+  color: rgba(201, 206, 214, 0.06);
+  transform: translateZ(-200px) translateY(-80px);
+}
+
+/* Layer 3 - Near background */
+.three-d-text-layer--3 {
+  font-size: clamp(50px, 10vw, 130px);
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.1), rgba(201, 206, 214, 0.05));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transform: translateZ(-100px) translateY(-30px);
+}
+
+/* Layer 4 - Middle ground */
+.three-d-text-layer--4 {
+  font-size: clamp(40px, 8vw, 100px);
+  color: rgba(245, 247, 250, 0.3);
+  transform: translateZ(-50px);
+}
+
+/* Layer 5 - Primary text */
+.three-d-text-layer--5 {
+  font-size: clamp(36px, 6vw, 80px);
+  background: linear-gradient(135deg, #f5f7fa 0%, #c9ced6 50%, #f5f7fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transform: translateZ(0px);
+  position: relative;
+}
+
+.three-d-text-layer--5::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #c9ced6, transparent);
+  transform: scaleX(0.5);
+}
+
+/* Layer 6 - Foreground accent */
+.three-d-text-layer--6 {
+  font-size: clamp(20px, 3vw, 40px);
+  color: rgba(201, 206, 214, 0.6);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  transform: translateZ(50px) translateY(60px);
+}
+
+/* Layer 7 - Foreground (closest) */
+.three-d-text-layer--7 {
+  font-size: clamp(180px, 25vw, 350px);
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(201, 206, 214, 0.08);
+  transform: translateZ(100px);
+  pointer-events: none;
+}
+
+/* Floating letters effect */
+.three-d-floating-letter {
+  position: absolute;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  color: rgba(201, 206, 214, 0.1);
+  transform-style: preserve-3d;
+  animation: float-3d 10s ease-in-out infinite;
+}
+
+@keyframes float-3d {
+  0%, 100% {
+    transform: translateY(0) rotateX(0deg) rotateY(0deg);
+  }
+  25% {
+    transform: translateY(-30px) rotateX(5deg) rotateY(5deg);
+  }
+  50% {
+    transform: translateY(0) rotateX(0deg) rotateY(10deg);
+  }
+  75% {
+    transform: translateY(30px) rotateX(-5deg) rotateY(5deg);
+  }
+}
+
+/* Text reveal animation */
+.three-d-text-reveal {
+  opacity: 0;
+  transform: translateZ(-200px) rotateX(45deg);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.three-d-text-reveal.visible {
+  opacity: 1;
+  transform: translateZ(0) rotateX(0deg);
+}
+
+/* Scroll progress indicator */
+.three-d-text-progress {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 2px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.three-d-text-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #c9ced6, #f5f7fa);
+  width: 0%;
+  transition: width 0.1s ease-out;
+}
+
+/* Depth lines effect */
+.three-d-text-depth-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transform-style: preserve-3d;
+}
+
+.depth-line {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 206, 214, 0.1), transparent);
+  width: 100%;
+  left: 0;
+}
+
+/* Parallax text section */
+.parallax-text-scroll {
+  position: relative;
+  height: 200vh;
+  overflow: hidden;
+}
+
+.parallax-text-container {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.parallax-text-word {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: clamp(48px, 10vw, 120px);
+  text-transform: uppercase;
+  color: #f5f7fa;
+  line-height: 1.1;
+  opacity: 0;
+  transform: translateY(100px);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.parallax-text-word.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.parallax-text-word:nth-child(2) {
+  background: linear-gradient(135deg, #c9ced6, #f5f7fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition-delay: 0.1s;
+}
+
+.parallax-text-word:nth-child(3) {
+  color: rgba(201, 206, 214, 0.5);
+  font-size: clamp(24px, 5vw, 60px);
+  transition-delay: 0.2s;
+}
+
+/* Split text character animation */
+.split-char-container {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.split-char {
+  display: inline-block;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.split-char.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* 3D Perspective heading */
+.perspective-heading {
+  perspective: 1000px;
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.perspective-heading-inner {
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease-out;
+}
+
+.perspective-heading h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: clamp(40px, 8vw, 100px);
+  text-transform: uppercase;
+  line-height: 1;
+  margin: 0;
+}
+
+.perspective-heading-line {
+  display: block;
+}
+
+.perspective-heading-line:nth-child(1) {
+  transform: translateZ(50px);
+  color: #f5f7fa;
+}
+
+.perspective-heading-line:nth-child(2) {
+  transform: translateZ(0px);
+  background: linear-gradient(135deg, #c9ced6, #f5f7fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.perspective-heading-line:nth-child(3) {
+  transform: translateZ(-50px);
+  color: rgba(201, 206, 214, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .three-d-text-layer--1,
+  .three-d-text-layer--7 {
+    display: none;
+  }
+  
+  .three-d-text-layer {
+    font-size: clamp(24px, 8vw, 60px) !important;
+  }
+  
+  .three-d-text-container {
+    perspective: 800px;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .three-d-text-layer,
+  .parallax-text-word,
+  .split-char {
+    transition: none;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

@@ -1,0 +1,430 @@
+/* =========================================
+   v126.1: Smart Form Analytics Dashboard
+   Fortune 500 Form Intelligence & Tracking
+   ========================================= */
+
+.form-analytics-dashboard {
+  position: fixed;
+  top: 100px;
+  right: -400px;
+  width: 380px;
+  max-height: calc(100vh - 120px);
+  background: rgba(15, 15, 16, 0.98);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 16px;
+  padding: 24px;
+  z-index: 9998;
+  backdrop-filter: blur(20px);
+  box-shadow: -20px 20px 60px rgba(0, 0, 0, 0.5);
+  transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 206, 214, 0.3) transparent;
+}
+
+.form-analytics-dashboard.active {
+  right: 20px;
+}
+
+.form-analytics-dashboard::-webkit-scrollbar {
+  width: 6px;
+}
+
+.form-analytics-dashboard::-webkit-scrollbar-thumb {
+  background: rgba(201, 206, 214, 0.3);
+  border-radius: 3px;
+}
+
+/* Dashboard Header */
+.form-analytics-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.form-analytics-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #f5f7fa;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-analytics-title::before {
+  content: '📊';
+  font-size: 16px;
+}
+
+.form-analytics-close {
+  width: 32px;
+  height: 32px;
+  background: rgba(201, 206, 214, 0.1);
+  border: none;
+  border-radius: 8px;
+  color: #c9ced6;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.form-analytics-close:hover {
+  background: rgba(201, 206, 214, 0.2);
+  color: #f5f7fa;
+}
+
+/* Toggle Button (when dashboard is closed) */
+.form-analytics-toggle {
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.2), rgba(201, 206, 214, 0.1));
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 12px;
+  color: #f5f7fa;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 9997;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.form-analytics-toggle:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.3), rgba(201, 206, 214, 0.2));
+}
+
+.form-analytics-toggle.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.form-analytics-toggle::after {
+  content: attr(data-count);
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s ease;
+}
+
+.form-analytics-toggle.has-data::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Stats Grid */
+.form-analytics-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.form-analytics-stat {
+  background: rgba(201, 206, 214, 0.05);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.form-analytics-stat:hover {
+  background: rgba(201, 206, 214, 0.08);
+  border-color: rgba(201, 206, 214, 0.2);
+}
+
+.form-analytics-stat-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: #f5f7fa;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.form-analytics-stat-label {
+  font-size: 11px;
+  color: #c9ced6;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Field Progress Section */
+.form-analytics-section {
+  margin-bottom: 24px;
+}
+
+.form-analytics-section-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #c9ced6;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 12px;
+}
+
+/* Progress Bar */
+.form-analytics-progress {
+  background: rgba(201, 206, 214, 0.1);
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.form-analytics-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+  border-radius: 4px;
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.form-analytics-progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: progress-shimmer 2s infinite;
+}
+
+@keyframes progress-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Field List */
+.form-analytics-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-analytics-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: rgba(201, 206, 214, 0.03);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.form-analytics-field:hover {
+  background: rgba(201, 206, 214, 0.06);
+}
+
+.form-analytics-field.completed {
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.form-analytics-field-status {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+.form-analytics-field.completed .form-analytics-field-status {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.form-analytics-field:not(.completed) .form-analytics-field-status {
+  background: rgba(201, 206, 214, 0.1);
+  color: #525862;
+}
+
+.form-analytics-field-name {
+  flex: 1;
+  font-size: 13px;
+  color: #c9ced6;
+}
+
+.form-analytics-field.completed .form-analytics-field-name {
+  color: #f5f7fa;
+}
+
+.form-analytics-field-time {
+  font-size: 11px;
+  color: #525862;
+}
+
+/* Real-time Activity */
+.form-analytics-activity {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-analytics-activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  background: rgba(201, 206, 214, 0.03);
+  border-radius: 8px;
+  font-size: 12px;
+  animation: activity-in 0.3s ease;
+}
+
+@keyframes activity-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.form-analytics-activity-icon {
+  width: 24px;
+  height: 24px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.form-analytics-activity-content {
+  flex: 1;
+}
+
+.form-analytics-activity-text {
+  color: #c9ced6;
+  line-height: 1.4;
+}
+
+.form-analytics-activity-time {
+  color: #525862;
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+/* Heat Map Representation */
+.form-analytics-heatmap {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  padding: 16px;
+  background: rgba(201, 206, 214, 0.03);
+  border-radius: 12px;
+}
+
+.form-analytics-heatmap-cell {
+  aspect-ratio: 1;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.form-analytics-heatmap-cell.level-0 { background: rgba(201, 206, 214, 0.05); }
+.form-analytics-heatmap-cell.level-1 { background: rgba(59, 130, 246, 0.2); }
+.form-analytics-heatmap-cell.level-2 { background: rgba(59, 130, 246, 0.4); }
+.form-analytics-heatmap-cell.level-3 { background: rgba(59, 130, 246, 0.6); }
+.form-analytics-heatmap-cell.level-4 { background: rgba(59, 130, 246, 0.8); }
+
+/* Insights Card */
+.form-analytics-insights {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.form-analytics-insight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12px;
+  color: #c9ced6;
+  line-height: 1.5;
+}
+
+.form-analytics-insight-icon {
+  width: 20px;
+  height: 20px;
+  background: rgba(59, 130, 246, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+/* Form field focus indicator */
+.form-field-tracker {
+  position: absolute;
+  pointer-events: none;
+  border: 2px solid rgba(59, 130, 246, 0.5);
+  border-radius: 8px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.form-field-tracker.active {
+  opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-analytics-dashboard {
+    width: calc(100vw - 40px);
+    right: calc(-100vw - 40px);
+    top: 80px;
+    max-height: calc(100vh - 100px);
+  }
+  
+  .form-analytics-dashboard.active {
+    right: 20px;
+  }
+  
+  .form-analytics-toggle {
+    top: auto;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+  }
+}

@@ -1,0 +1,512 @@
+/* =========================================
+   v126.3: Voice Interaction Feedback System
+   Fortune 500 Voice UI Components
+   ========================================= */
+
+/* Voice Interface Container */
+.voice-interface {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+/* Voice Activation Button */
+.voice-btn {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 40px rgba(59, 130, 246, 0.4);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.voice-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 15px 50px rgba(59, 130, 246, 0.5);
+}
+
+.voice-btn.listening {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  box-shadow: 0 10px 40px rgba(239, 68, 68, 0.4);
+}
+
+.voice-btn.processing {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  box-shadow: 0 10px 40px rgba(245, 158, 11, 0.4);
+}
+
+.voice-btn-icon {
+  font-size: 28px;
+  color: #f5f7fa;
+  transition: transform 0.3s ease;
+}
+
+.voice-btn.listening .voice-btn-icon {
+  animation: mic-pulse 1s ease-in-out infinite;
+}
+
+@keyframes mic-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+/* Ripple Effect */
+.voice-btn-ripple {
+  position: absolute;
+  inset: -8px;
+  border: 2px solid rgba(59, 130, 246, 0.3);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.voice-btn.listening .voice-btn-ripple {
+  animation: voice-ripple 2s ease-out infinite;
+}
+
+.voice-btn.listening .voice-btn-ripple:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.voice-btn.listening .voice-btn-ripple:nth-child(3) {
+  animation-delay: 1s;
+}
+
+@keyframes voice-ripple {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Voice Waveform Visualizer */
+.voice-waveform {
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  background: rgba(15, 15, 16, 0.98);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 16px;
+  padding: 20px 24px;
+  backdrop-filter: blur(20px);
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  min-width: 280px;
+}
+
+.voice-waveform.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+
+.voice-waveform-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.voice-waveform-status {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #f5f7fa;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.voice-waveform-status::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  animation: recording-dot 1s ease-in-out infinite;
+}
+
+@keyframes recording-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+.voice-waveform-timer {
+  font-size: 14px;
+  color: #c9ced6;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Wave Bars */
+.voice-waveform-bars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 60px;
+}
+
+.voice-waveform-bar {
+  width: 4px;
+  background: linear-gradient(to top, #3b82f6, #8b5cf6);
+  border-radius: 2px;
+  transition: height 0.1s ease;
+  min-height: 4px;
+}
+
+.voice-waveform-bar:nth-child(odd) {
+  animation: waveform-bar-1 0.4s ease-in-out infinite;
+}
+
+.voice-waveform-bar:nth-child(even) {
+  animation: waveform-bar-2 0.4s ease-in-out infinite;
+}
+
+.voice-waveform-bar:nth-child(3n) {
+  animation-delay: 0.1s;
+}
+
+.voice-waveform-bar:nth-child(4n) {
+  animation-delay: 0.15s;
+}
+
+@keyframes waveform-bar-1 {
+  0%, 100% { height: 20%; }
+  50% { height: 80%; }
+}
+
+@keyframes waveform-bar-2 {
+  0%, 100% { height: 40%; }
+  50% { height: 100%; }
+}
+
+/* Voice Transcription */
+.voice-transcription {
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(201, 206, 214, 0.05);
+  border-radius: 8px;
+  min-height: 44px;
+}
+
+.voice-transcription-text {
+  font-size: 14px;
+  color: #c9ced6;
+  line-height: 1.5;
+}
+
+.voice-transcription-text .cursor {
+  display: inline-block;
+  width: 2px;
+  height: 16px;
+  background: #3b82f6;
+  margin-left: 2px;
+  animation: cursor-blink 1s step-end infinite;
+  vertical-align: middle;
+}
+
+@keyframes cursor-blink {
+  50% { opacity: 0; }
+}
+
+/* Voice Commands Panel */
+.voice-commands {
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  background: rgba(15, 15, 16, 0.98);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 16px;
+  padding: 20px;
+  backdrop-filter: blur(20px);
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 320px;
+}
+
+.voice-commands.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+
+.voice-commands-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #f5f7fa;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.voice-commands-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.voice-command-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(201, 206, 214, 0.03);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.voice-command-item:hover {
+  background: rgba(201, 206, 214, 0.06);
+}
+
+.voice-command-icon {
+  width: 36px;
+  height: 36px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.voice-command-text {
+  flex: 1;
+}
+
+.voice-command-phrase {
+  font-size: 13px;
+  color: #f5f7fa;
+  margin-bottom: 2px;
+}
+
+.voice-command-desc {
+  font-size: 11px;
+  color: #525862;
+}
+
+.voice-command-hint {
+  font-size: 10px;
+  color: #3b82f6;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Voice Feedback Toast */
+.voice-feedback-toast {
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100px);
+  background: rgba(15, 15, 16, 0.98);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 16px;
+  padding: 16px 24px;
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10001;
+}
+
+.voice-feedback-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.voice-feedback-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.voice-feedback-content {
+  flex: 1;
+}
+
+.voice-feedback-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #f5f7fa;
+  margin-bottom: 4px;
+}
+
+.voice-feedback-message {
+  font-size: 13px;
+  color: #c9ced6;
+}
+
+/* Voice Processing Animation */
+.voice-processing {
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  background: rgba(15, 15, 16, 0.98);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 16px;
+  padding: 24px;
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.voice-processing.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.voice-processing-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(201, 206, 214, 0.1);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: processing-spin 1s linear infinite;
+}
+
+@keyframes processing-spin {
+  to { transform: rotate(360deg); }
+}
+
+.voice-processing-text {
+  font-size: 14px;
+  color: #c9ced6;
+}
+
+/* Sound Wave Animation */
+.sound-wave {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 24px;
+}
+
+.sound-wave-bar {
+  width: 3px;
+  background: linear-gradient(to top, #3b82f6, #8b5cf6);
+  border-radius: 1.5px;
+  animation: sound-wave 0.5s ease-in-out infinite;
+}
+
+.sound-wave-bar:nth-child(1) { animation-delay: 0s; height: 30%; }
+.sound-wave-bar:nth-child(2) { animation-delay: 0.05s; height: 60%; }
+.sound-wave-bar:nth-child(3) { animation-delay: 0.1s; height: 90%; }
+.sound-wave-bar:nth-child(4) { animation-delay: 0.15s; height: 50%; }
+.sound-wave-bar:nth-child(5) { animation-delay: 0.2s; height: 80%; }
+
+@keyframes sound-wave {
+  0%, 100% { transform: scaleY(0.5); }
+  50% { transform: scaleY(1); }
+}
+
+/* Voice Hint Tooltip */
+.voice-hint {
+  position: absolute;
+  bottom: 80px;
+  right: 80px;
+  background: rgba(15, 15, 16, 0.95);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #c9ced6;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.voice-hint::before {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent transparent rgba(201, 206, 214, 0.2);
+}
+
+.voice-btn:hover + .voice-hint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .voice-interface {
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .voice-waveform,
+  .voice-commands,
+  .voice-processing {
+    right: -70px;
+    left: auto;
+    min-width: 280px;
+  }
+  
+  .voice-feedback-toast {
+    left: 20px;
+    right: 20px;
+    transform: translateY(-100px);
+    max-width: none;
+  }
+  
+  .voice-feedback-toast.show {
+    transform: translateY(0);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .voice-btn-ripple,
+  .voice-waveform-bar,
+  .sound-wave-bar {
+    animation: none;
+  }
+}
