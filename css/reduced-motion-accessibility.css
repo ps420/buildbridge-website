@@ -1,0 +1,333 @@
+/**
+ * v136.0: Reduced Motion Accessibility Support
+ * Fortune 500 Quality Motion Sensitivity Support
+ * Respects user preferences and provides manual controls
+ */
+
+/* Base reduced motion styles */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .parallax {
+    transform: none !important;
+  }
+  
+  .floating-stats,
+  .floating-3d,
+  .magnetic-el {
+    animation: none !important;
+  }
+  
+  .aurora-background,
+  .neural-network-bg,
+  .ambient-particle-network {
+    display: none !important;
+  }
+}
+
+/* Manual reduced motion class */
+[data-reduced-motion="true"] {
+  --animation-duration: 0.01ms;
+  --transition-duration: 0.01ms;
+}
+
+[data-reduced-motion="true"] *,
+[data-reduced-motion="true"] *::before,
+[data-reduced-motion="true"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+[data-reduced-motion="true"] .parallax,
+[data-reduced-motion="true"] [data-parallax] {
+  transform: none !important;
+}
+
+[data-reduced-motion="true"] .magnetic-el {
+  transform: none !important;
+}
+
+[data-reduced-motion="true"] .floating-stats,
+[data-reduced-motion="true"] .floating-3d,
+[data-reduced-motion="true"] .floating-elements-system {
+  animation: none !important;
+}
+
+/* Reduced motion toggle button */
+.reduced-motion-toggle {
+  position: fixed;
+  bottom: 100px;
+  left: 20px;
+  width: 50px;
+  height: 50px;
+  background: rgba(15, 15, 16, 0.95);
+  border: 2px solid var(--accent-color, #c9ced6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 24px;
+  z-index: 999;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.reduced-motion-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px var(--glow-color, rgba(201, 206, 214, 0.3));
+}
+
+.reduced-motion-toggle.active {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.reduced-motion-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 16px;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
+}
+
+.reduced-motion-toggle:hover .reduced-motion-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Accessibility indicator */
+.accessibility-indicator {
+  position: fixed;
+  bottom: 160px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 998;
+}
+
+.accessibility-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(15, 15, 16, 0.95);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 20px;
+  font-size: 11px;
+  color: var(--accent-color, #c9ced6);
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.3s ease;
+}
+
+.accessibility-badge.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.accessibility-badge-icon {
+  font-size: 14px;
+}
+
+/* Focus visible styles */
+.focus-ring-accessible *:focus {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.focus-ring-accessible *:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.focus-ring-accessible *:focus-visible {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Skip link enhancement */
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  background: #3b82f6;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0 0 8px 8px;
+  z-index: 100000;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border-width: 2px;
+    --focus-width: 3px;
+  }
+  
+  * {
+    border-width: var(--border-width) !important;
+  }
+  
+  .btn,
+  .quote-btn,
+  .service-card,
+  .project-card {
+    border: 2px solid currentColor !important;
+  }
+}
+
+/* High contrast toggle */
+[data-high-contrast="true"] {
+  --border-width: 2px;
+}
+
+[data-high-contrast="true"] .btn,
+[data-high-contrast="true"] .quote-btn {
+  border: 2px solid currentColor !important;
+}
+
+[data-high-contrast="true"] img {
+  filter: contrast(1.2);
+}
+
+/* Large text support */
+@media (prefers-reduced-motion: reduce) and (prefers-contrast: more) {
+  :root {
+    --base-font-size: 18px;
+  }
+  
+  body {
+    font-size: var(--base-font-size);
+    line-height: 1.6;
+  }
+}
+
+/* Print accessibility */
+@media print {
+  .reduced-motion-toggle,
+  .accessibility-indicator,
+  .season-badge,
+  .season-toggle,
+  .floating-share-btn {
+    display: none !important;
+  }
+  
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Motion preferences respect announcement */
+.motion-respect-announcement {
+  position: fixed;
+  top: 100px;
+  left: 20px;
+  max-width: 280px;
+  padding: 16px 20px;
+  background: rgba(15, 15, 16, 0.98);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #c9ced6;
+  z-index: 1000;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.4s ease;
+  backdrop-filter: blur(10px);
+}
+
+.motion-respect-announcement.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.motion-respect-announcement-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.motion-respect-announcement-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  color: #8a9199;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* Vestibular disorders helper */
+.vestibular-safe {
+  animation: none !important;
+  transform: none !important;
+}
+
+/* Epilepsy-safe mode (no flashing) */
+[data-epilepsy-safe="true"] * {
+  animation-duration: 0s !important;
+}
+
+[data-epilepsy-safe="true"] .glimmer-effect,
+[data-epilepsy-safe="true"] .shimmer-effect,
+[data-epilepsy-safe="true"] .pulse-animation {
+  animation: none !important;
+}

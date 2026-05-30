@@ -1,0 +1,311 @@
+/**
+ * v134.0: Infinite Drag Gallery Component
+ * Fortune 500 Quality Touch-Friendly Draggable Gallery
+ * Creates smooth, infinite-scrolling galleries with momentum physics
+ */
+
+.infinite-drag-gallery {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;
+}
+
+.infinite-drag-gallery:active {
+  cursor: grabbing;
+}
+
+.infinite-drag-gallery.dragging {
+  cursor: grabbing;
+}
+
+.infinite-drag-gallery.dragging .drag-gallery-item {
+  pointer-events: none;
+}
+
+.drag-gallery-track {
+  display: flex;
+  gap: 24px;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.drag-gallery-item {
+  flex-shrink: 0;
+  width: 350px;
+  height: 450px;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #17191d, #1a1c21);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+}
+
+.drag-gallery-item:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+  z-index: 2;
+}
+
+.drag-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drag-gallery-item:hover img {
+  transform: scale(1.1);
+}
+
+.drag-gallery-item-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 30%,
+    rgba(15, 15, 16, 0.95) 100%
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 30px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drag-gallery-item:hover .drag-gallery-item-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.drag-gallery-item-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.drag-gallery-item-location {
+  font-size: 14px;
+  color: #c9ced6;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Gallery navigation arrows */
+.drag-gallery-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 60px;
+  height: 60px;
+  background: rgba(15, 15, 16, 0.9);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #c9ced6;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.infinite-drag-gallery:hover .drag-gallery-nav {
+  opacity: 1;
+  visibility: visible;
+}
+
+.drag-gallery-nav:hover {
+  background: #fff;
+  color: #0f0f10;
+  border-color: #fff;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.drag-gallery-nav.prev {
+  left: 20px;
+}
+
+.drag-gallery-nav.next {
+  right: 20px;
+}
+
+/* Progress indicator */
+.drag-gallery-progress {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.drag-gallery-dot {
+  width: 8px;
+  height: 8px;
+  background: rgba(201, 206, 214, 0.3);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.drag-gallery-dot.active {
+  width: 24px;
+  border-radius: 4px;
+  background: #c9ced6;
+}
+
+.drag-gallery-dot:hover {
+  background: rgba(201, 206, 214, 0.5);
+}
+
+/* Drag hint animation */
+.drag-gallery-hint {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(15, 15, 16, 0.8);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 20px;
+  font-size: 12px;
+  color: #c9ced6;
+  opacity: 0;
+  animation: drag-hint-fade 4s ease forwards;
+  pointer-events: none;
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+@keyframes drag-hint-fade {
+  0%, 80% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  10%, 70% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+}
+
+.drag-gallery-hint-icon {
+  animation: drag-hint-swipe 2s ease-in-out infinite;
+}
+
+@keyframes drag-hint-swipe {
+  0%, 100% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+}
+
+/* Velocity skew effect during drag */
+.drag-gallery-track.velocity-skew {
+  transition: transform 0.1s ease-out;
+}
+
+.drag-gallery-item {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drag-gallery-track.dragging .drag-gallery-item {
+  transition: transform 0.1s ease-out;
+}
+
+/* Category badge */
+.drag-gallery-category {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 6px 12px;
+  background: rgba(201, 206, 214, 0.2);
+  border: 1px solid rgba(201, 206, 214, 0.3);
+  border-radius: 20px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #fff;
+  backdrop-filter: blur(10px);
+  z-index: 3;
+}
+
+/* Project value badge */
+.drag-gallery-value {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #c9ced6, #fff);
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #0f0f10;
+  z-index: 3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .drag-gallery-item {
+    width: 280px;
+    height: 380px;
+  }
+  
+  .drag-gallery-nav {
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+  
+  .infinite-drag-gallery:hover .drag-gallery-nav {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .drag-gallery-track {
+    transition: none !important;
+  }
+  
+  .drag-gallery-item {
+    transition: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .drag-gallery-item {
+    border: 2px solid currentColor;
+  }
+  
+  .drag-gallery-nav {
+    border: 2px solid currentColor;
+  }
+}

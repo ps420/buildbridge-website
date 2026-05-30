@@ -1,0 +1,280 @@
+/**
+ * v132.0: Holographic Typography Effects
+ * Fortune 500 Quality Iridescent Text Animations
+ * Creates stunning reflective, chrome-like text effects
+ */
+
+.holographic-text {
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(
+    135deg,
+    #c9ced6 0%,
+    #ffffff 15%,
+    #c9ced6 30%,
+    #8a9199 45%,
+    #ffffff 60%,
+    #c9ced6 75%,
+    #5a6066 90%,
+    #c9ced6 100%
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: holographic-shift 8s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(201, 206, 214, 0.3));
+}
+
+@keyframes holographic-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Interactive holographic effect on mouse move */
+.holographic-text-interactive {
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(
+    135deg,
+    #c9ced6 0%,
+    #ffffff 25%,
+    #c9ced6 50%,
+    #8a9199 75%,
+    #ffffff 100%
+  );
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: filter 0.3s ease;
+}
+
+.holographic-text-interactive:hover {
+  filter: drop-shadow(0 0 30px rgba(201, 206, 214, 0.5));
+}
+
+/* Chrome metallic effect */
+.chrome-text {
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(
+    to bottom,
+    #ffffff 0%,
+    #c9ced6 20%,
+    #8a9199 40%,
+    #ffffff 50%,
+    #5a6066 60%,
+    #c9ced6 80%,
+    #ffffff 100%
+  );
+  background-size: 100% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: chrome-shine 4s ease-in-out infinite;
+}
+
+@keyframes chrome-shine {
+  0%, 100% {
+    background-position: 0% 100%;
+  }
+  50% {
+    background-position: 0% 0%;
+  }
+}
+
+/* Iridescent rainbow effect */
+.iridescent-text {
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    #ff0055 0%,
+    #ff7700 14%,
+    #ffdd00 28%,
+    #00ff55 42%,
+    #0099ff 56%,
+    #6600ff 70%,
+    #ff00ff 84%,
+    #ff0055 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: iridescent-flow 6s linear infinite;
+  filter: saturate(0.3) brightness(1.2);
+}
+
+@keyframes iridescent-flow {
+  0% {
+    background-position: 0% 50%;
+    filter: hue-rotate(0deg) saturate(0.3) brightness(1.2);
+  }
+  100% {
+    background-position: 200% 50%;
+    filter: hue-rotate(360deg) saturate(0.3) brightness(1.2);
+  }
+}
+
+/* Shimmer effect with mask */
+.shimmer-text {
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    var(--chrome, #c9ced6) 0%,
+    var(--white, #f5f7fa) 50%,
+    var(--chrome, #c9ced6) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.shimmer-text::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer-sweep 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer-sweep {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* 3D perspective text with holographic effect */
+.holo-3d-text {
+  position: relative;
+  display: inline-block;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.holo-3d-text span {
+  display: inline-block;
+  background: linear-gradient(
+    135deg,
+    #c9ced6 0%,
+    #ffffff 50%,
+    #8a9199 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transform-style: preserve-3d;
+  animation: holo-3d-float 4s ease-in-out infinite;
+  text-shadow: 
+    1px 1px 0 rgba(255, 255, 255, 0.1),
+    -1px -1px 0 rgba(0, 0, 0, 0.1);
+}
+
+@keyframes holo-3d-float {
+  0%, 100% {
+    transform: translateZ(0) rotateX(0deg);
+  }
+  50% {
+    transform: translateZ(20px) rotateX(5deg);
+  }
+}
+
+/* Gradient border text effect */
+.gradient-border-text {
+  position: relative;
+  display: inline-block;
+  padding: 4px 8px;
+}
+
+.gradient-border-text::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    45deg,
+    #ff0055,
+    #ff7700,
+    #ffdd00,
+    #00ff55,
+    #0099ff,
+    #6600ff,
+    #ff0055
+  );
+  background-size: 400% 400%;
+  border-radius: inherit;
+  z-index: -1;
+  animation: gradient-rotate 3s linear infinite;
+  opacity: 0.7;
+}
+
+.gradient-border-text::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  background: var(--black, #0f0f10);
+  border-radius: inherit;
+  z-index: -1;
+}
+
+@keyframes gradient-rotate {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .holographic-text,
+  .holographic-text-interactive,
+  .chrome-text,
+  .iridescent-text,
+  .shimmer-text,
+  .holo-3d-text span {
+    animation: none;
+    background-position: 0% 50%;
+  }
+  
+  .shimmer-text::after {
+    animation: none;
+    background-position: 200% 0;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .holographic-text,
+  .holographic-text-interactive,
+  .chrome-text,
+  .iridescent-text,
+  .shimmer-text {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+    color: white;
+  }
+}

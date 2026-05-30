@@ -538,6 +538,24 @@
   <link rel="stylesheet" href="css/scroll-3d-depth-system.css">
   <link rel="stylesheet" href="css/context-aware-microinteractions.css">
   <link rel="stylesheet" href="css/predictive-content-preloader.css">
+  
+  <!-- v131.0: Ambient Particle Network Background - Fortune 500 Interactive Background -->
+  <link rel="stylesheet" href="css/ambient-particle-network.css">
+  
+  <!-- v132.0: Holographic Typography Effects - Fortune 500 Iridescent Text -->
+  <link rel="stylesheet" href="css/holographic-typography.css">
+  
+  <!-- v133.0: Seasonal Adaptive Theme System - Fortune 500 Time-Based Adaptation -->
+  <link rel="stylesheet" href="css/seasonal-adaptive-theme.css">
+  
+  <!-- v134.0: Infinite Drag Gallery Component - Fortune 500 Touch-Friendly Gallery -->
+  <link rel="stylesheet" href="css/infinite-drag-gallery.css">
+  
+  <!-- v135.0: Native Share API Integration - Fortune 500 Social Sharing -->
+  <link rel="stylesheet" href="css/native-share-system.css">
+  
+  <!-- v136.0: Reduced Motion Accessibility - Fortune 500 Motion Sensitivity Support -->
+  <link rel="stylesheet" href="css/reduced-motion-accessibility.css">
 
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
   <link rel="manifest" href="manifest.json">
@@ -751,6 +769,11 @@
     <canvas></canvas>
     <div class="neural-network-overlay"></div>
   </div>
+  
+  <!-- v131.0: Ambient Particle Network Background - Fortune 500 Interactive Background -->
+  <div class="ambient-particle-network">
+    <canvas></canvas>
+  </div>
 
   <!-- Preloader - DISABLED -->
   <!--
@@ -820,7 +843,7 @@
   <section class="hero depth-container" id="main-content" data-section="Hero" data-nav-label="Home">
     <div class="hero-copy" data-depth="5">
       <p class="eyebrow">Construction Management</p>
-      <h1 class="split-heading kinetic-text">Connecting Clients.<br>Delivering Projects.<br><span class="gradient-text">Building Trust.</span></h1>
+      <h1 class="split-heading kinetic-text">Connecting Clients.<br>Delivering Projects.<br><span class="gradient-text holographic-text">Building Trust.</span></h1>
       <p>BuildBridge acts as the trusted link between clients and contractors — managing projects with transparency, expertise and care from concept to completion. We bridge the gap between vision and reality.</p>
       <div class="actions">
         <a href="https://wa.me/27661200064" class="btn btn-context-aware btn-magnetic-v5 glimmer-effect ripple-container" data-ripple-color="gold" data-magnetic="0.4" target="_blank">
@@ -991,6 +1014,66 @@
     </div>
     <div style="text-align:center;margin-top:50px;">
       <a href="projects.html" class="btn ghost">View All Projects →</a>
+    </div>
+  </section>
+  
+  <!-- v134.0: Infinite Drag Gallery - Fortune 500 Touch-Friendly Gallery -->
+  <section class="section" id="infinite-gallery" data-section="DragGallery" data-nav-label="Gallery">
+    <div class="section-header" data-scroll-animate="fade-up">
+      <p class="eyebrow">Interactive Gallery</p>
+      <h2 class="scramble-text holographic-text">Draggable <span>Portfolio</span></h2>
+      <p data-scroll-animate="fade-up" data-scroll-delay="100">Drag or swipe to explore our complete project portfolio. Experience Fortune 500 quality interactions.</p>
+    </div>
+    
+    <div class="infinite-drag-gallery" data-infinite-gallery>
+      <div class="drag-gallery-hint">
+        <span class="drag-gallery-hint-icon">↔️</span>
+        <span>Drag to explore</span>
+      </div>
+      
+      <div class="drag-gallery-track">
+        <div class="drag-gallery-item">
+          <div class="drag-gallery-category">Residential</div>
+          <div class="drag-gallery-value">R12M</div>
+          <img src="assets/02_Website_Heroes/Hero_2.png" alt="Modern Residential Complex">
+          <div class="drag-gallery-item-overlay">
+            <h3 class="drag-gallery-item-title">Modern Residential Complex</h3>
+            <p class="drag-gallery-item-location">📍 Cape Town</p>
+          </div>
+        </div>
+        <div class="drag-gallery-item">
+          <div class="drag-gallery-category">Commercial</div>
+          <div class="drag-gallery-value">R45M</div>
+          <img src="assets/03_Social_Campaign/Campaign_4.png" alt="Corporate Headquarters">
+          <div class="drag-gallery-item-overlay">
+            <h3 class="drag-gallery-item-title">Corporate Headquarters</h3>
+            <p class="drag-gallery-item-location">📍 Johannesburg</p>
+          </div>
+        </div>
+        <div class="drag-gallery-item">
+          <div class="drag-gallery-category">Luxury</div>
+          <div class="drag-gallery-value">R28M</div>
+          <img src="assets/03_Social_Campaign/Campaign_5.png" alt="Luxury Villa">
+          <div class="drag-gallery-item-overlay">
+            <h3 class="drag-gallery-item-title">Luxury Villa Estate</h3>
+            <p class="drag-gallery-item-location">📍 Durban</p>
+          </div>
+        </div>
+        <div class="drag-gallery-item">
+          <div class="drag-gallery-category">Industrial</div>
+          <div class="drag-gallery-value">R67M</div>
+          <img src="assets/03_Social_Campaign/Campaign_6.png" alt="Industrial Facility">
+          <div class="drag-gallery-item-overlay">
+            <h3 class="drag-gallery-item-title">Manufacturing Facility</h3>
+            <p class="drag-gallery-item-location">📍 Pretoria</p>
+          </div>
+        </div>
+      </div>
+      
+      <button class="drag-gallery-nav prev" aria-label="Previous project">‹</button>
+      <button class="drag-gallery-nav next" aria-label="Next project">›</button>
+      
+      <div class="drag-gallery-progress"></div>
     </div>
   </section>
 
@@ -5191,6 +5274,37 @@
     console.log('   ⚡ Predictive Content Preloader - Instant Navigation with Smart Caching');
     console.log('');
     console.log('🏗️ BuildBridge Website v130.0 - Fortune 500 Quality Achieved');
+  </script>
+  
+  <!-- v131.0: Ambient Particle Network Background - Fortune 500 Interactive Background -->
+  <script src="js/ambient-particle-network.js"></script>
+  
+  <!-- v132.0: Holographic Typography Effects - Fortune 500 Iridescent Text -->
+  <script src="js/holographic-typography.js"></script>
+  
+  <!-- v133.0: Seasonal Adaptive Theme System - Fortune 500 Time-Based Adaptation -->
+  <script src="js/seasonal-adaptive-theme.js"></script>
+  
+  <!-- v134.0: Infinite Drag Gallery Component - Fortune 500 Touch-Friendly Gallery -->
+  <script src="js/infinite-drag-gallery.js"></script>
+  
+  <!-- v135.0: Native Share API Integration - Fortune 500 Social Sharing -->
+  <script src="js/native-share-system.js"></script>
+  
+  <!-- v136.0: Reduced Motion Accessibility - Fortune 500 Motion Sensitivity Support -->
+  <script src="js/reduced-motion-accessibility.js"></script>
+  
+  <!-- Log v131.0-136.0 NEW features loaded -->
+  <script>
+    console.log('🚀 BuildBridge Fortune 500 v131.0-v136.0 loaded: Godzai Next-Gen Professional Features');
+    console.log('   ✨ Ambient Particle Network Background - Interactive Canvas Experience');
+    console.log('   🌈 Holographic Typography Effects - Iridescent Text Animations');
+    console.log('   🍂 Seasonal Adaptive Theme System - Time-Based Color Adaptation');
+    console.log('   ↔️ Infinite Drag Gallery Component - Touch-Friendly Physics Gallery');
+    console.log('   📤 Native Share API Integration - Modern Web Social Sharing');
+    console.log('   ♿ Reduced Motion Accessibility - Motion Sensitivity Support');
+    console.log('');
+    console.log('🏗️ BuildBridge Website v136.0 - Fortune 500 Elite Enhancement Suite Complete');
   </script>
   
 </body>

@@ -1,0 +1,63 @@
+/**
+ * v131.0: Ambient Particle Network Background System
+ * Fortune 500 Quality Interactive Background
+ * Creates elegant connected particle network that responds to mouse movement
+ */
+
+.ambient-particle-network {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.ambient-particle-network canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Particle configuration options via CSS custom properties */
+:root {
+  --particle-count: 60;
+  --particle-color: rgba(201, 206, 214, 0.5);
+  --particle-line-color: rgba(201, 206, 214, 0.08);
+  --particle-hover-radius: 200px;
+  --particle-connection-distance: 150px;
+  --particle-speed: 0.5;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .ambient-particle-network {
+    display: none;
+  }
+}
+
+/* High-DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  :root {
+    --particle-count: 45;
+  }
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .ambient-particle-network {
+    opacity: 0.6;
+  }
+  
+  :root {
+    --particle-count: 30;
+    --particle-connection-distance: 100px;
+  }
+}
+
+/* Low-power mode detection */
+@media (prefers-reduced-data: reduce) {
+  .ambient-particle-network {
+    display: none;
+  }
+}
