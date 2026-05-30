@@ -1,0 +1,186 @@
+/* v104.0: Animated Count-Up Stats - Fortune 500 Professional Counter System */
+
+.animated-stats-section {
+  padding: var(--section-padding) 5%;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(15, 15, 16, 0.8) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.animated-stats-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary-gold), transparent);
+}
+
+.animated-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.animated-stat-item {
+  text-align: center;
+  padding: 40px 20px;
+  position: relative;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animated-stat-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animated-stat-item::after {
+  content: '';
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 60%;
+  background: linear-gradient(180deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+}
+
+.animated-stat-item:last-child::after {
+  display: none;
+}
+
+.animated-stat-number {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary-gold) 0%, #f4d03f 50%, var(--primary-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.animated-stat-number .prefix,
+.animated-stat-number .suffix {
+  font-size: 0.6em;
+  opacity: 0.8;
+}
+
+.animated-stat-label {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 500;
+}
+
+.animated-stat-icon {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  opacity: 0.7;
+  transition: transform 0.3s ease;
+}
+
+.animated-stat-item:hover .animated-stat-icon {
+  transform: scale(1.1);
+}
+
+.animated-stat-progress {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: var(--primary-gold);
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animated-stat-item.visible .animated-stat-progress {
+  width: 40%;
+}
+
+/* Counter Animation */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Floating particles around stats */
+.stat-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.stat-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--primary-gold);
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: float-particle 8s ease-in-out infinite;
+}
+
+@keyframes float-particle {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+  50% { transform: translateY(-30px) translateX(10px); opacity: 0.6; }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .animated-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+  
+  .animated-stat-item:nth-child(2)::after {
+    display: none;
+  }
+  
+  .animated-stat-item:nth-child(odd)::after {
+    display: block;
+  }
+}
+
+@media (max-width: 640px) {
+  .animated-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .animated-stat-item::after {
+    display: none !important;
+  }
+  
+  .animated-stat-item {
+    padding: 30px 20px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animated-stat-item {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  
+  .animated-stat-progress {
+    width: 40%;
+  }
+}
