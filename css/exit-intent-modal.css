@@ -1,0 +1,412 @@
+/**
+ * Exit Intent Modal - v138.1
+ * Fortune 500 Lead Capture Before Leave
+ * Displays compelling offer when user attempts to leave
+ */
+
+.exit-intent-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.exit-intent-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.exit-intent-modal {
+  background: linear-gradient(145deg, #1a1a1b 0%, #0f0f10 100%);
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 24px;
+  max-width: 560px;
+  width: 90%;
+  max-height: 90vh;
+  overflow: hidden;
+  position: relative;
+  transform: scale(0.9) translateY(30px);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 
+    0 50px 100px rgba(0, 0, 0, 0.5),
+    0 0 60px rgba(212, 175, 55, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.exit-intent-overlay.active .exit-intent-modal {
+  transform: scale(1) translateY(0);
+}
+
+.exit-intent-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 20px;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.exit-intent-close:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #ef4444;
+  transform: rotate(90deg);
+}
+
+.exit-intent-content {
+  padding: 48px;
+  text-align: center;
+}
+
+.exit-intent-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.1));
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 50px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #d4af37;
+  margin-bottom: 24px;
+  animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px 5px rgba(212, 175, 55, 0.1);
+  }
+}
+
+.exit-intent-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.exit-intent-title .highlight {
+  background: linear-gradient(135deg, #d4af37 0%, #f4d03f 50%, #d4af37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.exit-intent-subtitle {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.exit-intent-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.exit-intent-benefit {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.exit-intent-benefit-icon {
+  width: 32px;
+  height: 32px;
+  background: rgba(212, 175, 55, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.exit-intent-benefit-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.exit-intent-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.exit-intent-input-group {
+  display: flex;
+  gap: 12px;
+}
+
+.exit-intent-input {
+  flex: 1;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 15px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.exit-intent-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.exit-intent-input:focus {
+  outline: none;
+  border-color: rgba(212, 175, 55, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.exit-intent-submit {
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #d4af37 0%, #c9a227 100%);
+  border: none;
+  border-radius: 12px;
+  color: #0f0f10;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.exit-intent-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 10px 30px rgba(212, 175, 55, 0.3),
+    0 0 40px rgba(212, 175, 55, 0.2);
+}
+
+.exit-intent-submit:active {
+  transform: translateY(0);
+}
+
+.exit-intent-submit.success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  pointer-events: none;
+}
+
+.exit-intent-privacy {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 16px;
+}
+
+.exit-intent-privacy a {
+  color: rgba(212, 175, 55, 0.8);
+  text-decoration: none;
+}
+
+.exit-intent-privacy a:hover {
+  color: #d4af37;
+  text-decoration: underline;
+}
+
+/* Alternative offer buttons */
+.exit-intent-alternatives {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.exit-intent-alt-btn {
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.exit-intent-alt-btn:hover {
+  border-color: rgba(212, 175, 55, 0.4);
+  color: #d4af37;
+  background: rgba(212, 175, 55, 0.05);
+}
+
+/* Urgency countdown */
+.exit-intent-urgency {
+  margin-top: 20px;
+  padding: 12px 16px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  font-size: 13px;
+  color: rgba(239, 68, 68, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.exit-intent-urgency-icon {
+  animation: urgencyPulse 1s ease-in-out infinite;
+}
+
+@keyframes urgencyPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Social proof in modal */
+.exit-intent-social-proof {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.exit-intent-avatars {
+  display: flex;
+}
+
+.exit-intent-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #1a1a1b;
+  margin-left: -8px;
+  background: linear-gradient(135deg, #d4af37, #c9a227);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #0f0f10;
+}
+
+.exit-intent-avatar:first-child {
+  margin-left: 0;
+}
+
+/* Success state */
+.exit-intent-success {
+  text-align: center;
+  padding: 40px;
+}
+
+.exit-intent-success-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  font-size: 40px;
+  animation: successScale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes successScale {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.exit-intent-success h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.exit-intent-success p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 24px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+  .exit-intent-modal {
+    width: 95%;
+    border-radius: 20px;
+  }
+  
+  .exit-intent-content {
+    padding: 32px 24px;
+  }
+  
+  .exit-intent-title {
+    font-size: 24px;
+  }
+  
+  .exit-intent-input-group {
+    flex-direction: column;
+  }
+  
+  .exit-intent-alternatives {
+    flex-direction: column;
+  }
+  
+  .exit-intent-alt-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .exit-intent-overlay,
+  .exit-intent-modal,
+  .exit-intent-close,
+  .exit-intent-badge {
+    transition: none;
+    animation: none;
+  }
+}

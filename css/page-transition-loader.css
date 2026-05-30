@@ -1,0 +1,415 @@
+/**
+ * Page Transition Loader - v138.3
+ * Fortune 500 Smooth Page Transition System
+ * Provides visual feedback during navigation
+ */
+
+/* Main transition overlay */
+.page-transition-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.page-transition-loader.active {
+  pointer-events: all;
+  opacity: 1;
+}
+
+.page-transition-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 15, 16, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Loader content */
+.page-transition-content {
+  position: relative;
+  text-align: center;
+  padding: 40px;
+  z-index: 1;
+}
+
+/* Animated logo */
+.page-transition-logo {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 24px;
+  position: relative;
+}
+
+.page-transition-logo-inner {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #d4af37 0%, #f4d03f 50%, #d4af37 100%);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: logoPulse 1.5s ease-in-out infinite;
+  box-shadow: 
+    0 0 40px rgba(212, 175, 55, 0.4),
+    inset 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.page-transition-logo-inner svg {
+  width: 50%;
+  height: 50%;
+  fill: #0f0f10;
+}
+
+@keyframes logoPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 60px rgba(212, 175, 55, 0.6);
+  }
+}
+
+/* Progress ring */
+.page-transition-ring {
+  position: absolute;
+  inset: -10px;
+  border: 3px solid transparent;
+  border-top-color: rgba(212, 175, 55, 0.5);
+  border-radius: 50%;
+  animation: ringSpin 1s linear infinite;
+}
+
+@keyframes ringSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Loading text */
+.page-transition-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.page-transition-destination {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  color: rgba(212, 175, 55, 0.8);
+  margin-bottom: 24px;
+}
+
+/* Progress bar */
+.page-transition-progress {
+  width: 200px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  margin: 0 auto 16px;
+  overflow: hidden;
+}
+
+.page-transition-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #d4af37 0%, #f4d03f 100%);
+  border-radius: 2px;
+  width: 0%;
+  transition: width 0.2s ease;
+  position: relative;
+}
+
+.page-transition-progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 50px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5));
+  animation: progressShine 1s linear infinite;
+}
+
+@keyframes progressShine {
+  0% { transform: translateX(-50px); }
+  100% { transform: translateX(50px); }
+}
+
+/* Percentage */
+.page-transition-percent {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Loading tips */
+.page-transition-tips {
+  margin-top: 32px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+  max-width: 300px;
+  animation: tipsFade 0.5s ease;
+}
+
+@keyframes tipsFade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Top progress bar (minimal mode) */
+.page-transition-top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 99999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.page-transition-top-bar.active {
+  opacity: 1;
+}
+
+.page-transition-top-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #d4af37 0%, #f4d03f 100%);
+  width: 0%;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+/* Corner loader (subtle mode) */
+.page-transition-corner {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  background: rgba(15, 15, 16, 0.95);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.page-transition-corner.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.page-transition-corner-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #d4af37;
+  border-radius: 50%;
+  animation: cornerSpin 0.8s linear infinite;
+}
+
+@keyframes cornerSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Page exit animation classes */
+.page-exit {
+  animation: pageExit 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes pageExit {
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+.page-enter {
+  animation: pageEnter 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Shimmer loading effect */
+.page-transition-shimmer {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.page-transition-shimmer.active {
+  opacity: 1;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Skeleton screen transition */
+.page-skeleton-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99997;
+  background: #0f0f10;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.page-skeleton-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.page-skeleton-content {
+  padding: 100px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-skeleton-block {
+  background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+  background-size: 200% 100%;
+  animation: skeletonLoading 1.5s infinite;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.page-skeleton-block.title {
+  height: 40px;
+  width: 60%;
+  margin-bottom: 24px;
+}
+
+.page-skeleton-block.text {
+  height: 16px;
+  width: 100%;
+}
+
+.page-skeleton-block.text.short {
+  width: 70%;
+}
+
+.page-skeleton-block.card {
+  height: 200px;
+  width: 100%;
+  border-radius: 16px;
+}
+
+@keyframes skeletonLoading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Cancel button */
+.page-transition-cancel {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.page-transition-loader.active .page-transition-cancel {
+  opacity: 1;
+}
+
+.page-transition-cancel:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .page-transition-loader,
+  .page-transition-top-bar,
+  .page-transition-corner,
+  .page-transition-shimmer,
+  .page-skeleton-overlay {
+    transition: none;
+  }
+  
+  .page-transition-logo-inner,
+  .page-transition-ring,
+  .page-transition-corner-spinner,
+  .page-skeleton-block {
+    animation: none;
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .page-transition-content {
+    padding: 30px 20px;
+  }
+  
+  .page-transition-logo {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .page-transition-text {
+    font-size: 16px;
+  }
+  
+  .page-transition-destination {
+    font-size: 13px;
+  }
+  
+  .page-transition-tips {
+    font-size: 12px;
+    max-width: 250px;
+  }
+}

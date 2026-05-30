@@ -1,0 +1,464 @@
+/**
+ * Keyboard Navigation Guide - v138.4
+ * Fortune 500 Accessibility Enhancement
+ * Displays keyboard shortcuts and helps users navigate efficiently
+ */
+
+/* Help button */
+.keyboard-guide-trigger {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  background: rgba(15, 15, 16, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d4af37;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 9996;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.keyboard-guide-trigger:hover {
+  transform: scale(1.1);
+  border-color: rgba(212, 175, 55, 0.6);
+  box-shadow: 
+    0 6px 30px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+.keyboard-guide-trigger:active {
+  transform: scale(0.95);
+}
+
+.keyboard-guide-trigger.hidden {
+  transform: scale(0);
+  opacity: 0;
+}
+
+/* Modal overlay */
+.keyboard-guide-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.keyboard-guide-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Modal content */
+.keyboard-guide-modal {
+  background: linear-gradient(145deg, #1a1a1b 0%, #0f0f10 100%);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 24px;
+  max-width: 700px;
+  width: 90%;
+  max-height: 85vh;
+  overflow: hidden;
+  transform: scale(0.9) translateY(30px);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 
+    0 50px 100px rgba(0, 0, 0, 0.5),
+    0 0 60px rgba(212, 175, 55, 0.1);
+}
+
+.keyboard-guide-overlay.active .keyboard-guide-modal {
+  transform: scale(1) translateY(0);
+}
+
+/* Header */
+.keyboard-guide-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.keyboard-guide-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.keyboard-guide-title-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.1));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.keyboard-guide-title-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.keyboard-guide-close {
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.keyboard-guide-close:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #ef4444;
+  transform: rotate(90deg);
+}
+
+/* Content area */
+.keyboard-guide-content {
+  padding: 24px 32px;
+  max-height: calc(85vh - 100px);
+  overflow-y: auto;
+}
+
+/* Search */
+.keyboard-guide-search {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.keyboard-guide-search-input {
+  width: 100%;
+  padding: 14px 20px 14px 48px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 15px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.keyboard-guide-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.keyboard-guide-search-input:focus {
+  outline: none;
+  border-color: rgba(212, 175, 55, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.keyboard-guide-search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 16px;
+}
+
+/* Categories */
+.keyboard-guide-categories {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.keyboard-guide-category-btn {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.keyboard-guide-category-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.keyboard-guide-category-btn.active {
+  background: rgba(212, 175, 55, 0.2);
+  border-color: rgba(212, 175, 55, 0.4);
+  color: #d4af37;
+}
+
+/* Shortcuts list */
+.keyboard-guide-shortcuts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.keyboard-guide-shortcut {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.keyboard-guide-shortcut:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(212, 175, 55, 0.2);
+}
+
+.keyboard-guide-shortcut.hidden {
+  display: none;
+}
+
+.keyboard-guide-shortcut-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.keyboard-guide-shortcut-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.keyboard-guide-shortcut-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.keyboard-guide-shortcut-keys {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Key styling */
+.keyboard-guide-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  box-shadow: 
+    0 2px 0 rgba(255, 255, 255, 0.1),
+    0 4px 8px rgba(0, 0, 0, 0.3);
+  font-family: 'SF Mono', 'Monaco', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+}
+
+.keyboard-guide-key.primary {
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.3) 0%, rgba(212, 175, 55, 0.15) 100%);
+  border-color: rgba(212, 175, 55, 0.4);
+  color: #d4af37;
+}
+
+.keyboard-guide-key.combined {
+  display: flex;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.keyboard-guide-key-plus {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 11px;
+}
+
+/* Section headers */
+.keyboard-guide-section {
+  margin-top: 24px;
+}
+
+.keyboard-guide-section:first-child {
+  margin-top: 0;
+}
+
+.keyboard-guide-section-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(212, 175, 55, 0.8);
+  margin-bottom: 12px;
+  padding-left: 8px;
+}
+
+/* Toast notification for used shortcuts */
+.keyboard-toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: rgba(15, 15, 16, 0.98);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 12px;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10002;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.keyboard-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.keyboard-toast-icon {
+  width: 36px;
+  height: 36px;
+  background: rgba(212, 175, 55, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.keyboard-toast-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.keyboard-toast-keys {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+}
+
+/* Quick tip badge */
+.keyboard-guide-quick-tip {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.1));
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  z-index: 9995;
+  transform: translateX(150%);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  max-width: 280px;
+  backdrop-filter: blur(10px);
+}
+
+.keyboard-guide-quick-tip.show {
+  transform: translateX(0);
+}
+
+.keyboard-guide-quick-tip strong {
+  color: #d4af37;
+}
+
+.keyboard-guide-quick-tip-close {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+  .keyboard-guide-modal {
+    width: 95%;
+    border-radius: 20px;
+  }
+  
+  .keyboard-guide-header,
+  .keyboard-guide-content {
+    padding: 20px 24px;
+  }
+  
+  .keyboard-guide-title-text {
+    font-size: 18px;
+  }
+  
+  .keyboard-guide-shortcut {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .keyboard-guide-shortcut-keys {
+    align-self: flex-end;
+  }
+  
+  .keyboard-guide-trigger {
+    display: none; /* Hide on mobile */
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .keyboard-guide-overlay,
+  .keyboard-guide-modal,
+  .keyboard-guide-trigger,
+  .keyboard-guide-shortcut,
+  .keyboard-toast,
+  .keyboard-guide-quick-tip {
+    transition: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .keyboard-guide-trigger,
+  .keyboard-guide-overlay,
+  .keyboard-guide-quick-tip,
+  .keyboard-toast {
+    display: none;
+  }
+}
