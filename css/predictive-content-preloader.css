@@ -1,0 +1,549 @@
+/* ========================================
+   PREDICTIVE CONTENT PRELOADER - v130.0
+   Fortune 500 Intelligent Page Prefetching
+   Features: Hover prefetch, progress indicator,
+   smooth transitions, loading states
+======================================== */
+
+/* ========================================
+   PREFETCH PROGRESS BAR
+   Top-of-page loading indicator
+======================================== */
+
+.prefetch-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #C9CED6, #F5F7FA, #C9CED6);
+  background-size: 200% 100%;
+  z-index: 10000;
+  width: 0%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.prefetch-progress.visible {
+  opacity: 1;
+}
+
+.prefetch-progress.loading {
+  animation: prefetch-progress-loading 2s ease-in-out infinite;
+}
+
+.prefetch-progress.complete {
+  width: 100% !important;
+  opacity: 0;
+  transition: width 0.3s ease, opacity 0.3s ease 0.3s;
+}
+
+@keyframes prefetch-progress-loading {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* ========================================
+   PREFETCH STATUS INDICATOR
+   Shows prefetch activity
+======================================== */
+
+.prefetch-status {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  padding: 12px 20px;
+  background: rgba(26, 28, 33, 0.95);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: #C9CED6;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+  z-index: 9998;
+  backdrop-filter: blur(10px);
+}
+
+.prefetch-status.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.prefetch-status-icon {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(201, 206, 214, 0.3);
+  border-top-color: #C9CED6;
+  border-radius: 50%;
+  animation: prefetch-spin 0.8s linear infinite;
+}
+
+@keyframes prefetch-spin {
+  to { transform: rotate(360deg); }
+}
+
+.prefetch-status-text {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ========================================
+   LINK PREFETCH INDICATOR
+   Shows which links are prefetched
+======================================== */
+
+.prefetch-link {
+  position: relative;
+}
+
+.prefetch-link::after {
+  content: '';
+  position: absolute;
+  right: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.3);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.prefetch-link.prefetched::after {
+  opacity: 1;
+  background: #22c55e;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+}
+
+.prefetch-link.prefetching::after {
+  opacity: 1;
+  background: #3B82F6;
+  animation: prefetch-pulse 1s ease-in-out infinite;
+}
+
+@keyframes prefetch-pulse {
+  0%, 100% { transform: translateY(-50%) scale(1); }
+  50% { transform: translateY(-50%) scale(1.3); }
+}
+
+/* ========================================
+   PAGE TRANSITION OVERLAY
+   Smooth page transitions
+======================================== */
+
+.page-transition-overlay {
+  position: fixed;
+  inset: 0;
+  background: #0F0F10;
+  z-index: 99999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.page-transition-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.page-transition-overlay.slide-up {
+  animation: page-transition-slide-up 0.5s ease forwards;
+}
+
+.page-transition-overlay.slide-down {
+  animation: page-transition-slide-down 0.5s ease forwards;
+}
+
+@keyframes page-transition-slide-up {
+  0% { transform: translateY(100%); opacity: 1; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes page-transition-slide-down {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-100%); opacity: 0; }
+}
+
+/* ========================================
+   PREFETCHED CONTENT PREVIEW
+   Preview card on hover
+======================================== */
+
+.prefetch-preview {
+  position: absolute;
+  width: 320px;
+  background: linear-gradient(180deg, #1a1c21, #0F0F10);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 12px;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 1000;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+.prefetch-preview.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.prefetch-preview-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.prefetch-preview-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.prefetch-preview-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #F5F7FA;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.prefetch-preview-desc {
+  font-size: 13px;
+  color: #525862;
+  line-height: 1.6;
+}
+
+.prefetch-preview-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #525862;
+}
+
+.prefetch-preview-loading .dot {
+  width: 6px;
+  height: 6px;
+  background: #C9CED6;
+  border-radius: 50%;
+  animation: preview-loading-dot 1.4s ease-in-out infinite;
+}
+
+.prefetch-preview-loading .dot:nth-child(2) { animation-delay: 0.2s; }
+.prefetch-preview-loading .dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes preview-loading-dot {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+/* ========================================
+   INSTANT LOAD INDICATOR
+   Shows instant page load success
+======================================== */
+
+.instant-load-indicator {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: white;
+  opacity: 0;
+  transform: translateX(100px);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 10001;
+  box-shadow: 0 10px 40px rgba(34, 197, 94, 0.3);
+}
+
+.instant-load-indicator.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.instant-load-indicator svg {
+  width: 20px;
+  height: 20px;
+  animation: check-pop 0.4s ease;
+}
+
+@keyframes check-pop {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* ========================================
+   PREFETCH CACHE STATUS
+   Debug indicator (optional)
+======================================== */
+
+.prefetch-cache-status {
+  position: fixed;
+  bottom: 80px;
+  left: 30px;
+  padding: 8px 16px;
+  background: rgba(26, 28, 33, 0.9);
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 6px;
+  font-size: 11px;
+  color: #525862;
+  font-family: 'Fira Code', monospace;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 9997;
+}
+
+.prefetch-cache-status.visible {
+  opacity: 1;
+}
+
+.prefetch-cache-status .cache-hit {
+  color: #22c55e;
+}
+
+.prefetch-cache-status .cache-miss {
+  color: #ef4444;
+}
+
+/* ========================================
+   CONTENT PLACEHOLDER SKELETON
+   While prefetching content
+======================================== */
+
+.prefetch-skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(201, 206, 214, 0.05) 25%,
+    rgba(201, 206, 214, 0.1) 50%,
+    rgba(201, 206, 214, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: prefetch-skeleton-shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes prefetch-skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ========================================
+   HOVER INTENT LOADING
+   Shows loading on hover intent
+======================================== */
+
+.hover-intent-loader {
+  position: relative;
+}
+
+.hover-intent-loader::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #C9CED6, transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.hover-intent-loader.prefetching::before {
+  animation: hover-intent-load 0.5s ease forwards;
+}
+
+@keyframes hover-intent-load {
+  0% { transform: scaleX(0); }
+  50% { transform: scaleX(1); }
+  100% { transform: scaleX(0); transform-origin: right; }
+}
+
+/* ========================================
+   SMOOTH PAGE CONTENT FADE
+======================================== */
+
+.smooth-content-fade {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.smooth-content-fade.loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered content fade */
+.smooth-content-fade.stagger-1 { transition-delay: 0.1s; }
+.smooth-content-fade.stagger-2 { transition-delay: 0.2s; }
+.smooth-content-fade.stagger-3 { transition-delay: 0.3s; }
+.smooth-content-fade.stagger-4 { transition-delay: 0.4s; }
+
+/* ========================================
+   CONNECTION STATUS
+   Shows when prefetch is blocked
+======================================== */
+
+.prefetch-connection-status {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-60px);
+  padding: 12px 24px;
+  background: rgba(239, 68, 68, 0.95);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: white;
+  z-index: 10002;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  backdrop-filter: blur(10px);
+}
+
+.prefetch-connection-status.visible {
+  transform: translateX(-50%) translateY(0);
+}
+
+.prefetch-connection-status svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ========================================
+   SMART PREFETCH BADGE
+   Badge on links that are cached
+======================================== */
+
+.smart-prefetch-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 18px;
+  height: 18px;
+  background: #22c55e;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: white;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.prefetch-link:hover .smart-prefetch-badge {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ========================================
+   VIEW TRANSITIONS SUPPORT
+   Modern browser page transitions
+======================================== */
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: view-transition-out 0.4s ease forwards;
+}
+
+::view-transition-new(root) {
+  animation: view-transition-in 0.4s ease forwards;
+}
+
+@keyframes view-transition-out {
+  to { opacity: 0; transform: scale(0.98); }
+}
+
+@keyframes view-transition-in {
+  from { opacity: 0; transform: scale(1.02); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 768px) {
+  .prefetch-status {
+    bottom: 20px;
+    left: 20px;
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+  
+  .prefetch-preview {
+    display: none; /* Hide on mobile */
+  }
+  
+  .instant-load-indicator {
+    top: auto;
+    bottom: 20px;
+    right: 20px;
+    left: 20px;
+    transform: translateY(100px);
+  }
+  
+  .instant-load-indicator.visible {
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   REDUCED MOTION
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .prefetch-progress,
+  .prefetch-status-icon,
+  .prefetch-skeleton,
+  .hover-intent-loader::before,
+  .smooth-content-fade {
+    animation: none !important;
+    transition: opacity 0.1s ease !important;
+  }
+  
+  .page-transition-overlay {
+    transition: none;
+  }
+}
+
+/* ========================================
+   DATA SAVER MODE
+======================================== */
+
+@media (prefers-reduced-data: reduce) {
+  .prefetch-status,
+  .prefetch-preview,
+  .prefetch-cache-status {
+    display: none !important;
+  }
+}

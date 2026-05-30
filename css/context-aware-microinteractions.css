@@ -1,0 +1,650 @@
+/* ========================================
+   CONTEXT-AWARE MICRO-INTERACTIONS - v129.0
+   Fortune 500 Intelligent Button States
+   Features: Context detection, magnetic pull,
+   ripple effects, loading states, success/fail feedback
+======================================== */
+
+/* ========================================
+   CONTEXT-AWARE BUTTON
+   Detects user intent and responds accordingly
+======================================== */
+
+.btn-context-aware {
+  position: relative;
+  overflow: hidden;
+  transition: 
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+
+/* Hover Intent Detection */
+.btn-context-aware::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(201, 206, 214, 0.15) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.btn-context-aware:hover::before {
+  opacity: 1;
+}
+
+/* Proximity Glow Effect */
+.btn-proximity-glow {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-proximity-glow.nearby {
+  box-shadow: 0 0 30px rgba(201, 206, 214, 0.3);
+  transform: scale(1.02);
+}
+
+/* ========================================
+   ADVANCED RIPPLE EFFECT
+   Material Design + Fortune 500 Polish
+======================================== */
+
+.ripple-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201, 206, 214, 0.4) 0%, transparent 70%);
+  transform: scale(0);
+  animation: ripple-effect 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple-effect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Ripple with color variants */
+.ripple-primary { background: radial-gradient(circle, rgba(201, 206, 214, 0.4) 0%, transparent 70%); }
+.ripple-success { background: radial-gradient(circle, rgba(34, 197, 94, 0.4) 0%, transparent 70%); }
+.ripple-danger { background: radial-gradient(circle, rgba(239, 68, 68, 0.4) 0%, transparent 70%); }
+.ripple-gold { background: radial-gradient(circle, rgba(245, 158, 11, 0.4) 0%, transparent 70%); }
+
+/* ========================================
+   BUTTON STATE MACHINE
+   Loading, Success, Error states
+======================================== */
+
+.btn-state-machine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-state-machine .btn-content,
+.btn-state-machine .btn-loading,
+.btn-state-machine .btn-success,
+.btn-state-machine .btn-error {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-state-machine .btn-loading,
+.btn-state-machine .btn-success,
+.btn-state-machine .btn-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Loading State */
+.btn-state-machine.loading .btn-content {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.btn-state-machine.loading .btn-loading {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Loading Spinner */
+.btn-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(15, 15, 16, 0.2);
+  border-top-color: #0F0F10;
+  border-radius: 50%;
+  animation: btn-spin 0.8s linear infinite;
+}
+
+@keyframes btn-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Success State */
+.btn-state-machine.success .btn-content,
+.btn-state-machine.success .btn-loading {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.btn-state-machine.success .btn-success {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.btn-state-machine.success {
+  background: #22c55e !important;
+  border-color: #22c55e !important;
+}
+
+/* Error State */
+.btn-state-machine.error .btn-content,
+.btn-state-machine.error .btn-loading {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.btn-state-machine.error .btn-error {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.btn-state-machine.error {
+  background: #ef4444 !important;
+  border-color: #ef4444 !important;
+  animation: btn-shake 0.5s ease;
+}
+
+@keyframes btn-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+/* ========================================
+   MAGNETIC BUTTON V5
+   Enhanced magnetic pull with delay
+======================================== */
+
+.btn-magnetic-v5 {
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-magnetic-v5 .magnetic-content {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Magnetic Attraction Zone */
+.magnetic-zone {
+  position: absolute;
+  inset: -50px;
+  pointer-events: auto;
+}
+
+/* ========================================
+   HOVER LIFT EFFECTS
+   Sophisticated elevation system
+======================================== */
+
+.hover-lift-sm {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift-sm:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.hover-lift-md {
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+}
+
+.hover-lift-md:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.hover-lift-lg {
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.5s ease;
+}
+
+.hover-lift-lg:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4);
+}
+
+/* ========================================
+   PRESS EFFECTS
+   Realistic button press feedback
+======================================== */
+
+.press-effect {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.press-effect:active {
+  transform: scale(0.95) translateY(2px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.press-effect-elastic {
+  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.press-effect-elastic:active {
+  transform: scale(0.9);
+}
+
+.press-effect-elastic:not(:active) {
+  transform: scale(1);
+}
+
+/* ========================================
+   GLIMMER/Shine Effect
+   Premium shine sweep animation
+======================================== */
+
+.glimmer-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.glimmer-effect::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.7s ease;
+}
+
+.glimmer-effect:hover::after {
+  left: 100%;
+}
+
+/* Auto-glimmer animation */
+.glimmer-auto::after {
+  animation: glimmer-sweep 3s ease-in-out infinite;
+  animation-delay: var(--glimmer-delay, 0s);
+}
+
+@keyframes glimmer-sweep {
+  0%, 100% { left: -100%; }
+  50% { left: 100%; }
+}
+
+/* ========================================
+   STAGGERED ICON ANIMATION
+   Icons animate in sequence
+======================================== */
+
+.icon-stagger-group:hover .icon-stagger-item:nth-child(1) { transition-delay: 0s; }
+.icon-stagger-group:hover .icon-stagger-item:nth-child(2) { transition-delay: 0.05s; }
+.icon-stagger-group:hover .icon-stagger-item:nth-child(3) { transition-delay: 0.1s; }
+.icon-stagger-group:hover .icon-stagger-item:nth-child(4) { transition-delay: 0.15s; }
+.icon-stagger-group:hover .icon-stagger-item:nth-child(5) { transition-delay: 0.2s; }
+
+.icon-stagger-item {
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.icon-stagger-group:hover .icon-stagger-item {
+  transform: translateY(-3px);
+}
+
+/* ========================================
+   BREATHING EFFECT
+   Subtle pulsing for attention
+======================================== */
+
+.breathing {
+  animation: breathing 3s ease-in-out infinite;
+}
+
+@keyframes breathing {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(201, 206, 214, 0.4);
+  }
+  50% { 
+    transform: scale(1.02);
+    box-shadow: 0 0 0 10px rgba(201, 206, 214, 0);
+  }
+}
+
+/* ========================================
+   MORPHING BUTTON
+   Button that changes shape
+======================================== */
+
+.btn-morph {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-morph .morph-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.4s ease;
+}
+
+.btn-morph .morph-icon {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-morph:hover .morph-icon {
+  transform: rotate(360deg) scale(1.2);
+}
+
+.btn-morph.morphed {
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+}
+
+.btn-morph.morphed .morph-text {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+/* ========================================
+   FOCUS RING ANIMATION
+   Accessible focus states
+======================================== */
+
+.focus-ring-animate {
+  position: relative;
+}
+
+.focus-ring-animate::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  border: 2px solid #C9CED6;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all 0.3s ease;
+}
+
+.focus-ring-animate:focus-visible::after {
+  opacity: 1;
+  transform: scale(1);
+  animation: focus-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes focus-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201, 206, 214, 0.4); }
+  50% { box-shadow: 0 0 0 4px rgba(201, 206, 214, 0.1); }
+}
+
+/* ========================================
+   TEXT SCRAMBLE HOVER
+   Characters scramble on hover
+======================================== */
+
+.text-scramble-hover {
+  position: relative;
+}
+
+.text-scramble-hover .scramble-target {
+  display: inline-block;
+}
+
+/* ========================================
+   DUAL-STATE TOGGLE
+   Smooth toggle switch animation
+======================================== */
+
+.dual-state-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.dual-state-track {
+  width: 60px;
+  height: 32px;
+  background: #2A2D34;
+  border-radius: 16px;
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+.dual-state-toggle.active .dual-state-track {
+  background: #C9CED6;
+}
+
+.dual-state-thumb {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 24px;
+  height: 24px;
+  background: #F5F7FA;
+  border-radius: 50%;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dual-state-toggle.active .dual-state-thumb {
+  transform: translateX(28px);
+}
+
+/* ========================================
+   EXPANDING BUTTON
+   Button expands to show more info
+======================================== */
+
+.btn-expanding {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-expanding .expand-content {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  white-space: nowrap;
+}
+
+.btn-expanding:hover {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.btn-expanding:hover .expand-content {
+  max-width: 200px;
+  opacity: 1;
+  margin-left: 8px;
+}
+
+/* ========================================
+   SKELETON BUTTON LOADING
+   Button shows skeleton state
+======================================== */
+
+.btn-skeleton-loading {
+  position: relative;
+  overflow: hidden;
+  color: transparent !important;
+  pointer-events: none;
+}
+
+.btn-skeleton-loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ========================================
+   HEARTBEAT EFFECT
+   Urgent attention indicator
+======================================== */
+
+.heartbeat-urgent {
+  animation: heartbeat-urgent 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat-urgent {
+  0%, 100% { transform: scale(1); }
+  10% { transform: scale(1.05); }
+  20% { transform: scale(1); }
+  30% { transform: scale(1.05); }
+  40%, 100% { transform: scale(1); }
+}
+
+/* ========================================
+   PROGRESSIVE REVEAL
+   Elements reveal progressively
+======================================== */
+
+.progressive-reveal {
+  overflow: hidden;
+}
+
+.progressive-reveal .reveal-line {
+  transform: translateY(100%);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.progressive-reveal.revealed .reveal-line {
+  transform: translateY(0);
+}
+
+.progressive-reveal.revealed .reveal-line:nth-child(1) { transition-delay: 0s; }
+.progressive-reveal.revealed .reveal-line:nth-child(2) { transition-delay: 0.1s; }
+.progressive-reveal.revealed .reveal-line:nth-child(3) { transition-delay: 0.2s; }
+
+/* ========================================
+   FLOATING LABEL INPUT
+   Input with animated label
+======================================== */
+
+.input-float-label {
+  position: relative;
+}
+
+.input-float-label input,
+.input-float-label textarea {
+  width: 100%;
+  padding: 20px 16px 8px;
+  background: rgba(201, 206, 214, 0.05);
+  border: 1px solid rgba(201, 206, 214, 0.2);
+  border-radius: 8px;
+  color: #F5F7FA;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.input-float-label label {
+  position: absolute;
+  left: 16px;
+  top: 14px;
+  color: #525862;
+  font-size: 14px;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.input-float-label input:focus,
+.input-float-label textarea:focus,
+.input-float-label input:not(:placeholder-shown),
+.input-float-label textarea:not(:placeholder-shown) {
+  border-color: #C9CED6;
+  background: rgba(201, 206, 214, 0.08);
+}
+
+.input-float-label input:focus + label,
+.input-float-label textarea:focus + label,
+.input-float-label input:not(:placeholder-shown) + label,
+.input-float-label textarea:not(:placeholder-shown) + label {
+  top: 6px;
+  font-size: 11px;
+  color: #C9CED6;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .btn-morph.morphed {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .dual-state-track {
+    width: 52px;
+    height: 28px;
+  }
+  
+  .dual-state-thumb {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .dual-state-toggle.active .dual-state-thumb {
+    transform: translateX(24px);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .ripple,
+  .btn-spinner,
+  .breathing,
+  .glimmer-auto::after,
+  .heartbeat-urgent,
+  .focus-ring-animate::after,
+  .btn-skeleton-loading::after {
+    animation: none !important;
+  }
+  
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}

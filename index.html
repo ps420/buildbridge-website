@@ -532,6 +532,12 @@
   <link rel="stylesheet" href="css/project-estimation-wizard.css">
   <link rel="stylesheet" href="css/voice-interaction-feedback.css">
   <link rel="stylesheet" href="css/collaboration-indicators.css">
+  
+  <!-- v127.0-130.0: Godzai Fortune 500 Auto-Update Professional Features -->
+  <link rel="stylesheet" href="css/smart-ai-chat-widget.css">
+  <link rel="stylesheet" href="css/scroll-3d-depth-system.css">
+  <link rel="stylesheet" href="css/context-aware-microinteractions.css">
+  <link rel="stylesheet" href="css/predictive-content-preloader.css">
 
   <link rel="icon" type="image/svg+xml" href="assets/BuildBridge_Icon_Mark.svg">
   <link rel="manifest" href="manifest.json">
@@ -810,26 +816,28 @@
   <!-- v89.0: Breadcrumb Navigation -->
   <div class="fortune-breadcrumbs floating" data-breadcrumbs='[]'></div>
 
-  <!-- Hero Section -->
-  <section class="hero" id="main-content" data-section="Hero" data-nav-label="Home">
-    <div class="hero-copy">
+  <!-- Hero Section with 3D Depth -->
+  <section class="hero depth-container" id="main-content" data-section="Hero" data-nav-label="Home">
+    <div class="hero-copy" data-depth="5">
       <p class="eyebrow">Construction Management</p>
       <h1 class="split-heading kinetic-text">Connecting Clients.<br>Delivering Projects.<br><span class="gradient-text">Building Trust.</span></h1>
       <p>BuildBridge acts as the trusted link between clients and contractors — managing projects with transparency, expertise and care from concept to completion. We bridge the gap between vision and reality.</p>
       <div class="actions">
-        <a href="https://wa.me/27661200064" class="btn" target="_blank">💬 Chat on WhatsApp</a>
-        <a href="services.html" class="btn ghost">Our Services →</a>
+        <a href="https://wa.me/27661200064" class="btn btn-context-aware btn-magnetic-v5 glimmer-effect ripple-container" data-ripple-color="gold" data-magnetic="0.4" target="_blank">
+          <span class="magnetic-content">💬 Chat on WhatsApp</span>
+        </a>
+        <a href="services.html" class="btn ghost btn-context-aware btn-magnetic-v5 ripple-container prefetch-link" data-magnetic="0.3">Our Services →</a>
       </div>
     </div>
-    <div class="hero-visual">
-      <div class="hero-image-wrapper">
+    <div class="hero-visual" data-depth="0">
+      <div class="hero-image-wrapper" data-depth="-5">
         <img src="assets/02_Website_Heroes/Hero_1.png" alt="BuildBridge Project" class="hero-main-image">
       </div>
-      <div class="floating-stats stat-1">
+      <div class="floating-stats stat-1 floating-3d" data-depth="10">
         <div class="number counter-gold" data-counter="150" data-suffix="+" data-duration="2000">0</div>
         <div class="label">Projects Delivered</div>
       </div>
-      <div class="floating-stats stat-2 magnetic-el">
+      <div class="floating-stats stat-2 magnetic-el floating-3d floating-3d-delay-1" data-depth="15">
         <div class="number counter-gold" data-counter="98" data-suffix="%" data-duration="2000">0</div>
         <div class="label">Client Satisfaction</div>
       </div>
@@ -5160,6 +5168,29 @@
     console.log('   🧮 Project Estimation Wizard - Fortune 500 Cost Calculator');
     console.log('   🎙️ Voice Interaction Feedback System - Fortune 500 Voice UI');
     console.log('   👥 Real-Time Collaboration Indicators - Live Activity System');
+  </script>
+  
+  <!-- v127.0: Smart AI Chat Widget - Fortune 500 AI Assistant -->
+  <script src="js/smart-ai-chat-widget.js"></script>
+  
+  <!-- v128.0: Scroll-Linked 3D Depth System - Multi-Layer Parallax -->
+  <script src="js/scroll-3d-depth-system.js"></script>
+  
+  <!-- v129.0: Context-Aware Micro-Interactions - Intelligent Button States -->
+  <script src="js/context-aware-microinteractions.js"></script>
+  
+  <!-- v130.0: Predictive Content Preloader - Instant Page Navigation -->
+  <script src="js/predictive-content-preloader.js"></script>
+  
+  <!-- Log v127.0-130.0 features loaded -->
+  <script>
+    console.log('🚀 BuildBridge Fortune 500 v127.0-v130.0 loaded: Godzai Auto-Update Professional Features');
+    console.log('   🤖 Smart AI Chat Widget - Fortune 500 AI Assistant with Smart Responses');
+    console.log('   🎭 Scroll-Linked 3D Depth System - Multi-Layer Parallax Effects');
+    console.log('   ✨ Context-Aware Micro-Interactions - Intelligent Button States');
+    console.log('   ⚡ Predictive Content Preloader - Instant Navigation with Smart Caching');
+    console.log('');
+    console.log('🏗️ BuildBridge Website v130.0 - Fortune 500 Quality Achieved');
   </script>
   
 </body>
