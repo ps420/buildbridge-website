@@ -1,0 +1,189 @@
+/* ========================================
+   SCROLL-BASED TYPEWRITER EFFECT
+   Fortune 500 Premium Text Animation
+   Types text progressively based on scroll position
+======================================== */
+
+.scroll-typewriter {
+  position: relative;
+  display: inline-block;
+}
+
+.scroll-typewriter-text {
+  position: relative;
+  display: inline;
+  background: linear-gradient(135deg, var(--white) 0%, var(--chrome) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.scroll-typewriter-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-typewriter-char.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-typewriter-char.typing {
+  animation: char-pop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes char-pop {
+  0% {
+    transform: translateY(20px) scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(-5px) scale(1.1);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Cursor that follows the typing */
+.scroll-typewriter-cursor {
+  display: inline-block;
+  width: 3px;
+  height: 1em;
+  background: var(--chrome);
+  margin-left: 4px;
+  animation: cursor-blink 0.8s ease-in-out infinite;
+  vertical-align: middle;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Glow effect behind active character */
+.scroll-typewriter-glow {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, rgba(201, 206, 214, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+}
+
+.scroll-typewriter-glow.active {
+  opacity: 1;
+}
+
+/* Progress indicator for scroll-typewriter section */
+.scroll-typewriter-progress {
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--chrome), var(--white));
+  border-radius: 2px;
+  transition: width 0.1s ease-out;
+}
+
+/* Section styling for scroll-typewriter container */
+.scroll-typewriter-section {
+  min-height: 150vh;
+  position: relative;
+}
+
+.scroll-typewriter-sticky {
+  position: sticky;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  padding: 0 40px;
+}
+
+.scroll-typewriter-title {
+  font-size: clamp(36px, 6vw, 72px);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.scroll-typewriter-subtitle {
+  font-size: clamp(16px, 2vw, 20px);
+  color: var(--chrome);
+  margin-top: 30px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+}
+
+.scroll-typewriter-subtitle.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Word highlight effect */
+.scroll-typewriter-word {
+  display: inline-block;
+  position: relative;
+}
+
+.scroll-typewriter-word.highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background: linear-gradient(180deg, transparent, rgba(201, 206, 214, 0.2));
+  z-index: -1;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: word-highlight 0.4s ease forwards;
+}
+
+@keyframes word-highlight {
+  to { transform: scaleX(1); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .scroll-typewriter-sticky {
+    padding: 0 20px;
+  }
+  
+  .scroll-typewriter-title {
+    font-size: clamp(28px, 8vw, 48px);
+  }
+  
+  .scroll-typewriter-cursor {
+    width: 2px;
+  }
+}
+
+/* Dark mode support */
+[data-theme="dark"] .scroll-typewriter-text {
+  background: linear-gradient(135deg, #ffffff 0%, #c9ced6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-typewriter-char {
+    transition: opacity 0.1s ease;
+  }
+  
+  .scroll-typewriter-char.typing {
+    animation: none;
+  }
+}
