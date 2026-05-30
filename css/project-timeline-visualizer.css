@@ -1,0 +1,634 @@
+/* ========================================
+   v101.0: Interactive Project Timeline Visualizer
+   Fortune 500 Quality Project Phase Display
+   ======================================== */
+
+.project-timeline-section {
+  padding: 120px 70px;
+  background: linear-gradient(180deg, #0f0f12 0%, #141418 50%, #0f0f12 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.project-timeline-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 206, 214, 0.3), transparent);
+}
+
+/* Animated background grid */
+.timeline-bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(201, 206, 214, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 206, 214, 0.02) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events: none;
+}
+
+.timeline-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Section Header */
+.timeline-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.timeline-header h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(36px, 4vw, 48px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+
+.timeline-header p {
+  max-width: 600px;
+  margin: 0 auto;
+  font-size: 17px;
+  color: var(--chrome);
+  line-height: 1.7;
+}
+
+/* Project Type Selector */
+.project-type-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 60px;
+  flex-wrap: wrap;
+}
+
+.timeline-tab {
+  padding: 16px 32px;
+  background: rgba(15, 15, 16, 0.6);
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--chrome);
+}
+
+.timeline-tab:hover {
+  background: rgba(201, 206, 214, 0.1);
+  border-color: rgba(201, 206, 214, 0.3);
+  transform: translateY(-2px);
+}
+
+.timeline-tab.active {
+  background: linear-gradient(135deg, var(--white), var(--chrome));
+  border-color: var(--white);
+  color: var(--black);
+  box-shadow: 0 10px 40px rgba(201, 206, 214, 0.2);
+}
+
+/* Timeline Display */
+.timeline-display {
+  position: relative;
+  padding: 40px 0;
+}
+
+/* Main Timeline Track */
+.timeline-track-container {
+  position: relative;
+  margin-bottom: 60px;
+}
+
+.timeline-track {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  padding: 0 60px;
+}
+
+.timeline-track::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 60px;
+  right: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, 
+    rgba(201, 206, 214, 0.1) 0%, 
+    rgba(201, 206, 214, 0.3) 50%, 
+    rgba(201, 206, 214, 0.1) 100%
+  );
+  border-radius: 2px;
+  transform: translateY(-50%);
+}
+
+.timeline-progress-line {
+  position: absolute;
+  top: 50%;
+  left: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--chrome), var(--white));
+  border-radius: 2px;
+  transform: translateY(-50%);
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 20px rgba(201, 206, 214, 0.3);
+}
+
+/* Timeline Node */
+.timeline-node {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.node-marker {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(145deg, #17191d, #1a1c21);
+  border: 3px solid rgba(201, 206, 214, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.node-marker::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  transition: all 0.4s ease;
+}
+
+.node-icon {
+  font-size: 24px;
+  filter: grayscale(1);
+  transition: all 0.3s ease;
+}
+
+.node-number {
+  position: absolute;
+  bottom: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  background: var(--gun);
+  border: 2px solid rgba(201, 206, 214, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--chrome);
+  transition: all 0.3s ease;
+}
+
+.node-label {
+  margin-top: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--slate);
+  transition: all 0.3s ease;
+  text-align: center;
+  max-width: 120px;
+}
+
+.node-duration {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--chrome);
+  opacity: 0.7;
+}
+
+/* Node States */
+.timeline-node:hover .node-marker,
+.timeline-node.active .node-marker {
+  background: linear-gradient(135deg, var(--chrome), var(--white));
+  border-color: var(--white);
+  transform: scale(1.15);
+  box-shadow: 0 0 30px rgba(201, 206, 214, 0.3);
+}
+
+.timeline-node:hover .node-marker::before,
+.timeline-node.active .node-marker::before {
+  border-color: rgba(201, 206, 214, 0.3);
+}
+
+.timeline-node:hover .node-icon,
+.timeline-node.active .node-icon {
+  filter: grayscale(0);
+}
+
+.timeline-node:hover .node-number,
+.timeline-node.active .node-number {
+  background: var(--white);
+  border-color: var(--white);
+  color: var(--black);
+}
+
+.timeline-node:hover .node-label,
+.timeline-node.active .node-label {
+  color: var(--white);
+}
+
+.timeline-node.completed .node-marker {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border-color: #22c55e;
+}
+
+.timeline-node.completed .node-number {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: white;
+}
+
+/* Phase Detail Cards */
+.timeline-phases-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.phase-card {
+  background: linear-gradient(145deg, rgba(23, 25, 29, 0.8), rgba(26, 28, 33, 0.6));
+  border: 1px solid rgba(201, 206, 214, 0.1);
+  border-radius: 16px;
+  padding: 32px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.phase-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--chrome), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.phase-card:hover::before,
+.phase-card.active::before {
+  transform: scaleX(1);
+}
+
+.phase-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(201, 206, 214, 0.2);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+}
+
+.phase-card.active {
+  border-color: rgba(201, 206, 214, 0.3);
+  background: linear-gradient(145deg, rgba(23, 25, 29, 0.95), rgba(26, 28, 33, 0.8));
+}
+
+.phase-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.phase-icon {
+  width: 56px;
+  height: 56px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.phase-title-group h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 6px;
+}
+
+.phase-title-group .duration {
+  font-size: 13px;
+  color: var(--chrome);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.phase-description {
+  font-size: 14px;
+  color: var(--chrome);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+/* Phase Tasks */
+.phase-tasks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.phase-tasks li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  font-size: 13px;
+  color: var(--slate);
+  border-bottom: 1px solid rgba(201, 206, 214, 0.05);
+}
+
+.phase-tasks li:last-child {
+  border-bottom: none;
+}
+
+.task-check {
+  width: 20px;
+  height: 20px;
+  background: rgba(34, 197, 94, 0.1);
+  border: 2px solid rgba(34, 197, 94, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #22c55e;
+  flex-shrink: 0;
+}
+
+/* Phase Details Expanded */
+.phase-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.phase-card.active .phase-details {
+  max-height: 500px;
+}
+
+.phase-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.phase-stat {
+  text-align: center;
+  padding: 16px;
+  background: rgba(15, 15, 16, 0.4);
+  border-radius: 10px;
+}
+
+.phase-stat .value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1;
+}
+
+.phase-stat .label {
+  font-size: 11px;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 6px;
+}
+
+/* Timeline Legend */
+.timeline-legend {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--chrome);
+}
+
+.legend-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.legend-dot.planning {
+  background: #3b82f6;
+}
+
+.legend-dot.construction {
+  background: #f59e0b;
+}
+
+.legend-dot.completion {
+  background: #22c55e;
+}
+
+/* Interactive Timeline Slider */
+.timeline-slider-container {
+  margin: 40px 60px;
+  padding: 20px 0;
+}
+
+.timeline-slider {
+  width: 100%;
+  height: 40px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.timeline-slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(90deg, 
+    #3b82f6 0%, #3b82f6 25%,
+    #f59e0b 25%, #f59e0b 75%,
+    #22c55e 75%, #22c55e 100%
+  );
+  border-radius: 3px;
+}
+
+.timeline-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, var(--white), var(--chrome));
+  border-radius: 50%;
+  cursor: grab;
+  box-shadow: 0 4px 15px rgba(201, 206, 214, 0.4);
+  margin-top: -11px;
+  transition: transform 0.2s ease;
+}
+
+.timeline-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+.timeline-slider::-webkit-slider-thumb:active {
+  cursor: grabbing;
+}
+
+/* Week Labels */
+.timeline-weeks {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 60px;
+  margin-top: 20px;
+}
+
+.week-label {
+  font-size: 12px;
+  color: var(--slate);
+  text-align: center;
+}
+
+.week-label span {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--chrome);
+  margin-bottom: 4px;
+}
+
+/* Current Week Indicator */
+.current-week-indicator {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  background: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--black);
+  box-shadow: 0 4px 20px rgba(201, 206, 214, 0.4);
+  pointer-events: none;
+  transition: left 0.3s ease;
+}
+
+.current-week-indicator::before {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid var(--white);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .timeline-track {
+    padding: 0 30px;
+  }
+  
+  .timeline-track::before,
+  .timeline-progress-line {
+    left: 30px;
+    right: 30px;
+  }
+}
+
+@media (max-width: 968px) {
+  .project-timeline-section {
+    padding: 80px 20px;
+  }
+  
+  .timeline-track {
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+  }
+  
+  .timeline-track::before,
+  .timeline-progress-line {
+    display: none;
+  }
+  
+  .timeline-node {
+    flex: 0 0 calc(33.333% - 40px);
+  }
+  
+  .timeline-phases-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .timeline-legend {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .timeline-node {
+    flex: 0 0 calc(50% - 30px);
+  }
+  
+  .project-type-tabs {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .timeline-tab {
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+  }
+  
+  .phase-card {
+    padding: 24px;
+  }
+}

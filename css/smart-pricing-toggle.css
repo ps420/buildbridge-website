@@ -1,0 +1,537 @@
+/**
+ * v102.0: Smart Pricing Toggle
+ * Fortune 500 quality animated pricing switcher with smooth transitions
+ * Created by: Godzai
+ */
+
+/* Pricing Section Container */
+.smart-pricing-section {
+  position: relative;
+  padding: 120px 0;
+}
+
+.smart-pricing-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.smart-pricing-header .eyebrow {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #C9CED6;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 16px;
+}
+
+.smart-pricing-header h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 42px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin-bottom: 20px;
+}
+
+.smart-pricing-header p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  color: rgba(201, 206, 214, 0.7);
+}
+
+/* Toggle Switch Container */
+.smart-pricing-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 30px;
+  padding: 20px 30px;
+  background: rgba(201, 206, 214, 0.05);
+  border-radius: 50px;
+  border: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.toggle-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(201, 206, 214, 0.6);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.toggle-label.active {
+  color: #F5F7FA;
+  font-weight: 600;
+}
+
+.toggle-label .save-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  margin-left: 8px;
+  animation: badge-pulse 2s ease-in-out infinite;
+}
+
+@keyframes badge-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  width: 70px;
+  height: 36px;
+  background: rgba(201, 206, 214, 0.2);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.toggle-switch::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(145deg, #C9CED6, #F5F7FA);
+  border-radius: 50%;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.toggle-switch.active {
+  background: rgba(201, 206, 214, 0.4);
+}
+
+.toggle-switch.active::before {
+  transform: translateX(34px);
+  background: linear-gradient(145deg, #F5F7FA, #C9CED6);
+}
+
+/* Pricing Cards Grid */
+.smart-pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* Pricing Card */
+.smart-pricing-card {
+  position: relative;
+  background: linear-gradient(145deg, rgba(201, 206, 214, 0.08), rgba(245, 247, 250, 0.03));
+  border: 1px solid rgba(201, 206, 214, 0.15);
+  border-radius: 24px;
+  padding: 40px 30px;
+  text-align: center;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow: hidden;
+}
+
+.smart-pricing-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, rgba(201, 206, 214, 0.05), transparent 50%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.smart-pricing-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(201, 206, 214, 0.3);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+}
+
+.smart-pricing-card:hover::before {
+  opacity: 1;
+}
+
+/* Featured Card */
+.smart-pricing-card.featured {
+  background: linear-gradient(145deg, rgba(201, 206, 214, 0.12), rgba(245, 247, 250, 0.06));
+  border-color: rgba(201, 206, 214, 0.4);
+  transform: scale(1.05);
+}
+
+.smart-pricing-card.featured:hover {
+  transform: scale(1.05) translateY(-10px);
+}
+
+/* Popular Badge */
+.pricing-badge {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #C9CED6, #F5F7FA);
+  border-radius: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: #0f0f10;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  z-index: 2;
+}
+
+/* Card Header */
+.pricing-card-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.15), rgba(245, 247, 250, 0.1));
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  margin: 0 auto 24px;
+  transition: all 0.4s ease;
+}
+
+.smart-pricing-card:hover .pricing-card-icon {
+  transform: scale(1.1) rotate(5deg);
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.25), rgba(245, 247, 250, 0.15));
+}
+
+.pricing-card-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin-bottom: 8px;
+}
+
+.pricing-card-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: rgba(201, 206, 214, 0.6);
+  margin-bottom: 24px;
+}
+
+/* Price Display */
+.pricing-card-price {
+  margin-bottom: 30px;
+}
+
+.price-currency {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #C9CED6;
+  vertical-align: top;
+}
+
+.price-amount {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 56px;
+  font-weight: 800;
+  color: #F5F7FA;
+  line-height: 1;
+  display: inline-block;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.price-amount.changing {
+  transform: translateY(-20px);
+  opacity: 0;
+}
+
+.price-period {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: rgba(201, 206, 214, 0.5);
+}
+
+/* Price Animation */
+@keyframes price-flip-in {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.price-amount.animating {
+  animation: price-flip-in 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Features List */
+.pricing-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 30px;
+  text-align: left;
+}
+
+.pricing-features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(201, 206, 214, 0.1);
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: rgba(245, 247, 250, 0.8);
+}
+
+.pricing-features li:last-child {
+  border-bottom: none;
+}
+
+.pricing-features li.included::before {
+  content: '✓';
+  width: 20px;
+  height: 20px;
+  background: rgba(74, 222, 128, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4ade80;
+  font-size: 11px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.pricing-features li.not-included {
+  color: rgba(201, 206, 214, 0.3);
+  text-decoration: line-through;
+}
+
+.pricing-features li.not-included::before {
+  content: '×';
+  width: 20px;
+  height: 20px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(201, 206, 214, 0.3);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* CTA Button */
+.pricing-card-btn {
+  width: 100%;
+  padding: 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f0f10;
+  background: linear-gradient(135deg, #C9CED6, #F5F7FA);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.pricing-card-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 60%
+  );
+  transform: translateX(-100%) rotate(45deg);
+  transition: transform 0.6s ease;
+}
+
+.pricing-card-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(201, 206, 214, 0.2);
+}
+
+.pricing-card-btn:hover::before {
+  transform: translateX(100%) rotate(45deg);
+}
+
+.pricing-card-btn-outline {
+  background: transparent;
+  border: 2px solid rgba(201, 206, 214, 0.3);
+  color: #C9CED6;
+}
+
+.pricing-card-btn-outline:hover {
+  background: rgba(201, 206, 214, 0.1);
+  border-color: rgba(201, 206, 214, 0.5);
+}
+
+/* Comparison Table */
+.pricing-comparison-section {
+  max-width: 1000px;
+  margin: 80px auto 0;
+  padding: 0 40px;
+}
+
+.pricing-comparison-title {
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin-bottom: 30px;
+}
+
+.pricing-comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Poppins', sans-serif;
+}
+
+.pricing-comparison-table th,
+.pricing-comparison-table td {
+  padding: 20px;
+  text-align: left;
+  border-bottom: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.pricing-comparison-table th {
+  font-size: 14px;
+  font-weight: 600;
+  color: #C9CED6;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.pricing-comparison-table td {
+  font-size: 14px;
+  color: rgba(245, 247, 250, 0.8);
+}
+
+.pricing-comparison-table td.feature-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pricing-comparison-table td.feature-name .info-icon {
+  width: 16px;
+  height: 16px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: rgba(201, 206, 214, 0.5);
+  cursor: help;
+}
+
+.pricing-comparison-table .check {
+  color: #4ade80;
+  font-weight: bold;
+}
+
+.pricing-comparison-table .cross {
+  color: rgba(201, 206, 214, 0.3);
+}
+
+.pricing-comparison-table tr:hover td {
+  background: rgba(201, 206, 214, 0.03);
+}
+
+/* FAQ Section */
+.pricing-faq {
+  max-width: 800px;
+  margin: 80px auto 0;
+  padding: 0 40px;
+}
+
+.pricing-faq-title {
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin-bottom: 40px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .smart-pricing-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .smart-pricing-card.featured {
+    transform: scale(1);
+    order: -1;
+  }
+  
+  .smart-pricing-card.featured:hover {
+    transform: translateY(-10px);
+  }
+}
+
+@media (max-width: 768px) {
+  .smart-pricing-grid {
+    grid-template-columns: 1fr;
+    padding: 0 20px;
+  }
+  
+  .smart-pricing-header h2 {
+    font-size: 32px;
+  }
+  
+  .pricing-comparison-table {
+    font-size: 12px;
+  }
+  
+  .pricing-comparison-table th,
+  .pricing-comparison-table td {
+    padding: 12px;
+  }
+  
+  .toggle-switch {
+    width: 60px;
+    height: 32px;
+  }
+  
+  .toggle-switch::before {
+    width: 26px;
+    height: 26px;
+  }
+  
+  .toggle-switch.active::before {
+    transform: translateX(28px);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .smart-pricing-card,
+  .price-amount,
+  .toggle-switch {
+    transition: none !important;
+  }
+  
+  .save-badge {
+    animation: none !important;
+  }
+}

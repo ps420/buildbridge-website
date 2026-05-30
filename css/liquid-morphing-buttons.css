@@ -1,0 +1,535 @@
+/**
+ * v100.0: Liquid Morphing Buttons
+ * Fortune 500 Fluid Button Effects with CSS-only Liquid Transitions
+ * Created by: Godzai
+ */
+
+/* Base Liquid Button */
+.liquid-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 40px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #F5F7FA;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 50px;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  text-decoration: none;
+  letter-spacing: 0.5px;
+}
+
+.liquid-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #C9CED6 0%, #F5F7FA 50%, #C9CED6 100%);
+  background-size: 200% 200%;
+  border-radius: 50px;
+  z-index: -2;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.liquid-btn::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: #0f0f10;
+  border-radius: 48px;
+  z-index: -1;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Liquid Fill Effect */
+.liquid-btn-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(180deg, transparent, rgba(201, 206, 214, 0.15));
+  border-radius: 50px;
+  transition: height 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: -1;
+}
+
+.liquid-btn:hover .liquid-btn-fill {
+  height: 100%;
+}
+
+.liquid-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px rgba(201, 206, 214, 0.2);
+}
+
+.liquid-btn:hover::before {
+  opacity: 1;
+  animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Liquid Ripple Effect */
+.liquid-btn-ripple {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: rgba(201, 206, 214, 0.4);
+  border-radius: 50%;
+  transform: scale(0);
+  pointer-events: none;
+  animation: liquid-ripple 0.8s ease-out forwards;
+}
+
+@keyframes liquid-ripple {
+  to {
+    transform: scale(20);
+    opacity: 0;
+  }
+}
+
+/* Morphing Border Button */
+.liquid-morph-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 42px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #C9CED6;
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  text-decoration: none;
+}
+
+.liquid-morph-btn::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: conic-gradient(from 0deg, #C9CED6, #F5F7FA, #C9CED6, #F5F7FA, #C9CED6);
+  border-radius: 10px;
+  z-index: -1;
+  opacity: 0.5;
+  animation: liquid-spin 4s linear infinite;
+  transition: opacity 0.3s ease;
+}
+
+.liquid-morph-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #0f0f10;
+  border-radius: 8px;
+  z-index: -1;
+}
+
+.liquid-morph-btn:hover::before {
+  opacity: 1;
+}
+
+.liquid-morph-btn:hover {
+  color: #F5F7FA;
+  transform: translateY(-3px);
+  box-shadow: 0 15px 50px rgba(201, 206, 214, 0.15);
+}
+
+@keyframes liquid-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Blob Button Effect */
+.liquid-blob-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 45px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f0f10;
+  background: linear-gradient(135deg, #C9CED6, #F5F7FA);
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  text-decoration: none;
+  clip-path: polygon(0% 50%, 5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%);
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.liquid-blob-btn:hover {
+  clip-path: polygon(5% 0%, 100% 0%, 95% 50%, 100% 100%, 0% 100%, 5% 50%);
+  transform: scale(1.05);
+  box-shadow: 0 20px 60px rgba(201, 206, 214, 0.3);
+}
+
+.liquid-blob-btn:active {
+  transform: scale(0.98);
+}
+
+/* Gooey Button Effect */
+.liquid-gooey-container {
+  position: relative;
+  display: inline-block;
+  filter: url('#goo');
+}
+
+.liquid-gooey-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 50px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f0f10;
+  background: #C9CED6;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.liquid-gooey-blob {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #C9CED6;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  opacity: 0;
+}
+
+.liquid-gooey-blob:nth-child(1) { left: 20%; }
+.liquid-gooey-blob:nth-child(2) { left: 40%; }
+.liquid-gooey-blob:nth-child(3) { left: 60%; }
+.liquid-gooey-blob:nth-child(4) { left: 80%; }
+
+.liquid-gooey-container:hover .liquid-gooey-blob {
+  opacity: 1;
+  animation: blob-dance 0.6s ease-in-out infinite alternate;
+}
+
+.liquid-gooey-container:hover .liquid-gooey-blob:nth-child(1) { animation-delay: 0.1s; }
+.liquid-gooey-container:hover .liquid-gooey-blob:nth-child(2) { animation-delay: 0.2s; }
+.liquid-gooey-container:hover .liquid-gooey-blob:nth-child(3) { animation-delay: 0.3s; }
+.liquid-gooey-container:hover .liquid-gooey-blob:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes blob-dance {
+  0% { transform: translateY(-50%) scale(1); }
+  100% { transform: translateY(-80%) scale(1.3); }
+}
+
+/* Shiny Button Effect */
+.liquid-shiny-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 45px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #F5F7FA;
+  background: linear-gradient(135deg, rgba(201, 206, 214, 0.2), rgba(245, 247, 250, 0.1));
+  border: 1px solid rgba(201, 206, 214, 0.3);
+  border-radius: 12px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  backdrop-filter: blur(10px);
+}
+
+.liquid-shiny-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 60%
+  );
+  transform: translateX(-100%) rotate(45deg);
+  transition: transform 0.6s ease;
+}
+
+.liquid-shiny-btn:hover::before {
+  transform: translateX(100%) rotate(45deg);
+  animation: shiny-sweep 1.5s ease infinite;
+}
+
+.liquid-shiny-btn:hover {
+  border-color: rgba(201, 206, 214, 0.6);
+  box-shadow: 0 0 30px rgba(201, 206, 214, 0.2);
+}
+
+@keyframes shiny-sweep {
+  0% { transform: translateX(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) rotate(45deg); }
+}
+
+/* Pulse Wave Button */
+.liquid-pulse-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 45px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #F5F7FA;
+  background: transparent;
+  border: 2px solid #C9CED6;
+  border-radius: 50px;
+  cursor: pointer;
+  overflow: visible;
+  transition: all 0.4s ease;
+}
+
+.liquid-pulse-btn::before,
+.liquid-pulse-btn::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 2px solid #C9CED6;
+  border-radius: 54px;
+  opacity: 0;
+  transition: all 0.6s ease;
+}
+
+.liquid-pulse-btn:hover {
+  background: #C9CED6;
+  color: #0f0f10;
+}
+
+.liquid-pulse-btn:hover::before {
+  animation: pulse-wave 1.5s ease-out infinite;
+}
+
+.liquid-pulse-btn:hover::after {
+  animation: pulse-wave 1.5s ease-out 0.5s infinite;
+}
+
+@keyframes pulse-wave {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+
+/* Gradient Text Button */
+.liquid-gradient-text-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: transparent;
+  background: linear-gradient(90deg, #C9CED6, #F5F7FA, #C9CED6);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  text-decoration: none;
+}
+
+.liquid-gradient-text-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #C9CED6, #F5F7FA);
+  transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.liquid-gradient-text-btn:hover {
+  background-position: right center;
+}
+
+.liquid-gradient-text-btn:hover::after {
+  width: 100%;
+}
+
+.liquid-gradient-text-btn .arrow {
+  display: inline-block;
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+}
+
+.liquid-gradient-text-btn:hover .arrow {
+  transform: translateX(5px);
+}
+
+/* Magnetic Liquid Button */
+.liquid-magnetic-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 50px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #F5F7FA;
+  background: linear-gradient(135deg, #C9CED6, #F5F7FA);
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.liquid-magnetic-btn-reflection {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.3), transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.liquid-magnetic-btn:hover {
+  transform: scale(1.05) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  box-shadow: 
+    0 20px 60px rgba(201, 206, 214, 0.3),
+    0 0 0 1px rgba(201, 206, 214, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.liquid-magnetic-btn:hover .liquid-magnetic-btn-reflection {
+  opacity: 1;
+}
+
+/* Size Variants */
+.liquid-btn-sm { padding: 12px 28px; font-size: 12px; }
+.liquid-btn-lg { padding: 22px 55px; font-size: 16px; }
+
+/* Color Variants */
+.liquid-btn-primary { 
+  background: linear-gradient(135deg, #C9CED6, #F5F7FA);
+  color: #0f0f10;
+}
+
+.liquid-btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(201, 206, 214, 0.4);
+}
+
+.liquid-btn-gold {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #0f0f10;
+}
+
+/* Button Group */
+.liquid-btn-group {
+  display: inline-flex;
+  gap: 0;
+}
+
+.liquid-btn-group .liquid-btn {
+  border-radius: 0;
+}
+
+.liquid-btn-group .liquid-btn:first-child {
+  border-radius: 50px 0 0 50px;
+}
+
+.liquid-btn-group .liquid-btn:last-child {
+  border-radius: 0 50px 50px 0;
+}
+
+/* Loading State */
+.liquid-btn.loading {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.liquid-btn.loading::after {
+  content: '';
+  width: 20px;
+  height: 20px;
+  margin-left: 12px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spinner 0.8s linear infinite;
+}
+
+@keyframes spinner {
+  to { transform: rotate(360deg); }
+}
+
+/* Success State */
+.liquid-btn.success {
+  background: linear-gradient(135deg, #4ade80, #22c55e) !important;
+  color: #fff !important;
+}
+
+/* Disabled State */
+.liquid-btn:disabled,
+.liquid-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Focus State */
+.liquid-btn:focus-visible {
+  outline: 2px solid #C9CED6;
+  outline-offset: 4px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .liquid-btn,
+  .liquid-morph-btn,
+  .liquid-blob-btn,
+  .liquid-shiny-btn,
+  .liquid-pulse-btn {
+    padding: 14px 32px;
+    font-size: 13px;
+  }
+  
+  .liquid-btn-lg {
+    padding: 18px 40px;
+    font-size: 14px;
+  }
+}
