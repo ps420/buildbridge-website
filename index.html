@@ -3636,6 +3636,165 @@
     <div id="smart-booking"></div>
   </section>
 
+  <!-- ===========================================
+       v95.0-v99.0: NEXT-GEN FORTUNE 500 FEATURE SUITE
+       Haptic Interactions | Storytelling | Liquid Menu | Activity Stream | Cursor Trail
+       =========================================== -->
+
+  <!-- v95.0-v96.0: Scroll Storytelling & Parallax Section -->
+  <section class="parallax-text-section scroll-storytelling" id="storytelling" data-story-section="parallax-text" data-section="Storytelling" data-nav-label="Our Story">
+    <div class="parallax-text-container">
+      <div class="parallax-text-layer back" data-parallax-speed="0.2">BUILDING</div>
+      <div class="parallax-text-layer mid" data-parallax-speed="0.5">TRUST</div>
+      <div class="parallax-text-layer front" data-parallax-speed="0.8">DELIVERING EXCELLENCE</div>
+      <div class="parallax-text-content">
+        <h2>Building Tomorrow's Landmarks</h2>
+        <p>For over a decade, BuildBridge has been at the forefront of construction innovation in South Africa. We combine deep industry expertise with modern technology to deliver projects that exceed expectations and stand the test of time.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- v95.0: Haptic Interactive Card Showcase -->
+  <section class="haptic-showcase-section" id="haptic-showcase" data-section="HapticShowcase" data-nav-label="Interactive Cards">
+    <style>
+      .haptic-showcase-section {
+        padding: 120px 40px;
+        background: linear-gradient(180deg, transparent 0%, rgba(201, 206, 214, 0.02) 50%, transparent 100%);
+      }
+      .haptic-showcase-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      .haptic-card {
+        background: linear-gradient(145deg, rgba(201, 206, 214, 0.08), rgba(15, 15, 16, 0.6));
+        border: 1px solid rgba(201, 206, 214, 0.1);
+        border-radius: 24px;
+        padding: 40px 30px;
+        position: relative;
+        overflow: hidden;
+        transform-style: preserve-3d;
+        perspective: 1000px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+      }
+      .haptic-card:hover {
+        border-color: rgba(201, 206, 214, 0.2);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+      }
+      .haptic-card-icon {
+        width: 64px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, rgba(201, 206, 214, 0.15), rgba(201, 206, 214, 0.05));
+        border-radius: 16px;
+        font-size: 28px;
+        margin-bottom: 24px;
+      }
+      .haptic-card h3 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        color: #F5F7FA;
+        margin-bottom: 12px;
+      }
+      .haptic-card p {
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        color: rgba(201, 206, 214, 0.7);
+        line-height: 1.6;
+      }
+      .haptic-card-shine {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+          rgba(255, 255, 255, 0.1) 0%,
+          transparent 60%
+        );
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+      }
+      .haptic-card:hover .haptic-card-shine {
+        opacity: 1;
+      }
+      @media (max-width: 1024px) {
+        .haptic-showcase-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 640px) {
+        .haptic-showcase-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+    <div class="section-header" style="text-align: center; margin-bottom: 60px;">
+      <p class="eyebrow">Interactive Experience</p>
+      <h2 class="scramble-text kinetic-text">Feel the Quality</h2>
+      <p>Experience our Fortune 500 interactive design with haptic micro-interactions on every element.</p>
+    </div>
+    <div class="haptic-showcase-grid">
+      <article class="haptic-card">
+        <div class="haptic-card-shine"></div>
+        <div class="haptic-card-icon">🎯</div>
+        <h3>3D Tilt Response</h3>
+        <p>Cards that respond to your cursor with realistic 3D perspective transformations.</p>
+      </article>
+      <article class="haptic-card">
+        <div class="haptic-card-shine"></div>
+        <div class="haptic-card-icon">✨</div>
+        <h3>Ripple Effects</h3>
+        <p>Click anywhere to see organic ripple animations emanating from your touch point.</p>
+      </article>
+      <article class="haptic-card">
+        <div class="haptic-card-shine"></div>
+        <div class="haptic-card-icon">🧲</div>
+        <h3>Magnetic Pull</h3>
+        <p>Buttons exhibit magnetic attraction to your cursor for engaging micro-interactions.</p>
+      </article>
+      <article class="haptic-card">
+        <div class="haptic-card-shine"></div>
+        <div class="haptic-card-icon">🌟</div>
+        <h3>Glow Dynamics</h3>
+        <p>Dynamic glow effects that follow your movements and highlight interactive zones.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- v96.0: Scroll-Linked Progressive Reveal Section -->
+  <section class="progressive-reveal-section scroll-storytelling" id="progressive-reveal" data-story-section="progressive-reveal" data-section="Process" data-nav-label="Our Process">
+    <div class="progressive-reveal-container">
+      <div class="reveal-stage" data-stage="1">
+        <span class="reveal-number">01</span>
+        <h3>Discovery & Planning</h3>
+        <p>We begin every project with deep discovery. Our team analyzes your vision, requirements, and constraints to create a comprehensive project roadmap that aligns with your goals and budget.</p>
+      </div>
+      <div class="reveal-stage" data-stage="2">
+        <span class="reveal-number">02</span>
+        <h3>Design & Development</h3>
+        <p>Our architects and engineers transform your vision into detailed blueprints. We leverage cutting-edge design tools and sustainable building practices to create spaces that inspire.</p>
+      </div>
+      <div class="reveal-stage" data-stage="3">
+        <span class="reveal-number">03</span>
+        <h3>Construction Excellence</h3>
+        <p>With our network of 50+ vetted contractors, we bring your project to life. Our project managers ensure quality, timeline adherence, and transparent communication throughout.</p>
+      </div>
+      <div class="reveal-stage" data-stage="4">
+        <span class="reveal-number">04</span>
+        <h3>Handover & Beyond</h3>
+        <p>We don't just deliver projects—we build lasting relationships. Our post-completion support ensures your investment continues to deliver value for years to come.</p>
+      </div>
+      <div class="reveal-progress-bar">
+        <div class="reveal-progress-fill"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- v98.0: Real-time Activity Stream Container -->
+  <div id="activity-stream" class="activity-stream-container" style="position: fixed; bottom: 30px; left: 30px; width: 380px; max-width: calc(100vw - 60px); z-index: 9990;"></div>
+
   <!-- Footer -->
   <footer>
     <div class="footer-grid">
@@ -3721,6 +3880,13 @@
 
   <script src="scripts.js?v=3"></script>
   <script src="js/unified-feature-loader.js"></script>
+  
+  <!-- v95.0-v99.0: Next-Gen Fortune 500 Professional Feature Suite -->
+  <script src="js/haptic-micro-interactions.js"></script>
+  <script src="js/scroll-storytelling.js"></script>
+  <script src="js/liquid-morphing-menu.js"></script>
+  <script src="js/realtime-activity-stream.js"></script>
+  <script src="js/advanced-cursor-trail.js"></script>
   
   <!-- v7.0 Fortune 500 Professional Features -->
   <script src="js/text-scramble-effect.js"></script>
