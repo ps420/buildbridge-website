@@ -1,0 +1,337 @@
+/* ============================================
+   SMART SCROLLSPY V2.0
+   Fortune 500 Auto-Highlight Navigation
+   ============================================ */
+
+/* ScrollSpy Navigation Container */
+.scrollspy-nav {
+  position: fixed;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 10px;
+}
+
+/* Individual ScrollSpy Dot */
+.scrollspy-item {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.2);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hover State */
+.scrollspy-item::before {
+  content: attr(data-label);
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%) translateX(10px);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--chrome, #C9CED6);
+  opacity: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  background: rgba(15, 15, 16, 0.9);
+  padding: 8px 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.scrollspy-item:hover::before {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.scrollspy-item:hover {
+  background: rgba(201, 206, 214, 0.4);
+  transform: scale(1.2);
+}
+
+/* Active State - Enhanced */
+.scrollspy-item.active {
+  background: var(--chrome, #C9CED6);
+  border-color: var(--white, #F5F7FA);
+  transform: scale(1.4);
+  box-shadow: 
+    0 0 20px rgba(201, 206, 214, 0.5),
+    0 0 40px rgba(201, 206, 214, 0.2);
+}
+
+.scrollspy-item.active::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 206, 214, 0.3);
+  animation: scrollspy-pulse 2s ease-out infinite;
+}
+
+@keyframes scrollspy-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Progress Ring Variant */
+.scrollspy-progress-ring {
+  position: fixed;
+  right: 26px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 200px;
+  background: rgba(201, 206, 214, 0.1);
+  border-radius: 2px;
+  z-index: 998;
+  overflow: hidden;
+}
+
+.scrollspy-progress-fill {
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(to bottom, var(--chrome, #C9CED6), var(--white, #F5F7FA));
+  border-radius: 2px;
+  transition: height 0.1s linear;
+  box-shadow: 0 0 10px rgba(201, 206, 214, 0.5);
+}
+
+/* Section Labels Variant */
+.scrollspy-nav-labels {
+  position: fixed;
+  right: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.scrollspy-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(201, 206, 214, 0.4);
+  padding: 15px 0;
+  text-align: right;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
+  position: relative;
+}
+
+.scrollspy-label::after {
+  content: '';
+  position: absolute;
+  right: -35px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.2);
+  transition: all 0.3s ease;
+}
+
+.scrollspy-label:hover {
+  color: rgba(201, 206, 214, 0.8);
+}
+
+.scrollspy-label.active {
+  color: var(--chrome, #C9CED6);
+  font-weight: 600;
+}
+
+.scrollspy-label.active::after {
+  background: var(--chrome, #C9CED6);
+  box-shadow: 0 0 15px rgba(201, 206, 214, 0.5);
+  transform: translateY(-50%) scale(1.3);
+}
+
+/* Section visibility indicator */
+.section-visible-indicator {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 999;
+  padding: 12px 20px;
+  background: rgba(15, 15, 16, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 30px;
+  border: 1px solid rgba(201, 206, 214, 0.1);
+}
+
+.section-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(201, 206, 214, 0.3);
+  transition: all 0.3s ease;
+}
+
+.section-dot.active {
+  background: var(--chrome, #C9CED6);
+  transform: scale(1.5);
+}
+
+/* Horizontal ScrollSpy (for top navigation) */
+.scrollspy-horizontal {
+  position: fixed;
+  top: 82px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(201, 206, 214, 0.1);
+  z-index: 998;
+}
+
+.scrollspy-horizontal-progress {
+  height: 100%;
+  background: linear-gradient(90deg, var(--chrome, #C9CED6), var(--white, #F5F7FA));
+  width: 0%;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 10px rgba(201, 206, 214, 0.3);
+}
+
+/* Navigation highlight in header */
+.nav-link-highlight {
+  position: relative;
+}
+
+.nav-link-highlight::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--chrome, #C9CED6), var(--white, #F5F7FA));
+  transition: width 0.3s ease;
+}
+
+.nav-link-highlight.active::after {
+  width: 100%;
+}
+
+/* Active section glow effect */
+.section-active-glow {
+  position: relative;
+}
+
+.section-active-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(201, 206, 214, 0.03) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+}
+
+.section-active-glow.active-section::before {
+  opacity: 1;
+}
+
+/* Section transition overlay */
+.section-transition-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(15, 15, 16, 0.5) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  pointer-events: none;
+  z-index: 997;
+  transition: opacity 0.5s ease;
+}
+
+.section-transition-overlay.transitioning {
+  opacity: 1;
+}
+
+/* Mobile ScrollSpy - Bottom bar */
+@media (max-width: 768px) {
+  .scrollspy-nav {
+    position: fixed;
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: 20px;
+    transform: translateX(-50%);
+    flex-direction: row;
+    gap: 12px;
+    padding: 12px 20px;
+    background: rgba(15, 15, 16, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 30px;
+    border: 1px solid rgba(201, 206, 214, 0.1);
+  }
+  
+  .scrollspy-item {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .scrollspy-item::before {
+    display: none;
+  }
+  
+  .scrollspy-item.active {
+    transform: scale(1.6);
+  }
+  
+  .scrollspy-progress-ring {
+    display: none;
+  }
+  
+  .scrollspy-nav-labels {
+    display: none;
+  }
+  
+  .section-visible-indicator {
+    bottom: 80px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .scrollspy-item,
+  .scrollspy-item::before,
+  .scrollspy-label,
+  .scrollspy-label::after {
+    transition: none;
+  }
+  
+  .scrollspy-item.active::after {
+    animation: none;
+  }
+}

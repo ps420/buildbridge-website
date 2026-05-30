@@ -1,0 +1,349 @@
+/* ============================================
+   ANIMATED GRADIENT BORDER SYSTEM v1.0
+   Fortune 500 Eye-Catching Animated Borders
+   ============================================ */
+
+/* Base Animated Border Container */
+.animated-border {
+  position: relative;
+  background: linear-gradient(145deg, #17191d, #1a1c21);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.animated-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 2px;
+  background: linear-gradient(
+    var(--gradient-angle, 0deg),
+    #C9CED6 0%,
+    #525862 25%,
+    #C9CED6 50%,
+    #525862 75%,
+    #C9CED6 100%
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: border-rotate 3s linear infinite;
+}
+
+@keyframes border-rotate {
+  to {
+    --gradient-angle: 360deg;
+  }
+}
+
+@property --gradient-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Glow Variant */
+.animated-border-glow {
+  position: relative;
+  background: linear-gradient(145deg, #17191d, #1a1c21);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.animated-border-glow::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 14px;
+  background: linear-gradient(
+    var(--gradient-angle, 0deg),
+    rgba(201, 206, 214, 0.8),
+    rgba(82, 88, 98, 0.4),
+    rgba(201, 206, 214, 0.8),
+    rgba(42, 45, 52, 0.6),
+    rgba(201, 206, 214, 0.8)
+  );
+  animation: border-rotate 4s linear infinite;
+  filter: blur(8px);
+  opacity: 0.6;
+  z-index: -1;
+}
+
+.animated-border-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 2px;
+  background: linear-gradient(
+    var(--gradient-angle, 0deg),
+    #C9CED6 0%,
+    #525862 50%,
+    #C9CED6 100%
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: border-rotate 4s linear infinite;
+}
+
+/* Pulse Border Variant */
+.animated-border-pulse {
+  position: relative;
+  background: linear-gradient(145deg, #17191d, #1a1c21);
+  border-radius: 12px;
+  overflow: visible;
+}
+
+.animated-border-pulse::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 15px;
+  background: linear-gradient(90deg, #C9CED6, #525862, #C9CED6);
+  animation: border-pulse 2s ease-in-out infinite;
+  z-index: -1;
+}
+
+.animated-border-pulse::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 15px;
+  background: linear-gradient(90deg, #C9CED6, #525862, #C9CED6);
+  animation: border-pulse 2s ease-in-out infinite 0.5s;
+  z-index: -2;
+  filter: blur(10px);
+  opacity: 0.5;
+}
+
+@keyframes border-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.02);
+  }
+}
+
+/* Rainbow Chromatic Variant */
+.animated-border-chromatic {
+  position: relative;
+  background: linear-gradient(145deg, #17191d, #1a1c21);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.animated-border-chromatic::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--gradient-angle, 0deg),
+    #C9CED6,
+    #8B92A8,
+    #C9CED6,
+    #525862,
+    #C9CED6,
+    #2A2D34,
+    #C9CED6
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: border-rotate 8s linear infinite;
+}
+
+/* Hover Trigger Variant */
+.animated-border-hover {
+  position: relative;
+  background: linear-gradient(145deg, #17191d, #1a1c21);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.animated-border-hover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 2px;
+  background: linear-gradient(
+    90deg,
+    #C9CED6 0%,
+    #525862 50%,
+    #C9CED6 100%
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.animated-border-hover:hover::before {
+  opacity: 1;
+  animation: border-shimmer 2s linear infinite;
+}
+
+.animated-border-hover:hover {
+  transform: translateY(-5px);
+}
+
+@keyframes border-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+/* Corner Accent Variant */
+.animated-border-corners {
+  position: relative;
+  background: linear-gradient(145deg, #17191d, #1a1c21);
+  border-radius: 8px;
+}
+
+.animated-border-corners::before,
+.animated-border-corners::after {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-color: #C9CED6;
+  border-style: solid;
+  transition: all 0.4s ease;
+}
+
+.animated-border-corners::before {
+  top: 0;
+  left: 0;
+  border-width: 2px 0 0 2px;
+  border-radius: 8px 0 0 0;
+}
+
+.animated-border-corners::after {
+  bottom: 0;
+  right: 0;
+  border-width: 0 2px 2px 0;
+  border-radius: 0 0 8px 0;
+}
+
+.animated-border-corners:hover::before,
+.animated-border-corners:hover::after {
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+}
+
+/* Dashed Animated Border */
+.animated-border-dashed {
+  position: relative;
+  background: linear-gradient(145deg, #17191d, #1a1c21);
+  border-radius: 12px;
+}
+
+.animated-border-dashed::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 14px;
+  background: repeating-conic-gradient(
+    from var(--gradient-angle, 0deg),
+    #C9CED6 0deg 10deg,
+    transparent 10deg 20deg
+  );
+  animation: border-rotate 20s linear infinite;
+  z-index: -1;
+}
+
+/* Content wrapper for all variants */
+.animated-border-content {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(145deg, #17191d, #1a1c21);
+  border-radius: 10px;
+  padding: 30px;
+  height: 100%;
+}
+
+/* Service Card Application */
+.service-card.animated-border .service-icon {
+  transition: all 0.4s ease;
+}
+
+.service-card.animated-border:hover .service-icon {
+  background: rgba(201, 206, 214, 0.15);
+  transform: scale(1.1);
+}
+
+/* Project Card Application */
+.project-card.animated-border-glow::before,
+.project-card.animated-border-glow::after {
+  border-radius: 6px;
+}
+
+/* Featured Card Variant */
+.featured-card {
+  position: relative;
+}
+
+.featured-card .featured-badge {
+  position: absolute;
+  top: -10px;
+  right: 20px;
+  background: linear-gradient(90deg, #C9CED6, #8B92A8);
+  color: #0f0f10;
+  padding: 6px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 20px;
+  z-index: 10;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .animated-border::before,
+  .animated-border-glow::before,
+  .animated-border-glow::after,
+  .animated-border-chromatic::before,
+  .animated-border-dashed::before {
+    animation: none;
+  }
+  
+  .animated-border-pulse::before,
+  .animated-border-pulse::after {
+    animation: none;
+  }
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .animated-border::before,
+  .animated-border-glow::after,
+  .animated-border-chromatic::before {
+    animation-duration: 6s;
+  }
+  
+  .animated-border-content {
+    padding: 24px;
+  }
+}
