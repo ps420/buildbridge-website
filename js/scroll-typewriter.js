@@ -1,216 +1,249 @@
 /**
- * Scroll-Based Typewriter Effect
- * Fortune 500 Premium Text Animation
- * 
- * Types text progressively based on scroll position within a section
- * Creates an immersive storytelling experience
+ * Scroll-Typewriter v121.0
+ * Fortune 500 Quality Scroll-Triggered Typewriter Effect
  */
 
-class ScrollTypewriter {
-  constructor(element, options = {}) {
-    this.element = element;
-    this.options = {
-      text: element.dataset.typewriterText || element.textContent.trim(),
-      speed: parseInt(element.dataset.typewriterSpeed) || 50, // Characters per scroll percentage
-      cursor: element.dataset.typewriterCursor !== 'false',
-      highlightWords: element.dataset.typewriterHighlight?.split(',') || [],
-      onComplete: null,
-      ...options
-    };
-    
-    this.chars = [];
-    this.currentIndex = 0;
-    this.isVisible = false;
-    this.progress = 0;
-    
-    this.init();
-  }
-  
-  init() {
-    // Clear original content
-    this.element.innerHTML = '';
-    this.element.classList.add('scroll-typewriter-text');
-    
-    // Create container for characters
-    this.container = document.createElement('span');
-    this.container.className = 'scroll-typewriter-container';
-    
-    // Split text into characters and words
-    const words = this.options.text.split(' ');
-    let charIndex = 0;
-    
-    words.forEach((word, wordIndex) => {
-      const wordSpan = document.createElement('span');
-      wordSpan.className = 'scroll-typewriter-word';
+(function() {
+  'use strict';
+
+  class ScrollTypewriter {
+    constructor(element, options = {}) {
+      this.element = element;
+      this.options = {
+        speed: options.speed || 50,
+        delay: options.delay || 0,
+        cursor: options.cursor !== false,
+        cursorChar: options.cursorChar || '|',
+        loop: options.loop || false,
+        pauseDuration: options.pauseDuration || 2000,
+        ...options
+      };
       
-      // Check if word should be highlighted
-      const isHighlight = this.options.highlightWords.some(hw => 
-        word.toLowerCase().includes(hw.toLowerCase())
-      );
+      this.originalText = element.textContent.trim();
+      this.isTyping = false;
+      this.hasTyped = false;
+      this.cursorElement = null;
       
-      if (isHighlight) {
-        wordSpan.classList.add('highlight');
+      this.init();
+    }
+
+    init() {
+      // Clear element and prepare for typing
+      this.element.textContent = '';
+      this.element.classList.add('scroll-typewriter');
+      
+      // Create text container
+      this.textSpan = document.createElement('span');
+      this.textSpan.className = 'type-text';
+      this.element.appendChild(this.textSpan);
+      
+      // Add cursor if enabled
+      if (this.options.cursor) {
+        this.cursorElement = document.createElement('span');
+        this.cursorElement.className = 'cursor';
+        this.cursorElement.textContent = this.options.cursorChar;
+        this.element.appendChild(this.cursorElement);
       }
       
-      // Create character spans
-      [...word].forEach((char, i) => {
-        const charSpan = document.createElement('span');
-        charSpan.className = 'scroll-typewriter-char';
-        charSpan.textContent = char;
-        charSpan.dataset.index = charIndex++;
-        this.chars.push(charSpan);
-        wordSpan.appendChild(charSpan);
+      // Setup intersection observer for scroll trigger
+      this.setupObserver();
+    }
+
+    setupObserver() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !this.hasTyped) {
+            setTimeout(() => this.startTyping(), this.options.delay);
+          }
+        });
+      }, {
+        threshold: 0.5,
+        rootMargin: '0px 0px -100px 0px'
       });
       
-      this.container.appendChild(wordSpan);
+      observer.observe(this.element);
+    }
+
+    async startTyping() {
+      if (this.isTyping) return;
       
-      // Add space after word (except last word)
-      if (wordIndex < words.length - 1) {
-        const space = document.createElement('span');
-        space.textContent = '\u00A0'; // Non-breaking space
-        space.className = 'scroll-typewriter-char';
-        space.dataset.index = charIndex++;
-        this.chars.push(space);
-        this.container.appendChild(space);
+      this.isTyping = true;
+      this.element.classList.add('typing-active');
+      
+      const chars = this.originalText.split('');
+      
+      for (let i = 0; i < chars.length; i++) {
+        this.textSpan.textContent += chars[i];
+        
+        // Variable typing speed for realism
+        const delay = this.options.speed + (Math.random() * 30 - 15);
+        await this.sleep(delay);
       }
+      
+      this.isTyping = false;
+      this.hasTyped = true;
+      this.element.classList.add('typing-complete');
+      this.element.classList.remove('typing-active');
+      
+      // Loop if enabled
+      if (this.options.loop) {
+        setTimeout(() => this.resetAndType(), this.options.pauseDuration);
+      }
+    }
+
+    async resetAndType() {
+      this.element.classList.remove('typing-complete');
+      this.hasTyped = false;
+      this.textSpan.textContent = '';
+      await this.sleep(500);
+      this.startTyping();
+    }
+
+    sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+  }
+
+  // Word-by-word reveal
+  class WordReveal {
+    constructor(element, options = {}) {
+      this.element = element;
+      this.options = {
+        delay: options.delay || 100,
+        ...options
+      };
+      
+      this.init();
+    }
+
+    init() {
+      const text = this.element.textContent.trim();
+      const words = text.split(' ');
+      
+      this.element.textContent = '';
+      this.element.classList.add('scroll-typewriter-word-reveal');
+      
+      words.forEach((word, index) => {
+        const span = document.createElement('span');
+        span.className = 'word';
+        span.textContent = word;
+        span.style.transitionDelay = `${index * this.options.delay}ms`;
+        this.element.appendChild(span);
+      });
+      
+      this.setupObserver();
+    }
+
+    setupObserver() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            this.element.classList.add('active');
+          }
+        });
+      }, { threshold: 0.3 });
+      
+      observer.observe(this.element);
+    }
+  }
+
+  // Character decode effect (random chars to final)
+  class DecodeEffect {
+    constructor(element, options = {}) {
+      this.element = element;
+      this.options = {
+        chars: options.chars || 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*',
+        speed: options.speed || 30,
+        ...options
+      };
+      
+      this.originalText = element.textContent.trim();
+      this.init();
+    }
+
+    init() {
+      this.element.classList.add('scroll-typewriter', 'decode-effect');
+      this.setupObserver();
+    }
+
+    setupObserver() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            this.decode();
+          }
+        });
+      }, { threshold: 0.5 });
+      
+      observer.observe(this.element);
+    }
+
+    async decode() {
+      const finalText = this.originalText;
+      const length = finalText.length;
+      let iterations = 0;
+      
+      const interval = setInterval(() => {
+        this.element.textContent = finalText
+          .split('')
+          .map((char, index) => {
+            if (index < iterations) {
+              return finalText[index];
+            }
+            if (char === ' ') return ' ';
+            return this.options.chars[Math.floor(Math.random() * this.options.chars.length)];
+          })
+          .join('');
+        
+        iterations += 1/3;
+        
+        if (iterations >= length) {
+          clearInterval(interval);
+          this.element.textContent = finalText;
+        }
+      }, this.options.speed);
+    }
+  }
+
+  // Initialize on DOM ready
+  function init() {
+    // Regular typewriter elements
+    document.querySelectorAll('[data-scroll-typewriter]').forEach(el => {
+      const options = {
+        speed: parseInt(el.dataset.typeSpeed) || 50,
+        delay: parseInt(el.dataset.typeDelay) || 0,
+        cursor: el.dataset.typeCursor !== 'false',
+        loop: el.dataset.typeLoop === 'true'
+      };
+      new ScrollTypewriter(el, options);
     });
     
-    this.element.appendChild(this.container);
+    // Word reveal elements
+    document.querySelectorAll('[data-word-reveal]').forEach(el => {
+      const options = {
+        delay: parseInt(el.dataset.revealDelay) || 100
+      };
+      new WordReveal(el, options);
+    });
     
-    // Add cursor if enabled
-    if (this.options.cursor) {
-      this.cursor = document.createElement('span');
-      this.cursor.className = 'scroll-typewriter-cursor';
-      this.element.appendChild(this.cursor);
-    }
-    
-    // Add glow effect container
-    this.glow = document.createElement('div');
-    this.glow.className = 'scroll-typewriter-glow';
-    this.element.appendChild(this.glow);
-    
-    // Setup intersection observer
-    this.setupObserver();
-    
-    // Setup scroll listener
-    this.setupScrollListener();
+    // Decode effect elements
+    document.querySelectorAll('[data-decode-effect]').forEach(el => {
+      const options = {
+        speed: parseInt(el.dataset.decodeSpeed) || 30
+      };
+      new DecodeEffect(el, options);
+    });
   }
-  
-  setupObserver() {
-    this.observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        this.isVisible = entry.isIntersecting;
-      });
-    }, { threshold: 0.1 });
-    
-    this.observer.observe(this.element);
-  }
-  
-  setupScrollListener() {
-    // Find parent section for scroll calculation
-    this.section = this.element.closest('.scroll-typewriter-section') || 
-                   this.element.closest('section') ||
-                   this.element.parentElement;
-    
-    window.addEventListener('scroll', () => this.onScroll(), { passive: true });
-    // Initial calculation
-    this.onScroll();
-  }
-  
-  onScroll() {
-    if (!this.section) return;
-    
-    const rect = this.section.getBoundingClientRect();
-    const windowHeight = window.innerHeight;
-    
-    // Calculate progress based on section position
-    // 0 = section just entering viewport from bottom
-    // 1 = section fully scrolled through
-    const sectionTop = rect.top;
-    const sectionHeight = rect.height;
-    
-    // Start typing when section enters viewport
-    const startOffset = windowHeight * 0.5;
-    const endOffset = -sectionHeight * 0.3;
-    
-    let rawProgress = (startOffset - sectionTop) / (startOffset - endOffset);
-    this.progress = Math.max(0, Math.min(1, rawProgress));
-    
-    // Calculate how many characters should be visible
-    const targetIndex = Math.floor(this.progress * this.chars.length);
-    
-    this.updateCharacters(targetIndex);
-    
-    // Update cursor position
-    if (this.cursor && targetIndex < this.chars.length) {
-      const currentChar = this.chars[targetIndex];
-      if (currentChar) {
-        const charRect = currentChar.getBoundingClientRect();
-        const containerRect = this.element.getBoundingClientRect();
-        this.cursor.style.transform = `translate(${charRect.left - containerRect.left}px, ${charRect.top - containerRect.top}px)`;
-      }
-    }
-    
-    // Update glow position
-    if (this.glow && targetIndex < this.chars.length) {
-      const currentChar = this.chars[targetIndex];
-      if (currentChar) {
-        const charRect = currentChar.getBoundingClientRect();
-        const containerRect = this.element.getBoundingClientRect();
-        this.glow.style.left = `${charRect.left - containerRect.left + charRect.width / 2}px`;
-        this.glow.style.top = `${charRect.top - containerRect.top + charRect.height / 2}px`;
-        this.glow.classList.add('active');
-      }
-    }
-    
-    // Check if complete
-    if (targetIndex >= this.chars.length && !this.completed) {
-      this.completed = true;
-      if (this.options.onComplete) {
-        this.options.onComplete();
-      }
-      // Trigger completion animation
-      this.element.dispatchEvent(new CustomEvent('typewriterComplete'));
-    }
-  }
-  
-  updateCharacters(targetIndex) {
-    // Show characters up to target
-    for (let i = 0; i < this.chars.length; i++) {
-      const char = this.chars[i];
-      if (i < targetIndex) {
-        if (!char.classList.contains('visible')) {
-          char.classList.add('visible');
-          // Add typing animation for newly revealed chars
-          if (i >= this.currentIndex - 3) {
-            char.classList.add('typing');
-            setTimeout(() => char.classList.remove('typing'), 400);
-          }
-        }
-      } else {
-        char.classList.remove('visible');
-      }
-    }
-    
-    this.currentIndex = targetIndex;
-  }
-  
-  destroy() {
-    if (this.observer) {
-      this.observer.disconnect();
-    }
-  }
-}
 
-// Initialize on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
-  // Auto-initialize elements with data-scroll-typewriter attribute
-  document.querySelectorAll('[data-scroll-typewriter]').forEach(el => {
-    new ScrollTypewriter(el);
-  });
-});
+  // Auto-init
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 
-// Export for module usage
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = ScrollTypewriter;
-}
+  // Expose globally
+  window.ScrollTypewriter = ScrollTypewriter;
+  window.WordReveal = WordReveal;
+  window.DecodeEffect = DecodeEffect;
+})();

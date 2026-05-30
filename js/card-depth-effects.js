@@ -1,316 +1,313 @@
 /**
- * Card Depth Effects v1.0
- * Fortune 500 3D Card Interactions
- * Features: Mouse tracking tilt, depth layering, parallax content
+ * Card Depth Effects v120.3
+ * Fortune 500 Quality 3D Card Interactions
  */
 
-class CardDepthEffects {
-  constructor(options = {}) {
-    this.options = {
-      selector: options.selector || '.card-depth',
-      maxTilt: options.maxTilt || 10,
-      perspective: options.perspective || 1000,
-      scale: options.scale || 1.02,
-      glare: options.glare !== false,
-      ...options
-    };
-    
-    this.cards = [];
-    this.isTouch = window.matchMedia('(pointer: coarse)').matches;
-    
-    this.init();
-  }
-  
-  init() {
-    if (this.isTouch) return; // Disable on touch devices
-    
-    this.findCards();
-    this.bindEvents();
-    this.setupScrollReveal();
-  }
-  
-  findCards() {
-    const elements = document.querySelectorAll(this.options.selector);
-    
-    this.cards = Array.from(elements).map(element => {
-      // Add perspective container if needed
-      let container = element.parentElement;
-      if (!container.classList.contains('card-3d-container')) {
-        container = document.createElement('div');
-        container.className = 'card-3d-container';
-        element.parentNode.insertBefore(container, element);
-        container.appendChild(element);
-      }
-      
-      container.style.perspective = `${this.options.perspective}px`;
-      
-      // Create glare element if enabled
-      let glareElement = null;
-      if (this.options.glare) {
-        glareElement = document.createElement('div');
-        glareElement.className = 'card-glare';
-        glareElement.style.cssText = `
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(255, 255, 255, 0.05) 50%,
-            rgba(255, 255, 255, 0) 100%
-          );
-          opacity: 0;
-          transition: opacity 0.3s ease;
-          pointer-events: none;
-          z-index: 10;
-          border-radius: inherit;
-        `;
-        element.appendChild(glareElement);
-      }
-      
-      return {
-        element,
-        container,
-        glareElement,
-        rect: null,
-        isHovering: false,
-        currentRotateX: 0,
-        currentRotateY: 0,
-        targetRotateX: 0,
-        targetRotateY: 0
+(function() {
+  'use strict';
+
+  class CardDepthEffect {
+    constructor(card, options = {}) {
+      this.card = card;
+      this.options = {
+        maxRotation: options.maxRotation || 15,
+        perspective: options.perspective || 1000,
+        scale: options.scale || 1.02,
+        glare: options.glare !== false,
+        ...options
       };
-    });
-  }
-  
-  bindEvents() {
-    document.addEventListener('mousemove', (e) => {
-      this.cards.forEach(card => this.handleMouseMove(card, e));
-    });
-    
-    this.cards.forEach(card => {
-      card.element.addEventListener('mouseenter', () => {
-        card.isHovering = true;
-        card.rect = card.element.getBoundingClientRect();
-        this.animateCard(card);
-      });
       
-      card.element.addEventListener('mouseleave', () => {
-        card.isHovering = false;
-        this.resetCard(card);
-      });
-    });
-    
-    // Update rects on scroll/resize
-    window.addEventListener('scroll', () => {
-      this.cards.forEach(card => {
-        if (card.isHovering) {
-          card.rect = card.element.getBoundingClientRect();
-        }
-      });
-    }, { passive: true });
-    
-    window.addEventListener('resize', () => {
-      this.cards.forEach(card => {
-        card.rect = card.element.getBoundingClientRect();
-      });
-    }, { passive: true });
-  }
-  
-  handleMouseMove(card, e) {
-    if (!card.isHovering || !card.rect) return;
-    
-    const rect = card.rect;
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    
-    const mouseX = e.clientX - centerX;
-    const mouseY = e.clientY - centerY;
-    
-    // Calculate rotation (inverted for natural feel)
-    card.targetRotateY = (mouseX / (rect.width / 2)) * this.options.maxTilt;
-    card.targetRotateX = -(mouseY / (rect.height / 2)) * this.options.maxTilt;
-    
-    // Update glare position
-    if (card.glareElement) {
-      const glareX = ((e.clientX - rect.left) / rect.width) * 100;
-      const glareY = ((e.clientY - rect.top) / rect.height) * 100;
-      card.glareElement.style.background = `
-        radial-gradient(
-          circle at ${glareX}% ${glareY}%,
-          rgba(255, 255, 255, 0.15) 0%,
-          rgba(255, 255, 255, 0.05) 30%,
-          transparent 70%
-        )
-      `;
-      card.glareElement.style.opacity = '1';
+      this.bounds = null;
+      this.isHovering = false;
+      
+      this.init();
     }
-  }
-  
-  animateCard(card) {
-    if (!card.isHovering) return;
-    
-    // Smooth interpolation
-    const ease = 0.15;
-    card.currentRotateX += (card.targetRotateX - card.currentRotateX) * ease;
-    card.currentRotateY += (card.targetRotateY - card.currentRotateY) * ease;
-    
-    // Apply transform
-    const transform = `
-      rotateX(${card.currentRotateX}deg)
-      rotateY(${card.currentRotateY}deg)
-      scale3d(${this.options.scale}, ${this.options.scale}, ${this.options.scale})
-    `;
-    
-    card.element.style.transform = transform;
-    
-    // Update CSS custom properties for child elements
-    card.element.style.setProperty('--rotate-x', `${card.currentRotateX}deg`);
-    card.element.style.setProperty('--rotate-y', `${card.currentRotateY}deg`);
-    
-    requestAnimationFrame(() => this.animateCard(card));
-  }
-  
-  resetCard(card) {
-    card.element.style.transform = '';
-    card.element.style.setProperty('--rotate-x', '0deg');
-    card.element.style.setProperty('--rotate-y', '0deg');
-    
-    if (card.glareElement) {
-      card.glareElement.style.opacity = '0';
-    }
-    
-    card.currentRotateX = 0;
-    card.currentRotateY = 0;
-    card.targetRotateX = 0;
-    card.targetRotateY = 0;
-  }
-  
-  setupScrollReveal() {
-    const revealCards = document.querySelectorAll('.card-reveal');
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, {
-      threshold: 0.2,
-      rootMargin: '0px 0px -50px 0px'
-    });
-    
-    revealCards.forEach(card => observer.observe(card));
-  }
-}
 
-// Magnetic Card Effect
-class MagneticCards {
-  constructor(options = {}) {
-    this.options = {
-      selector: options.selector || '.card-magnetic',
-      strength: options.strength || 0.3,
-      radius: options.radius || 150,
-      ...options
-    };
-    
-    this.cards = [];
-    this.isTouch = window.matchMedia('(pointer: coarse)').matches;
-    
-    this.init();
-  }
-  
-  init() {
-    if (this.isTouch) return;
-    
-    this.findCards();
-    this.bindEvents();
-  }
-  
-  findCards() {
-    const elements = document.querySelectorAll(this.options.selector);
-    
-    this.cards = Array.from(elements).map(element => ({
-      element,
-      rect: null,
-      isHovering: false,
-      currentX: 0,
-      currentY: 0,
-      targetX: 0,
-      targetY: 0
-    }));
-  }
-  
-  bindEvents() {
-    document.addEventListener('mousemove', (e) => {
-      this.cards.forEach(card => this.handleMouseMove(card, e));
-    });
-    
-    window.addEventListener('resize', () => {
-      this.cards.forEach(card => {
-        card.rect = card.element.getBoundingClientRect();
-      });
-    }, { passive: true });
-  }
-  
-  handleMouseMove(card, e) {
-    card.rect = card.element.getBoundingClientRect();
-    const rect = card.rect;
-    
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    
-    const distX = e.clientX - centerX;
-    const distY = e.clientY - centerY;
-    const distance = Math.sqrt(distX * distX + distY * distY);
-    
-    if (distance < this.options.radius) {
-      const factor = 1 - (distance / this.options.radius);
-      card.targetX = distX * this.options.strength * factor;
-      card.targetY = distY * this.options.strength * factor;
+    init() {
+      // Set up container
+      this.card.style.transformStyle = 'preserve-3d';
+      this.card.style.willChange = 'transform';
       
-      if (!card.isHovering) {
-        card.isHovering = true;
-        this.animateCard(card);
+      // Add glare element if enabled
+      if (this.options.glare) {
+        this.addGlareEffect();
       }
-    } else {
-      card.targetX = 0;
-      card.targetY = 0;
-      card.isHovering = false;
+      
+      // Bind events
+      this.card.addEventListener('mouseenter', this.handleEnter.bind(this));
+      this.card.addEventListener('mouseleave', this.handleLeave.bind(this));
+      this.card.addEventListener('mousemove', this.handleMove.bind(this));
+      
+      // Touch events for mobile
+      this.card.addEventListener('touchstart', this.handleTouch.bind(this), { passive: true });
+      this.card.addEventListener('touchmove', this.handleTouch.bind(this), { passive: true });
+      this.card.addEventListener('touchend', this.handleLeave.bind(this));
+    }
+
+    addGlareEffect() {
+      const glare = document.createElement('div');
+      glare.className = 'card-glare';
+      glare.style.cssText = `
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.25) 0%,
+          rgba(255, 255, 255, 0.1) 40%,
+          transparent 60%
+        );
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        z-index: 10;
+      `;
+      this.card.appendChild(glare);
+      this.glare = glare;
+    }
+
+    handleEnter() {
+      this.bounds = this.card.getBoundingClientRect();
+      this.isHovering = true;
+      this.card.style.transition = 'transform 0.1s ease';
+    }
+
+    handleLeave() {
+      this.isHovering = false;
+      this.card.style.transition = 'transform 0.5s ease';
+      this.card.style.transform = `perspective(${this.options.perspective}px) rotateX(0) rotateY(0) scale(1)`;
+      
+      if (this.glare) {
+        this.glare.style.opacity = '0';
+      }
+    }
+
+    handleMove(e) {
+      if (!this.isHovering || !this.bounds) return;
+      
+      const x = e.clientX - this.bounds.left;
+      const y = e.clientY - this.bounds.top;
+      
+      this.updateTransform(x, y);
+    }
+
+    handleTouch(e) {
+      if (!e.touches.length) return;
+      
+      this.bounds = this.card.getBoundingClientRect();
+      const touch = e.touches[0];
+      const x = touch.clientX - this.bounds.left;
+      const y = touch.clientY - this.bounds.top;
+      
+      this.updateTransform(x, y);
+    }
+
+    updateTransform(x, y) {
+      const centerX = this.bounds.width / 2;
+      const centerY = this.bounds.height / 2;
+      
+      const rotateX = ((y - centerY) / centerY) * -this.options.maxRotation;
+      const rotateY = ((x - centerX) / centerX) * this.options.maxRotation;
+      
+      this.card.style.transform = `
+        perspective(${this.options.perspective}px)
+        rotateX(${rotateX}deg)
+        rotateY(${rotateY}deg)
+        scale(${this.options.scale})
+      `;
+      
+      // Update glare position
+      if (this.glare) {
+        this.glare.style.opacity = '1';
+        const glareX = (x / this.bounds.width) * 100;
+        const glareY = (y / this.bounds.height) * 100;
+        this.glare.style.background = `
+          radial-gradient(
+            circle at ${glareX}% ${glareY}%,
+            rgba(255, 255, 255, 0.3) 0%,
+            rgba(255, 255, 255, 0.1) 25%,
+            transparent 50%
+          )
+        `;
+      }
+      
+      // Update content layers
+      this.updateContentDepth(rotateX, rotateY);
+    }
+
+    updateContentDepth(rotateX, rotateY) {
+      const layers = this.card.querySelectorAll('.card-content-layer, .card-icon-layer, .card-title-layer');
+      
+      layers.forEach(layer => {
+        const depth = layer.classList.contains('card-icon-layer') ? 50 :
+                     layer.classList.contains('card-title-layer') ? 40 :
+                     layer.classList.contains('card-action-layer') ? 60 : 30;
+        
+        layer.style.transform = `
+          translateZ(${depth}px)
+          translateX(${rotateY * 0.5}px)
+          translateY(${rotateX * 0.5}px)
+        `;
+      });
     }
   }
-  
-  animateCard(card) {
-    if (!card.isHovering && Math.abs(card.currentX) < 0.1 && Math.abs(card.currentY) < 0.1) {
-      card.element.style.transform = '';
-      return;
+
+  // Magnetic Card Effect
+  class MagneticCard {
+    constructor(card, options = {}) {
+      this.card = card;
+      this.options = {
+        strength: options.strength || 0.3,
+        ...options
+      };
+      
+      this.init();
     }
-    
-    const ease = 0.1;
-    card.currentX += (card.targetX - card.currentX) * ease;
-    card.currentY += (card.targetY - card.currentY) * ease;
-    
-    card.element.style.transform = `translate3d(${card.currentX}px, ${card.currentY}px, 0)`;
-    
-    requestAnimationFrame(() => this.animateCard(card));
+
+    init() {
+      this.card.addEventListener('mousemove', this.handleMagnetic.bind(this));
+      this.card.addEventListener('mouseleave', this.resetMagnetic.bind(this));
+    }
+
+    handleMagnetic(e) {
+      const rect = this.card.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      
+      this.card.style.transform = `
+        translateX(${x * this.options.strength}px)
+        translateY(${y * this.options.strength}px)
+      `;
+    }
+
+    resetMagnetic() {
+      this.card.style.transform = 'translateX(0) translateY(0)';
+    }
   }
-}
 
-// Initialize on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
-  window.cardDepthEffects = new CardDepthEffects({
-    maxTilt: 8,
-    perspective: 1000,
-    scale: 1.02,
-    glare: true
-  });
-  
-  window.magneticCards = new MagneticCards({
-    strength: 0.2,
-    radius: 100
-  });
-});
+  // Stacked Card Effect
+  class StackedCards {
+    constructor(container, options = {}) {
+      this.container = container;
+      this.cards = Array.from(container.children);
+      this.options = {
+        offset: options.offset || 10,
+        scale: options.scale || 0.05,
+        ...options
+      };
+      
+      this.init();
+    }
 
-// Export for module use
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { CardDepthEffects, MagneticCards };
-}
+    init() {
+      this.cards.forEach((card, index) => {
+        card.style.position = 'relative';
+        card.style.zIndex = this.cards.length - index;
+        card.style.transform = `
+          translateY(${index * this.options.offset}px)
+          scale(${1 - index * this.options.scale})
+        `;
+        card.style.opacity = index === 0 ? 1 : 0.7 - index * 0.1;
+      });
+      
+      this.container.addEventListener('mouseenter', () => this.expand());
+      this.container.addEventListener('mouseleave', () => this.collapse());
+    }
+
+    expand() {
+      this.cards.forEach((card, index) => {
+        card.style.transition = 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        card.style.transform = 'translateY(0) scale(1)';
+        card.style.opacity = 1;
+      });
+    }
+
+    collapse() {
+      this.cards.forEach((card, index) => {
+        card.style.transform = `
+          translateY(${index * this.options.offset}px)
+          scale(${1 - index * this.options.scale})
+        `;
+        card.style.opacity = index === 0 ? 1 : 0.7 - index * 0.1;
+      });
+    }
+  }
+
+  // Reveal Card on Scroll
+  class ScrollRevealCard {
+    constructor(card, options = {}) {
+      this.card = card;
+      this.options = {
+        threshold: options.threshold || 0.2,
+        delay: options.delay || 0,
+        ...options
+      };
+      
+      this.init();
+    }
+
+    init() {
+      this.card.style.opacity = '0';
+      this.card.style.transform = 'translateY(40px)';
+      this.card.style.transition = 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              this.card.style.opacity = '1';
+              this.card.style.transform = 'translateY(0)';
+            }, this.options.delay);
+            observer.unobserve(this.card);
+          }
+        });
+      }, { threshold: this.options.threshold });
+      
+      observer.observe(this.card);
+    }
+  }
+
+  // Initialize on DOM ready
+  function init() {
+    // Initialize 3D tilt cards
+    document.querySelectorAll('.card-depth, .tilt-card-3d').forEach(card => {
+      new CardDepthEffect(card, {
+        maxRotation: parseFloat(card.dataset.tiltMax) || 15,
+        scale: parseFloat(card.dataset.tiltScale) || 1.02
+      });
+    });
+    
+    // Initialize magnetic cards
+    document.querySelectorAll('.card-magnetic, [data-magnetic]').forEach(card => {
+      new MagneticCard(card, {
+        strength: parseFloat(card.dataset.magnetic) || 0.3
+      });
+    });
+    
+    // Initialize stacked cards
+    document.querySelectorAll('.card-stack-container, [data-card-stack]').forEach(container => {
+      new StackedCards(container);
+    });
+    
+    // Initialize scroll reveal cards
+    document.querySelectorAll('.card-reveal-scroll, [data-reveal-scroll]').forEach((card, index) => {
+      new ScrollRevealCard(card, {
+        delay: index * 100
+      });
+    });
+    
+    console.log('🎴 Card Depth Effects v120.3 initialized');
+  }
+
+  // Auto-init
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  // Expose globally
+  window.CardDepthEffect = CardDepthEffect;
+  window.MagneticCard = MagneticCard;
+  window.StackedCards = StackedCards;
+})();

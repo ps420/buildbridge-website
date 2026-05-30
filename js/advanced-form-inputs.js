@@ -1,394 +1,316 @@
 /**
- * Advanced Form Input Interactions
- * Fortune 500 Professional Form Component
- * 
- * Features:
- * - Floating labels with smooth transitions
- * - Real-time validation
- * - Character counters
- * - Password strength indicator
- * - File upload with drag & drop
- * - Input formatting/masking
+ * Advanced Form Inputs v123.0
+ * Fortune 500 Quality Form Field Animations & Interactions
  */
 
-class AdvancedFormManager {
-  constructor(form) {
-    this.form = form;
-    this.inputs = {};
-    
-    this.init();
-  }
-  
-  init() {
-    this.setupFloatingLabels();
-    this.setupValidation();
-    this.setupCharacterCounters();
-    this.setupPasswordStrength();
-    this.setupFileUploads();
-    this.setupInputMasking();
-    this.setupSubmitHandling();
-  }
-  
-  setupFloatingLabels() {
-    const floatingInputs = this.form.querySelectorAll('.form-input-floating input, .form-input-floating textarea, .form-input-floating select');
-    
-    floatingInputs.forEach(input => {
-      // Set placeholder if not set (needed for :placeholder-shown selector)
-      if (!input.placeholder && input.tagName !== 'SELECT') {
-        input.placeholder = ' ';
-      }
+(function() {
+  'use strict';
+
+  class AdvancedFormInputs {
+    constructor(form) {
+      this.form = form;
+      this.inputs = form.querySelectorAll('input, textarea, select');
+      this.submitBtn = form.querySelector('button[type="submit"]');
       
-      // Handle autofill
-      input.addEventListener('animationstart', (e) => {
-        if (e.animationName === 'onAutoFillStart') {
-          input.parentElement.classList.add('input-filled');
-        }
-      });
-    });
-  }
-  
-  setupValidation() {
-    const inputs = this.form.querySelectorAll('[data-validate]');
-    
-    inputs.forEach(input => {
-      const rules = input.dataset.validate.split('|');
-      
-      input.addEventListener('blur', () => this.validateInput(input, rules));
-      input.addEventListener('input', () => {
-        if (input.classList.contains('input-invalid')) {
-          this.validateInput(input, rules);
-        }
-      });
-    });
-    
-    // Form-level validation
-    this.form.addEventListener('submit', (e) => {
-      let isValid = true;
-      
-      inputs.forEach(input => {
-        const rules = input.dataset.validate.split('|');
-        if (!this.validateInput(input, rules)) {
-          isValid = false;
-        }
-      });
-      
-      if (!isValid) {
-        e.preventDefault();
-        // Focus first invalid input
-        const firstInvalid = this.form.querySelector('.input-invalid');
-        if (firstInvalid) {
-          firstInvalid.focus();
-          firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }
-    });
-  }
-  
-  validateInput(input, rules) {
-    const value = input.value.trim();
-    const parent = input.closest('.form-input-floating') || input.parentElement;
-    let isValid = true;
-    let errorMessage = '';
-    
-    for (const rule of rules) {
-      const [ruleName, ruleValue] = rule.split(':');
-      
-      switch(ruleName) {
-        case 'required':
-          if (!value) {
-            isValid = false;
-            errorMessage = 'This field is required';
-          }
-          break;
-          
-        case 'email':
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          if (value && !emailRegex.test(value)) {
-            isValid = false;
-            errorMessage = 'Please enter a valid email';
-          }
-          break;
-          
-        case 'min':
-          if (value.length < parseInt(ruleValue)) {
-            isValid = false;
-            errorMessage = `Minimum ${ruleValue} characters required`;
-          }
-          break;
-          
-        case 'max':
-          if (value.length > parseInt(ruleValue)) {
-            isValid = false;
-            errorMessage = `Maximum ${ruleValue} characters allowed`;
-          }
-          break;
-          
-        case 'phone':
-          const phoneRegex = /^[\d\s\-\+\(\)]{10,}$/;
-          if (value && !phoneRegex.test(value)) {
-            isValid = false;
-            errorMessage = 'Please enter a valid phone number';
-          }
-          break;
-          
-        case 'match':
-          const matchInput = this.form.querySelector(`[name="${ruleValue}"]`);
-          if (matchInput && value !== matchInput.value) {
-            isValid = false;
-            errorMessage = 'Passwords do not match';
-          }
-          break;
-      }
-      
-      if (!isValid) break;
+      this.init();
     }
-    
-    // Update visual state
-    parent.classList.remove('input-valid', 'input-invalid');
-    
-    // Remove existing error message
-    const existingError = parent.querySelector('.input-error-message');
-    if (existingError) existingError.remove();
-    
-    if (value && isValid) {
-      parent.classList.add('input-valid');
-    } else if (!isValid && value) {
-      parent.classList.add('input-invalid');
-      
-      // Add error message
-      const errorEl = document.createElement('span');
-      errorEl.className = 'input-error-message';
-      errorEl.style.cssText = 'color: #ef4444; font-size: 12px; margin-top: 4px; display: block;';
-      errorEl.textContent = errorMessage;
-      parent.appendChild(errorEl);
+
+    init() {
+      this.inputs.forEach(input => this.enhanceInput(input));
+      this.bindFormEvents();
     }
-    
-    return isValid;
-  }
-  
-  setupCharacterCounters() {
-    const counters = this.form.querySelectorAll('[data-char-counter]');
-    
-    counters.forEach(input => {
-      const maxLength = parseInt(input.dataset.charCounter);
-      const warningThreshold = parseInt(input.dataset.charWarning) || maxLength * 0.8;
+
+    enhanceInput(input) {
+      const wrapper = input.closest('.form-group-advanced, .input-floating-label, .input-with-icon');
       
-      // Create counter element
+      if (!wrapper) return;
+      
+      // Character counter for textareas
+      if (input.tagName === 'TEXTAREA' && input.dataset.maxLength) {
+        this.addCharCounter(input, wrapper);
+      }
+      
+      // Password toggle
+      if (input.type === 'password') {
+        this.addPasswordToggle(input, wrapper);
+      }
+      
+      // Real-time validation
+      if (input.dataset.validate) {
+        this.addRealTimeValidation(input, wrapper);
+      }
+      
+      // Focus animations
+      input.addEventListener('focus', () => {
+        wrapper.classList.add('input-focused');
+      });
+      
+      input.addEventListener('blur', () => {
+        wrapper.classList.remove('input-focused');
+        if (input.value) {
+          wrapper.classList.add('input-has-value');
+        } else {
+          wrapper.classList.remove('input-has-value');
+        }
+      });
+    }
+
+    addCharCounter(input, wrapper) {
+      const maxLength = parseInt(input.dataset.maxLength);
       const counter = document.createElement('span');
-      counter.className = 'form-char-counter';
-      input.parentElement.appendChild(counter);
+      counter.className = 'input-char-counter';
+      counter.textContent = `0 / ${maxLength}`;
+      wrapper.appendChild(counter);
       
-      const updateCounter = () => {
+      input.addEventListener('input', () => {
         const length = input.value.length;
-        const remaining = maxLength - length;
+        counter.textContent = `${length} / ${maxLength}`;
         
-        counter.textContent = `${length}/${maxLength}`;
         counter.classList.remove('warning', 'error');
-        
-        if (length >= maxLength) {
+        if (length > maxLength * 0.9) {
           counter.classList.add('error');
-        } else if (length >= warningThreshold) {
+        } else if (length > maxLength * 0.8) {
           counter.classList.add('warning');
         }
+      });
+    }
+
+    addPasswordToggle(input, wrapper) {
+      wrapper.classList.add('input-password-toggle');
+      
+      const toggleBtn = document.createElement('button');
+      toggleBtn.type = 'button';
+      toggleBtn.className = 'password-toggle-btn';
+      toggleBtn.innerHTML = '👁️';
+      toggleBtn.setAttribute('aria-label', 'Toggle password visibility');
+      
+      toggleBtn.addEventListener('click', () => {
+        const type = input.type === 'password' ? 'text' : 'password';
+        input.type = type;
+        toggleBtn.innerHTML = type === 'password' ? '👁️' : '🙈';
+      });
+      
+      wrapper.appendChild(toggleBtn);
+    }
+
+    addRealTimeValidation(input, wrapper) {
+      const rules = input.dataset.validate.split(',');
+      const errorMsg = document.createElement('span');
+      errorMsg.className = 'input-error-message';
+      wrapper.appendChild(errorMsg);
+      
+      const validate = () => {
+        const value = input.value.trim();
+        let isValid = true;
+        let error = '';
+        
+        for (const rule of rules) {
+          const [type, param] = rule.split(':');
+          
+          switch(type) {
+            case 'required':
+              if (!value) {
+                isValid = false;
+                error = 'This field is required';
+              }
+              break;
+            case 'email':
+              if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                isValid = false;
+                error = 'Please enter a valid email';
+              }
+              break;
+            case 'min':
+              if (value.length < parseInt(param)) {
+                isValid = false;
+                error = `Minimum ${param} characters required`;
+              }
+              break;
+            case 'phone':
+              if (value && !/^[\d\s\-+()]{10,}$/.test(value)) {
+                isValid = false;
+                error = 'Please enter a valid phone number';
+              }
+              break;
+          }
+          
+          if (!isValid) break;
+        }
+        
+        wrapper.classList.remove('input-valid', 'input-invalid');
+        
+        if (input.value && isValid) {
+          wrapper.classList.add('input-valid');
+        } else if (input.value && !isValid) {
+          wrapper.classList.add('input-invalid');
+          errorMsg.textContent = error;
+        }
+        
+        return isValid;
       };
       
-      input.addEventListener('input', updateCounter);
-      updateCounter();
-    });
-  }
-  
-  setupPasswordStrength() {
-    const passwords = this.form.querySelectorAll('[data-password-strength]');
-    
-    passwords.forEach(input => {
-      // Create strength indicator
-      const strengthEl = document.createElement('div');
-      strengthEl.className = 'form-password-strength';
-      strengthEl.innerHTML = `
-        <div class="password-strength-bar">
-          <div class="password-strength-fill"></div>
-        </div>
-        <div class="password-strength-text"></div>
-      `;
-      input.parentElement.appendChild(strengthEl);
-      
-      const fill = strengthEl.querySelector('.password-strength-fill');
-      const text = strengthEl.querySelector('.password-strength-text');
-      
+      input.addEventListener('blur', validate);
       input.addEventListener('input', () => {
-        const strength = this.calculatePasswordStrength(input.value);
-        
-        fill.className = 'password-strength-fill ' + strength.level;
-        text.textContent = strength.message;
-      });
-    });
-    
-    // Setup password toggle
-    const toggles = this.form.querySelectorAll('.password-toggle');
-    toggles.forEach(toggle => {
-      toggle.addEventListener('click', () => {
-        const input = toggle.parentElement.querySelector('input');
-        const isPassword = input.type === 'password';
-        input.type = isPassword ? 'text' : 'password';
-        toggle.textContent = isPassword ? '🙈' : '👁️';
-      });
-    });
-  }
-  
-  calculatePasswordStrength(password) {
-    let score = 0;
-    
-    if (password.length >= 8) score++;
-    if (password.length >= 12) score++;
-    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
-    if (/\d/.test(password)) score++;
-    if (/[^a-zA-Z0-9]/.test(password)) score++;
-    
-    if (score <= 2) return { level: 'weak', message: 'Weak password' };
-    if (score === 3) return { level: 'fair', message: 'Fair password' };
-    if (score === 4) return { level: 'good', message: 'Good password' };
-    return { level: 'strong', message: 'Strong password' };
-  }
-  
-  setupFileUploads() {
-    const uploads = this.form.querySelectorAll('.form-file-upload');
-    
-    uploads.forEach(upload => {
-      const input = upload.querySelector('input[type="file"]');
-      const icon = upload.querySelector('.file-upload-icon');
-      const text = upload.querySelector('.file-upload-text');
-      const hint = upload.querySelector('.file-upload-hint');
-      
-      // Drag & drop
-      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-        upload.addEventListener(eventName, (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-        });
-      });
-      
-      ['dragenter', 'dragover'].forEach(eventName => {
-        upload.addEventListener(eventName, () => upload.classList.add('dragover'));
-      });
-      
-      ['dragleave', 'drop'].forEach(eventName => {
-        upload.addEventListener(eventName, () => upload.classList.remove('dragover'));
-      });
-      
-      upload.addEventListener('drop', (e) => {
-        const files = e.dataTransfer.files;
-        if (files.length) {
-          input.files = files;
-          this.updateFileUploadDisplay(upload, files[0]);
+        if (wrapper.classList.contains('input-invalid')) {
+          validate();
         }
       });
+    }
+
+    bindFormEvents() {
+      if (!this.submitBtn) return;
       
-      input.addEventListener('change', () => {
-        if (input.files.length) {
-          this.updateFileUploadDisplay(upload, input.files[0]);
-        }
-      });
-    });
-  }
-  
-  updateFileUploadDisplay(upload, file) {
-    const icon = upload.querySelector('.file-upload-icon');
-    const text = upload.querySelector('.file-upload-text');
-    const hint = upload.querySelector('.file-upload-hint');
-    
-    icon.textContent = '📄';
-    text.textContent = file.name;
-    hint.textContent = `${(file.size / 1024 / 1024).toFixed(2)} MB`;
-  }
-  
-  setupInputMasking() {
-    const maskedInputs = this.form.querySelectorAll('[data-mask]');
-    
-    maskedInputs.forEach(input => {
-      const mask = input.dataset.mask;
-      
-      input.addEventListener('input', (e) => {
-        let value = e.target.value.replace(/\D/g, '');
-        let formatted = '';
-        let valueIndex = 0;
+      this.form.addEventListener('submit', async (e) => {
+        e.preventDefault();
         
-        for (let i = 0; i < mask.length && valueIndex < value.length; i++) {
-          if (mask[i] === '9') {
-            formatted += value[valueIndex++];
-          } else {
-            formatted += mask[i];
-            if (valueIndex <= i) valueIndex++;
+        // Validate all fields
+        let isValid = true;
+        this.inputs.forEach(input => {
+          const wrapper = input.closest('.form-group-advanced');
+          if (wrapper && input.dataset.validate) {
+            const event = new Event('blur');
+            input.dispatchEvent(event);
+            if (wrapper.classList.contains('input-invalid')) {
+              isValid = false;
+            }
           }
+        });
+        
+        if (!isValid) {
+          // Shake invalid fields
+          this.form.querySelectorAll('.input-invalid').forEach(wrapper => {
+            wrapper.style.animation = 'none';
+            setTimeout(() => {
+              wrapper.style.animation = '';
+            }, 10);
+          });
+          return;
         }
         
-        e.target.value = formatted;
-      });
-    });
-  }
-  
-  setupSubmitHandling() {
-    const submitBtn = this.form.querySelector('.btn-advanced[type="submit"]');
-    if (!submitBtn) return;
-    
-    this.form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      // Show loading state
-      submitBtn.classList.add('loading');
-      submitBtn.disabled = true;
-      
-      try {
-        // Simulate form submission
-        await this.simulateSubmission();
+        // Show loading state
+        this.submitBtn.classList.add('loading');
+        this.submitBtn.disabled = true;
+        
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1500));
         
         // Show success
-        submitBtn.classList.remove('loading');
-        submitBtn.classList.add('success');
+        this.submitBtn.classList.remove('loading');
+        this.submitBtn.classList.add('success');
+        this.submitBtn.textContent = '✓ Sent!';
         
+        // Reset after delay
         setTimeout(() => {
-          submitBtn.classList.remove('success');
-          submitBtn.disabled = false;
+          this.submitBtn.classList.remove('success');
+          this.submitBtn.disabled = false;
+          this.submitBtn.textContent = this.submitBtn.dataset.originalText || 'Send Message';
           this.form.reset();
-        }, 2000);
-        
-      } catch (error) {
-        submitBtn.classList.remove('loading');
-        submitBtn.disabled = false;
-        
-        // Show error
-        this.showFormError(error.message);
-      }
+          this.form.querySelectorAll('.input-valid').forEach(el => {
+            el.classList.remove('input-valid');
+          });
+        }, 3000);
+      });
+    }
+  }
+
+  // File Input Enhancement
+  class FileInputEnhancer {
+    constructor(input) {
+      this.input = input;
+      this.init();
+    }
+
+    init() {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'file-input-wrapper';
+      
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'file-input-btn';
+      button.innerHTML = '📎 Choose File';
+      
+      const filename = document.createElement('span');
+      filename.className = 'file-name';
+      filename.textContent = 'No file chosen';
+      
+      this.input.parentNode.insertBefore(wrapper, this.input);
+      wrapper.appendChild(this.input);
+      wrapper.appendChild(button);
+      wrapper.appendChild(filename);
+      
+      button.addEventListener('click', () => this.input.click());
+      
+      this.input.addEventListener('change', () => {
+        if (this.input.files.length > 0) {
+          filename.textContent = this.input.files[0].name;
+          button.innerHTML = '📄 Change File';
+        }
+      });
+    }
+  }
+
+  // Range Slider Enhancer
+  class RangeSliderEnhancer {
+    constructor(input) {
+      this.input = input;
+      this.init();
+    }
+
+    init() {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'input-range-wrapper';
+      wrapper.style.position = 'relative';
+      wrapper.style.paddingTop = '30px';
+      
+      const value = document.createElement('span');
+      value.className = 'range-value';
+      value.textContent = this.input.value;
+      
+      this.input.parentNode.insertBefore(wrapper, this.input);
+      wrapper.appendChild(value);
+      wrapper.appendChild(this.input);
+      
+      this.updateValue(value);
+      
+      this.input.addEventListener('input', () => this.updateValue(value));
+    }
+
+    updateValue(element) {
+      const percent = (this.input.value - this.input.min) / (this.input.max - this.input.min);
+      const left = percent * (this.input.offsetWidth - 20) + 10;
+      element.textContent = this.input.value;
+      element.style.left = `${left}px`;
+    }
+  }
+
+  // Initialize on DOM ready
+  function init() {
+    // Enhance all forms
+    document.querySelectorAll('form').forEach(form => {
+      new AdvancedFormInputs(form);
     });
-  }
-  
-  simulateSubmission() {
-    return new Promise((resolve) => {
-      setTimeout(resolve, 2000);
+    
+    // Enhance file inputs
+    document.querySelectorAll('input[type="file"]').forEach(input => {
+      new FileInputEnhancer(input);
     });
+    
+    // Enhance range inputs
+    document.querySelectorAll('input[type="range"]').forEach(input => {
+      new RangeSliderEnhancer(input);
+    });
+    
+    // Log initialization
+    console.log('📝 Advanced Form Inputs v123.0 initialized');
   }
-  
-  showFormError(message) {
-    // Could implement toast notification here
-    console.error('Form error:', message);
+
+  // Auto-init
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
   }
-}
 
-// Auto-initialize
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('form[data-advanced-form]').forEach(form => {
-    new AdvancedFormManager(form);
-  });
-});
-
-// CSS for autofill detection
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes onAutoFillStart { from { } to { } }
-  input:-webkit-autofill { animation-name: onAutoFillStart; }
-`;
-document.head.appendChild(style);
-
-// Export for module usage
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = AdvancedFormManager;
-}
+  // Expose globally
+  window.AdvancedFormInputs = AdvancedFormInputs;
+})();
